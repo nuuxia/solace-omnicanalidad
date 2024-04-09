@@ -1,0 +1,42 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@import 'shared/assets/fonts/plus-jakarta';
+@import 'shared/assets/stylesheets/animations';
+@import 'shared/assets/stylesheets/colors';
+@import 'shared/assets/stylesheets/spacing';
+@import 'shared/assets/stylesheets/font-size';
+@import 'shared/assets/stylesheets/font-weights';
+@import 'shared/assets/stylesheets/shadows';
+@import 'shared/assets/stylesheets/border-radius';
+@import 'shared/assets/stylesheets/z-index';
+
+@import 'variables';
+
+@import 'mixins';
+@import 'helper-classes';
+@import 'formulate';
+@import 'date-picker';
+
+@import 'layout';
+@import 'animations';
+@import 'rtl';
+
+@import 'widgets/base';
+@import 'widgets/buttons';
+@import 'widgets/conversation-view';
+@import 'widgets/tabs';
+@import 'widgets/woot-tables';
+
+@import 'plugins/multiselect';
+@import 'plugins/dropdown';
+@import '~shared/assets/stylesheets/ionicons';
+
+.tooltip {
+  @apply bg-slate-900 text-white py-1 px-2 z-40 text-xs rounded-md dark:bg-slate-200 dark:text-slate-900;
+}
+
+.hide {
+  @apply hidden;
+}
