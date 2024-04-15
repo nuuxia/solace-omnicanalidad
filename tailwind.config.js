@@ -11,6 +11,8 @@ const {
   redDark,
   violet,
   violetDark,
+  plum,
+  purple,
 } = require('@radix-ui/colors');
 const defaultTheme = require('tailwindcss/defaultTheme');
 module.exports = {
@@ -41,15 +43,16 @@ module.exports = {
       'modal-backdrop-light': 'rgba(0, 0, 0, 0.4)',
       'modal-backdrop-dark': 'rgba(0, 0, 0, 0.6)',
       current: 'currentColor',
+      arrow: 'rgb(178, 149, 201)',
       woot: {
-        25: blue.blue2,
+        25: purple.plum3,
         50: blue.blue3,
         75: blue.blue4,
         100: blue.blue5,
         200: blue.blue7,
         300: blue.blue8,
         400: blueDark.blue11,
-        500: blueDark.blue10,
+        500: plum.plum12,
         600: blueDark.blue9,
         700: blueDark.blue8,
         800: blueDark.blue6,
