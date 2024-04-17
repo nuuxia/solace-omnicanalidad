@@ -82,7 +82,7 @@ class AgentBotListener < BaseListener
   end
 
   def process_arrowai_bot_event(event, agent_bot, message)
-    return if agent_bot.outgoing_url.blank?
+    # return if agent_bot.outgoing_url.blank?
     return unless message.incoming? || (message.submitted_values.present? && message.outgoing?)
 
     AgentBots::ArrowaiJob.perform_later(event, agent_bot, message)

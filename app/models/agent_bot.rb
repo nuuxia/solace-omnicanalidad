@@ -4,7 +4,7 @@
 #
 #  id           :bigint           not null, primary key
 #  bot_config   :jsonb
-#  bot_type     :integer          default("webhook")
+#  bot_type     :integer          default("arrowai")
 #  description  :string
 #  name         :string
 #  outgoing_url :string
@@ -25,7 +25,7 @@ class AgentBot < ApplicationRecord
   has_many :inboxes, through: :agent_bot_inboxes
   has_many :messages, as: :sender, dependent: :nullify
   belongs_to :account, optional: true
-  enum bot_type: { webhook: 0, csml: 1, arrowai: 2 }
+  enum bot_type: { arrowai: 0, csml: 1, webhook: 2 }
 
   validate :validate_agent_bot_config
   validates :outgoing_url, length: { maximum: Limits::URL_LENGTH_LIMIT }

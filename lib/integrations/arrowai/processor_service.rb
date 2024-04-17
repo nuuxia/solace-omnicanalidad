@@ -4,6 +4,7 @@ class Integrations::Arrowai::ProcessorService
 
   def perform
     return if message.content.blank?
+
     conversation_starting
     make_client_call
   end
@@ -19,26 +20,41 @@ class Integrations::Arrowai::ProcessorService
     assistant_id = @inbox.assistantid
 
     return create_messages({"type"=>"text", "text"=>{"value"=>"Assistant not found! Choose an assistant to talk with Software Clock AI!", "annotations"=>[]}}) if assistant_id.blank?
-    response = client.threads.create
-    thread_id = response["id"]
+
+    conversation_thread_record = ConversationThreadRecord.find_by(conversation_id: conversation.id, assistant_id: assistant_id)
+
+    if conversation_thread_record.present?
+      thread_id =  conversation_thread_record.thread_id
+    else  
+      response = client.threads.create
+      thread_id = response["id"]
+
+      ConversationThreadRecord.create(conversation_id: conversation.id, assistant_id: assistant_id, thread_id: thread_id)
+    end  
 
     message_id = client.messages.create(
       thread_id: thread_id,
       parameters: {
-          role: "user", # Required for manually created messages
+          role: "user",
           content: message.content
     })["id"]
 
-    run = client.runs.create(thread_id: thread_id,
-    parameters: {
-        assistant_id: assistant_id
-    })
-    run_id = run['id']
+    begin 
+      run = client.runs.create(thread_id: thread_id,
+      parameters: {
+          assistant_id: assistant_id
+      })
+      run_id = run['id']
+
+    rescue StandardError => e
+      errorMessage = e.response[:body]["error"]["message"]
+      return create_messages({"type"=>"text", "text"=>{"value"=> errorMessage, "annotations"=>[]}})
+    end
 
     response = client.runs.retrieve(id: run_id, thread_id: thread_id)
     status = response['status']
 
-    max_retries = 20  # Set a maximum number of retries
+    max_retries = 20  
     retry_count = 0
 
     while retry_count < max_retries do
