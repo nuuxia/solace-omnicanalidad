@@ -1,9 +1,9 @@
+require 'openai'
 class Integrations::Arrowai::ProcessorService
   pattr_initialize [:event_name!, :agent_bot!, :message!]
 
   def perform
     return if message.content.blank?
-
     conversation_starting
     make_client_call
   end
@@ -11,89 +11,79 @@ class Integrations::Arrowai::ProcessorService
   private
 
   def make_client_call
-    request = HTTParty.post(build_url, body: JSON(bot_payload), headers: headers)
+    client = OpenAI::Client.new(access_token: ENV['OPENAI_API_KEY'])
+    client.add_headers("OpenAI-Beta" => "assistants=v1")
 
-    return if request.body.blank?
+    conversation = @conversation
+    @inbox = Inbox.find_by(id: conversation.inbox_id)
+    assistant_id = @inbox.assistantid
 
-    response = JSON.parse(request.body)
+    return create_messages({"type"=>"text", "text"=>{"value"=>"Assistant not found! Choose an assistant to talk with Software Clock AI!", "annotations"=>[]}}) if assistant_id.blank?
+    response = client.threads.create
+    thread_id = response["id"]
 
-    create_messages(response)
+    message_id = client.messages.create(
+      thread_id: thread_id,
+      parameters: {
+          role: "user", # Required for manually created messages
+          content: message.content
+    })["id"]
+
+    run = client.runs.create(thread_id: thread_id,
+    parameters: {
+        assistant_id: assistant_id
+    })
+    run_id = run['id']
+
+    response = client.runs.retrieve(id: run_id, thread_id: thread_id)
+    status = response['status']
+
+    max_retries = 20  # Set a maximum number of retries
+    retry_count = 0
+
+    while retry_count < max_retries do
+      response = client.runs.retrieve(id: run_id, thread_id: thread_id)
+      status = response['status']
+  
+      case status
+      when 'queued', 'in_progress', 'cancelling'
+          puts 'Sleeping'
+          sleep 1 
+      when 'completed'
+          break 
+      when 'requires_action'
+          # Handle tool calls (see below)
+      when 'cancelled', 'failed', 'expired'
+          puts response['last_error'].inspect
+          break # or `exit`
+      else
+          puts "Unknown status response: #{status}"
+      end
+    end
+
+    return create_messages({"type"=>"text", "text"=>{"value"=>" Maximum retries reached! Exiting", "annotations"=>[]}}) if retry_count == max_retries
+
+    messages = client.messages.list(thread_id: thread_id) 
+    create_messages(messages["data"][0]["content"][0])
   end
 
   def create_messages(response)
-    status = response['status']
     conversation = @conversation
-
-    case status
-    when 'success'
-      response_text_messages(response, conversation)
-    when 'error'
-      response_error_messages(response, conversation)
-    when 'fail'
-      response_error_messages(response, conversation)
-    end
-  end
-
-  def response_text_messages(message_payload, conversation)
+    response_hash = response.is_a?(String) ? JSON.parse(response) : response
     conversation.messages.create!(
       {
         message_type: :outgoing,
         account_id: conversation.account_id,
         inbox_id: conversation.inbox_id,
-        content: message_payload['message'],
+        content: response_hash["text"]["value"],
         sender: agent_bot,
-        additional_attributes: message_payload
+        additional_attributes: response_hash
       }
     )
-  end
-
-  def response_error_messages(message_payload, conversation)
-    conversation.messages.create!(
-      {
-        message_type: :outgoing,
-        account_id: conversation.account_id,
-        inbox_id: conversation.inbox_id,
-        content: 'Something went wrong! Please try again.',
-        sender: agent_bot,
-        additional_attributes: message_payload
-      }
-    )
-  end
-
-  def response_fail_messages(message_payload, conversation)
-    conversation.messages.create!(
-      {
-        message_type: :outgoing,
-        account_id: conversation.account_id,
-        inbox_id: conversation.inbox_id,
-        content: 'You are not autherized to chat with OpenAI! Agent will reponse soon. Please wait a minute...',
-        sender: agent_bot,
-        additional_attributes: message_payload
-      }
-    )
-  end
-
-  def bot_payload
-    conversation = @conversation
-    @inbox = Inbox.find_by(id: conversation.inbox_id)
-    assistantId = @inbox.assistantid
-    {
-      'message': message.content,
-      'assistant_id': assistantId
-    }
-  end
-
-  def build_url
-    "#{agent_bot.outgoing_url}"
   end
 
   def conversation_starting
     @conversation ||= Conversation.find_by(id: message.conversation_id)
   end
 
-  def headers
-    {
-      'Content-Type' => 'application/json'
-    }
-  end
 end

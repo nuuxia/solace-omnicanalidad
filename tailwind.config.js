@@ -53,7 +53,7 @@ module.exports = {
         300: blue.blue8,
         400: blueDark.blue11,
         500: plum.plum12,
-        600: blueDark.blue9,
+        600: plum.plum11,
         700: blueDark.blue8,
         800: blueDark.blue6,
         900: blueDark.blue2,

@@ -184,6 +184,9 @@ gem 'reverse_markdown'
 # Sentiment analysis
 gem 'informers'
 
+# openAI
+gem "ruby-openai"
+
 ### Gems required only in specific deployment environments ###
 ##############################################################
 
