@@ -7,13 +7,7 @@ gem 'rack-cors', '2.0.0', require: 'rack/cors'
 gem 'rails', '~> 7.0.8.1'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', require: false
-gem 'capistrano', '~> 3.16'
-gem 'capistrano-rails', '~> 1.1', '>= 1.1.7'
-gem 'capistrano-rvm'
-gem 'capistrano-puma'
-gem "capistrano3-puma", "4.0.0"
-gem "ed25519", "~> 1.3"
-gem "bcrypt_pbkdf", "~> 1.1"
+
 ##-- rails application helper gems --##
 gem 'acts-as-taggable-on'
 gem 'attr_extras'
@@ -75,7 +69,7 @@ gem 'webpacker'
 gem 'barnes'
 
 ##--- gems for authentication & authorization ---##
-gem 'devise', '>= 4.9.3'
+gem 'devise', '>= 4.9.4'
 gem 'devise-secure_password', git: 'https://github.com/chatwoot/devise-secure_password', branch: 'chatwoot'
 gem 'devise_token_auth'
 # authorization
@@ -209,7 +203,7 @@ group :development do
   gem 'rack-mini-profiler', '>= 3.2.0', require: false
   gem 'stackprof'
   # Should install the associated chrome extension to view query logs
-  gem 'meta_request'
+  gem 'meta_request', '>= 0.8.0'
 end
 
 group :test do
