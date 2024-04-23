@@ -185,7 +185,7 @@ gem 'reverse_markdown'
 gem 'informers'
 
 # openAI
-gem "ruby-openai"
+gem 'ruby-openai'
 
 ### Gems required only in specific deployment environments ###
 ##############################################################
