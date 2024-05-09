@@ -13,7 +13,7 @@
   enabled: false
 - name: disable_branding
   enabled: false
-  premium: true
+  
 - name: email_continuity_on_api_channel
   enabled: false
 - name: help_center
@@ -66,7 +66,7 @@
   enabled: false
 - name: audit_logs
   enabled: false
-  premium: true
+  
 - name: response_bot
   enabled: false
   premium: true
@@ -79,7 +79,7 @@
   enabled: false
 - name: sla
   enabled: false
-  premium: true
+  
 - name: help_center_embedding_search
   enabled: false
-  premium: true
+  
