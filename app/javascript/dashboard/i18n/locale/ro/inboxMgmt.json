@@ -9,7 +9,7 @@
       {
         "title": "Alege canalul",
         "route": "setare_inbox_nou",
-        "body": "Alegeți serviciul pe care doriți să-l integrați cu SoftwareArrow."
+        "body": "Alegeți serviciul pe care doriți să-l integrați cu Software Arrows."
       },
       {
         "title": "Crează căsuța",
@@ -38,7 +38,7 @@
         "PLACEHOLDER": "Introduceți numele website-ului dvs. (de exemplu: Acme Inc)"
       },
       "FB": {
-        "HELP": "PS: Prin conectare, vom avea acces doar la mesajele paginii tale. Mesajele tale private nu pot fi accesate niciodată de SoftwareArrow.",
+        "HELP": "PS: Prin conectare, vom avea acces doar la mesajele paginii tale. Mesajele tale private nu pot fi accesate niciodată de Software Arrows.",
         "CHOOSE_PAGE": "Alege pagina",
         "CHOOSE_PLACEHOLDER": "Selectaţi o pagină din listă",
         "INBOX_NAME": "Nume Inbox",

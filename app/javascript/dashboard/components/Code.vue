@@ -42,7 +42,7 @@ export default {
     },
     codepenTitle: {
       type: String,
-      default: 'Software Arrow Codepen',
+      default: 'Software Arrows Codepen',
     },
   },
   computed: {

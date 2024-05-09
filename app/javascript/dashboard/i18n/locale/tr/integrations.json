@@ -80,7 +80,7 @@
       },
       "HELP_TEXT": {
         "TITLE": "Slack Entegrasyonu Kullanımı",
-        "BODY": "<br/><p>SoftwareArrows artık tüm gelen konuşmaları Slack iş alanınız içindeki <b><i>customer-conversations</i></b> kanalına senkronize edecektir.</p><p><b><i>customer-conversations</i></b> slack kanalındaki bir konuşma başlığına yanıt vermek, bir yanıtı müşteriye geri bildirerek Software Arrows üzerinden yapacaktır.</p><p>Cevaplamaya başlamadan önce <b><i>note:</i></b> ile başlarsanız, yanıtlar yerine özel notlar oluşturabilirsiniz.</p><p>Slack'teki yanıtlayıcının, aynı e-posta altında Software Arrows'ta bir temsilci profiline sahip olması durumunda yanıtlar buna göre ilişkilendirilecektir.</p><p>Yanıtlayıcının ilişkilendirilmiş bir temsilci profili olmadığında yanıtlar bot profili üzerinden yapılacaktır.</p>",
+        "BODY": "<br/><p>Software Arrows artık tüm gelen konuşmaları Slack iş alanınız içindeki <b><i>customer-conversations</i></b> kanalına senkronize edecektir.</p><p><b><i>customer-conversations</i></b> slack kanalındaki bir konuşma başlığına yanıt vermek, bir yanıtı müşteriye geri bildirerek Software Arrows üzerinden yapacaktır.</p><p>Cevaplamaya başlamadan önce <b><i>note:</i></b> ile başlarsanız, yanıtlar yerine özel notlar oluşturabilirsiniz.</p><p>Slack'teki yanıtlayıcının, aynı e-posta altında Software Arrows'ta bir temsilci profiline sahip olması durumunda yanıtlar buna göre ilişkilendirilecektir.</p><p>Yanıtlayıcının ilişkilendirilmiş bir temsilci profili olmadığında yanıtlar bot profili üzerinden yapılacaktır.</p>",
         "SELECTED": "seçili"
       },
       "SELECT_CHANNEL": {

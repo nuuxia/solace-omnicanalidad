@@ -8,7 +8,7 @@
     "LIST": {
       "404": "Það eru engar aðgerðaskrár tiltækar á þessum reikning.",
       "TITLE": "Stjórna Aðgerðaskrám",
-      "DESC": "Aðgerðaskrár heldur utan um alla atburði og aðgerðir í SoftwareArrow.",
+      "DESC": "Aðgerðaskrár heldur utan um alla atburði og aðgerðir í Software Arrows.",
       "TABLE_HEADER": [
         "Notandi",
         "Aðgerð",

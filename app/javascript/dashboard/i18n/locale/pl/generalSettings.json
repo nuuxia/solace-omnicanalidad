@@ -50,8 +50,8 @@
     },
     "UPDATE_CHATWOOT": "Dostępna jest aktualizacja do wersji %{latestChatwootVersion} Software Arrows . Proszę zaktualizować swoją instancję.",
     "LEARN_MORE": "Dowiedz się więcej",
-    "PAYMENT_PENDING": "Twoja płatność jest w toku. Zaktualizuj informacje o płatności, aby kontynuować korzystanie z SoftwareArrow.",
-    "LIMITS_UPGRADE": "Twoje konto przekroczyło limit użytkowania. Zaktualizuj swój plan, aby kontynuować korzystanie z SoftwareArrow.",
+    "PAYMENT_PENDING": "Twoja płatność jest w toku. Zaktualizuj informacje o płatności, aby kontynuować korzystanie z Software Arrows.",
+    "LIMITS_UPGRADE": "Twoje konto przekroczyło limit użytkowania. Zaktualizuj swój plan, aby kontynuować korzystanie z Software Arrows.",
     "OPEN_BILLING": "Otwórz fakturę"
   },
   "FORMS": {

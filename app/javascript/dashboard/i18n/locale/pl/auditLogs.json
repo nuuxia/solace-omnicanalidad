@@ -8,7 +8,7 @@
     "LIST": {
       "404": "Brak dostępnych Dzienników Audytu na tym koncie.",
       "TITLE": "Zarządzaj Dziennikami Audytu",
-      "DESC": "Dzienniki Audytu to ślady działań i zdarzeń w systemie SoftwareArrow.",
+      "DESC": "Dzienniki Audytu to ślady działań i zdarzeń w systemie Software Arrows.",
       "TABLE_HEADER": [
         "Aktywność",
         "Akcja",

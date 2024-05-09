@@ -9,7 +9,7 @@
       {
         "title": "Pilih Channel",
         "route": "settings_inbox_new",
-        "body": "Pilih penyedia yang ingin Anda integrasikan dengan SoftwareArrow."
+        "body": "Pilih penyedia yang ingin Anda integrasikan dengan Software Arrows."
       },
       {
         "title": "Buat Kotak Masuk",
@@ -38,7 +38,7 @@
         "PLACEHOLDER": "Masukkan nama situs web Anda (misalnya: Acme Inc)"
       },
       "FB": {
-        "HELP": "NB: Dengan masuk, kami hanya mendapatkan akses ke pesan Halaman Anda. Pesan pribadi Anda tidak akan pernah bisa diakses oleh SoftwareArrow.",
+        "HELP": "NB: Dengan masuk, kami hanya mendapatkan akses ke pesan Halaman Anda. Pesan pribadi Anda tidak akan pernah bisa diakses oleh Software Arrows.",
         "CHOOSE_PAGE": "Pilih Halaman",
         "CHOOSE_PLACEHOLDER": "Pilih halaman dari daftar",
         "INBOX_NAME": "Nama Kotak Masuk",

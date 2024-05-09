@@ -9,7 +9,7 @@
       {
         "title": "Choisir un canal",
         "route": "settings_inbox_new",
-        "body": "Choisissez le fournisseur que vous souhaitez intégrer avec SoftwareArrow."
+        "body": "Choisissez le fournisseur que vous souhaitez intégrer avec Software Arrows."
       },
       {
         "title": "Créer une boîte de réception",
@@ -38,7 +38,7 @@
         "PLACEHOLDER": "Entrez le nom de votre boîte de réception (ex: Acme Inc)"
       },
       "FB": {
-        "HELP": "PS : En vous connectant, nous avons seulement accès aux messages de votre page. Vos messages privés ne peuvent jamais être consultés par SoftwareArrow.",
+        "HELP": "PS : En vous connectant, nous avons seulement accès aux messages de votre page. Vos messages privés ne peuvent jamais être consultés par Software Arrows.",
         "CHOOSE_PAGE": "Choisir la page",
         "CHOOSE_PLACEHOLDER": "Sélectionnez une page dans la liste",
         "INBOX_NAME": "Nom de la boîte de réception",

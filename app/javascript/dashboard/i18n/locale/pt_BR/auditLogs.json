@@ -8,7 +8,7 @@
     "LIST": {
       "404": "Não há Registros de Auditoria disponíveis nesta conta.",
       "TITLE": "Gerenciar Registros de Auditoria",
-      "DESC": "Registros de Auditoria são trilhas para eventos e ações em um Sistema SoftwareArrow.",
+      "DESC": "Registros de Auditoria são trilhas para eventos e ações em um Sistema Software Arrows.",
       "TABLE_HEADER": [
         "Usuário",
         "Ação",

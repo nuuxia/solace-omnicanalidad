@@ -8,7 +8,7 @@
     "LIST": {
       "404": "No hay registros de auditoría disponibles en esta cuenta.",
       "TITLE": "Administrar registros de auditoría",
-      "DESC": "Los registros de auditoría son pistas para eventos y acciones en un sistema de SoftwareArrow.",
+      "DESC": "Los registros de auditoría son pistas para eventos y acciones en un sistema de Software Arrows.",
       "TABLE_HEADER": [
         "User",
         "Action",

@@ -8,7 +8,7 @@
     "LIST": {
       "404": "Nu există jurnale de audit disponibile în acest cont.",
       "TITLE": "Gestionarea jurnalelor de audit",
-      "DESC": "Jurnalele de audit sunt piste pentru evenimente și acțiuni într-un sistem SoftwareArrow.",
+      "DESC": "Jurnalele de audit sunt piste pentru evenimente și acțiuni într-un sistem Software Arrows.",
       "TABLE_HEADER": [
         "Activitate",
         "Timp",

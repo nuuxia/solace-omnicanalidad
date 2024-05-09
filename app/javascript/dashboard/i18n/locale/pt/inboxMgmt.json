@@ -9,7 +9,7 @@
       {
         "title": "Escolher canal",
         "route": "settings_inbox_new",
-        "body": "Escolha o provedor que você deseja integrar com o SoftwareArrow."
+        "body": "Escolha o provedor que você deseja integrar com o Software Arrows."
       },
       {
         "title": "Criar Caixa de Entrada",
@@ -38,7 +38,7 @@
         "PLACEHOLDER": "Digite o nome do seu site (por exemplo: Acme Inc)"
       },
       "FB": {
-        "HELP": "PS: ao fazer login, só teremos acesso às mensagens da sua página. Suas mensagens privadas nunca poderão ser acessadas pelo SoftwareArrow.",
+        "HELP": "PS: ao fazer login, só teremos acesso às mensagens da sua página. Suas mensagens privadas nunca poderão ser acessadas pelo Software Arrows.",
         "CHOOSE_PAGE": "Escolher página",
         "CHOOSE_PLACEHOLDER": "Escolher uma página da lista",
         "INBOX_NAME": "Nome Caixa de Entrada",

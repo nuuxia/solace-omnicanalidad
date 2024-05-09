@@ -8,7 +8,7 @@
     "LIST": {
       "404": "Il n'y a aucun journal d'audit disponible dans ce compte.",
       "TITLE": "Gérer les journaux d’audit",
-      "DESC": "Les journaux d'audit sont des traces pour les événements et les actions dans un système SoftwareArrow.",
+      "DESC": "Les journaux d'audit sont des traces pour les événements et les actions dans un système Software Arrows.",
       "TABLE_HEADER": [
         "User",
         "Action",

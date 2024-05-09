@@ -9,7 +9,7 @@
       {
         "title": "Vybrat kanál",
         "route": "settings_inbox_new",
-        "body": "Vyberte si poskytovatele, který chcete integrovat do SoftwareArrow."
+        "body": "Vyberte si poskytovatele, který chcete integrovat do Software Arrows."
       },
       {
         "title": "Vytvořit doručenou poštu",
@@ -38,7 +38,7 @@
         "PLACEHOLDER": "Enter your website name (eg: Acme Inc)"
       },
       "FB": {
-        "HELP": "PS: Přihlášením získáme přístup pouze ke zprávám vaší stránky. Vaše soukromé zprávy nikdy nemohou být přístupné SoftwareArrow.",
+        "HELP": "PS: Přihlášením získáme přístup pouze ke zprávám vaší stránky. Vaše soukromé zprávy nikdy nemohou být přístupné Software Arrows.",
         "CHOOSE_PAGE": "Vybrat stránku",
         "CHOOSE_PLACEHOLDER": "Vyberte stránku ze seznamu",
         "INBOX_NAME": "Název schránky",

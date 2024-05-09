@@ -9,7 +9,7 @@
       {
         "title": "Välj kanal",
         "route": "settings_inbox_new",
-        "body": "Välj den leverantör du vill integrera med SoftwareArrow."
+        "body": "Välj den leverantör du vill integrera med Software Arrows."
       },
       {
         "title": "Skapa inkorg",
@@ -38,7 +38,7 @@
         "PLACEHOLDER": "Ange namnet på din webbplats (t.ex. Acme Inc)"
       },
       "FB": {
-        "HELP": "PS: Genom att logga in får vi bara tillgång till din sidas meddelanden. Dina privata meddelanden kan aldrig nås av SoftwareArrow.",
+        "HELP": "PS: Genom att logga in får vi bara tillgång till din sidas meddelanden. Dina privata meddelanden kan aldrig nås av Software Arrows.",
         "CHOOSE_PAGE": "Välj sida",
         "CHOOSE_PLACEHOLDER": "Välj en sida från listan",
         "INBOX_NAME": "Inkorgsnamn",

@@ -9,7 +9,7 @@
       {
         "title": "Elegir canal",
         "route": "settings_inbox_new",
-        "body": "Elija el proveedor que desea integrar con SoftwareArrow."
+        "body": "Elija el proveedor que desea integrar con Software Arrows."
       },
       {
         "title": "Crear bandeja de entrada",
@@ -38,7 +38,7 @@
         "PLACEHOLDER": "Introduzca el nombre de su sitio web (por ejemplo: Acme Inc)"
       },
       "FB": {
-        "HELP": "PS: Al iniciar sesión, sólo tenemos acceso a los mensajes de tu Página. Tus mensajes privados nunca pueden ser accedidos por SoftwareArrow.",
+        "HELP": "PS: Al iniciar sesión, sólo tenemos acceso a los mensajes de tu Página. Tus mensajes privados nunca pueden ser accedidos por Software Arrows.",
         "CHOOSE_PAGE": "Elegir página",
         "CHOOSE_PLACEHOLDER": "Seleccione una página de la lista",
         "INBOX_NAME": "Nombre de la bandeja de entrada",

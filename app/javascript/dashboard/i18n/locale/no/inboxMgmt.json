@@ -9,7 +9,7 @@
       {
         "title": "Velg kanal",
         "route": "settings_inbox_new",
-        "body": "Velg tilbyderen du vil integrere med SoftwareArrow."
+        "body": "Velg tilbyderen du vil integrere med Software Arrows."
       },
       {
         "title": "Opprett innboks",
@@ -38,7 +38,7 @@
         "PLACEHOLDER": "Angi navnet på nettsiden (f. eks.: Acme Inc)"
       },
       "FB": {
-        "HELP": "PS: Ved å logge inn får vi bare tilgang til meldingene til siden. Dine private meldinger vil aldri bli lest av SoftwareArrow.",
+        "HELP": "PS: Ved å logge inn får vi bare tilgang til meldingene til siden. Dine private meldinger vil aldri bli lest av Software Arrows.",
         "CHOOSE_PAGE": "Velg side",
         "CHOOSE_PLACEHOLDER": "Velg en side fra listen",
         "INBOX_NAME": "Navn på innboks",

@@ -8,7 +8,7 @@
     "LIST": {
       "404": "Tidak ada Catatan Audit yang tersedia di akun ini.",
       "TITLE": "Kelola Catatan Audit",
-      "DESC": "Catatan Audit adalah jejak untuk peristiwa dan tindakan dalam Sistem SoftwareArrow.",
+      "DESC": "Catatan Audit adalah jejak untuk peristiwa dan tindakan dalam Sistem Software Arrows.",
       "TABLE_HEADER": [
         "Pengguna",
         "Tindakan",
