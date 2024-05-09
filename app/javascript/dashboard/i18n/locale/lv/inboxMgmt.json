@@ -728,7 +728,7 @@
         "USER_MESSAGE": "Sveicināti",
         "AGENT_MESSAGE": "Labdien"
       },
-      "BRANDING_TEXT": "Darbināts ar SoftwareArrow",
+      "BRANDING_TEXT": "Darbināts ar Software Arrows",
       "SCRIPT_SETTINGS": "\nwindow.arrowsSettings = {options};"
     },
     "EMAIL_PROVIDERS": {

@@ -728,7 +728,7 @@
         "USER_MESSAGE": "Хай",
         "AGENT_MESSAGE": "Привет"
       },
-      "BRANDING_TEXT": "Работает на SoftwareArrow",
+      "BRANDING_TEXT": "Работает на Software Arrows",
       "SCRIPT_SETTINGS": "\n      window.arrowsSettings = {options};"
     },
     "EMAIL_PROVIDERS": {

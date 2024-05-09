@@ -728,7 +728,7 @@
         "USER_MESSAGE": "Salve",
         "AGENT_MESSAGE": "Ciao"
       },
-      "BRANDING_TEXT": "Offerto da SoftwareArrow",
+      "BRANDING_TEXT": "Offerto da Software Arrows",
       "SCRIPT_SETTINGS": "\n      window.arrowsSettings = {options};"
     },
     "EMAIL_PROVIDERS": {

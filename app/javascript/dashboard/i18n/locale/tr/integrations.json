@@ -33,7 +33,7 @@
       "HEADER_BTN_TXT": "Yeni Web Kancası Ekle",
       "LOADING": "Ekli web kancaları getiriliyor",
       "SEARCH_404": "Bu sorgu ile eşleşen öğe yok",
-      "SIDEBAR_TXT": "<p> <b> Web Kancaları </b> </p> <p> Web Kancaları, her hesap için tanımlanabilen HTTP geri aramalarıdır. SoftwareArrow'ta mesaj oluşturma gibi olaylar tarafından tetiklenirler. Bu hesap için birden fazla web kancası oluşturabilirsiniz. <br /> <br /> Bir <b> web kancası </b> oluşturmak için, <b> Yeni Web Kancası Ekle </b> düğmesini tıklayın. Ayrıca, Sil düğmesini tıklayarak mevcut herhangi bir web kancasını kaldırabilirsiniz. </p>",
+      "SIDEBAR_TXT": "<p> <b> Web Kancaları </b> </p> <p> Web Kancaları, her hesap için tanımlanabilen HTTP geri aramalarıdır. Software Arrows'ta mesaj oluşturma gibi olaylar tarafından tetiklenirler. Bu hesap için birden fazla web kancası oluşturabilirsiniz. <br /> <br /> Bir <b> web kancası </b> oluşturmak için, <b> Yeni Web Kancası Ekle </b> düğmesini tıklayın. Ayrıca, Sil düğmesini tıklayarak mevcut herhangi bir web kancasını kaldırabilirsiniz. </p>",
       "LIST": {
         "404": "Bu hesap için yapılandırılmış web kancası yok.",
         "TITLE": "Web Kancalarını Yönet",
@@ -80,14 +80,14 @@
       },
       "HELP_TEXT": {
         "TITLE": "Slack Entegrasyonu Kullanımı",
-        "BODY": "<br/><p>SoftwareArrows artık tüm gelen konuşmaları Slack iş alanınız içindeki <b><i>customer-conversations</i></b> kanalına senkronize edecektir.</p><p><b><i>customer-conversations</i></b> slack kanalındaki bir konuşma başlığına yanıt vermek, bir yanıtı müşteriye geri bildirerek Software Arrows üzerinden yapacaktır.</p><p>Cevaplamaya başlamadan önce <b><i>note:</i></b> ile başlarsanız, yanıtlar yerine özel notlar oluşturabilirsiniz.</p><p>Slack'teki yanıtlayıcının, aynı e-posta altında SoftwareArrow'ta bir temsilci profiline sahip olması durumunda yanıtlar buna göre ilişkilendirilecektir.</p><p>Yanıtlayıcının ilişkilendirilmiş bir temsilci profili olmadığında yanıtlar bot profili üzerinden yapılacaktır.</p>",
+        "BODY": "<br/><p>SoftwareArrows artık tüm gelen konuşmaları Slack iş alanınız içindeki <b><i>customer-conversations</i></b> kanalına senkronize edecektir.</p><p><b><i>customer-conversations</i></b> slack kanalındaki bir konuşma başlığına yanıt vermek, bir yanıtı müşteriye geri bildirerek Software Arrows üzerinden yapacaktır.</p><p>Cevaplamaya başlamadan önce <b><i>note:</i></b> ile başlarsanız, yanıtlar yerine özel notlar oluşturabilirsiniz.</p><p>Slack'teki yanıtlayıcının, aynı e-posta altında Software Arrows'ta bir temsilci profiline sahip olması durumunda yanıtlar buna göre ilişkilendirilecektir.</p><p>Yanıtlayıcının ilişkilendirilmiş bir temsilci profili olmadığında yanıtlar bot profili üzerinden yapılacaktır.</p>",
         "SELECTED": "seçili"
       },
       "SELECT_CHANNEL": {
         "OPTION_LABEL": "Bir kanal seçin",
         "UPDATE": "Güncelleme",
         "BUTTON_TEXT": "Kanalı Bağla",
-        "DESCRIPTION": "Slack iş alanınız şimdi Software Arrows ile bağlantılı. Ancak entegrasyon şu anda etkin değil. Entegrasyonu etkinleştirmek ve bir kanalı SoftwareArrow'a bağlamak için lütfen aşağıdaki düğmeye tıklayın.\n\n**Not:** Eğer özel bir kanal bağlamaya çalışıyorsanız, bu adımdan önce Slack kanalına Software Arrows uygulamasını ekleyin.",
+        "DESCRIPTION": "Slack iş alanınız şimdi Software Arrows ile bağlantılı. Ancak entegrasyon şu anda etkin değil. Entegrasyonu etkinleştirmek ve bir kanalı Software Arrows'a bağlamak için lütfen aşağıdaki düğmeye tıklayın.\n\n**Not:** Eğer özel bir kanal bağlamaya çalışıyorsanız, bu adımdan önce Slack kanalına Software Arrows uygulamasını ekleyin.",
         "ATTENTION_REQUIRED": "Dikkat gerekiyor",
         "EXPIRED": "Slack entegrasyonunuz süresi dolmuştur. Slack üzerinde mesaj almaya devam etmek için lütfen entegrasyonu silip iş alanınızı tekrar bağlayın."
       },

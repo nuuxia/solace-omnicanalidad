@@ -728,7 +728,7 @@
         "USER_MESSAGE": "היי",
         "AGENT_MESSAGE": "שלום"
       },
-      "BRANDING_TEXT": "מופעל על ידי SoftwareArrow",
+      "BRANDING_TEXT": "מופעל על ידי Software Arrows",
       "SCRIPT_SETTINGS": "\n      window.arrowsSettings = {options};"
     },
     "EMAIL_PROVIDERS": {

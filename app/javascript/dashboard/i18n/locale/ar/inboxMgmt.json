@@ -728,7 +728,7 @@
         "USER_MESSAGE": "مرحبا",
         "AGENT_MESSAGE": "مرحبا"
       },
-      "BRANDING_TEXT": "مدعوم بواسطة SoftwareArrow",
+      "BRANDING_TEXT": "مدعوم بواسطة Software Arrows",
       "SCRIPT_SETTINGS": "\n      window.arrowsSettings = {options};"
     },
     "EMAIL_PROVIDERS": {

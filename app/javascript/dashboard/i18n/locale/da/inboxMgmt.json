@@ -728,7 +728,7 @@
         "USER_MESSAGE": "Hi",
         "AGENT_MESSAGE": "Hej"
       },
-      "BRANDING_TEXT": "Drevet af SoftwareArrow",
+      "BRANDING_TEXT": "Drevet af Software Arrows",
       "SCRIPT_SETTINGS": "\n      window.arrowsSettings = {options};"
     },
     "EMAIL_PROVIDERS": {

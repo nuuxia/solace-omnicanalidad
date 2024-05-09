@@ -728,7 +728,7 @@
         "USER_MESSAGE": "Hola",
         "AGENT_MESSAGE": "Hola"
       },
-      "BRANDING_TEXT": "Desarrollado por SoftwareArrow",
+      "BRANDING_TEXT": "Desarrollado por Software Arrows",
       "SCRIPT_SETTINGS": "\n      window.arrowsSettings = {options};"
     },
     "EMAIL_PROVIDERS": {

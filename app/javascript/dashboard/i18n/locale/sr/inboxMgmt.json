@@ -728,7 +728,7 @@
         "USER_MESSAGE": "Ćao",
         "AGENT_MESSAGE": "Zdravo"
       },
-      "BRANDING_TEXT": "Pokreće SoftwareArrow",
+      "BRANDING_TEXT": "Pokreće Software Arrows",
       "SCRIPT_SETTINGS": "\n      window.arrowsSettings ={options};"
     },
     "EMAIL_PROVIDERS": {

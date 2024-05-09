@@ -728,7 +728,7 @@
         "USER_MESSAGE": "Hei",
         "AGENT_MESSAGE": "Moi"
       },
-      "BRANDING_TEXT": "Palvelun tarjoaa SoftwareArrow",
+      "BRANDING_TEXT": "Palvelun tarjoaa Software Arrows",
       "SCRIPT_SETTINGS": "\n      window.arrowsSettings = {options};"
     },
     "EMAIL_PROVIDERS": {

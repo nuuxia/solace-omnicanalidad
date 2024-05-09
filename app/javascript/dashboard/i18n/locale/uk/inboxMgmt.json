@@ -728,7 +728,7 @@
         "USER_MESSAGE": "Привіт",
         "AGENT_MESSAGE": "Доброго дня"
       },
-      "BRANDING_TEXT": "Працює на SoftwareArrow",
+      "BRANDING_TEXT": "Працює на Software Arrows",
       "SCRIPT_SETTINGS": "\n      window.arrowsSettings = {options};"
     },
     "EMAIL_PROVIDERS": {

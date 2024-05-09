@@ -728,7 +728,7 @@
         "USER_MESSAGE": "Xin chào",
         "AGENT_MESSAGE": "Xin chào"
       },
-      "BRANDING_TEXT": "CC bởi SoftwareArrow",
+      "BRANDING_TEXT": "CC bởi Software Arrows",
       "SCRIPT_SETTINGS": "\nwindow.arrowsSettings = {options};"
     },
     "EMAIL_PROVIDERS": {

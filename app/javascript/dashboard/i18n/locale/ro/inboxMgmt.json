@@ -728,7 +728,7 @@
         "USER_MESSAGE": "Salut",
         "AGENT_MESSAGE": "Bună"
       },
-      "BRANDING_TEXT": "Oferit de SoftwareArrow",
+      "BRANDING_TEXT": "Oferit de Software Arrows",
       "SCRIPT_SETTINGS": "\nwindow.arrowsSettings = {options};"
     },
     "EMAIL_PROVIDERS": {

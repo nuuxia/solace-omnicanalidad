@@ -728,7 +728,7 @@
         "USER_MESSAGE": "Cześć",
         "AGENT_MESSAGE": "Witam"
       },
-      "BRANDING_TEXT": "Napędzany przez SoftwareArrow",
+      "BRANDING_TEXT": "Napędzany przez Software Arrows",
       "SCRIPT_SETTINGS": "\n      window.arrowsSettings = {options};"
     },
     "EMAIL_PROVIDERS": {

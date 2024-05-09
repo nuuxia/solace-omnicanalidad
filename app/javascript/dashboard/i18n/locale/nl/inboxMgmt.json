@@ -728,7 +728,7 @@
         "USER_MESSAGE": "Hi",
         "AGENT_MESSAGE": "Hello"
       },
-      "BRANDING_TEXT": "Mogelijk gemaakt door SoftwareArrow",
+      "BRANDING_TEXT": "Mogelijk gemaakt door Software Arrows",
       "SCRIPT_SETTINGS": "\n      window.arrowsSettings = {options};"
     },
     "EMAIL_PROVIDERS": {

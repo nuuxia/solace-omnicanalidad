@@ -732,7 +732,7 @@
         "USER_MESSAGE": "Hi",
         "AGENT_MESSAGE": "Hello"
       },
-      "BRANDING_TEXT": "Powered by SoftwareArrow",
+      "BRANDING_TEXT": "Powered by Software Arrows",
       "SCRIPT_SETTINGS": "\n      window.arrowsSettings = {options};"
     },
     "EMAIL_PROVIDERS": {
