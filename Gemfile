@@ -75,7 +75,7 @@ gem 'webpacker'
 gem 'barnes'
 
 ##--- gems for authentication & authorization ---##
-gem 'devise', '>= 4.9.3'
+gem 'devise', '>= 4.9.4'
 gem 'devise-secure_password', git: 'https://github.com/chatwoot/devise-secure_password', branch: 'chatwoot'
 gem 'devise_token_auth'
 # authorization
@@ -185,7 +185,7 @@ gem 'reverse_markdown'
 gem 'informers'
 
 # openAI
-gem "ruby-openai"
+gem 'ruby-openai'
 
 ### Gems required only in specific deployment environments ###
 ##############################################################
@@ -212,7 +212,7 @@ group :development do
   gem 'rack-mini-profiler', '>= 3.2.0', require: false
   gem 'stackprof'
   # Should install the associated chrome extension to view query logs
-  gem 'meta_request'
+  gem 'meta_request', '>= 0.8.0'
 end
 
 group :test do
