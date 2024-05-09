@@ -26,7 +26,7 @@ RSpec.describe 'Devise::Mailer' do
     end
 
     it 'does not refer to the inviter and their account' do
-      expect(mail.body).not_to match('te ha invitado a probar Softwarearrows!')
+      expect(mail.body).not_to match('te ha invitado a probar Software Arrows!')
       expect(mail.body).to match('Tenemos un conjunto de potentes herramientas listas para que las explore.')
     end
 
@@ -40,7 +40,7 @@ RSpec.describe 'Devise::Mailer' do
 
       it 'refers to the inviter and their account' do
         expect(mail.body).to match(
-          "#{CGI.escapeHTML(inviter_val.name)}, with #{CGI.escapeHTML(account.name)}, te ha invitado a probar Softwarearrows. "
+          "#{CGI.escapeHTML(inviter_val.name)}, with #{CGI.escapeHTML(account.name)}, te ha invitado a probar Software Arrows. "
         )
         expect(mail.body).not_to match('Tenemos un conjunto de potentes herramientas listas para que las explore.')
       end

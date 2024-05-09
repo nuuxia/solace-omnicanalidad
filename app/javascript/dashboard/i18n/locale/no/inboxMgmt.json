@@ -1,7 +1,7 @@
 {
   "INBOX_MGMT": {
     "HEADER": "Innbokser",
-    "SIDEBAR_TXT": "<p><b>Innboks</b></p> <p> Når du kobler til et nettsted eller en facebook-side til SoftwareArrow blir den kalt en <b>Innboks</b>. Du kan ha ubegrensede innbokser i din SoftwareArrow -konto. </p><p> Klikk på <b>Legg til innboks</b> for å koble sammen en nettside eller en facebook-side. </p><p> I oversikten kan du se alle samtalene fra innboksene på et sted og svare på de i samtaler-fanen. </p><p> Du kan også se samtaler for hver enkelt innboks ved å klikke på innboksen på venstre siden av oversikten. </p>",
+    "SIDEBAR_TXT": "<p><b>Innboks</b></p> <p> Når du kobler til et nettsted eller en facebook-side til Software Arrows blir den kalt en <b>Innboks</b>. Du kan ha ubegrensede innbokser i din Software Arrows -konto. </p><p> Klikk på <b>Legg til innboks</b> for å koble sammen en nettside eller en facebook-side. </p><p> I oversikten kan du se alle samtalene fra innboksene på et sted og svare på de i samtaler-fanen. </p><p> Du kan også se samtaler for hver enkelt innboks ved å klikke på innboksen på venstre siden av oversikten. </p>",
     "LIST": {
       "404": "Det er ingen innbokser tilknyttet denne kontoen."
     },
@@ -350,11 +350,11 @@
       },
       "DETAILS": {
         "TITLE": "Innboksdetaljer",
-        "DESC": "Fra listen under, velg facebook-siden du vil koble til SoftwareArrow . Du kan også gi innboksen et egendefinert navn for bedre identifisering."
+        "DESC": "Fra listen under, velg facebook-siden du vil koble til Software Arrows . Du kan også gi innboksen et egendefinert navn for bedre identifisering."
       },
       "FINISH": {
         "TITLE": "Den satt!",
-        "DESC": "Du er ferdig med å integrere din facebook-side med SoftwareArrow . Neste gang en kunde sender en melding fra siden din vil samtalen vises automatisk i innboksen din.<br>Vi gir deg også et widget skript som du enkelt kan legge til på nettstedet ditt. Når dette er direkte på din nettside kan kunder sende deg meldinger fra nettstedet ditt uten hjelp av eksterne verktøy og samtalen vil vises her, i SoftwareArrow .<br>Kult, eller hva? Vel, vi prøver :)"
+        "DESC": "Du er ferdig med å integrere din facebook-side med Software Arrows . Neste gang en kunde sender en melding fra siden din vil samtalen vises automatisk i innboksen din.<br>Vi gir deg også et widget skript som du enkelt kan legge til på nettstedet ditt. Når dette er direkte på din nettside kan kunder sende deg meldinger fra nettstedet ditt uten hjelp av eksterne verktøy og samtalen vil vises her, i Software Arrows .<br>Kult, eller hva? Vel, vi prøver :)"
       },
       "EMAIL_PROVIDER": {
         "TITLE": "Select your email provider",

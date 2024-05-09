@@ -1,7 +1,7 @@
 {
   "INBOX_MGMT": {
     "HEADER": "Inboxes",
-    "SIDEBAR_TXT": "<p><b>Inbox</b></p> <p> When you connect a website or a facebook Page to SoftwareArrow, it is called an <b>Inbox</b>. You can have unlimited inboxes in your SoftwareArrow account. </p><p> Click on <b>Add Inbox</b> to connect a website or a Facebook Page. </p><p> In the Dashboard, you can see all the conversations from all your inboxes in a single place and respond to them under the `Conversations` tab. </p><p> You can also see conversations specific to an inbox by clicking on the inbox name on the left pane of the dashboard. </p>",
+    "SIDEBAR_TXT": "<p><b>Inbox</b></p> <p> When you connect a website or a facebook Page to Software Arrows, it is called an <b>Inbox</b>. You can have unlimited inboxes in your Software Arrows account. </p><p> Click on <b>Add Inbox</b> to connect a website or a Facebook Page. </p><p> In the Dashboard, you can see all the conversations from all your inboxes in a single place and respond to them under the `Conversations` tab. </p><p> You can also see conversations specific to an inbox by clicking on the inbox name on the left pane of the dashboard. </p>",
     "LIST": {
       "404": "There are no inboxes attached to this account."
     },
@@ -350,11 +350,11 @@
       },
       "DETAILS": {
         "TITLE": "Detaily schránky",
-        "DESC": "Z rozbaľovacieho zoznamu nižšie vyberte stránku na Facebooku, ktorú chcete pripojiť k službe SoftwareArrow . Pre lepšiu identifikáciu môžete schránke zadať aj vlastný názov."
+        "DESC": "Z rozbaľovacieho zoznamu nižšie vyberte stránku na Facebooku, ktorú chcete pripojiť k službe Software Arrows . Pre lepšiu identifikáciu môžete schránke zadať aj vlastný názov."
       },
       "FINISH": {
         "TITLE": "Podarilo sa!",
-        "DESC": "Úspešne ste dokončili integráciu svojej stránky na Facebooku s SoftwareArrow . Pri ďalšej správe od zákazníka sa konverzácia automaticky zobrazí na vašej stránke.<br>Poskytujeme vám aj skript widgetu, ktorý môžete jednoducho pridať na svoju webovú stránku. Keď bude na vašej webovej stránke funkčný, zákazníci vám môžu posielať správy priamo z vašej webovej stránky bez pomoci akéhokoľvek externého nástroja a konverzácia sa objaví priamo tu, na SoftwareArrow .<br>Cool, čo? No, určite sa o to snažíme :)"
+        "DESC": "Úspešne ste dokončili integráciu svojej stránky na Facebooku s Software Arrows . Pri ďalšej správe od zákazníka sa konverzácia automaticky zobrazí na vašej stránke.<br>Poskytujeme vám aj skript widgetu, ktorý môžete jednoducho pridať na svoju webovú stránku. Keď bude na vašej webovej stránke funkčný, zákazníci vám môžu posielať správy priamo z vašej webovej stránky bez pomoci akéhokoľvek externého nástroja a konverzácia sa objaví priamo tu, na Software Arrows .<br>Cool, čo? No, určite sa o to snažíme :)"
       },
       "EMAIL_PROVIDER": {
         "TITLE": "Select your email provider",
