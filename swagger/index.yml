@@ -5,11 +5,11 @@ info:
   title: Chatwoot
   termsOfService:	https://www.chatwoot.com/terms-of-service/
   contact:
-    email: hello@chatwoot.com
+    email: hello@softwarearrows.com
   license:
     name: MIT License
     url: https://opensource.org/licenses/MIT
-host: app.chatwoot.com
+host: app.softwarearrows.com
 basePath: /
 schemes:
   - https
