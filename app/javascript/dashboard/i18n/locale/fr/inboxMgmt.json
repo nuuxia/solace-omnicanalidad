@@ -729,7 +729,7 @@
         "AGENT_MESSAGE": "Bonjour"
       },
       "BRANDING_TEXT": "Propulsé par SoftwareArrow",
-      "SCRIPT_SETTINGS": "\n      window.chatwootSettings = {options};"
+      "SCRIPT_SETTINGS": "\n      window.arrowsSettings = {options};"
     },
     "EMAIL_PROVIDERS": {
       "MICROSOFT": "Microsoft",

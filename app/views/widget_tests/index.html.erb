@@ -12,7 +12,7 @@
 %>
 <script>
 
-window.chatwootSettings = {
+window.arrowsSettings = {
   hideMessageBubble: false,
   // baseDomain: '.loca.lt',
   position: '<%= @widget_position %>',
@@ -32,7 +32,7 @@ window.chatwootSettings = {
   g.async = true;
   s.parentNode.insertBefore(g,s);
   g.onload=function(){
-    window.chatwootSDK.run({
+    window.arrowsSDK.run({
       websiteToken: '<%= @web_widget.website_token %>',
       baseUrl: BASE_URL
     })

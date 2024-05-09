@@ -729,7 +729,7 @@
         "AGENT_MESSAGE": "Bună"
       },
       "BRANDING_TEXT": "Oferit de SoftwareArrow",
-      "SCRIPT_SETTINGS": "\nwindow.chatwootSettings = {options};"
+      "SCRIPT_SETTINGS": "\nwindow.arrowsSettings = {options};"
     },
     "EMAIL_PROVIDERS": {
       "MICROSOFT": "Microsoft",

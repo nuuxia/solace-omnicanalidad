@@ -10,13 +10,14 @@ RSpec.describe AdministratorNotifications::ChannelNotificationsMailer do
   before do
     allow(described_class).to receive(:new).and_return(class_instance)
     allow(class_instance).to receive(:smtp_config_set_or_development?).and_return(true)
+    Account::ContactsExportJob.perform_now(account.id, [])
   end
 
   describe 'slack_disconnect' do
     let(:mail) { described_class.with(account: account).slack_disconnect.deliver_now }
 
     it 'renders the subject' do
-      expect(mail.subject).to eq('Your Slack integration has expired')
+      expect(mail.subject).to eq('Tu integración de Slack ha caducado')
     end
 
     it 'renders the receiver email' do
@@ -28,11 +29,11 @@ RSpec.describe AdministratorNotifications::ChannelNotificationsMailer do
     let(:mail) { described_class.with(account: account).dialogflow_disconnect.deliver_now }
 
     it 'renders the subject' do
-      expect(mail.subject).to eq('Your Dialogflow integration was disconnected')
+      expect(mail.subject).to eq('Tu integración de Dialogflow fue desconectada')
     end
 
     it 'renders the content' do
-      expect(mail.body).to include('Your Dialogflow integration was disconnected because of permission issues.')
+      expect(mail.body).to include('Su integración de Dialogflow se desconectó debido a problemas de permisos')
     end
 
     it 'renders the receiver email' do
@@ -50,7 +51,7 @@ RSpec.describe AdministratorNotifications::ChannelNotificationsMailer do
     let(:mail) { described_class.with(account: account).facebook_disconnect(facebook_inbox).deliver_now }
 
     it 'renders the subject' do
-      expect(mail.subject).to eq('Your Facebook page connection has expired')
+      expect(mail.subject).to eq('La conexión a tu página de Facebook ha caducado')
     end
 
     it 'renders the receiver email' do
@@ -64,7 +65,7 @@ RSpec.describe AdministratorNotifications::ChannelNotificationsMailer do
     let(:mail) { described_class.with(account: account).whatsapp_disconnect(whatsapp_inbox).deliver_now }
 
     it 'renders the subject' do
-      expect(mail.subject).to eq('Your Whatsapp connection has expired')
+      expect(mail.subject).to eq('Tu conexión de Whatsapp ha caducado')
     end
 
     it 'renders the receiver email' do
@@ -77,7 +78,7 @@ RSpec.describe AdministratorNotifications::ChannelNotificationsMailer do
     let(:mail) { described_class.with(account: account).contact_import_complete(data_import).deliver_now }
 
     it 'renders the subject' do
-      expect(mail.subject).to eq('Contact Import Completed')
+      expect(mail.subject).to eq('Importación de contactos completada')
     end
 
     it 'renders the processed records' do
@@ -91,11 +92,11 @@ RSpec.describe AdministratorNotifications::ChannelNotificationsMailer do
   end
 
   describe 'contact_export_complete' do
-    let!(:file_url) { 'http://test.com/test' }
-    let(:mail) { described_class.with(account: account).contact_export_complete(file_url, administrator.email).deliver_now }
+    let!(:file_url) { Rails.application.routes.url_helpers.rails_blob_url(account.contacts_export) }
+    let(:mail) { described_class.with(account: account).contact_export_complete(file_url).deliver_now }
 
     it 'renders the subject' do
-      expect(mail.subject).to eq("Your contact's export file is available to download.")
+      expect(mail.subject).to eq("El archivo de exportación de su contacto está disponible para descargar.")
     end
 
     it 'renders the receiver email' do

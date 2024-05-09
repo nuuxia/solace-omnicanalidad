@@ -729,7 +729,7 @@
         "AGENT_MESSAGE": "Merhaba"
       },
       "BRANDING_TEXT": "SoftwareArrows tarafından desteklenmektedir",
-      "SCRIPT_SETTINGS": "\nwindow.chatwootSettings = {options};"
+      "SCRIPT_SETTINGS": "\nwindow.arrowsSettings = {options};"
     },
     "EMAIL_PROVIDERS": {
       "MICROSOFT": "Microsoft",

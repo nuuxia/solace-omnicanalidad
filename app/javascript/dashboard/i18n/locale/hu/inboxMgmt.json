@@ -729,7 +729,7 @@
         "AGENT_MESSAGE": "Hello"
       },
       "BRANDING_TEXT": "SoftwareArrows",
-      "SCRIPT_SETTINGS": "\nwindow.chatwootSettings = {options};"
+      "SCRIPT_SETTINGS": "\nwindow.arrowsSettings = {options};"
     },
     "EMAIL_PROVIDERS": {
       "MICROSOFT": "360Dialog",
