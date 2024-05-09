@@ -6,14 +6,14 @@ ruby '3.2.2'
 gem 'rack-cors', '2.0.0', require: 'rack/cors'
 gem 'rails', '~> 7.0.8.1'
 # Reduces boot times through caching; required in config/boot.rb
+gem 'bcrypt_pbkdf', '~> 1.1'
 gem 'bootsnap', require: false
 gem 'capistrano', '~> 3.16'
+gem 'capistrano3-puma', '4.0.0'
+gem 'capistrano-puma'
 gem 'capistrano-rails', '~> 1.1', '>= 1.1.7'
 gem 'capistrano-rvm'
-gem 'capistrano-puma'
-gem "capistrano3-puma", "4.0.0"
-gem "ed25519", "~> 1.3"
-gem "bcrypt_pbkdf", "~> 1.1"
+gem 'ed25519', '~> 1.3'
 ##-- rails application helper gems --##
 gem 'acts-as-taggable-on'
 gem 'attr_extras'
@@ -183,6 +183,9 @@ gem 'reverse_markdown'
 
 # Sentiment analysis
 gem 'informers'
+
+# openAI
+gem "ruby-openai"
 
 ### Gems required only in specific deployment environments ###
 ##############################################################

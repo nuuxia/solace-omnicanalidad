@@ -102,6 +102,13 @@
             )
           "
         />
+        <woot-input
+          v-model.trim="selectedAssistantId"
+          class="w-[75%] pb-4"
+          :label="assistantIdNameLabel"
+          :placeholder="assistantIdPlaceHolder"
+          @blur="$v.selectedAssistantId.$touch"
+        />
 
         <label v-if="isAWebWidgetInbox" class="w-3/4 pb-4">
           {{ $t('INBOX_MGMT.ADD.WEBSITE_CHANNEL.WIDGET_COLOR.LABEL') }}
@@ -468,6 +475,7 @@ export default {
       locktoSingleConversation: false,
       allowMessagesAfterResolved: true,
       continuityViaEmail: true,
+      selectedAssistantId: '',
       selectedInboxName: '',
       channelWebsiteUrl: '',
       webhookUrl: '',
@@ -605,6 +613,12 @@ export default {
       }
       return this.$t('INBOX_MGMT.ADD.CHANNEL_NAME.PLACEHOLDER');
     },
+    assistantIdNameLabel() {
+      return this.$t('INBOX_MGMT.ADD.ASSISTANTID.LABEL');
+    },
+    assistantIdPlaceHolder() {
+      return this.$t('INBOX_MGMT.ADD.ASSISTANTID.PLACEHOLDER');
+    },
     textAreaChannels() {
       if (
         this.isATwilioChannel ||
@@ -655,6 +669,7 @@ export default {
       this.$store.dispatch('inboxes/get').then(() => {
         this.avatarUrl = this.inbox.avatar_url;
         this.selectedInboxName = this.inbox.name;
+        this.selectedAssistantId = this.inbox.assistantid;
         this.webhookUrl = this.inbox.webhook_url;
         this.greetingEnabled = this.inbox.greeting_enabled || false;
         this.greetingMessage = this.inbox.greeting_message || '';
@@ -681,6 +696,7 @@ export default {
         const payload = {
           id: this.currentInboxId,
           name: this.selectedInboxName,
+          assistantid: this.selectedAssistantId,
           enable_email_collect: this.emailCollectEnabled,
           csat_survey_enabled: this.csatSurveyEnabled,
           allow_messages_after_resolved: this.allowMessagesAfterResolved,
@@ -754,6 +770,7 @@ export default {
       shouldBeUrl,
     },
     selectedInboxName: {},
+    selectedAssistantId: {},
   },
 };
 </script>
