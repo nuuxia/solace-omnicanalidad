@@ -15,15 +15,15 @@ const {
 
 export const colors = {
   woot: {
-    25: blue.blue2,
+    25: purple.plum3,
     50: blue.blue3,
     75: blue.blue4,
     100: blue.blue5,
     200: blue.blue7,
     300: blue.blue8,
     400: blueDark.blue11,
-    500: blueDark.blue10,
-    600: blueDark.blue9,
+    500: plum.plum12,
+    600: plum.plum11,
     700: blueDark.blue8,
     800: blueDark.blue6,
     900: blueDark.blue2,
