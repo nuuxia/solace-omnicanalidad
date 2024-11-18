@@ -1,5 +1,4 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+import { createStore } from 'vuex';
 
 import accounts from './modules/accounts';
 import agentBots from './modules/agentBots';
@@ -27,6 +26,7 @@ import conversationTypingStatus from './modules/conversationTypingStatus';
 import conversationWatchers from './modules/conversationWatchers';
 import csat from './modules/csat';
 import customViews from './modules/customViews';
+import customRole from './modules/customRole';
 import dashboardApps from './modules/dashboardApps';
 import globalConfig from 'shared/store/globalConfig';
 import inboxAssignableAgents from './modules/inboxAssignableAgents';
@@ -46,28 +46,9 @@ import webhooks from './modules/webhooks';
 import draftMessages from './modules/draftMessages';
 import SLAReports from './modules/SLAReports';
 
-import LogRocket from 'logrocket';
-import createPlugin from 'logrocket-vuex';
-
 const plugins = [];
 
-if (window.logRocketProjectId) {
-  LogRocket.init(window.logRocketProjectId);
-  // eslint-disable-next-line func-names
-  const logRocketPlugin = createPlugin(LogRocket, function (mutation) {
-    const eventsToIgnore = ['SET_CURRENT_USER', 'AUTHENTICATE', 'CLEAR_USER'];
-    if (eventsToIgnore.includes(mutation.type)) {
-      return null;
-    }
-
-    return mutation;
-  });
-
-  plugins.push(logRocketPlugin);
-}
-
-Vue.use(Vuex);
-export default new Vuex.Store({
+export default createStore({
   modules: {
     accounts,
     agentBots,
@@ -95,6 +76,7 @@ export default new Vuex.Store({
     conversationWatchers,
     csat,
     customViews,
+    customRole,
     dashboardApps,
     globalConfig,
     inboxAssignableAgents,
