@@ -9,6 +9,8 @@ const {
   slateDark,
   red,
   redDark,
+  purple,
+  plum,
   violet,
   violetDark,
 } = require('@radix-ui/colors');
