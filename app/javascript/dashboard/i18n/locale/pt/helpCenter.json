@@ -386,7 +386,7 @@
         "SLUG": {
           "LABEL": "Slug",
           "PLACEHOLDER": "Categoria slug para URLs",
-          "HELP_TEXT": "app.chatwoot.com/hc/meu-portal/en-US/categorias/meu-slug",
+          "HELP_TEXT": "app.softwarearrows.com/hc/meu-portal/en-US/categorias/meu-slug",
           "ERROR": "Slug obrigatória"
         },
         "DESCRIPTION": {

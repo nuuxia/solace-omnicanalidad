@@ -41,9 +41,9 @@ const runSDK = ({ baseUrl, websiteToken }) => {
     restoreWidgetInDOM(event.newDocument.body)
   );
 
-  const chatwootSettings = window.chatwootSettings || {};
-  let locale = chatwootSettings.locale;
-  let baseDomain = chatwootSettings.baseDomain;
+  const arrowsSettings = window.arrowsSettings || {};
+  let locale = arrowsSettings.locale;
+  let baseDomain = arrowsSettings.baseDomain;
 
   if (arrowsSettings.useBrowserLanguage) {
     locale = window.navigator.language.replace('-', '_');

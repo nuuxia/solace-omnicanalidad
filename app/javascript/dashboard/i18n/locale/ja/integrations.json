@@ -1,7 +1,7 @@
 {
   "INTEGRATION_SETTINGS": {
     "HEADER": "連携",
-    "DESCRIPTION": "Chatwoot integrates with multiple tools and services to improve your team's efficiency. Explore the list below to configure your favorite apps.",
+    "DESCRIPTION": "Software Arrows integrates with multiple tools and services to improve your team's efficiency. Explore the list below to configure your favorite apps.",
     "LEARN_MORE": "Learn more about integrations",
     "LOADING": "Fetching integrations",
     "CAPTAIN": {
@@ -15,7 +15,7 @@
       "LEARN_MORE": "Learn more about webhooks",
       "FORM": {
         "CANCEL": "キャンセル",
-        "DESC": "Webhookイベントは、Chatwootアカウントで何が起こっているかについてのリアルタイムの情報を提供します。コールバックを設定するには有効なURLを入力してください。",
+        "DESC": "Webhookイベントは、Software Arrowsアカウントで何が起こっているかについてのリアルタイムの情報を提供します。コールバックを設定するには有効なURLを入力してください。",
         "SUBSCRIPTIONS": {
           "LABEL": "Events",
           "EVENTS": {
@@ -43,7 +43,7 @@
       "HEADER_BTN_TXT": "新しいWebhookを追加",
       "LOADING": "添付されたWebhookを取得しています",
       "SEARCH_404": "検索内容（クエリ）に一致する項目はありませんでした",
-      "SIDEBAR_TXT": "<p><b>Webhooks</b> </p> <p>Webhooks は、すべてのアカウントで定義可能なHTTP コールバックです。これらは、メッセージの作成などChatwoot上でのイベントをきっかけに実行されます。このアカウントでは、1つ以上のwebhookが作成できます。 <br /><br /> <b>webhook</b>を作成するには、<b>webhookを作成</b>ボタンをクリックしてください。また、作成した webhook を削除ボタンを押して削除することもできます。</p>",
+      "SIDEBAR_TXT": "<p><b>Webhooks</b> </p> <p>Webhooks は、すべてのアカウントで定義可能なHTTP コールバックです。これらは、メッセージの作成などSoftware Arrows上でのイベントをきっかけに実行されます。このアカウントでは、1つ以上のwebhookが作成できます。 <br /><br /> <b>webhook</b>を作成するには、<b>webhookを作成</b>ボタンをクリックしてください。また、作成した webhook を削除ボタンを押して削除することもできます。</p>",
       "LIST": {
         "404": "このアカウントに紐付けされたWebフックはありません。",
         "TITLE": "Webhookの管理",

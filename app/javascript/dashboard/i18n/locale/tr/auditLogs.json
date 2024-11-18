@@ -10,7 +10,7 @@
     "LIST": {
       "404": "Bu hesapta kullanılabilir denetim kaydı yok.",
       "TITLE": "Denetim Kayıtlarını Yönet",
-      "DESC": "Denetim Kayıtları, Chatwoot Sistemi'ndeki olaylar ve eylemler için izlerdir.",
+      "DESC": "Denetim Kayıtları, Software Arrows Sistemi'ndeki olaylar ve eylemler için izlerdir.",
       "TABLE_HEADER": ["Kullanıcı", "Eylem", "IP Adresi"]
     },
     "API": {

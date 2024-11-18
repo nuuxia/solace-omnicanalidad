@@ -10,7 +10,7 @@
     "LIST": {
       "404": "There are no Audit Logs available in this account.",
       "TITLE": "Manage Audit Logs",
-      "DESC": "Audit Logs are trails for events and actions in a Chatwoot System.",
+      "DESC": "Audit Logs are trails for events and actions in a Software Arrows System.",
       "TABLE_HEADER": ["User", "Action", "ที่อยู่ไอพี"]
     },
     "API": {

@@ -1,7 +1,7 @@
 {
   "INTEGRATION_SETTINGS": {
     "HEADER": "Integrationen",
-    "DESCRIPTION": "Chatwoot integriert sich mit mehreren Tools und Diensten, um die Effizienz Ihres Teams zu verbessern. Erkunden Sie die folgende Liste, um Ihre Lieblingsapps zu konfigurieren.",
+    "DESCRIPTION": "Software Arrows integriert sich mit mehreren Tools und Diensten, um die Effizienz Ihres Teams zu verbessern. Erkunden Sie die folgende Liste, um Ihre Lieblingsapps zu konfigurieren.",
     "LEARN_MORE": "Mehr über Integrationen erfahren",
     "LOADING": "Integrationen werden abgerufen",
     "CAPTAIN": {
@@ -90,14 +90,14 @@
       },
       "HELP_TEXT": {
         "TITLE": "Slack-Integration verwenden",
-        "BODY": "<br/><p>Chatwoot wird nun alle eingehenden Konversationen in den <b><i>Kundengespräche</i></b> Channel innerhalb Ihres Slack Arbeitsplatzes synchronisieren.</p><p>Wenn Sie in <b><i>Kunden-Konversationen</i></b> antworten, wird der Slack Kanal eine Antwort an den Kunden durch Chat erzeugen.</p><p>Starten Sie die Antworten mit <b><i>Notiz:</i></b> um private Notizen anstatt Antworten zu erstellen.</p><p>Wenn der Replier auf Slack ein Agentenprofil im Chatwoot unter der gleichen E-Mail hat, werden die Antworten entsprechend assoziiert.</p><p>Wenn der Replier kein Agentenprofil hat, werden die Antworten aus dem Bot-Profil getätigt.</p>",
+        "BODY": "<br/><p>Software Arrows wird nun alle eingehenden Konversationen in den <b><i>Kundengespräche</i></b> Channel innerhalb Ihres Slack Arbeitsplatzes synchronisieren.</p><p>Wenn Sie in <b><i>Kunden-Konversationen</i></b> antworten, wird der Slack Kanal eine Antwort an den Kunden durch Chat erzeugen.</p><p>Starten Sie die Antworten mit <b><i>Notiz:</i></b> um private Notizen anstatt Antworten zu erstellen.</p><p>Wenn der Replier auf Slack ein Agentenprofil im Software Arrows unter der gleichen E-Mail hat, werden die Antworten entsprechend assoziiert.</p><p>Wenn der Replier kein Agentenprofil hat, werden die Antworten aus dem Bot-Profil getätigt.</p>",
         "SELECTED": "ausgewählt"
       },
       "SELECT_CHANNEL": {
         "OPTION_LABEL": "Einen Kanal auswählen",
         "UPDATE": "Aktualisieren",
         "BUTTON_TEXT": "Kanal verbinden",
-        "DESCRIPTION": "Ihr Slack-Arbeitsbereich ist jetzt mit Chatwoot verbunden. Die Integration ist jedoch derzeit inaktiv. Um die Integration zu aktivieren und einen Kanal mit Chatwoot zu verbinden, klicken Sie bitte auf den untenstehenden Button.\n\n**Hinweis:** Wenn Sie versuchen, einen privaten Kanal zu verbinden, fügen Sie die Chatwoot-App dem Slack-Kanal hinzu, bevor Sie diesen Schritt fortsetzen.",
+        "DESCRIPTION": "Ihr Slack-Arbeitsbereich ist jetzt mit Software Arrows verbunden. Die Integration ist jedoch derzeit inaktiv. Um die Integration zu aktivieren und einen Kanal mit Software Arrows zu verbinden, klicken Sie bitte auf den untenstehenden Button.\n\n**Hinweis:** Wenn Sie versuchen, einen privaten Kanal zu verbinden, fügen Sie die softwarearrows-App dem Slack-Kanal hinzu, bevor Sie diesen Schritt fortsetzen.",
         "ATTENTION_REQUIRED": "Achtung",
         "EXPIRED": "Ihre Slack-Integration ist abgelaufen. Um weiterhin Nachrichten auf Slack zu erhalten, löschen Sie bitte die Integration und verbinden Sie Ihren Arbeitsbereich erneut."
       },

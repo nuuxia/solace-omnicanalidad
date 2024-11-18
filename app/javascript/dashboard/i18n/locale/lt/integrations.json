@@ -1,7 +1,7 @@
 {
   "INTEGRATION_SETTINGS": {
     "HEADER": "Integracijos",
-    "DESCRIPTION": "Chatwoot integrates with multiple tools and services to improve your team's efficiency. Explore the list below to configure your favorite apps.",
+    "DESCRIPTION": "Software Arrows integrates with multiple tools and services to improve your team's efficiency. Explore the list below to configure your favorite apps.",
     "LEARN_MORE": "Learn more about integrations",
     "LOADING": "Fetching integrations",
     "CAPTAIN": {
@@ -90,7 +90,7 @@
       },
       "HELP_TEXT": {
         "TITLE": "Slack integracijos naudojimas",
-        "BODY": "<br/><p>Dabar Software Arrows sinchronizuos visus gaunamus pokalbius į <b><i>kliento pokalbiai</i></b> kanalą jūsų laisvoje darbo vietoje.</p><p>Atsakymas į pokalbių giją <b><i>kliento pokalbiai</i></b> Slack kanale pateiks atsakymą klientui per Software Arrows .</p><p>Atsakymus pradėkite naudodami <b><i> pastaba:</i></b> jei norite sukurti privačias pastabas, o ne atsakymus.</p><p>Jei „slack“ atsakytojas turi agento profilį „chatwoot“ tuo pačiu el. pašto adresu, atsakymai bus atitinkamai susieti.</p><p> p><p>Kai atsakiklis neturi susieto agento profilio, atsakymai bus pateikiami iš boto profilio.</p>",
+        "BODY": "<br/><p>Dabar Software Arrows sinchronizuos visus gaunamus pokalbius į <b><i>kliento pokalbiai</i></b> kanalą jūsų laisvoje darbo vietoje.</p><p>Atsakymas į pokalbių giją <b><i>kliento pokalbiai</i></b> Slack kanale pateiks atsakymą klientui per Software Arrows .</p><p>Atsakymus pradėkite naudodami <b><i> pastaba:</i></b> jei norite sukurti privačias pastabas, o ne atsakymus.</p><p>Jei „slack“ atsakytojas turi agento profilį „Software Arrows“ tuo pačiu el. pašto adresu, atsakymai bus atitinkamai susieti.</p><p> p><p>Kai atsakiklis neturi susieto agento profilio, atsakymai bus pateikiami iš boto profilio.</p>",
         "SELECTED": "pasirinkta"
       },
       "SELECT_CHANNEL": {
