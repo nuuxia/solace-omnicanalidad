@@ -155,7 +155,7 @@ export default {
 
 <template>
   <main
-    class="flex flex-col w-full min-h-screen py-20 bg-woot-25 sm:px-6 lg:px-8 dark:bg-slate-900"
+    class="flex flex-col w-full min-h-screen py-20 bg-arrow sm:px-6 lg:px-8 dark:bg-arrow"
   >
     <section class="max-w-5xl mx-auto">
       <img
