@@ -5,7 +5,7 @@ PartOf=chatwoot.target
 [Service]
 Type=simple
 User=chatwoot
-WorkingDirectory=/home/chatwoot/chatwoot
+WorkingDirectory=/home/w3villa/software-arrow/current/
 
 ExecStart=/bin/bash -lc 'bin/rails server -p $PORT -e $RAILS_ENV'
 
@@ -16,10 +16,10 @@ KillMode=mixed
 StandardInput=null
 SyslogIdentifier=%p
 
-Environment="PATH=/home/chatwoot/.rvm/gems/ruby-3.3.3/bin:/home/chatwoot/.rvm/gems/ruby-3.3.3@global/bin:/home/chatwoot/.rvm/rubies/ruby-3.3.3/bin:/home/chatwoot/.rvm/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin:/home/chatwoot/.rvm/bin:/home/chatwoot/.rvm/bin"
+Environment="PATH=/home/w3villa/.rvm/gems/ruby-3.2.2/bin:/home/w3villa/.rvm/gems/ruby-3.2.2@global/bin:/home/w3villa/.rvm/rubies/ruby-3.2.2/bin:/home/w3villa/.rvm/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin:/home/w3villa/.rvm/bin:/home/w3villa/.rvm/bin"
 Environment="PORT=3000"
 Environment="RAILS_ENV=production"
 Environment="NODE_ENV=production"
 Environment="RAILS_LOG_TO_STDOUT=true"
-Environment="GEM_HOME=/home/chatwoot/.rvm/gems/ruby-3.3.3"
-Environment="GEM_PATH=/home/chatwoot/.rvm/gems/ruby-3.3.3:/home/chatwoot/.rvm/gems/ruby-3.3.3@global"
+Environment="GEM_HOME=/home/w3villa/.rvm/gems/ruby-3.2.2"
+Environment="GEM_PATH=/home/w3villa/.rvm/gems/ruby-3.2.2:/home/w3villa/.rvm/gems/ruby-3.2.2@global"
