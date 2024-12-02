@@ -217,6 +217,7 @@ group :test do
   gem 'database_cleaner'
   # mock http calls
   gem 'webmock'
+  gem 'vcr'
   # test profiling
   gem 'test-prof'
 end

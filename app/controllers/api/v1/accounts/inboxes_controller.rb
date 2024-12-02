@@ -143,6 +143,7 @@ class Api::V1::Accounts::InboxesController < Api::V1::Accounts::BaseController
       'api' => Channel::Api,
       'email' => Channel::Email,
       'line' => Channel::Line,
+      'mercado_libre' => Channel::MercadoLibre,
       'telegram' => Channel::Telegram,
       'whatsapp' => Channel::Whatsapp,
       'sms' => Channel::Sms

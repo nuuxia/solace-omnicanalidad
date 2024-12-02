@@ -8,6 +8,7 @@ import Email from './channels/Email.vue';
 import Sms from './channels/Sms.vue';
 import Whatsapp from './channels/Whatsapp.vue';
 import Line from './channels/Line.vue';
+import MercadoLibre from './channels/MercadoLibre.vue';
 import Telegram from './channels/Telegram.vue';
 
 const channelViewList = {
@@ -20,6 +21,7 @@ const channelViewList = {
   whatsapp: Whatsapp,
   line: Line,
   telegram: Telegram,
+  mercado_libre: MercadoLibre,
 };
 
 export default defineComponent({

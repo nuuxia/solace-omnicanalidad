@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_09_23_215335) do
+ActiveRecord::Schema[7.0].define(version: 2024_10_24_174058) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
@@ -316,6 +316,17 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_23_215335) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["line_channel_id"], name: "index_channel_line_on_line_channel_id", unique: true
+  end
+
+  create_table "channel_mercado_libres", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "mercado_libre_access_token"
+    t.string "mercado_libre_refresh_token"
+    t.datetime "mercado_libre_token_expires_at"
+    t.integer "mercado_libre_user_id"
+    t.index ["account_id"], name: "index_channel_mercado_libres_on_account_id"
   end
 
   create_table "channel_sms", force: :cascade do |t|
@@ -1006,6 +1017,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_23_215335) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "channel_mercado_libres", "accounts"
   add_foreign_key "inboxes", "portals"
   create_trigger("accounts_after_insert_row_tr", :generated => true, :compatibility => 1).
       on("accounts").

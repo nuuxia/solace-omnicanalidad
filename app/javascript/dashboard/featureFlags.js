@@ -23,6 +23,7 @@ export const FEATURE_FLAGS = {
   CHANNEL_FACEBOOK: 'channel_facebook',
   CHANNEL_TWITTER: 'channel_twitter',
   CHANNEL_WEBSITE: 'channel_website',
+  CHANNEL_MERCADO_LIBRE: 'channel_mercado_libre',
   CUSTOM_REPLY_DOMAIN: 'custom_reply_domain',
   CUSTOM_REPLY_EMAIL: 'custom_reply_email',
   DISABLE_BRANDING: 'disable_branding',

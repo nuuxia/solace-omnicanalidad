@@ -96,6 +96,10 @@ class Inbox < ApplicationRecord
     channel_type == 'Channel::FacebookPage'
   end
 
+  def mercado_libre?
+    channel_type == 'Channel::MercadoLibre'
+  end
+
   def instagram?
     facebook? && channel.instagram_id.present?
   end

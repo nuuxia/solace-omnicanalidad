@@ -79,6 +79,12 @@ describe('inboxMixin', () => {
     expect(wrapper.vm.isALineChannel).toBe(true);
   });
 
+  it('isAMercadoLibreChannel returns true if channel type is Mercado Libre', () => {
+    const Component = getComponentConfigForInbox('Channel::MercadoLibre');
+    const wrapper = shallowMount(Component);
+    expect(wrapper.vm.isAMercadoLibreChannel).toBe(true);
+  });
+
   it('isATelegramChannel returns true if channel type is Telegram', () => {
     const Component = getComponentConfigForInbox('Channel::Telegram');
     const wrapper = shallowMount(Component);
