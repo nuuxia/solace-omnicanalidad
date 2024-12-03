@@ -1,3 +1,3 @@
-server '104.131.172.91', roles: [:web, :app, :db], primary: true
+server '159.203.161.226', roles: [:web, :app, :db], primary: true
 set :stage,  :production
-set :branch, 'version_3.8'
+set :branch, 'chatwoot_new_version'
