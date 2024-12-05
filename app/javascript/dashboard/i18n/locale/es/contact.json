@@ -52,6 +52,12 @@
       "NO_RECORDS_FOUND": "No se encontraron atributos"
     }
   },
+  "ORDER_PANEL": {
+    "ORDER_ID": "ID de la orden: ",
+    "ORDER_DATE": "Fecha de la orden: ",
+    "ORDER_STATUS": "Estado de la orden: ",
+    "ORDER_ITEM": "Item/s: "
+  },
   "EDIT_CONTACT": {
     "BUTTON_LABEL": "Editar Contacto",
     "TITLE": "Editar Contacto",

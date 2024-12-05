@@ -44,7 +44,7 @@ const createdAtIp = computed(() => props.contactAttributes.created_at_ip);
 
 const orderId = computed(() => {
   const orderDetails = props.conversationAttributes.order_details;
-  return orderDetails?.id ? `Compra: #${orderDetails.id}` : null;
+  return orderDetails?.id ? `#${orderDetails.id}` : null;
 });
 
 function formatDateTime(dateTime) {

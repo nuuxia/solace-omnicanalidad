@@ -765,6 +765,7 @@
       "EMAIL": "Email",
       "TELEGRAM": "Telegram",
       "LINE": "Line",
+      "MERCADO_LIBRE": "Mercado Libre",
       "API": "API Channel"
     }
   }
