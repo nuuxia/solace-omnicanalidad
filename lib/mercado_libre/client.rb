@@ -60,8 +60,8 @@ module MercadoLibre
       @access_token.present?
     end
 
-    def download_file(file_url)
-      response = self.class.get("/messages/attachments/#{file_url}?tag=post_sale&site_id=MLA", headers: headers)
+    def download_file(file_url, site_id)
+      response = self.class.get("/messages/attachments/#{file_url}?tag=post_sale&site_id=#{site_id}", headers: headers)
       raise StandardError, "Error descargando el archivo: #{response.code}" unless response.success?
       response.body
     end

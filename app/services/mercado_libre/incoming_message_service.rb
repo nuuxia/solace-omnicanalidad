@@ -47,7 +47,7 @@ module MercadoLibre
         source_id: message["id"]
       )
 
-      process_attachments(message["message_attachments"], client)
+      process_attachments(message["message_attachments"], client, message['site_id'])
     end
 
     def extract_pack_id(message)
@@ -127,20 +127,20 @@ module MercadoLibre
       }
     end
 
-    def process_attachments(attachments, client)
+    def process_attachments(attachments, client, site_id)
       return if attachments.blank?
 
       attachments.each do |attachment|
         next if attachment["potential_security_threat"]
 
-        downloaded_file = download_attachment(attachment, client)
+        downloaded_file = download_attachment(attachment, client, site_id)
 
         attach_file_to_conversation(downloaded_file, attachment) if downloaded_file
       end
     end
 
-    def download_attachment(attachment, client)
-      file_content = client.download_file(attachment["filename"])
+    def download_attachment(attachment, client, site_id)
+      file_content = client.download_file(attachment["filename"], site_id)
       return nil unless file_content
 
       file_name = "attachment-#{attachment['id']}.#{attachment['type'].split('/').last}"
