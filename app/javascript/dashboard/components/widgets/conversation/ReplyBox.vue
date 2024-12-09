@@ -258,6 +258,7 @@ export default {
         this.isAnEmailChannel ||
         this.isASmsInbox ||
         this.isATelegramChannel ||
+        this.isAMercadoLibreChannel ||
         this.isALineChannel
       );
     },

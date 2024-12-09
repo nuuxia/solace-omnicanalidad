@@ -1,17 +1,19 @@
 # Change these
-
 set :repo_url,        'git@github.com:Atricanico/SoftwareArrows.git'
 set :application,     'software-arrow'
 set :user,            'w3villa'
 set :puma_threads,    [4, 16]
 set :puma_workers,    0
+set :keep_releases, 100
 
 # Don't change these unless you know what you're doing
 set :pty,             true
 set :use_sudo,        true
 set :deploy_via,      :remote_cache
 set :deploy_to,       "/home/#{fetch(:user)}/#{fetch(:application)}"
+set :default_env, { 'NODE_OPTIONS' => '--max-old-space-size=4096 --openssl-legacy-provider' }
 set :puma_bind, 'tcp://127.0.0.1:3000'
+# set :puma_bind, 'tcp://127.0.0.1:3001' THIS IS FOR STAGING
 # set :puma_bind,       "unix://#{shared_path}/tmp/sockets/#{fetch(:application)}-puma.sock"
 set :puma_state,      "#{shared_path}/tmp/pids/puma.state"
 set :puma_pid,        "#{shared_path}/tmp/pids/puma.pid"

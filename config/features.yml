@@ -13,7 +13,7 @@
   enabled: false
 - name: disable_branding
   enabled: false
-  
+
 - name: email_continuity_on_api_channel
   enabled: false
 - name: help_center
@@ -51,6 +51,8 @@
   enabled: false
 - name: channel_website
   enabled: true
+- name: channel_mercado_libre
+  enabled: true
 - name: campaigns
   enabled: true
   help_url: https://chwt.app/hc/campaigns
@@ -67,7 +69,7 @@
   enabled: false
 - name: audit_logs
   enabled: false
-  
+
 - name: response_bot
   enabled: false
   premium: true

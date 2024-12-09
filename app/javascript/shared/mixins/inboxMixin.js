@@ -13,6 +13,7 @@ export const INBOX_FEATURE_MAP = {
     INBOX_TYPES.WEB,
     INBOX_TYPES.TWITTER,
     INBOX_TYPES.WHATSAPP,
+    INBOX_TYPES.MERCADO_LIBRE,
     INBOX_TYPES.TELEGRAM,
     INBOX_TYPES.API,
   ],
@@ -20,6 +21,7 @@ export const INBOX_FEATURE_MAP = {
     INBOX_TYPES.WEB,
     INBOX_TYPES.TWITTER,
     INBOX_TYPES.WHATSAPP,
+    INBOX_TYPES.MERCADO_LIBRE,
     INBOX_TYPES.TELEGRAM,
     INBOX_TYPES.API,
   ],
@@ -56,6 +58,9 @@ export default {
     },
     isALineChannel() {
       return this.channelType === INBOX_TYPES.LINE;
+    },
+    isAMercadoLibreChannel() {
+      return this.channelType === INBOX_TYPES.MERCADO_LIBRE;
     },
     isAnEmailChannel() {
       return this.channelType === INBOX_TYPES.EMAIL;

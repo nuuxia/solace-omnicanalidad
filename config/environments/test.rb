@@ -28,6 +28,10 @@ Rails.application.configure do
   config.action_controller.perform_caching = false
   config.cache_store = :null_store
 
+  config.mercado_libre_auth_url = 'https://auth.mercadolibre.com/authorization'
+  config.mercado_libre_redirect_uri = 'https://6697-2800-810-803-3fe-6c5d-dc53-4e30-e896.ngrok-free.app/mercado_libre/callback'
+  config.mercado_libre_base_url = 'https://api.mercadolibre.com/'
+
   # Raise exceptions instead of rendering exception templates.
   config.action_dispatch.show_exceptions = true
 

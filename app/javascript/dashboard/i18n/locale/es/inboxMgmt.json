@@ -341,6 +341,14 @@
           "ERROR_MESSAGE": "No pudimos guardar el canal de telegram"
         }
       },
+      "MERCADO_LIBRE_CHANNEL": {
+        "HELP": "Para agregar Mercado Libre como un canal, necesitas autenticar tu cuenta haciendo clic en 'Iniciar sesión con Mercado Libre'.",
+        "ERROR_MESSAGE": "Hubo un error al conectar con Mercado Libre, por favor intenta nuevamente.",
+        "TITLE": "Canal de Mercado Libre",
+        "DESC": "Integra con el canal de Mercado Libre y comienza a atender a tus clientes.",
+        "SUBMIT_BUTTON": "Crear Canal de Mercado Libre",
+        "LOADING_MESSAGE": "Creando el canal, por favor espera..."
+      },
       "AUTH": {
         "TITLE": "Elija un canal",
         "DESC": "SoftwareArrows soporta widgets de Live Chat, Facebook Messenger, perfiles de Twitter, WhatsApp, correos electrónicos, etc., como canales. Si quieres construir un canal personalizado, puedes crearlo usando el canal API. Para empezar, elige uno de los canales a continuación."
@@ -757,6 +765,7 @@
       "EMAIL": "E-mail",
       "TELEGRAM": "Telegram",
       "LINE": "Line",
+      "MERCADO_LIBRE": "Mercado Libre",
       "API": "Canal API"
     }
   }

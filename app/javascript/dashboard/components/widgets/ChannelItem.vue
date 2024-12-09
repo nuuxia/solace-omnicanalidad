@@ -31,6 +31,9 @@ export default {
       if (key === 'email') {
         return this.enabledFeatures.channel_email;
       }
+      if (key === 'mercado_libre') {
+        return true;
+      }
 
       return [
         'website',
@@ -40,6 +43,7 @@ export default {
         'sms',
         'telegram',
         'line',
+        'mercado_libre',
       ].includes(key);
     },
   },

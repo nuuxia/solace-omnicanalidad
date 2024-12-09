@@ -78,6 +78,7 @@ export default {
         sms: 'sms',
         'Channel::Line': 'line',
         'Channel::Telegram': 'telegram',
+        'Channel::MercadoLibre': 'mercado_libre',
         'Channel::WebWidget': '',
       }[this.badge];
     },

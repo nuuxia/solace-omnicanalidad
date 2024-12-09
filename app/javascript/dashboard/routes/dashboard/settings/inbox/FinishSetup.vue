@@ -20,6 +20,9 @@ export default {
     isALineInbox() {
       return this.currentInbox.channel_type === 'Channel::Line';
     },
+    isAMercadoLibreInbox() {
+      return this.currentInbox.channel_type === 'Channel::MercadoLibre';
+    },
     isASmsInbox() {
       return this.currentInbox.channel_type === 'Channel::Sms';
     },

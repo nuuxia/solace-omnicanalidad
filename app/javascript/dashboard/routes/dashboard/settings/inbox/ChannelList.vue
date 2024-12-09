@@ -34,6 +34,7 @@ export default {
           thumbnail: apiChannelThumbnail,
         },
         { key: 'telegram', name: 'Telegram' },
+        { key: 'mercado_libre', name: 'Mercado Libre' },
         { key: 'line', name: 'Line' },
       ];
     },
