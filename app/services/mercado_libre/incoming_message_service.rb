@@ -98,7 +98,8 @@ module MercadoLibre
         additional_attributes: @conversation.additional_attributes.merge(
           pack_id: pack_id,
           buyer_id: buyer_id,
-          seller_id: seller_id
+          seller_id: seller_id,
+          type_of_conversation: 'post_sale'
         )
       )
     end

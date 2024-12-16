@@ -12,6 +12,16 @@ module MercadoLibre
       handle_response(response)
     end
 
+    def fetch_question_details(question_id)
+      response = self.class.get("/questions/#{question_id}", headers: headers)
+      handle_response(response)
+    end
+
+    def fetch_item_details(item_id)
+      response = self.class.get("/items/#{item_id}/permalinks?", headers: headers)
+      handle_response(response)
+    end
+
     def fetch_client_data(user_id)
       response = self.class.get("/users/#{user_id}", headers: headers)
       handle_response(response)
