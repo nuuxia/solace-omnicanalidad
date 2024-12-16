@@ -29,7 +29,7 @@ module MercadoLibre
 
     def message_from_channel_owner?(message)
       channel_user_id = inbox.channel.mercado_libre_user_id
-      message_sender_id = message.dig("from", "user_id")
+      message_sender_id = message["from"]["user_id"]
       channel_user_id.to_s == message_sender_id.to_s
     end
 
@@ -51,11 +51,11 @@ module MercadoLibre
     end
 
     def extract_pack_id(message)
-      message.dig("message_resources")&.find { |resource| resource["name"] == "packs" }&.dig("id")
+      message["message_resources"]&.find { |resource| resource["name"] == "packs" }&.dig("id")
     end
 
     def set_contact(message)
-      client_id = message.dig("from", "user_id")
+      client_id = message["from"]["user_id"]
       client_data = initialize_client.fetch_client_data(client_id)
 
       contact_inbox = ::ContactInboxWithContactBuilder.new(
@@ -72,36 +72,55 @@ module MercadoLibre
       {
         name: client_data['nickname'],
         identifier: client_data['id'].to_s,
-        location: "#{client_data.dig('address', 'city')}, #{client_data.dig('address', 'state')}",
+        location: "#{client_data['address']['city']}, #{client_data['address']['state']}",
         country_code: client_data['country_id'],
         additional_attributes: {
           user_type: client_data['user_type'],
-          site_status: client_data.dig('status', 'site_status')
+          site_status: client_data['status']['site_status']
         }
       }
     end
 
     def set_conversation(pack_id, message, client)
-      buyer_id = message.dig("from", "user_id")
-      seller_id = message.dig("to", "user_id")
+      # Accediendo a los valores de buyer_id y seller_id
+      buyer_id = message["from"]["user_id"]
+      seller_id = message["to"]["user_id"]
 
-      @conversation = @contact_inbox.conversations.first_or_create!(conversation_params)
-
-      if pack_id.present? && @conversation.additional_attributes[:order_details].blank?
-        order_details = fetch_order_details(client, pack_id)
-        return if order_details.blank?
-
-        update_conversation_with_order_details(order_details)
+      # Buscar una conversación existente que coincida con los mismos datos
+      @conversation = @contact_inbox.conversations.detect do |conversation|
+        conversation.account_id == inbox.account_id &&
+        conversation.inbox_id == inbox.id &&
+        conversation.contact_id == @contact.id &&
+        conversation.contact_inbox_id == @contact_inbox.id &&
+        conversation.additional_attributes["pack_id"] == pack_id &&
+        conversation.additional_attributes["buyer_id"] == buyer_id &&
+        conversation.additional_attributes["seller_id"] == seller_id &&
+        conversation.additional_attributes["type_of_conversation"] == 'post_sale'
       end
 
-      @conversation.update!(
-        additional_attributes: @conversation.additional_attributes.merge(
-          pack_id: pack_id,
-          buyer_id: buyer_id,
-          seller_id: seller_id,
-          type_of_conversation: 'post_sale'
+      # Si no existe, crear una nueva conversación
+      unless @conversation
+        @conversation = @contact_inbox.conversations.create!(
+          conversation_params.merge(
+            additional_attributes: {
+              pack_id: pack_id,
+              buyer_id: buyer_id,
+              seller_id: seller_id,
+              type_of_conversation: 'post_sale'
+            }
+          )
         )
-      )
+      end
+
+      # Agregar detalles de orden si no están presentes
+      if pack_id.present? && @conversation.additional_attributes["order_details"].blank?
+        order_details = fetch_order_details(client, pack_id)
+        if order_details
+          @conversation.update!(
+            additional_attributes: @conversation.additional_attributes.merge(order_details: order_details)
+          )
+        end
+      end
     end
 
     def fetch_order_details(client, pack_id)
