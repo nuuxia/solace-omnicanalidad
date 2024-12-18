@@ -95,7 +95,7 @@ Rails.application.configure do
   # config.mercado_libre_base_url = 'https://api.mercadolibre.com/'
 
   config.mercado_libre_auth_url = 'https://auth.mercadolibre.com/authorization'
-  config.mercado_libre_redirect_uri = 'https://4eff-2800-810-803-3fe-2894-ac64-dc8-c6bb.ngrok-free.app/mercado_libre/callback'
+  config.mercado_libre_redirect_uri = 'https://staging.softwarearrows.com/mercado_libre/callback'
   config.mercado_libre_base_url = 'https://api.mercadolibre.com/'
 
   # Ignore bad email addresses and do not raise email delivery errors.
