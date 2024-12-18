@@ -41,6 +41,15 @@ module MercadoLibre
       handle_response(response)
     end
 
+    def send_answer_on_mercado_libre(answer_payload)
+      response = self.class.post(
+        "/answers",
+         headers: headers,
+         body: answer_payload.to_json
+        )
+      handle_response(response)
+    end
+
     # def send_attachments_on_mercado_libre(attachments)
     #   byebug
     #   attachments.each do |attachment|

@@ -18,6 +18,11 @@ class ActionService
     @conversation.resolved!
   end
 
+  def open_conversation(_params)
+    @conversation.opened!
+    byebug
+  end
+
   def change_status(status)
     @conversation.update!(status: status[0])
   end

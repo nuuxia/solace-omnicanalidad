@@ -67,6 +67,7 @@ module ActivityMessageHandler
   end
 
   def automation_status_change_activity_content
+    byebug
     if Current.executed_by.instance_of?(AutomationRule)
       I18n.t("conversations.activity.status.#{status}", user_name: 'Automation System')
     elsif Current.executed_by.instance_of?(Contact)
