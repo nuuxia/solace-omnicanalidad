@@ -20,7 +20,6 @@ class ActionService
 
   def open_conversation(_params)
     @conversation.opened!
-    byebug
   end
 
   def change_status(status)

@@ -76,7 +76,6 @@ class AutomationRuleListener < BaseListener
   end
 
   def current_account_rules(event_name, account)
-    byebug
     AutomationRule.where(
       event_name: event_name,
       account_id: account.id,
@@ -85,7 +84,6 @@ class AutomationRuleListener < BaseListener
   end
 
   def performed_by_automation?(event)
-    byebug
     event.data[:performed_by].present? && event.data[:performed_by].instance_of?(AutomationRule)
   end
 
