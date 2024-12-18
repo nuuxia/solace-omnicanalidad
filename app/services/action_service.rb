@@ -19,7 +19,7 @@ class ActionService
   end
 
   def open_conversation(_params)
-    @conversation.opened!
+    @conversation.open!
   end
 
   def change_status(status)
