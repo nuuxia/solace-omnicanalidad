@@ -131,6 +131,7 @@ const validateSingleAction = action => {
     'mute_conversation',
     'snooze_conversation',
     'resolve_conversation',
+    'open_conversation',
     'remove_assigned_team',
   ];
 

@@ -12,6 +12,16 @@ module MercadoLibre
       handle_response(response)
     end
 
+    def fetch_question_details(question_id)
+      response = self.class.get("/questions/#{question_id}", headers: headers)
+      handle_response(response)
+    end
+
+    def fetch_item_details(item_id)
+      response = self.class.get("/items/#{item_id}/permalinks?", headers: headers)
+      handle_response(response)
+    end
+
     def fetch_client_data(user_id)
       response = self.class.get("/users/#{user_id}", headers: headers)
       handle_response(response)
@@ -27,6 +37,15 @@ module MercadoLibre
         "/messages/packs/#{pack_id}/sellers/#{seller_id}?tag=post_sale",
          headers: headers,
          body: reply_payload.to_json
+        )
+      handle_response(response)
+    end
+
+    def send_answer_on_mercado_libre(answer_payload)
+      response = self.class.post(
+        "/answers",
+         headers: headers,
+         body: answer_payload.to_json
         )
       handle_response(response)
     end

@@ -24,14 +24,14 @@ class Channel::MercadoLibre < ApplicationRecord
 
   self.table_name = 'channel_mercado_libres'
 
-  EDITABLE_ATTRS = [:mercado_libre_access_token, :mercado_libre_refresh_token, :mercado_libre_token_expires_at, :mercado_libre_user_id].freeze
+  EDITABLE_ATTRS = [:mercado_libre_access_token, :mercado_libre_refresh_token,
+                    :mercado_libre_token_expires_at, :mercado_libre_user_id].freeze
 
   belongs_to :account
 
   validates :mercado_libre_access_token, uniqueness: true, presence: true
-  validates :mercado_libre_refresh_token, presence: true
-  validates :mercado_libre_token_expires_at, presence: true
-  validates :mercado_libre_user_id, presence: true
+  validates :mercado_libre_refresh_token, :mercado_libre_token_expires_at,
+            :mercado_libre_user_id, presence: true
 
   def name
     'Mercado Libre'
@@ -46,63 +46,75 @@ class Channel::MercadoLibre < ApplicationRecord
   end
 
   def send_message_on_mercado_libre(message)
-    return send_message(message) if message.attachments.empty?
+    process_and_send(:message, message)
+  end
 
-    # send_attachments(message)
+  def send_answer_on_mercado_libre(answer)
+    process_and_send(:answer, answer)
   end
 
   private
 
-  # def send_attachments(message)
-  #   send_message(message) unless message.content.nil?
-
-  #   mercado_libre_attachments = []
-  #   byebug
-  #   message.attachments.each do |attachment|
-  #     byebug
-  #     mercado_libre_attachment = {}
-  #     mercado_libre_attachment[:file] = attachment.download_url
-  #     mercado_libre_attachments << mercado_libre_attachment
-  #   end
-  #   byebug
-  #   client = MercadoLibre::Client.new(mercado_libre_access_token)
-  #   client.send_attachments_on_mercado_libre(mercado_libre_attachments)
-  # end
-
-  def send_message(message)
+  def process_and_send(type, resource)
     ensure_token_valid
+    client = build_client
 
-    message_request(message)
+    case type
+    when :message
+      handle_message_request(resource, client)
+    when :answer
+      handle_answer_request(resource, client)
+    end
   end
 
-  def message_request(message)
+  def handle_message_request(message, client)
+    conversation = fetch_conversation_data(message)
+    payload = reply_payload(conversation[:seller_id], conversation[:buyer_id], message.content)
+    client.send_message_on_mercado_libre(payload, conversation[:pack_id],
+                                         conversation[:seller_id], conversation[:buyer_id], message.content)
+  end
+
+  def handle_answer_request(answer, client)
+    conversation = answer.conversation
+    last_incoming_message = last_incoming_message(conversation)
+
+    if last_incoming_message.nil? || last_incoming_message.source_id.nil?
+      Rails.logger.error "No valid incoming question found for conversation #{conversation.id}"
+      return
+    end
+
+    payload = answer_payload(last_incoming_message.source_id, answer.content)
+    client.send_answer_on_mercado_libre(payload)
+  end
+
+  def fetch_conversation_data(message)
     conversation = message.conversation
-    pack_id = conversation.additional_attributes['pack_id']
-    seller_id = conversation.additional_attributes['seller_id']
-    buyer_id = conversation.additional_attributes['buyer_id']
-    text = message.content
-    payload = reply_payload(seller_id, buyer_id, text)
-    client = MercadoLibre::Client.new(mercado_libre_access_token)
-    client.send_message_on_mercado_libre(payload, pack_id, seller_id, buyer_id, text)
+    {
+      pack_id: conversation.additional_attributes['pack_id'],
+      seller_id: conversation.additional_attributes['seller_id'],
+      buyer_id: conversation.additional_attributes['buyer_id']
+    }
+  end
+
+  def last_incoming_message(conversation)
+    conversation.messages.incoming.last
+  end
+
+  def build_client
+    MercadoLibre::Client.new(mercado_libre_access_token)
   end
 
   def reply_payload(seller_id, buyer_id, text, attachments = [])
     {
-      from: {
-        user_id: seller_id.to_s
-      },
-      to: {
-        user_id: buyer_id.to_s
-      },
+      from: { user_id: seller_id.to_s },
+      to: { user_id: buyer_id.to_s },
       text: text,
       attachments: attachments
     }.compact
   end
 
-  def process_error(message, response)
-    error_details = response.parsed_response['error'] || 'Unknown error'
-    Rails.logger.error("Error sending message to Mercado Libre: #{error_details}")
-    raise StandardError, "Failed to send message: #{error_details}"
+  def answer_payload(question_id, text)
+    { question_id: question_id, text: text }.compact
   end
 
   def refresh_token

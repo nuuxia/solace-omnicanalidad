@@ -80,6 +80,19 @@ const orderItems = props.conversationAttributes?.order_details?.order_items || [
 console.log('Order Items:', orderItems);
 
 const staticElements = computed(() => {
+  if (props.conversationAttributes.type_of_conversation === 'questions') {
+    const itemPermalink = props.conversationAttributes.item_permalink || '';
+    const itemTitle = props.conversationAttributes.item_title || 'Item desconocido';
+
+    return [
+      {
+        content: itemPermalink,
+        title: `Preguntas sobre la publicación:`,
+        type: 'link',
+      },
+    ];
+  }
+
   const baseElements = [
     {
       content: initiatedAt,
@@ -120,7 +133,6 @@ const staticElements = computed(() => {
     },
   ].filter(attribute => !!attribute.content?.value);
 
-  // Comprobar si orderItems existe y tiene elementos
   const orderDetails = props.conversationAttributes?.order_details || {};
   const orderItems = orderDetails.order_items || [];
 
@@ -143,15 +155,22 @@ const staticElements = computed(() => {
       :value="element.content.value || element.content"
       class="conversation--attribute"
     >
-      <a
-        v-if="element.type === 'link'"
-        :href="referer"
-        rel="noopener noreferrer nofollow"
-        target="_blank"
-        class="text-woot-400 dark:text-woot-600"
-      >
-        {{ referer }}
-      </a>
+      <!-- Agregar enlace solo para el caso de item_permalink -->
+      <template v-if="element.type === 'link'">
+        <a
+          :href="element.content"
+          rel="noopener noreferrer nofollow"
+          target="_blank"
+          class="text-woot-400 dark:text-woot-600"
+        >
+          {{ element.content }}
+        </a>
+      </template>
+
+      <!-- Renderizar el contenido original cuando no sea un enlace -->
+      <template v-else>
+        {{ element.content }}
+      </template>
     </ContactDetailsItem>
 
     <CustomAttributes
