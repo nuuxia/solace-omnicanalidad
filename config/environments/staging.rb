@@ -26,7 +26,7 @@ Rails.application.configure do
   config.assets.compile = false
 
   config.mercado_libre_auth_url = 'https://auth.mercadolibre.com/authorization'
-  config.mercado_libre_redirect_uri = 'https://4eff-2800-810-803-3fe-2894-ac64-dc8-c6bb.ngrok-free.app/mercado_libre/callback'
+  config.mercado_libre_redirect_uri = 'http://159.203.161.226:4001/mercado_libre/callback'
   config.mercado_libre_base_url = 'https://api.mercadolibre.com/'
 
   # `config.assets.precompile` and `config.assets.version` have moved to config/initializers/assets.rb

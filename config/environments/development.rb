@@ -33,7 +33,7 @@ Rails.application.configure do
   config.active_storage.service = ENV.fetch('ACTIVE_STORAGE_SERVICE', 'local').to_sym
 
   config.mercado_libre_auth_url = 'https://auth.mercadolibre.com/authorization'
-  config.mercado_libre_redirect_uri = 'https://4eff-2800-810-803-3fe-2894-ac64-dc8-c6bb.ngrok-free.app/mercado_libre/callback'
+  config.mercado_libre_redirect_uri = 'https://4736-2800-810-803-3fe-c944-79cd-ccd9-c5be.ngrok-free.app/mercado_libre/callback'
   config.mercado_libre_base_url = 'https://api.mercadolibre.com/'
 
   config.active_job.queue_adapter = :sidekiq
