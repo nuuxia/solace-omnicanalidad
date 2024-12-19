@@ -47,9 +47,13 @@ const endPoints = {
   setActiveAccount: {
     url: '/api/v1/profile/set_active_account',
   },
-
   resendConfirmation: {
     url: '/api/v1/profile/resend_confirmation',
+  },
+  automatedWhatsappSignup: {
+    url(accountId) {
+      return `api/v1/accounts/${accountId}/channels/automated_whatsapp_embedded_signup`;
+    },
   },
 };
 

@@ -212,7 +212,7 @@
         }
       },
       "WHATSAPP": {
-        "TITLE": "Canal de WhatsApp",
+        "TITLE": "Canal de WhatsApp Manual",
         "DESC": "Comience a apoyar a sus clientes mediante WhatsApp.",
         "PROVIDERS": {
           "LABEL": "Proveedor de API",
@@ -220,6 +220,12 @@
           "WHATSAPP_CLOUD": "Nube de WhatsApp",
           "360_DIALOG": "360 Diálogo"
         },
+        "CHOOSE_METHOD": "Elige cómo quieres conectar tu canal de WhatsApp. Puedes hacerlo automáticamente a través de Facebook o configurarlo manualmente.",
+        "LOGIN_WITH_FACEBOOK": {
+          "LABEL": "Iniciar sesión con Facebook"
+        },
+        "AUTOMATED_TITLE": "Canal de WhatsApp Automatizado",
+        "AUTOMATED_DESC": "Conecta tu cuenta de WhatsApp a través de Facebook. Ahora, en lugar de hacerlo manualmente, puedes aprovechar el registro integrado de Meta para automatizar todo el proceso.",
         "INBOX_NAME": {
           "LABEL": "Nombre de la bandeja de entrada",
           "PLACEHOLDER": "Por favor, introduzca un nombre de bandeja de entrada",
