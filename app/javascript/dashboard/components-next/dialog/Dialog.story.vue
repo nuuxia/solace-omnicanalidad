@@ -49,7 +49,7 @@ const onConfirm = dialog => {};
             <Input
               id="portal-name"
               type="text"
-              placeholder="User Guide | Chatwoot"
+              placeholder="User Guide | Arrows"
               label="Name"
               message="This will be the name of your public facing portal"
             />
