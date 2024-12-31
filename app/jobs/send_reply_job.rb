@@ -11,7 +11,7 @@ class SendReplyJob < ApplicationJob
       'Channel::TwilioSms' => ::Twilio::SendOnTwilioService,
       'Channel::Line' => ::Line::SendOnLineService,
       'Channel::MercadoLibre' => ::MercadoLibre::SendOnMercadoLibreService,
-      'Channel::TikTok' => ::TikTok::SendOnTikTokService,
+      # 'Channel::TikTok' => ::TikTok::SendOnTikTokService,
       'Channel::Telegram' => ::Telegram::SendOnTelegramService,
       'Channel::Whatsapp' => ::Whatsapp::SendOnWhatsappService,
       'Channel::Sms' => ::Sms::SendOnSmsService

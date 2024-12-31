@@ -79,7 +79,7 @@ export default {
         'Channel::Line': 'line',
         'Channel::Telegram': 'telegram',
         'Channel::MercadoLibre': 'mercado_libre',
-        'Channel::TikTok': 'tik_tok',
+        // 'Channel::TikTok': 'tik_tok',
         'Channel::WebWidget': '',
       }[this.badge];
     },

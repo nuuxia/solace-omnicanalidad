@@ -144,7 +144,7 @@ class Api::V1::Accounts::InboxesController < Api::V1::Accounts::BaseController
       'email' => Channel::Email,
       'line' => Channel::Line,
       'mercado_libre' => Channel::MercadoLibre,
-      'tik_tok' => Channel::TikTok,
+      # 'tik_tok' => Channel::TikTok,
       'telegram' => Channel::Telegram,
       'whatsapp' => Channel::Whatsapp,
       'sms' => Channel::Sms
