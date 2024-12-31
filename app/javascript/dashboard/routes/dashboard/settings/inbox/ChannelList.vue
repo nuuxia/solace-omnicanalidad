@@ -35,6 +35,7 @@ export default {
         },
         { key: 'telegram', name: 'Telegram' },
         { key: 'mercado_libre', name: 'Mercado Libre' },
+        // { key: 'tik_tok', name: 'Tik Tok' },
         { key: 'line', name: 'Line' },
       ];
     },

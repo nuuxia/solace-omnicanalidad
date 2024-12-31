@@ -106,6 +106,7 @@ module Api::V1::InboxesHelper
       'email' => Current.account.email_channels,
       'line' => Current.account.line_channels,
       'mercado_libre' => Current.account.channel_mercado_libres,
+      # 'tik_tok' => Current.account.tik_tok_channels,
       'telegram' => Current.account.telegram_channels,
       'whatsapp' => Current.account.whatsapp_channels,
       'sms' => Current.account.sms_channels

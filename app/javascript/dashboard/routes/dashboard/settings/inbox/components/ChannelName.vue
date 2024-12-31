@@ -28,6 +28,7 @@ const i18nMap = {
   'Channel::Telegram': 'TELEGRAM',
   'Channel::Line': 'LINE',
   'Channel::MercadoLibre': 'MERCADO_LIBRE',
+  // 'Channel::TikTok': 'TIK_TOK',
   'Channel::Api': 'API',
 };
 

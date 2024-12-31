@@ -85,6 +85,11 @@ class Seeders::InboxSeeder
     Inbox.create!(channel: channel, account: @account, name: "#{@company_data['name']} Mobile")
   end
 
+  def seed_tik_tok_inbox
+    channel = Channel::TikTok.create!(account: @account)
+    Inbox.create!(channel: channel, account: @account, name: "#{@company_data['name']} Mobile")
+  end
+
   def seed_telegram_inbox
     # rubocop:disable Rails/SkipsModelValidations
     bot_token = SecureRandom.hex

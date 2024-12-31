@@ -23,6 +23,9 @@ export default {
     isAMercadoLibreInbox() {
       return this.currentInbox.channel_type === 'Channel::MercadoLibre';
     },
+    // isATikTokInbox() {
+    //   return this.currentInbox.channel_type === 'Channel::TikTok';
+    // },
     isASmsInbox() {
       return this.currentInbox.channel_type === 'Channel::Sms';
     },

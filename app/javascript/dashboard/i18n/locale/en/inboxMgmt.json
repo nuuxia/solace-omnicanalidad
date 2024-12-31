@@ -349,10 +349,18 @@
       },
       "MERCADO_LIBRE_CHANNEL": {
         "HELP": "To add Mercado Libre as a channel, you need to authenticate your Account by clicking on 'Sign in with Mercado Libre' ",
-        "ERROR_MESSAGE": "There was an error connecting to Twitter, please try again",
+        "ERROR_MESSAGE": "There was an error connecting to Mercado Libre, please try again",
         "TITLE": "Mercado Libre Channel",
         "DESC": "Integrate with the Mercado Libre channel and start supporting your customers.",
         "SUBMIT_BUTTON": "Create Mercado Libre Channel",
+        "LOADING_MESSAGE": "Creating channel, please wait..."
+      },
+      "TIK_TOK_CHANNEL": {
+        "HELP": "To add Tik Tok as a channel, you need to authenticate your Account by clicking on 'Sign in with Tik Tok' ",
+        "ERROR_MESSAGE": "There was an error connecting to Tik Tok, please try again",
+        "TITLE": "Tik Tok Channel",
+        "DESC": "Integrate with the Tik Tok channel and start supporting your customers.",
+        "SUBMIT_BUTTON": "Create Tik Tok Channel",
         "LOADING_MESSAGE": "Creating channel, please wait..."
       },
       "AUTH": {
@@ -772,6 +780,7 @@
       "TELEGRAM": "Telegram",
       "LINE": "Line",
       "MERCADO_LIBRE": "Mercado Libre",
+      "TIK_TOK": "Tik Tok",
       "API": "API Channel"
     }
   }

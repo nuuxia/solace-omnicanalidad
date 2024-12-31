@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_10_24_174058) do
+ActiveRecord::Schema[7.0].define(version: 2024_12_26_232820) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
@@ -346,6 +346,18 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_24_174058) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["bot_token"], name: "index_channel_telegram_on_bot_token", unique: true
+  end
+
+  create_table "channel_tik_tok", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.string "tik_tok_access_token"
+    t.string "tik_tok_refresh_token"
+    t.string "tik_tok_user_id"
+    t.datetime "tik_tok_token_expires_at"
+    t.datetime "tok_tok_refresh_expires_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_channel_tik_tok_on_account_id"
   end
 
   create_table "channel_twilio_sms", force: :cascade do |t|
@@ -1018,6 +1030,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_24_174058) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "channel_mercado_libres", "accounts"
+  add_foreign_key "channel_tik_tok", "accounts"
   add_foreign_key "inboxes", "portals"
   create_trigger("accounts_after_insert_row_tr", :generated => true, :compatibility => 1).
       on("accounts").

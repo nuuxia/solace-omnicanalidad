@@ -9,6 +9,7 @@ import Sms from './channels/Sms.vue';
 import Whatsapp from './channels/Whatsapp.vue';
 import Line from './channels/Line.vue';
 import MercadoLibre from './channels/MercadoLibre.vue';
+// import TikTok from './channels/TikTok.vue';
 import Telegram from './channels/Telegram.vue';
 
 const channelViewList = {
@@ -22,6 +23,7 @@ const channelViewList = {
   line: Line,
   telegram: Telegram,
   mercado_libre: MercadoLibre,
+  // tik_tok: TikTok,
 };
 
 export default defineComponent({
