@@ -8,7 +8,8 @@ export const INBOX_TYPES = {
   EMAIL: 'Channel::Email',
   TELEGRAM: 'Channel::Telegram',
   LINE: 'Channel::Line',
-  LINE: 'Channel::MercadoLibre',
+  MERCADO_LIBRE: 'Channel::MercadoLibre',
+  TIK_TOK: 'Channel::TikTok',
   SMS: 'Channel::Sms',
 };
 
@@ -69,6 +70,9 @@ export const getReadableInboxByType = (type, phoneNumber) => {
 
     case INBOX_TYPES.MERCADO_LIBRE:
       return 'mercado_libre';
+
+    case INBOX_TYPES.TIK_TOK:
+      return 'tik_tok';
 
     case INBOX_TYPES.LINE:
       return 'line';

@@ -19,10 +19,12 @@ Rails.application.routes.draw do
     get '/app/accounts/:account_id/settings/inboxes/new/twitter', to: 'dashboard#index', as: 'app_new_twitter_inbox'
     get '/app/accounts/:account_id/settings/inboxes/new/microsoft', to: 'dashboard#index', as: 'app_new_microsoft_inbox'
     get '/app/accounts/:account_id/settings/inboxes/new/mercado_libre', to: 'dashboard#index', as: 'app_new_mercado_libre_inbox'
+    # get '/app/accounts/:account_id/settings/inboxes/new/tik_tok', to: 'dashboard#index', as: 'app_new_tik_tok_inbox'
     get '/app/accounts/:account_id/settings/inboxes/new/:inbox_id/agents', to: 'dashboard#index', as: 'app_twitter_inbox_agents'
     get '/app/accounts/:account_id/settings/inboxes/new/:inbox_id/agents', to: 'dashboard#index', as: 'app_email_inbox_agents'
     get '/app/accounts/:account_id/settings/inboxes/:inbox_id', to: 'dashboard#index', as: 'app_email_inbox_settings'
     get '/app/accounts/:account_id/settings/inboxes/new/:inbox_id/agents', to: 'dashboard#index', as: 'app_mercado_libre_inbox_agents'
+    # get '/app/accounts/:account_id/settings/inboxes/new/:inbox_id/agents', to: 'dashboard#index', as: 'app_tik_tok_inbox_agents'
 
     resource :widget, only: [:show]
     namespace :survey do
@@ -216,6 +218,10 @@ Rails.application.routes.draw do
           namespace :mercado_libre do
             resource :authorization, only: [:create]
           end
+
+          # namespace :tik_tok do
+          #   resource :authorization, only: [:create]
+          # end
 
           namespace :google do
             resource :authorization, only: [:create]
@@ -452,6 +458,7 @@ Rails.application.routes.draw do
   get 'webhooks/instagram', to: 'webhooks/instagram#verify'
   post 'webhooks/instagram', to: 'webhooks/instagram#events'
   post 'webhooks/mercado_libre', to: 'webhooks/mercado_libre#process_payload'
+  # post 'webhooks/tik_tok', to: 'webhooks/tik_tok#process_payload'
 
   namespace :twitter do
     resource :callback, only: [:show]
@@ -465,6 +472,7 @@ Rails.application.routes.draw do
   get 'microsoft/callback', to: 'microsoft/callbacks#show'
   get 'google/callback', to: 'google/callbacks#show'
   get 'mercado_libre/callback', to: 'mercado_libre/callbacks#show'
+  # get 'tik_tok/callback', to: 'tik_tok/callbacks#show'
 
   # ----------------------------------------------------------------------
   # Routes for external service verifications

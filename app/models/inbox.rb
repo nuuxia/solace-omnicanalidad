@@ -100,6 +100,10 @@ class Inbox < ApplicationRecord
     channel_type == 'Channel::MercadoLibre'
   end
 
+  def tik_tok?
+    channel_type == 'Channel::TikTok'
+  end
+
   def instagram?
     facebook? && channel.instagram_id.present?
   end

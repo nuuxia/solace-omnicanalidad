@@ -34,6 +34,9 @@ export default {
       if (key === 'mercado_libre') {
         return true;
       }
+      if (key === 'tik_tok') {
+        return true;
+      }
 
       return [
         'website',
@@ -43,7 +46,8 @@ export default {
         'sms',
         'telegram',
         'line',
-        'mercado_libre',
+        'mercado_libre'
+        // 'tik_tok'
       ].includes(key);
     },
   },
