@@ -34,9 +34,9 @@ export default {
       if (key === 'mercado_libre') {
         return true;
       }
-      if (key === 'tik_tok') {
-        return true;
-      }
+      // if (key === 'tik_tok') {
+      //   return true;
+      // }
 
       return [
         'website',
