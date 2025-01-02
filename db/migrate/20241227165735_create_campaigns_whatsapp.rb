@@ -1,4 +1,4 @@
-class RecreateCampaignsWhatsapp < ActiveRecord::Migration[7.0]
+class CreateCampaignsWhatsapp < ActiveRecord::Migration[7.0]
     def change
       drop_table :campaigns_whatsapp, if_exists: true
       create_table :campaigns_whatsapp do |t|
