@@ -158,6 +158,9 @@ const handleSendPreview = async () => {
     useAlert(
       t('CAMPAIGN.WHATSAPP.CREATE.FORM.PREVIEW_SECTION.SUCCESS_MESSAGE')
     );
+    state.inboxId = null;
+    state.selectedWhatsAppTemplate = null;
+    state.phoneNumber = '';
   } catch (error) {
     // Manejar errores y mostrar mensaje de error
     const errorMessage =
