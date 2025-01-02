@@ -100,10 +100,6 @@ class Inbox < ApplicationRecord
     channel_type == 'Channel::MercadoLibre'
   end
 
-  # def tik_tok?
-  #   channel_type == 'Channel::TikTok'
-  # end
-
   def instagram?
     facebook? && channel.instagram_id.present?
   end
@@ -131,7 +127,13 @@ class Inbox < ApplicationRecord
   def whatsapp?
     channel_type == 'Channel::Whatsapp'
   end
+  def phone_number_id
+    return unless whatsapp?
 
+    phone_number_id = channel.provider_config['phone_number_id']
+    puts "📋 [DEBUG] phone_number_id fetched for Inbox ID=#{id}: #{phone_number_id}"
+    phone_number_id
+  end
   def assignable_agents
     (account.users.where(id: members.select(:user_id)) + account.administrators).uniq
   end

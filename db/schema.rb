@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_12_26_232820) do
+ActiveRecord::Schema[7.0].define(version: 2024_12_28_223157) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
@@ -227,6 +227,31 @@ ActiveRecord::Schema[7.0].define(version: 2024_12_26_232820) do
     t.index ["scheduled_at"], name: "index_campaigns_on_scheduled_at"
   end
 
+  create_table "campaigns_whatsapp", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.bigint "inbox_id", null: false
+    t.string "title", null: false
+    t.jsonb "template", default: {}
+    t.boolean "enabled", default: true
+    t.boolean "trigger_only_during_business_hours", default: false
+    t.integer "sender_id"
+    t.datetime "scheduled_at"
+    t.jsonb "audience", default: []
+    t.jsonb "trigger_rules", default: {}
+    t.integer "campaign_status", default: 0
+    t.integer "campaign_type", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "messages_total", default: 0
+    t.integer "messages_sent", default: 0
+    t.integer "messages_failed", default: 0
+    t.index ["account_id"], name: "index_campaigns_whatsapp_on_account_id"
+    t.index ["campaign_status"], name: "index_campaigns_whatsapp_on_campaign_status"
+    t.index ["campaign_type"], name: "index_campaigns_whatsapp_on_campaign_type"
+    t.index ["inbox_id"], name: "index_campaigns_whatsapp_on_inbox_id"
+    t.index ["scheduled_at"], name: "index_campaigns_whatsapp_on_scheduled_at"
+  end
+
   create_table "canned_responses", id: :serial, force: :cascade do |t|
     t.integer "account_id", null: false
     t.string "short_code"
@@ -346,18 +371,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_12_26_232820) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["bot_token"], name: "index_channel_telegram_on_bot_token", unique: true
-  end
-
-  create_table "channel_tik_tok", force: :cascade do |t|
-    t.bigint "account_id", null: false
-    t.string "tik_tok_access_token"
-    t.string "tik_tok_refresh_token"
-    t.string "tik_tok_user_id"
-    t.datetime "tik_tok_token_expires_at"
-    t.datetime "tok_tok_refresh_expires_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_channel_tik_tok_on_account_id"
   end
 
   create_table "channel_twilio_sms", force: :cascade do |t|
@@ -1029,8 +1042,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_12_26_232820) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "campaigns_whatsapp", "accounts"
+  add_foreign_key "campaigns_whatsapp", "inboxes"
   add_foreign_key "channel_mercado_libres", "accounts"
-  add_foreign_key "channel_tik_tok", "accounts"
   add_foreign_key "inboxes", "portals"
   create_trigger("accounts_after_insert_row_tr", :generated => true, :compatibility => 1).
       on("accounts").
