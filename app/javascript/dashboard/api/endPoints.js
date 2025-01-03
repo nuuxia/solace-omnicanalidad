@@ -55,6 +55,16 @@ const endPoints = {
       return `api/v1/accounts/${accountId}/channels/automated_whatsapp_embedded_signup`;
     },
   },
+  syncWhatsAppTemplates: {
+    url(accountId) {
+      return `api/v1/accounts/${accountId}/whatsapp/sync_whatsapp_templates`;
+    },
+  },
+  whatsappCampaignPreview: {
+    url(accountId) {
+      return `api/v1/accounts/${accountId}/campaigns_whatsapp/preview`;
+    },
+  },
 };
 
 export default page => {

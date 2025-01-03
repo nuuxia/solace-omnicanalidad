@@ -112,6 +112,108 @@
         "BOT": "Bot"
       }
     },
+    "WHATSAPP": {
+    "HEADER_TITLE": "Campanhas do WhatsApp",
+    "NEW_CAMPAIGN": "Criar campanha",
+    "CARD": {
+        "STATUS": {
+            "ENABLED": "Habilitado",
+            "DISABLED": "Desabilitado"
+        },
+        "CAMPAIGN_DETAILS": {
+            "SENT_BY": "Enviado por",
+            "BOT": "Bot",
+            "FROM": "de",
+            "ON": "em",
+            "SENT_FROM": "Enviado de",
+            "URL": "URL:"
+        }
+    },
+    "EMPTY_STATE": {
+        "TITLE": "Nenhuma campanha do WhatsApp disponível",
+        "SUBTITLE": "Conecte-se com seus clientes usando campanhas do WhatsApp. Clique em 'Criar campanha' para começar."
+    },
+    "CREATE": {
+        "TITLE": "Criar campanha do WhatsApp",
+        "CANCEL_BUTTON_TEXT": "Cancelar",
+        "CREATE_BUTTON_TEXT": "Criar",
+        "FORM": {
+            "TITLE": {
+                "LABEL": "Título",
+                "PLACEHOLDER": "Por favor, insira o título da campanha",
+                "ERROR": "O título é obrigatório"
+            },
+            "WHATSAPP_TEMPLATE": {
+                "LABEL": "Selecione um modelo do WhatsApp",
+                "PLACEHOLDER": "Selecione um modelo do WhatsApp",
+                "ERROR": "Um modelo do WhatsApp é obrigatório"
+            },
+            "MESSAGE": {
+                "LABEL": "Mensagem",
+                "PLACEHOLDER": "Por favor, insira a mensagem da campanha",
+                "ERROR": "A mensagem é obrigatória"
+            },
+            "INBOX": {
+                "LABEL": "Selecione uma caixa de entrada",
+                "PLACEHOLDER": "Selecione uma caixa de entrada",
+                "ERROR": "A caixa de entrada é obrigatória"
+            },
+            "AUDIENCE": {
+                "LABEL": "Público",
+                "PLACEHOLDER": "Selecione os rótulos dos clientes",
+                "ERROR": "O público é obrigatório"
+            },
+            "SCHEDULED_AT": {
+                "LABEL": "Horário programado",
+                "PLACEHOLDER": "Por favor, selecione o horário",
+                "ERROR": "O horário programado é obrigatório"
+            },
+            "PREVIEW_SECTION": {
+                "TITLE": "Enviar pré-visualização do WhatsApp",
+                "PHONE_LABEL": "Insira um número de telefone para receber a pré-visualização",
+                "PLACEHOLDER": "Insira o número de telefone",
+                "ERROR": "Por favor, forneça um número de telefone válido começando com o sinal `+`. Espaços não são permitidos",
+                "BUTTON_LABEL": "Enviar pré-visualização do modelo",
+                "LOADING_LABEL": "Enviando...",
+                "SUCCESS_MESSAGE": "Pré-visualização enviada com sucesso.",
+                "ERROR_MESSAGE": "Erro ao enviar a pré-visualização.",
+                "TOOL_TIP": "Você deve selecionar uma caixa de entrada e um modelo para enviar uma pré-visualização"
+            },
+            "BUTTONS": {
+                "CREATE": "Criar",
+                "CANCEL": "Cancelar"
+            },
+            "API": {
+                "SUCCESS_MESSAGE": "Campanha do WhatsApp criada com sucesso",
+                "ERROR_MESSAGE": "Ocorreu um erro. Por favor, tente novamente."
+            },
+            "SYNC": {
+                "SUCCESS_MESSAGE": "Modelos sincronizados com sucesso",
+                "ERROR_MESSAGE": "Erro ao sincronizar os modelos. Por favor, tente novamente."
+            },
+            "SYNC_BUTTON_LABEL": "Sincronizar",
+            "SYNC_BUTTON_TOOLTIP": "Sincronizar modelos"
+        }
+    },
+    "CONFIRM_DELETE": {
+        "TITLE": "Excluir campanha do WhatsApp",
+        "DESCRIPTION": "Tem certeza de que deseja excluir esta campanha? Esta ação não pode ser desfeita.",
+        "CONFIRM": "Excluir",
+        "API": {
+            "SUCCESS_MESSAGE": "Campanha do WhatsApp excluída com sucesso",
+            "ERROR_MESSAGE": "Não foi possível excluir a campanha. Por favor, tente novamente."
+        }
+    },
+    "EDIT": {
+        "TITLE": "Editar campanha do WhatsApp",
+        "FORM": {
+            "API": {
+                "SUCCESS_MESSAGE": "Campanha do WhatsApp atualizada com sucesso",
+                "ERROR_MESSAGE": "Ocorreu um erro. Por favor, tente novamente."
+            }
+        }
+    }
+},
     "ONE_OFF": {
       "HEADER": "Campanhas únicas",
       "404": "Não há nenhuma campanha única criada",
