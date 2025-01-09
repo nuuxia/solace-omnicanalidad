@@ -47,6 +47,26 @@ class AutomationRules::ActionService < ActionService
     Messages::MessageBuilder.new(nil, @conversation, params).perform
   end
 
+  def send_alert(params)
+    inbox = @account.inboxes.find_by(id: params[:inboxId])
+    template = params[:template]
+    phone_number = params[:phoneNumber]
+
+    raise 'Inbox not found' if inbox.blank?
+    raise 'Invalid template' if template.blank?
+    raise 'Phone number is required' if phone_number.blank?
+
+    Whatsapp::CampaignPreviewService.new(
+      inbox: inbox,
+      template: template,
+      phone_number: phone_number
+    ).perform
+
+    Rails.logger.info "✅ WhatsApp alert sent successfully to #{phone_number}"
+  rescue StandardError => e
+    Rails.logger.error "❌ Error sending WhatsApp alert: #{e.message}"
+  end
+
   def send_email_to_team(params)
     teams = Team.where(id: params[0][:team_ids])
 
