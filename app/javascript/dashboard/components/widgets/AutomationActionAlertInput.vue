@@ -5,8 +5,8 @@
     <select
       id="whatsappInbox"
       class="form-select"
-      v-model="localValue.inboxId"
-      @change="emitValue"
+      v-model="localValue.inbox_id"
+      @change="updateValue"
     >
       <option value="" disabled>Select an inbox</option>
       <option v-for="inbox in whatsappInboxes" :key="inbox.id" :value="inbox.id">
@@ -22,19 +22,19 @@
     <select
       id="template"
       class="form-select"
-      v-model="localValue.templateId"
-      @change="emitValue"
-      :disabled="!localValue.inboxId || !availableTemplates.length"
+      v-model="localValue.template_id"
+      @change="updateValue"
+      :disabled="!localValue.inbox_id || !availableTemplates.length"
     >
       <option value="" disabled>Select a template</option>
       <option v-for="template in availableTemplates" :key="template.id" :value="template.id">
         {{ template.name }}
       </option>
     </select>
-    <small v-if="!localValue.inboxId" class="text-muted">
+    <small v-if="!localValue.inbox_id" class="text-muted">
       Select a WhatsApp inbox to view templates.
     </small>
-    <small v-if="localValue.inboxId && !availableTemplates.length" class="text-muted">
+    <small v-if="localValue.inbox_id && !availableTemplates.length" class="text-muted">
       No templates available for the selected inbox.
     </small>
 
@@ -44,8 +44,8 @@
       id="phoneNumber"
       type="tel"
       class="form-control"
-      v-model="localValue.phoneNumber"
-      @input="emitValue"
+      v-model="localValue.phone_number"
+      @input="updateValue"
       placeholder="Enter phone number (e.g., +1234567890)"
     />
     <small class="text-muted">
@@ -55,8 +55,6 @@
 </template>
 
 <script>
-import { useMapGetter } from 'dashboard/composables/store';
-
 export default {
   name: 'AutomationActionAlertInput',
   props: {
@@ -65,6 +63,7 @@ export default {
       required: true,
     },
   },
+  emits: ['update:modelValue'],
   data() {
     return {
       localValue: { ...this.modelValue },
@@ -75,9 +74,9 @@ export default {
       return this.$store.getters['inboxes/getWhatsAppInboxes'] || [];
     },
     availableTemplates() {
-      if (!this.localValue.inboxId) return [];
+      if (!this.localValue.inbox_id) return [];
       const selectedInbox = this.whatsappInboxes.find(
-        (inbox) => inbox.id === this.localValue.inboxId
+        (inbox) => inbox.id === this.localValue.inbox_id
       );
       return selectedInbox?.message_templates || [];
     },
@@ -91,7 +90,8 @@ export default {
     },
   },
   methods: {
-    emitValue() {
+    updateValue() {
+      // Emit the updated localValue whenever a field changes
       this.$emit('update:modelValue', this.localValue);
     },
   },
