@@ -24,15 +24,7 @@ namespace :labels do
 
     # Asignamos la etiqueta a los contactos
     contacts.each do |contact|
-      # Obtener las etiquetas actuales del contacto
-      current_labels = contact.label_list || []
-
-      # Combinamos las etiquetas actuales con la nueva etiqueta
-      combined_labels = current_labels + [label.title]
-
-      # Actualizamos el label_list directamente con update_columns para evitar validaciones
-      contact.update_columns(label_list: combined_labels, updated_at: Time.current)
-
+      contact.add_labels(label.title)
       puts "Etiqueta '#{label_title}' asignada al contacto con ID #{contact.id}."
     end
 
