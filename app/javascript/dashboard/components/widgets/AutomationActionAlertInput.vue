@@ -1,3 +1,50 @@
+<script>
+export default {
+  name: 'AutomationActionAlertInput',
+  props: {
+    modelValue: {
+      type: Object,
+      required: true,
+    },
+  },
+  emits: ['update:modelValue'],
+  data() {
+    return {
+      selectedInboxId: null,
+      selectedTemplateId: null,
+      phoneNumber: '',
+    };
+  },
+  mounted() {
+    const { inbox_id: inboxId, template_id: templateId, phone_number: phoneNumber } = this.modelValue;
+    this.selectedInboxId = inboxId;
+    this.selectedTemplateId = templateId;
+    this.phoneNumber = phoneNumber;
+  },
+  computed: {
+    whatsappInboxes() {
+      return this.$store.getters['inboxes/getWhatsAppInboxes'] || [];
+    },
+    availableTemplates() {
+      if (!this.selectedInboxId) return [];
+      const selectedInbox = this.whatsappInboxes.find(
+        (inbox) => inbox.id === this.selectedInboxId
+      );
+      return selectedInbox?.message_templates || [];
+    },
+  },
+  methods: {
+    updateValue() {
+      this.$emit('update:modelValue', {
+        inbox_id: this.selectedInboxId,
+        template_id: this.selectedTemplateId,
+        phone_number: this.phoneNumber,
+      });
+    },
+  },
+};
+</script>
+
 <template>
   <div class="automation-action-alert-input">
     <!-- WhatsApp Inbox Selection -->
@@ -5,7 +52,7 @@
     <select
       id="whatsappInbox"
       class="form-select"
-      v-model="localValue.inbox_id"
+      v-model="selectedInboxId"
       @change="updateValue"
     >
       <option value="" disabled>Select an inbox</option>
@@ -22,19 +69,19 @@
     <select
       id="template"
       class="form-select"
-      v-model="localValue.template_id"
+      v-model="selectedTemplateId"
       @change="updateValue"
-      :disabled="!localValue.inbox_id || !availableTemplates.length"
+      :disabled="!selectedInboxId || !availableTemplates.length"
     >
       <option value="" disabled>Select a template</option>
       <option v-for="template in availableTemplates" :key="template.id" :value="template.id">
         {{ template.name }}
       </option>
     </select>
-    <small v-if="!localValue.inbox_id" class="text-muted">
+    <small v-if="!selectedInboxId" class="text-muted">
       Select a WhatsApp inbox to view templates.
     </small>
-    <small v-if="localValue.inbox_id && !availableTemplates.length" class="text-muted">
+    <small v-if="selectedInboxId && !availableTemplates.length" class="text-muted">
       No templates available for the selected inbox.
     </small>
 
@@ -44,7 +91,7 @@
       id="phoneNumber"
       type="tel"
       class="form-control"
-      v-model="localValue.phone_number"
+      v-model="phoneNumber"
       @input="updateValue"
       placeholder="Enter phone number (e.g., +1234567890)"
     />
@@ -53,50 +100,6 @@
     </small>
   </div>
 </template>
-
-<script>
-export default {
-  name: 'AutomationActionAlertInput',
-  props: {
-    modelValue: {
-      type: Object,
-      required: true,
-    },
-  },
-  emits: ['update:modelValue'],
-  data() {
-    return {
-      localValue: { ...this.modelValue },
-    };
-  },
-  computed: {
-    whatsappInboxes() {
-      return this.$store.getters['inboxes/getWhatsAppInboxes'] || [];
-    },
-    availableTemplates() {
-      if (!this.localValue.inbox_id) return [];
-      const selectedInbox = this.whatsappInboxes.find(
-        (inbox) => inbox.id === this.localValue.inbox_id
-      );
-      return selectedInbox?.message_templates || [];
-    },
-  },
-  watch: {
-    modelValue: {
-      handler(newValue) {
-        this.localValue = { ...newValue };
-      },
-      deep: true,
-    },
-  },
-  methods: {
-    updateValue() {
-      // Emit the updated localValue whenever a field changes
-      this.$emit('update:modelValue', this.localValue);
-    },
-  },
-};
-</script>
 
 <style scoped>
 .automation-action-alert-input {
