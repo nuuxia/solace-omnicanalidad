@@ -5,7 +5,7 @@ namespace :labels do
     label_title = 'clientesdebitopdu1'
     start_date = Date.new(2025, 1, 10)
 
-    # Buscar la etiqueta existente
+    # Buscamos la etiqueta existente
     label = Label.find_by(title: label_title, account_id: account_id)
 
     unless label
@@ -13,7 +13,7 @@ namespace :labels do
       exit 1
     end
 
-    # Buscar los contactos específicos
+    # Buscamos los contactos específicos
     contacts = Contact.where(account_id: account_id)
                       .where('created_at >= ?', start_date)
 
@@ -22,9 +22,17 @@ namespace :labels do
       exit 0
     end
 
-    # Asignar la etiqueta a los contactos
+    # Asignamos la etiqueta a los contactos
     contacts.each do |contact|
-      contact.add_labels(label.title)
+      # Obtener las etiquetas actuales del contacto
+      current_labels = contact.label_list || []
+
+      # Combinamos las etiquetas actuales con la nueva etiqueta
+      combined_labels = current_labels + [label.title]
+
+      # Actualizamos el label_list directamente con update_columns para evitar validaciones
+      contact.update_columns(label_list: combined_labels, updated_at: Time.current)
+
       puts "Etiqueta '#{label_title}' asignada al contacto con ID #{contact.id}."
     end
 
