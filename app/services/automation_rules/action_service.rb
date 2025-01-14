@@ -11,7 +11,12 @@ class AutomationRules::ActionService < ActionService
       @conversation.reload
       action = action.with_indifferent_access
       begin
-        send(action[:action_name], action[:action_params])
+        # Llamamos a send de manera similar a los otros métodos
+        if respond_to?(action[:action_name])
+          send(action[:action_name], action[:action_params])
+        else
+          raise "Action #{action[:action_name]} not implemented"
+        end
       rescue StandardError => e
         ChatwootExceptionTracker.new(e, account: @account).capture_exception
       end
@@ -22,11 +27,8 @@ class AutomationRules::ActionService < ActionService
 
   private
 
-  def send_alert(params)
-    action_params = params[:action_params] || {}
-
+  def send_alert(action_params)
     inbox = @account.inboxes.find_by(id: action_params[:inbox_id])
-    Rails.logger.info "📥 Inbox found: #{inbox.inspect}" if inbox.present?
     raise 'Inbox not found' if inbox.blank?
 
     template = inbox.channel&.message_templates&.find { |t| t['id'] == action_params[:template_id] }
@@ -45,6 +47,7 @@ class AutomationRules::ActionService < ActionService
   rescue StandardError => e
     Rails.logger.error "❌ Error sending WhatsApp alert: #{e.message}"
   end
+
 
   def send_attachment(blob_ids)
     return if conversation_a_tweet?
