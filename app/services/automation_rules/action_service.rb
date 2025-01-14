@@ -11,8 +11,10 @@ class AutomationRules::ActionService < ActionService
       @conversation.reload
       action = action.with_indifferent_access
       begin
-        # Llamamos a send de manera similar a los otros métodos
-        if respond_to?(action[:action_name])
+        # Si el action_name es "send_alert", lo llamamos directamente
+        if action[:action_name] == "send_alert"
+          send(:send_alert, action[:action_params])
+        elsif respond_to?(action[:action_name], true)
           send(action[:action_name], action[:action_params])
         else
           raise "Action #{action[:action_name]} not implemented"
