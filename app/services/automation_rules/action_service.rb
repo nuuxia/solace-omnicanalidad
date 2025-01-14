@@ -10,14 +10,9 @@ class AutomationRules::ActionService < ActionService
     @rule.actions.each do |action|
       @conversation.reload
       action = action.with_indifferent_access
-
-      Rails.logger.info "🔍 Action being executed: #{action[:action_name]}"
-      Rails.logger.info "📦 Action params: #{action[:action_params].inspect}"
       begin
         send(action[:action_name], action[:action_params])
-        Rails.logger.info "✅ Successfully executed: #{action[:action_name]}"
       rescue StandardError => e
-        Rails.logger.error "❌ Error executing #{action[:action_name]}: #{e.message}"
         ChatwootExceptionTracker.new(e, account: @account).capture_exception
       end
     end
@@ -26,6 +21,30 @@ class AutomationRules::ActionService < ActionService
   end
 
   private
+
+  def send_alert(params)
+    action_params = params[:action_params] || {}
+
+    inbox = @account.inboxes.find_by(id: action_params[:inbox_id])
+    Rails.logger.info "📥 Inbox found: #{inbox.inspect}" if inbox.present?
+    raise 'Inbox not found' if inbox.blank?
+
+    template = inbox.channel&.message_templates&.find { |t| t['id'] == action_params[:template_id] }
+    raise 'Invalid template' if template.blank?
+
+    phone_number = action_params[:phone_number]
+    raise 'Phone number is required' if phone_number.blank?
+
+    Whatsapp::CampaignPreviewService.new(
+      inbox: inbox,
+      template: template,
+      phone_number: phone_number
+    ).perform
+
+    Rails.logger.info "✅ WhatsApp alert sent successfully to #{phone_number}"
+  rescue StandardError => e
+    Rails.logger.error "❌ Error sending WhatsApp alert: #{e.message}"
+  end
 
   def send_attachment(blob_ids)
     return if conversation_a_tweet?
@@ -50,36 +69,6 @@ class AutomationRules::ActionService < ActionService
 
     params = { content: message[0], private: false, content_attributes: { automation_rule_id: @rule.id } }
     Messages::MessageBuilder.new(nil, @conversation, params).perform
-  end
-
-  def send_alert(params)
-    Rails.logger.info "⏳ Starting send_alert with params: #{params}"
-
-    action_params = params[:action_params] || {}
-    Rails.logger.info "👉 Action params: #{action_params}"
-
-    inbox = @account.inboxes.find_by(id: action_params[:inbox_id])
-    Rails.logger.info "📥 Inbox found: #{inbox.inspect}" if inbox.present?
-    raise 'Inbox not found' if inbox.blank?
-
-    template = inbox.channel&.message_templates&.find { |t| t['id'] == action_params[:template_id] }
-    Rails.logger.info "📄 Template found: #{template}" if template.present?
-    raise 'Invalid template' if template.blank?
-
-    phone_number = action_params[:phone_number]
-    Rails.logger.info "📞 Phone number provided: #{phone_number}"
-    raise 'Phone number is required' if phone_number.blank?
-
-    Rails.logger.info "🚀 Sending WhatsApp alert via CampaignPreviewService"
-    Whatsapp::CampaignPreviewService.new(
-      inbox: inbox,
-      template: template,
-      phone_number: phone_number
-    ).perform
-
-    Rails.logger.info "✅ WhatsApp alert sent successfully to #{phone_number}"
-  rescue StandardError => e
-    Rails.logger.error "❌ Error sending WhatsApp alert: #{e.message}"
   end
 
   def send_email_to_team(params)
