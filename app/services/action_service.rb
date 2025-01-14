@@ -79,6 +79,36 @@ class ActionService
     end
   end
 
+  def send_alert(params)
+    puts "⏳ Starting send_alert with params: #{params}"
+
+    action_params = params[:action_params] || {}
+    puts "👉 Action params: #{action_params}"
+
+    inbox = @account.inboxes.find_by(id: action_params[:inbox_id])
+    puts "📥 Inbox found: #{inbox.inspect}" if inbox.present?
+    raise 'Inbox not found' if inbox.blank?
+
+    template = inbox.channel&.message_templates&.find { |t| t['id'] == action_params[:template_id] }
+    puts "📄 Template found: #{template}" if template.present?
+    raise 'Invalid template' if template.blank?
+
+    phone_number = action_params[:phone_number]
+    puts "📞 Phone number provided: #{phone_number}"
+    raise 'Phone number is required' if phone_number.blank?
+
+    puts "🚀 Sending WhatsApp alert via CampaignPreviewService"
+    Whatsapp::CampaignPreviewService.new(
+      inbox: inbox,
+      template: template,
+      phone_number: phone_number
+    ).perform
+
+    puts "✅ WhatsApp alert sent successfully to #{phone_number}"
+  rescue StandardError => e
+    puts "❌ Error sending WhatsApp alert: #{e.message}"
+  end
+
   private
 
   def agent_belongs_to_inbox?(agent_ids)
