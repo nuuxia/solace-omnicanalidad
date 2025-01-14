@@ -10,9 +10,14 @@ class AutomationRules::ActionService < ActionService
     @rule.actions.each do |action|
       @conversation.reload
       action = action.with_indifferent_access
+
+      Rails.logger.info "🔍 Action being executed: #{action[:action_name]}"
+      Rails.logger.info "📦 Action params: #{action[:action_params].inspect}"
       begin
         send(action[:action_name], action[:action_params])
+        Rails.logger.info "✅ Successfully executed: #{action[:action_name]}"
       rescue StandardError => e
+        Rails.logger.error "❌ Error executing #{action[:action_name]}: #{e.message}"
         ChatwootExceptionTracker.new(e, account: @account).capture_exception
       end
     end
