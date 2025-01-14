@@ -23,35 +23,20 @@ class AutomationRules::ActionService < ActionService
   private
 
   def send_alert(params)
-    Rails.logger.info "ENTRO AL SEND_ALERT"
-    Rails.logger.info "send_alert params: #{params.inspect}"
-  #   puts "⏳ Starting send_alert with params: #{params}"
+    phone_number = params.first['phone_number']
+    raise 'Phone number is required' if phone_number.blank?
 
-  #   action_params = params[:action_params] || {}
-  #   puts "👉 Action params: #{action_params}"
+    inbox = @account.inboxes.find_by(id: params.first['inbox_id'])
+    raise 'Inbox not found or not WhatsApp' unless inbox&.whatsapp?
 
-  #   inbox = @account.inboxes.find_by(id: action_params[:inbox_id])
-  #   puts "📥 Inbox found: #{inbox.inspect}" if inbox.present?
-  #   raise 'Inbox not found' if inbox.blank?
+    template = inbox.channel&.message_templates&.find { |t| t['id'] == params.first['template_id'] }
+    raise 'Template not found' if template.blank?
 
-  #   template = inbox.channel&.message_templates&.find { |t| t['id'] == action_params[:template_id] }
-  #   puts "📄 Template found: #{template}" if template.present?
-  #   raise 'Invalid template' if template.blank?
+    Whatsapp::CampaignPreviewService.new(inbox: inbox, template: template, phone_number: phone_number).perform
 
-  #   phone_number = action_params[:phone_number]
-  #   puts "📞 Phone number provided: #{phone_number}"
-  #   raise 'Phone number is required' if phone_number.blank?
-
-  #   puts "🚀 Sending WhatsApp alert via CampaignPreviewService"
-  #   Whatsapp::CampaignPreviewService.new(
-  #     inbox: inbox,
-  #     template: template,
-  #     phone_number: phone_number
-  #   ).perform
-
-  #   puts "✅ WhatsApp alert sent successfully to #{phone_number}"
-  # rescue StandardError => e
-  #   puts "❌ Error sending WhatsApp alert: #{e.message}"
+    Rails.logger.info "✅ WhatsApp alert sent to #{phone_number}"
+  rescue StandardError => e
+    Rails.logger.error "❌ Error: #{e.message}"
   end
 
   def send_attachment(blob_ids)
