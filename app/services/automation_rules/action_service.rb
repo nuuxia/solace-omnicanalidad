@@ -48,17 +48,24 @@ class AutomationRules::ActionService < ActionService
   end
 
   def send_alert(params)
+    Rails.logger.info "⏳ Starting send_alert with params: #{params}"
+
     action_params = params[:action_params] || {}
+    Rails.logger.info "👉 Action params: #{action_params}"
 
     inbox = @account.inboxes.find_by(id: action_params[:inbox_id])
+    Rails.logger.info "📥 Inbox found: #{inbox.inspect}" if inbox.present?
     raise 'Inbox not found' if inbox.blank?
 
     template = inbox.channel&.message_templates&.find { |t| t['id'] == action_params[:template_id] }
+    Rails.logger.info "📄 Template found: #{template}" if template.present?
     raise 'Invalid template' if template.blank?
 
     phone_number = action_params[:phone_number]
+    Rails.logger.info "📞 Phone number provided: #{phone_number}"
     raise 'Phone number is required' if phone_number.blank?
 
+    Rails.logger.info "🚀 Sending WhatsApp alert via CampaignPreviewService"
     Whatsapp::CampaignPreviewService.new(
       inbox: inbox,
       template: template,
