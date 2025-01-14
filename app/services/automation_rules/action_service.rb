@@ -24,13 +24,8 @@ class AutomationRules::ActionService < ActionService
 
   def send_alert(params)
     phone_number = params.first['phone_number']
-    raise 'Phone number is required' if phone_number.blank?
-
     inbox = @account.inboxes.find_by(id: params.first['inbox_id'])
-    raise 'Inbox not found or not WhatsApp' unless inbox&.whatsapp?
-
-    template = inbox.channel&.message_templates&.find { |t| t['id'] == params.first['template_id'] }
-    raise 'Template not found' if template.blank?
+    template = inbox.channel.message_templates.last
 
     Whatsapp::CampaignPreviewService.new(inbox: inbox, template: template, phone_number: phone_number).perform
 
