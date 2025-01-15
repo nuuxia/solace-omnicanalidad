@@ -4,18 +4,15 @@ module TikTok
     base_uri TIK_TOK[:base_url]
 
     def initialize(code, code_verifier)
-      byebug
       @code = code
       @code_verifier = code_verifier
       @client_key = TIK_TOK[:api_key]
       @client_secret = TIK_TOK[:secret_key]
       @redirect_uri = TIK_TOK[:redirect_uri]
-      byebug
     end
 
     def call
       response = self.class.post('/oauth/token/', headers: headers, body: request_body)
-      byebug
       handle_response(response)
     end
 

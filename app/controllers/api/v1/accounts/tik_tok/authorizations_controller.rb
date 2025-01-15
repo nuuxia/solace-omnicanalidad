@@ -25,7 +25,6 @@ class Api::V1::Accounts::TikTok::AuthorizationsController < Api::V1::Accounts::B
   end
 
   def store_user_session_data
-    byebug
     session[:account_id] = Current.account.id
   end
 end
