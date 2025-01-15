@@ -20,12 +20,10 @@ class AutomationRules::ActionService < ActionService
     Current.reset
   end
 
-  private
-
   def send_alert(params)
     phone_number = params.first['phone_number']
     inbox = @account.inboxes.find_by(id: params.first['inbox_id'])
-    template = inbox.channel.message_templates.last
+    template = inbox.channel&.message_templates&.find { |template| template['id'] == some_id }
 
     Whatsapp::CampaignPreviewService.new(inbox: inbox, template: template, phone_number: phone_number).perform
 
@@ -33,6 +31,8 @@ class AutomationRules::ActionService < ActionService
   rescue StandardError => e
     Rails.logger.error "❌ Error: #{e.message}"
   end
+
+  private
 
   def send_attachment(blob_ids)
     return if conversation_a_tweet?
