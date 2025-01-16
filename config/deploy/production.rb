@@ -1,3 +1,3 @@
-server '159.203.161.226', roles: [:web, :app, :db], primary: true
+server '104.131.172.91', roles: [:web, :app, :db], primary: true
 set :stage,  :production
-set :branch, 'automation_whatsapp_alert'
+set :branch, '3.14'
