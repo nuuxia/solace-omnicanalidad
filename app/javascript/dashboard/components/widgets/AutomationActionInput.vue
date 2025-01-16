@@ -1,10 +1,12 @@
 <script>
 import AutomationActionTeamMessageInput from './AutomationActionTeamMessageInput.vue';
+import AutomationActionAlertInput from './AutomationActionAlertInput.vue';
 import AutomationActionFileInput from './AutomationFileInput.vue';
 import WootMessageEditor from 'dashboard/components/widgets/WootWriter/Editor.vue';
 export default {
   components: {
     AutomationActionTeamMessageInput,
+    AutomationActionAlertInput,
     AutomationActionFileInput,
     WootMessageEditor,
   },
@@ -184,6 +186,12 @@ export default {
       v-if="inputType === 'team_message'"
       v-model="action_params"
       :teams="dropdownValues"
+    />
+    <AutomationActionAlertInput
+      v-if="action_name === 'send_alert'"
+      v-model="action_params"
+      :inboxes="dropdownValues"
+      :templates="dropdownValues"
     />
     <WootMessageEditor
       v-if="inputType === 'textarea'"

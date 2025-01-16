@@ -83,6 +83,11 @@ export const AUTOMATIONS = {
         attributeI18nKey: 'SEND_MESSAGE',
       },
       {
+        key: 'send_alert',
+        name: 'Send an alert',
+        attributeI18nKey: 'SEND_ALERT',
+      },
+      {
         key: 'send_email_transcript',
         name: 'Send an email transcript',
         attributeI18nKey: 'SEND_EMAIL_TRANSCRIPT',
@@ -217,6 +222,11 @@ export const AUTOMATIONS = {
         key: 'send_message',
         name: 'Send a message',
         attributeI18nKey: 'SEND_MESSAGE',
+      },
+      {
+        key: 'send_alert',
+        name: 'Send an alert',
+        attributeI18nKey: 'SEND_ALERT',
       },
       {
         key: 'send_email_transcript',
@@ -369,6 +379,11 @@ export const AUTOMATIONS = {
         attributeI18nKey: 'SEND_MESSAGE',
       },
       {
+        key: 'send_alert',
+        name: 'Send an alert',
+        attributeI18nKey: 'SEND_ALERT',
+      },
+      {
         key: 'send_email_transcript',
         name: 'Send an email transcript',
         attributeI18nKey: 'SEND_EMAIL_TRANSCRIPT',
@@ -512,6 +527,11 @@ export const AUTOMATIONS = {
         attributeI18nKey: 'SEND_MESSAGE',
       },
       {
+        key: 'send_alert',
+        name: 'Send an alert',
+        attributeI18nKey: 'SEND_ALERT',
+      },
+      {
         key: 'send_email_transcript',
         name: 'Send an email transcript',
         attributeI18nKey: 'SEND_EMAIL_TRANSCRIPT',
@@ -624,6 +644,11 @@ export const AUTOMATION_ACTION_TYPES = [
     key: 'send_message',
     label: 'Send a message',
     inputType: 'textarea',
+  },
+  {
+    key: 'send_alert',
+    label: 'Send an alert',
+    inputType: null,
   },
   {
     key: 'change_priority',

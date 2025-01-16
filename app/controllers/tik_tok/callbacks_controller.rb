@@ -11,9 +11,7 @@ class TikTok::CallbacksController < ApplicationController
 
     ActiveRecord::Base.transaction do
       token_data = TikTok::TokenService.new(code, code_verifier).call
-      byebug
       inbox = create_inbox(token_data)
-      byebug
       redirect_to app_tik_tok_inbox_agents_url(account_id: account.id, inbox_id: inbox.id)
     end
   rescue StandardError => e
@@ -47,13 +45,11 @@ class TikTok::CallbacksController < ApplicationController
   end
 
   def create_inbox(token_data)
-    byebug
     inbox = create_tik_tok_channel_with_inbox(token_data)
     inbox
   end
 
   def create_tik_tok_channel_with_inbox(token_data)
-    byebug
     ActiveRecord::Base.transaction do
       channel_tik_tok = Channel::TikTok.create!(
         account: account,

@@ -7,9 +7,9 @@
 #  campaign_status                    :integer          default("scheduled")
 #  campaign_type                      :integer          default("ongoing")
 #  enabled                            :boolean          default(TRUE)
-#  messages_failed                    :integer          default(0)
-#  messages_sent                      :integer          default(0)
-#  messages_total                     :integer          default(0)
+#  messages_failed                    :integer          default(0), not null
+#  messages_sent                      :integer          default(0), not null
+#  messages_total                     :integer          default(0), not null
 #  scheduled_at                       :datetime
 #  template                           :jsonb
 #  title                              :string           not null
