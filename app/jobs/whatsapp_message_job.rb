@@ -1,218 +1,94 @@
-# frozen_string_literal: true
-
-# == Schema Information
-#
-# Table name: inboxes
-#
-#  id                            :integer          not null, primary key
-#  allow_messages_after_resolved :boolean          default(TRUE)
-#  assistantid                   :string
-#  auto_assignment_config        :jsonb
-#  business_name                 :string
-#  channel_type                  :string
-#  csat_survey_enabled           :boolean          default(FALSE)
-#  email_address                 :string
-#  enable_auto_assignment        :boolean          default(TRUE)
-#  enable_email_collect          :boolean          default(TRUE)
-#  greeting_enabled              :boolean          default(FALSE)
-#  greeting_message              :string
-#  lock_to_single_conversation   :boolean          default(FALSE), not null
-#  name                          :string           not null
-#  out_of_office_message         :string
-#  sender_name_type              :integer          default("friendly"), not null
-#  timezone                      :string           default("UTC")
-#  working_hours_enabled         :boolean          default(FALSE)
-#  created_at                    :datetime         not null
-#  updated_at                    :datetime         not null
-#  account_id                    :integer          not null
-#  channel_id                    :integer          not null
-#  portal_id                     :bigint
-#
-# Indexes
-#
-#  index_inboxes_on_account_id                   (account_id)
-#  index_inboxes_on_channel_id_and_channel_type  (channel_id,channel_type)
-#  index_inboxes_on_portal_id                    (portal_id)
-#
-# Foreign Keys
-#
-#  fk_rails_...  (portal_id => portals.id)
-#
-
-class Inbox < ApplicationRecord
-  include Reportable
-  include Avatarable
-  include OutOfOffisable
-  include AccountCacheRevalidator
-
-  # Not allowing characters:
-  validates :name, presence: true
-  validates :name, if: :check_channel_type?, format: { with: %r{^^\b[^/\\<>@]*\b$}, multiline: true,
-                                                       message: I18n.t('errors.inboxes.validations.name') }
-  validates :account_id, presence: true
-  validates :timezone, inclusion: { in: TZInfo::Timezone.all_identifiers }
-  validates :out_of_office_message, length: { maximum: Limits::OUT_OF_OFFICE_MESSAGE_MAX_LENGTH }
-  validates :greeting_message, length: { maximum: Limits::GREETING_MESSAGE_MAX_LENGTH }
-  validate :ensure_valid_max_assignment_limit
-
-  belongs_to :account
-  belongs_to :portal, optional: true
-
-  belongs_to :channel, polymorphic: true, dependent: :destroy
-
-  has_many :campaigns, dependent: :destroy_async
-  has_many :contact_inboxes, dependent: :destroy_async
-  has_many :contacts, through: :contact_inboxes
-
-  has_many :inbox_members, dependent: :destroy_async
-  has_many :members, through: :inbox_members, source: :user
-  has_many :conversations, dependent: :destroy_async
-  has_many :messages, dependent: :destroy_async
-
-  has_one :agent_bot_inbox, dependent: :destroy_async
-  has_one :agent_bot, through: :agent_bot_inbox
-  has_many :webhooks, dependent: :destroy_async
-  has_many :hooks, dependent: :destroy_async, class_name: 'Integrations::Hook'
-
-  enum sender_name_type: { friendly: 0, professional: 1 }
-
-  after_destroy :delete_round_robin_agents
-
-  after_create_commit :dispatch_create_event
-  after_update_commit :dispatch_update_event
-
-  scope :order_by_name, -> { order('lower(name) ASC') }
-
-  def add_member(user_id)
-    member = inbox_members.new(user_id: user_id)
-    member.save!
-  end
-
-  def remove_member(user_id)
-    member = inbox_members.find_by!(user_id: user_id)
-    member.try(:destroy)
-  end
-
-  def facebook?
-    channel_type == 'Channel::FacebookPage'
-  end
-
-  def mercado_libre?
-    channel_type == 'Channel::MercadoLibre'
-  end
-
-  def instagram?
-    facebook? && channel.instagram_id.present?
-  end
-
-  def web_widget?
-    channel_type == 'Channel::WebWidget'
-  end
-
-  def api?
-    channel_type == 'Channel::Api'
-  end
-
-  def email?
-    channel_type == 'Channel::Email'
-  end
-
-  def twilio?
-    channel_type == 'Channel::TwilioSms'
-  end
-
-  def twitter?
-    channel_type == 'Channel::TwitterProfile'
-  end
-
-  def whatsapp?
-    channel_type == 'Channel::Whatsapp'
-  end
-  def phone_number_id
-    return unless whatsapp?
-
-    phone_number_id = channel.provider_config['phone_number_id']
-    puts "📋 [DEBUG] phone_number_id fetched for Inbox ID=#{id}: #{phone_number_id}"
-    phone_number_id
-  end
-  def whatsapp_api_key
-    return unless whatsapp?  
-    key_in_db = channel.provider_config['api_key']
-    key_in_db
-  end
-  
-  def assignable_agents
-    (account.users.where(id: members.select(:user_id)) + account.administrators).uniq
-  end
-
-  def active_bot?
-    agent_bot_inbox&.active? || hooks.where(app_id: %w[dialogflow],
-                                            status: 'enabled').count.positive? || captain_enabled?
-  end
-
-  def captain_enabled?
-    captain_hook = account.hooks.where(
-      app_id: %w[captain], status: 'enabled'
-    ).first
-
-    captain_hook.present? && captain_hook.settings['inbox_ids'].split(',').include?(id.to_s)
-  end
-
-  def inbox_type
-    channel.name
-  end
-
-  def webhook_data
-    {
-      id: id,
-      name: name
-    }
-  end
-
-  def callback_webhook_url
-    case channel_type
-    when 'Channel::TwilioSms'
-      "#{ENV.fetch('FRONTEND_URL', nil)}/twilio/callback"
-    when 'Channel::Sms'
-      "#{ENV.fetch('FRONTEND_URL', nil)}/webhooks/sms/#{channel.phone_number.delete_prefix('+')}"
-    when 'Channel::Line'
-      "#{ENV.fetch('FRONTEND_URL', nil)}/webhooks/line/#{channel.line_channel_id}"
-    when 'Channel::Whatsapp'
-      "#{ENV.fetch('FRONTEND_URL', nil)}/webhooks/whatsapp/#{channel.phone_number}"
+class WhatsappMessageJob
+  include Sidekiq::Worker
+  sidekiq_options queue: :whatsapp_messages, retry: 3
+  RATE_LIMIT_KEY = "whatsapp_rate_limit"
+  MESSAGES_PER_SECOND = 10
+  def perform(campaign_id, contact_id)
+    campaign = nil # Inicializar la variable
+    Rails.logger.info "📤 [WhatsappMessageJob] Processing message for campaign=#{campaign_id}, contact=#{contact_id}"
+    
+    begin
+      campaign = CampaignsWhatsapp.find(campaign_id)
+      contact = campaign.account.contacts.find(contact_id)
+      
+      if contact.phone_number.blank?
+        Rails.logger.warn "[WhatsappMessageJob] Contact #{contact_id} has no phone number. Skipping."
+        return
+      end
+      enforce_rate_limit
+      response = send_message(campaign, contact)
+      log_response_details(response)
+      
+      # Verificar el estado del mensaje en la respuesta de la API
+      if response['messages'] && response['messages'].first['message_status'] == 'accepted'
+        campaign.increment!(:messages_sent)
+        Rails.logger.info "✅ [WhatsappMessageJob] Message sent to #{contact.phone_number} successfully."
+      else
+        campaign.increment!(:messages_failed)
+        Rails.logger.error "[WhatsappMessageJob] Failed to send message to #{contact.phone_number}. Response: #{response.inspect}"
+      end
+    rescue ActiveRecord::RecordNotFound => e
+      Rails.logger.error "[WhatsappMessageJob] Record not found: #{e.message}"
+      # Opcional: Notificar al equipo o registrar información adicional
+    rescue StandardError => e
+      Rails.logger.error "[WhatsappMessageJob] Error sending message to contact #{contact_id}: #{e.message}"
+      Rails.logger.error e.backtrace.join("\n")
+      campaign.increment!(:messages_failed) if campaign
+      raise e
     end
   end
-
-  def member_ids_with_assignment_capacity
-    members.ids
-  end
-
   private
+  
+    def send_message(campaign, contact)
+      api_key = campaign.inbox.whatsapp_api_key
 
-  def dispatch_create_event
-    return if ENV['ENABLE_INBOX_EVENTS'].blank?
-
-    Rails.configuration.dispatcher.dispatch(INBOX_CREATED, Time.zone.now, inbox: self)
+    Whatsapp::SendTemplateService.new(
+      phone_number_id: campaign.inbox.phone_number_id,
+      version: ENV['VITE_FB_GRAPH_API_VERSION'],
+      to: contact.phone_number,
+      template: campaign.template,
+      token: api_key
+    ).perform
   end
-
-  def dispatch_update_event
-    return if ENV['ENABLE_INBOX_EVENTS'].blank?
-
-    Rails.configuration.dispatcher.dispatch(INBOX_UPDATED, Time.zone.now, inbox: self, changed_attributes: previous_changes)
+  def enforce_rate_limit
+    redis = Sidekiq.redis { |conn| conn }
+    current_second = Time.now.to_i
+    key = "#{RATE_LIMIT_KEY}:#{current_second}"
+    
+    count_response = redis.get(key)
+    
+    # Añadir registro de depuración
+    Rails.logger.debug "[enforce_rate_limit] Redis.get('#{key}') returned: #{count_response.inspect}"
+    
+    # Manejar diferentes tipos de respuesta
+    if count_response.is_a?(String) || count_response.is_a?(Numeric)
+      count = count_response.to_i
+    else
+      Rails.logger.error "[enforce_rate_limit] Unexpected response type from Redis.get: #{count_response.class} - #{count_response.inspect}"
+      count = 0
+    end
+  
+    if count >= MESSAGES_PER_SECOND
+      Rails.logger.warn "[enforce_rate_limit] Rate limit reached for key=#{key}. Sleeping for 1 segundo."
+      sleep 1
+      enforce_rate_limit
+    else
+      redis.multi do
+        redis.incr(key)
+        redis.expire(key, 2)
+      end
+      Rails.logger.debug "[enforce_rate_limit] Incremented count for key=#{key} to #{count + 1}."
+    end
   end
-
-  def ensure_valid_max_assignment_limit
-    # overridden in enterprise/app/models/enterprise/inbox.rb
+  def log_response_details(response)
+    Rails.logger.info "\n===== WhatsApp API Response ====="
+    Rails.logger.info "Response: #{response.inspect}"
+    Rails.logger.info "===============================\n"
   end
-
-  def delete_round_robin_agents
-    ::AutoAssignment::InboxRoundRobinService.new(inbox: self).clear_queue
-  end
-
-  def check_channel_type?
-    ['Channel::Email', 'Channel::Api', 'Channel::WebWidget'].include?(channel_type)
+  def log_error_details(error)
+    Rails.logger.error "\n===== WhatsApp API Error ====="
+    Rails.logger.error "Error Message: #{error.message}"
+    Rails.logger.error "Backtrace: #{error.backtrace.join("\n")}"
+    Rails.logger.error "=============================\n"
   end
 end
-
-Inbox.prepend_mod_with('Inbox')
-Inbox.include_mod_with('Audit::Inbox')
-Inbox.include_mod_with('Concerns::Inbox')
