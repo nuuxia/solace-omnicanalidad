@@ -6,6 +6,7 @@
 #
 #  id                            :integer          not null, primary key
 #  allow_messages_after_resolved :boolean          default(TRUE)
+#  assistantid                   :string
 #  auto_assignment_config        :jsonb
 #  business_name                 :string
 #  channel_type                  :string
@@ -134,6 +135,12 @@ class Inbox < ApplicationRecord
     puts "📋 [DEBUG] phone_number_id fetched for Inbox ID=#{id}: #{phone_number_id}"
     phone_number_id
   end
+  def whatsapp_api_key
+    return unless whatsapp?  
+    key_in_db = channel.provider_config['api_key']
+    key_in_db
+  end
+  
   def assignable_agents
     (account.users.where(id: members.select(:user_id)) + account.administrators).uniq
   end
