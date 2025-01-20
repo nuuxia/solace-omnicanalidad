@@ -18,6 +18,11 @@
         "TITLE": "ID de Cuenta",
         "NOTE": "Este ID es necesario si estás construyendo una integración basada en API"
       },
+      "RESTRICT_AGENTS_ENABLED": {
+        "TITLE": "Restringir agentes",
+        "DESCRIPTION": "Habilita esta configuración para restringir el acceso de los agentes.",
+        "LABEL": "Restringir el acceso para los agentes"
+      },
       "NAME": {
         "LABEL": "Nombre de cuenta",
         "PLACEHOLDER": "Tu nombre de cuenta",

@@ -18,6 +18,11 @@
         "TITLE": "Account ID",
         "NOTE": "This ID is required if you are building an API based integration"
       },
+      "RESTRICT_AGENTS_ENABLED": {
+        "TITLE": "Restrict Agents",
+        "DESCRIPTION": "Enable this setting to restrict agents access.",
+        "LABEL": "Restrict access for agents"
+      },
       "NAME": {
         "LABEL": "Account name",
         "PLACEHOLDER": "Your account name",

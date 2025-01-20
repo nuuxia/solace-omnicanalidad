@@ -29,6 +29,7 @@ export default {
       features: {},
       autoResolveDuration: null,
       latestChatwootVersion: null,
+      restrict_agents: false,
     };
   },
   validations: {
@@ -108,6 +109,7 @@ export default {
           id,
           domain,
           support_email,
+          restrict_agents,
           features,
           auto_resolve_duration,
           latest_chatwoot_version: latestChatwootVersion,
@@ -119,6 +121,7 @@ export default {
         this.id = id;
         this.domain = domain;
         this.supportEmail = support_email;
+        this.restrict_agents = restrict_agents;
         this.features = features;
         this.autoResolveDuration = auto_resolve_duration;
         this.latestChatwootVersion = latestChatwootVersion;
@@ -139,6 +142,7 @@ export default {
           name: this.name,
           domain: this.domain,
           support_email: this.supportEmail,
+          restrict_agents: this.restrict_agents,
           auto_resolve_duration: this.autoResolveDuration,
         });
         this.$root.$i18n.locale = this.locale;
@@ -278,7 +282,28 @@ export default {
           <div>{{ `Build ${globalConfig.gitSha}` }}</div>
         </div>
       </div>
-
+      <div class="flex flex-row p-4 border-b border-slate-25 dark:border-slate-800">
+        <div class="flex-grow-0 flex-shrink-0 flex-[25%] min-w-0 py-4 pr-6 pl-0">
+          <h4 class="text-lg font-medium text-black-900 dark:text-slate-200">
+            {{ $t('GENERAL_SETTINGS.FORM.RESTRICT_AGENTS_ENABLED.TITLE') }}
+          </h4>
+          <p>
+            {{ $t('GENERAL_SETTINGS.FORM.RESTRICT_AGENTS_ENABLED.DESCRIPTION') }}
+          </p>
+        </div>
+        <div class="p-4 flex-grow-0 flex-shrink-0 flex-[50%]">
+          <label class="flex items-center">
+            <input
+              v-model="restrict_agents"
+              type="checkbox"
+              class="mr-2"
+            />
+            <span>
+              {{ $t('GENERAL_SETTINGS.FORM.RESTRICT_AGENTS_ENABLED.LABEL') }}
+            </span>
+          </label>
+        </div>
+      </div>
       <woot-submit-button
         class="button nice success button--fixed-top"
         :button-text="$t('GENERAL_SETTINGS.SUBMIT')"
