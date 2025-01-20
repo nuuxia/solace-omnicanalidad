@@ -192,8 +192,7 @@ const userPermissions = computed(() => {
 
 const assigneeTabItems = computed(() => {
   const isAgent = currentUser.value.role === 'agent';
-  // const isRestrictedAccount = currentAccount.value.restrict_agents;
-  alert(currentAccount.value.restrict_agents);
+  const isRestrictedAccount = currentAccount.value.restrict_agents;
 
   return filterItemsByPermission(
     ASSIGNEE_TYPE_TAB_PERMISSIONS,
@@ -201,7 +200,7 @@ const assigneeTabItems = computed(() => {
     item => item.permissions
   )
     .filter(({ key }) => {
-      if (key === 'all' && isAgent) {
+      if (key === 'all' && isAgent && isRestrictedAccount) {
         return false;
       }
       return true;
@@ -212,7 +211,6 @@ const assigneeTabItems = computed(() => {
       count: conversationStats.value[countKey] || 0,
     }));
 });
-
 
 const showAssigneeInConversationCard = computed(() => {
   return (

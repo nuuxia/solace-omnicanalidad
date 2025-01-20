@@ -24,6 +24,6 @@ class Platform::Api::V1::AccountUsersController < PlatformController
   end
 
   def account_user_params
-    params.permit(:user_id, :role)
+    params.permit(:user_id, :role, :restrict_agents)
   end
 end

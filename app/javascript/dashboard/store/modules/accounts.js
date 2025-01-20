@@ -54,6 +54,7 @@ export const actions = {
     try {
       const response = await AccountAPI.get();
       commit(types.default.ADD_ACCOUNT, response.data);
+      console.log(JSON.stringify(response.data, null, 2));
       commit(types.default.SET_ACCOUNT_UI_FLAG, {
         isFetchingItem: false,
       });
