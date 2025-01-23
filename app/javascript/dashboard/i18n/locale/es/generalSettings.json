@@ -21,7 +21,7 @@
       "RESTRICT_AGENTS_ENABLED": {
         "TITLE": "Restringir agentes",
         "DESCRIPTION": "Habilita esta configuración para restringir el acceso de los agentes.",
-        "LABEL": "Restringir el acceso para los agentes"
+        "LABEL": "Restringir la vista de los agentes"
       },
       "NAME": {
         "LABEL": "Nombre de cuenta",
