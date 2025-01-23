@@ -115,6 +115,7 @@ const inboxesList = useMapGetter('inboxes/getInboxes');
 const campaigns = useMapGetter('campaigns/getAllCampaigns');
 const labels = useMapGetter('labels/getLabels');
 const currentAccountId = useMapGetter('getCurrentAccountId');
+const getAccount = useMapGetter('accounts/getAccount');
 // We can't useFunctionGetter here since it needs to be called on setup?
 const getTeamFn = useMapGetter('teams/getTeam');
 
@@ -164,6 +165,10 @@ const activeFolder = computed(() => {
   return undefined;
 });
 
+
+const currentAccount = computed(() => getAccount.value(currentAccountId.value));
+
+
 const activeFolderName = computed(() => {
   return activeFolder.value?.name;
 });
@@ -186,15 +191,25 @@ const userPermissions = computed(() => {
 });
 
 const assigneeTabItems = computed(() => {
+  const isAgent = currentUser.value.role === 'agent';
+  const isRestrictedAccount = currentAccount.value.restrict_agents;
+
   return filterItemsByPermission(
     ASSIGNEE_TYPE_TAB_PERMISSIONS,
     userPermissions.value,
     item => item.permissions
-  ).map(({ key, count: countKey }) => ({
-    key,
-    name: t(`CHAT_LIST.ASSIGNEE_TYPE_TABS.${key}`),
-    count: conversationStats.value[countKey] || 0,
-  }));
+  )
+    .filter(({ key }) => {
+      if (key === 'all' && isAgent && isRestrictedAccount) {
+        return false;
+      }
+      return true;
+    })
+    .map(({ key, count: countKey }) => ({
+      key,
+      name: t(`CHAT_LIST.ASSIGNEE_TYPE_TABS.${key}`),
+      count: conversationStats.value[countKey] || 0,
+    }));
 });
 
 const showAssigneeInConversationCard = computed(() => {

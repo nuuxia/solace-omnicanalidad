@@ -3,6 +3,7 @@ json.name resource.name
 json.locale resource.locale
 json.domain resource.domain
 json.support_email resource.support_email
+json.restrict_agents resource.restrict_agents
 json.features resource.enabled_features
 json.custom_attributes resource.custom_attributes
 json.limits resource.limits
