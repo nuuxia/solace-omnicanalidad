@@ -19,7 +19,7 @@ const settings = accountId => ({
     'macros_wrapper',
     'settings_applications_integration',
     'settings_applications_webhook',
-    // 'settings_applications',
+    'settings_applications',
     'settings_inbox_finish',
     'settings_inbox_list',
     'settings_inbox_new',
@@ -156,17 +156,17 @@ const settings = accountId => ({
       toStateName: 'canned_list',
       featureFlag: FEATURE_FLAGS.CANNED_RESPONSES,
     },
-    // {
-    //   icon: 'flash-on',
-    //   label: 'INTEGRATIONS',
-    //   hasSubMenu: false,
-    //   meta: {
-    //     permissions: ['administrator'],
-    //   },
-    //   toState: frontendURL(`accounts/${accountId}/settings/integrations`),
-    //   toStateName: 'settings_applications',
-    //   featureFlag: FEATURE_FLAGS.INTEGRATIONS,
-    // },
+    {
+      icon: 'flash-on',
+      label: 'INTEGRATIONS',
+      hasSubMenu: false,
+      meta: {
+        permissions: ['administrator'],
+      },
+      toState: frontendURL(`accounts/${accountId}/settings/integrations`),
+      toStateName: 'settings_applications',
+      featureFlag: FEATURE_FLAGS.INTEGRATIONS,
+    },
     {
       icon: 'key',
       label: 'AUDIT_LOGS',

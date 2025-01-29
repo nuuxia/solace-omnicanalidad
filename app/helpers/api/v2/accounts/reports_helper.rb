@@ -20,6 +20,9 @@ module Api::V2::Accounts::ReportsHelper
     end
   end
 
+  def generate_companies_report
+  end
+
   def generate_labels_report
     Current.account.labels.map do |label|
       label_report = generate_report({ type: :label, id: label.id })
