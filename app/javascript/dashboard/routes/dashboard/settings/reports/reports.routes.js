@@ -11,7 +11,7 @@ import CsatResponses from './CsatResponses.vue';
 import BotReports from './BotReports.vue';
 import LiveReports from './LiveReports.vue';
 import SLAReports from './SLAReports.vue';
-import CompanyReports from './CompanyReports.vue';
+import ContactReports from './ContactReports.vue';
 
 export default {
   routes: [
@@ -203,12 +203,12 @@ export default {
       },
       children: [
         {
-          path: 'companies',
-          name: 'company_reports',
+          path: 'contacts',
+          name: 'contact_reports',
           meta: {
             permissions: ['administrator', 'report_manage'],
           },
-          component: CompanyReports,
+          component: ContactReports,
         },
       ],
     },

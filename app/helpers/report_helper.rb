@@ -13,6 +13,8 @@ module ReportHelper
       label
     when :team
       team
+    when :contact
+      contact
     end
   end
 

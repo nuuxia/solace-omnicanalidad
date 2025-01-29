@@ -17,6 +17,8 @@ class V2::Reports::Timeseries::BaseTimeseriesBuilder
       label
     when :team
       team
+    when :contact
+      contact
     end
   end
 
@@ -34,6 +36,10 @@ class V2::Reports::Timeseries::BaseTimeseriesBuilder
 
   def team
     @team ||= account.teams.find(params[:id])
+  end
+
+  def contact
+    @contact ||= account.contacts.find(params[:id])
   end
 
   def group_by

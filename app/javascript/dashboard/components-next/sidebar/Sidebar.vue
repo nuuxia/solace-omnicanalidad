@@ -282,7 +282,7 @@ const menuItems = computed(() => {
         {
           name: 'Reports Company',
           label: t('SIDEBAR.REPORTS_COMPANY'),
-          to: accountScopedRoute('company_reports'),
+          to: accountScopedRoute('contact_reports'),
         },
       ],
     },

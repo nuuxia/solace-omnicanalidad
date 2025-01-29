@@ -38,9 +38,9 @@ class Api::V2::Accounts::ReportsController < Api::V1::Accounts::BaseController
     generate_csv('teams_report', 'api/v2/accounts/reports/teams')
   end
 
-  def companies
-    @report_data = generate_companies_report
-    generate_csv('companies_report', 'api/v2/accounts/reports/companies')
+  def contacts
+    @report_data = generate_contacts_report
+    generate_csv('contacts_report', 'api/v2/accounts/reports/contacts')
   end
 
   def conversation_traffic

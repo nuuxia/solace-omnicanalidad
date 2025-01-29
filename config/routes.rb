@@ -354,7 +354,7 @@ Rails.application.routes.draw do
               get :inboxes
               get :labels
               get :teams
-              get :companies
+              get :contacts
               get :conversations
               get :conversation_traffic
               get :bot_metrics

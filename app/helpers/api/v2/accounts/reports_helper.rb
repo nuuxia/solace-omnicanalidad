@@ -20,7 +20,11 @@ module Api::V2::Accounts::ReportsHelper
     end
   end
 
-  def generate_companies_report
+  def generate_contacts_report
+    Current.account.contacts.map do |contact|
+      contact_report = report_builder({ type: :contact, id: contact.id }).summary
+      [contact.name] + generate_readable_report_metrics(contact_report)
+    end
   end
 
   def generate_labels_report

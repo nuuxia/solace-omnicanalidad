@@ -13,7 +13,7 @@ const reports = accountId => ({
     'inbox_reports',
     'team_reports',
     'sla_reports',
-    'company_reports'
+    'contact_reports'
   ],
   menuItems: [
     {
@@ -77,8 +77,8 @@ const reports = accountId => ({
       icon: 'briefcase',
       label: 'REPORTS_COMPANY',
       hasSubMenu: false,
-      toState: frontendURL(`accounts/${accountId}/reports/companies`),
-      toStateName: 'company_reports',
+      toState: frontendURL(`accounts/${accountId}/reports/contacts`),
+      toStateName: 'contact_reports',
     },
     {
       icon: 'document-list-clock',
