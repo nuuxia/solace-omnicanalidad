@@ -85,6 +85,12 @@ class ReportsAPI extends ApiClient {
     });
   }
 
+  getContactReports({ from: since, to: until, businessHours }) {
+    return axios.get(`${this.url}/contacts`, {
+      params: { since, until, business_hours: businessHours },
+    });
+  }
+
   getBotMetrics({ from, to } = {}) {
     return axios.get(`${this.url}/bot_metrics`, {
       params: { since: from, until: to },

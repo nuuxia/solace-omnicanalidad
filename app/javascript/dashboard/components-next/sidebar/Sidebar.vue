@@ -279,6 +279,11 @@ const menuItems = computed(() => {
           label: t('SIDEBAR.REPORTS_SLA'),
           to: accountScopedRoute('sla_reports'),
         },
+        {
+          name: 'Reports Company',
+          label: t('SIDEBAR.REPORTS_COMPANY'),
+          to: accountScopedRoute('contact_reports'),
+        },
       ],
     },
     {
@@ -427,12 +432,12 @@ const menuItems = computed(() => {
           icon: 'i-lucide-message-square-quote',
           to: accountScopedRoute('canned_list'),
         },
-        // {
-        //   name: 'Settings Integrations',
-        //   label: t('SIDEBAR.INTEGRATIONS'),
-        //   icon: 'i-lucide-blocks',
-        //   to: accountScopedRoute('settings_applications'),
-        // },
+        {
+          name: 'Settings Integrations',
+          label: t('SIDEBAR.INTEGRATIONS'),
+          icon: 'i-lucide-blocks',
+          to: accountScopedRoute('settings_applications'),
+        },
         {
           name: 'Settings Audit Logs',
           label: t('SIDEBAR.AUDIT_LOGS'),

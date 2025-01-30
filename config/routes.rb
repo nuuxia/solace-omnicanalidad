@@ -46,7 +46,7 @@ Rails.application.routes.draw do
             post :sync_whatsapp_templates, to: 'whatsapp#sync_whatsapp_templates'
           end
         end
-  
+
         scope module: :accounts do
           namespace :actions do
             resource :contact_merge, only: [:create]
@@ -83,7 +83,7 @@ Rails.application.routes.draw do
           resources :sla_policies, only: [:index, :create, :show, :update, :destroy]
           resources :custom_roles, only: [:index, :create, :show, :update, :destroy]
           resources :campaigns, only: [:index, :create, :show, :update, :destroy]
-          resources :campaigns_whatsapp, only: [:index, :show, :create, :update, :destroy] do 
+          resources :campaigns_whatsapp, only: [:index, :show, :create, :update, :destroy] do
             collection do
                post :preview, to: 'campaigns_whatsapp_preview#create'
             end
@@ -354,6 +354,7 @@ Rails.application.routes.draw do
               get :inboxes
               get :labels
               get :teams
+              get :contacts
               get :conversations
               get :conversation_traffic
               get :bot_metrics

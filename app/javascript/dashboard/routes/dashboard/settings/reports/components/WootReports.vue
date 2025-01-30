@@ -66,6 +66,9 @@ export default {
       return this.type === 'agent';
     },
     reportKeys() {
+      if (this.type === 'contact') {
+        return { CONVERSATIONS: 'conversations_count' };
+      }
       return {
         CONVERSATIONS: 'conversations_count',
         ...(!this.isAgentType && {
@@ -122,6 +125,7 @@ export default {
         label: 'downloadLabelReports',
         inbox: 'downloadInboxReports',
         team: 'downloadTeamReports',
+        contact: 'downloadContactReports',
       };
       if (dispatchMethods[type]) {
         const fileName = generateFileName({ type, to, businessHours });
