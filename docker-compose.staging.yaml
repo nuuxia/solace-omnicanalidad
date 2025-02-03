@@ -1,0 +1,57 @@
+version: '3.7'
+
+services:
+  # Servicio principal (Rails/Chatwoot)
+  chatwoot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        RAILS_ENV: "production"
+        BUNDLE_WITHOUT: "development test"
+    container_name: chatwoot_staging
+
+    # No montamos código local en producción/staging;
+    # la imagen ya contiene todo el código y assets precompilados.
+    ports:
+      - "3001:3000"  # Staging en puerto 3001 (host) -> 3000 (contenedor)
+
+    depends_on:
+      - redis
+
+    environment:
+      # Ajusta estas variables de entorno según tu config y Chatwoot
+      RAILS_ENV: "production"
+      NODE_ENV: "production"
+
+      # Base de datos externa (en Hetzner)
+      POSTGRES_HOST: "178.156.156.53"
+      POSTGRES_DB: "nuuxia-chat"        # o el que uses realmente
+      POSTGRES_USERNAME: "admin"
+      POSTGRES_PASSWORD: '-To3Go~GDhQHvMP1'  # Cuida las comillas en YAML
+
+      # Redis local (en contenedor "redis" de este compose)
+      REDIS_URL: "redis://redis:6379"
+
+      # KEY BASE para Rails (genera una con `rake secret`)
+      SECRET_KEY_BASE: "&gksfS2.Z7K9S?;z&gksfS2.Z7K9S?;zq_uutDR8_ebyHX@]q_uutDR8_ebyHX@]q_uutDR8_ebyHX@]6-4P!(~<$cZp4?g)dH%Y)^%y',47yo;}"
+
+      # Opcional: URL frontal, logs, etc.
+      FRONTEND_URL: "http://chat.staging.nuuxia.com"
+      RAILS_LOG_TO_STDOUT: "true"
+      LOG_LEVEL: "info"
+
+    command: >
+      bash -c "
+      bundle exec rails db:migrate &&
+      bundle exec rails s -b 0.0.0.0 -p 3000
+      "
+
+  # Redis (si no lo tienes externo, lo levantas aquí)
+  redis:
+    image: redis:7-alpine
+    container_name: redis_staging
+    restart: unless-stopped
+    ports:
+      # Si no necesitas exponer Redis, puedes omitir esto
+      - "6379:6379"
