@@ -21,4 +21,4 @@ jobs:
           script: |
             cd /home/nuuxia/nuuxia-chat  # Ajusta la ruta si es diferente en tu server
             git pull origin production
-            docker-compose -f docker-compose.production.yml up -d --build
+            docker-compose -f docker-compose.production.yaml up -d --build
