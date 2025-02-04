@@ -4,7 +4,7 @@ services:
   chatwoot:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: docker/Dockerfile
       args:
         RAILS_ENV: "production"
         BUNDLE_WITHOUT: "development test"
@@ -16,7 +16,7 @@ services:
     env_file:
       - .env.staging
     command: >
-      bash -c "
+      sh -c "
       bundle exec rails db:migrate &&
       bundle exec rails s -b 0.0.0.0 -p 3000
       "
