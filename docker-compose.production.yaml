@@ -8,13 +8,13 @@ services:
       args:
         RAILS_ENV: "production"
         BUNDLE_WITHOUT: "development test"
-    container_name: chatwoot_staging
+    container_name: chatwoot_production
     ports:
       - "3001:3000"
     depends_on:
       - redis
     env_file:
-      - .env.staging
+      - .env.production
     command: >
       sh -c "
       bundle exec rails db:migrate &&
