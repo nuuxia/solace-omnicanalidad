@@ -1,14 +1,14 @@
 version: '3.7'
 
 services:
-  chatwoot:
+  solace:
     build:
       context: .
       dockerfile: docker/Dockerfile
       args:
         RAILS_ENV: "production"
         BUNDLE_WITHOUT: "development test"
-    container_name: chatwoot_production
+    container_name: solace_production
     ports:
       - "3001:3000"
     depends_on:
@@ -42,3 +42,4 @@ services:
     image: redis:7-alpine
     container_name: redis_staging
     restart: unless-stopped
+
