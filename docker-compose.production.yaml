@@ -40,6 +40,6 @@ services:
 
   redis:
     image: redis:7-alpine
-    container_name: redis_staging
+    container_name: redis_production
     restart: unless-stopped
 
