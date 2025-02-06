@@ -5,6 +5,7 @@
     "LEARN_MORE": "Learn more about inboxes",
     "RECONNECTION_REQUIRED": "Your inbox is disconnected. You won't receive new messages until you reauthorize it.",
     "CLICK_TO_RECONNECT": "Click here to reconnect.",
+    "OFFLINE_RESPONSE_LABEL": "The bot will only answer during offline hours.",
     "LIST": {
       "404": "There are no inboxes attached to this account."
     },

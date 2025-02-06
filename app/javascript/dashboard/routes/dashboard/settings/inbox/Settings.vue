@@ -286,6 +286,7 @@ export default {
           csat_survey_enabled: this.csatSurveyEnabled,
           allow_messages_after_resolved: this.allowMessagesAfterResolved,
           greeting_enabled: this.greetingEnabled,
+          offline_response: this.inbox.offline_response,
           greeting_message: this.greetingMessage || '',
           portal_id: this.selectedPortalSlug
             ? this.portals.find(
@@ -628,6 +629,12 @@ export default {
             {{ $t('INBOX_MGMT.HELP_CENTER.SUB_TEXT') }}
           </p>
         </div>
+
+        <label class="flex items-center space-x-2 mb-4 mt-4">
+          <input type="checkbox" v-model="inbox.offline_response" />
+          <span>{{ $t('INBOX_MGMT.OFFLINE_RESPONSE_LABEL') }}</span>
+        </label>
+
         <label v-if="canLocktoSingleConversation" class="w-3/4 pb-4">
           {{ $t('INBOX_MGMT.SETTINGS_POPUP.LOCK_TO_SINGLE_CONVERSATION') }}
           <select v-model="locktoSingleConversation">
