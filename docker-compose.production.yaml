@@ -20,6 +20,24 @@ services:
       bundle exec rails db:migrate &&
       bundle exec rails s -b 0.0.0.0 -p 3000
       "
+
+  sidekiq:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      args:
+        RAILS_ENV: "production"
+        BUNDLE_WITHOUT: "development test"
+    container_name: sidekiq_production
+    depends_on:
+      - redis
+    env_file:
+      - .env.production
+    command: >
+      sh -c "
+      bundle exec sidekiq -C config/sidekiq.yml
+      "
+
   redis:
     image: redis:7-alpine
     container_name: redis_staging
