@@ -1,4 +1,3 @@
-
 class Webhooks::MercadoLibreEventsJob < ApplicationJob
   queue_as :default
 
@@ -19,19 +18,26 @@ class Webhooks::MercadoLibreEventsJob < ApplicationJob
   private
 
   def process_message_event(channel, params)
-    if valid_application_id?(params) && !message_already_processed?(params["resource"])
-      MercadoLibre::IncomingMessageService.new(inbox: channel.inbox, params: params).perform
-    else
-      log_invalid_event(params)
-    end
+    return log_invalid_event(params) unless valid_application_id?(params)
+
+    inbox = find_or_create_inbox(channel, "Mensajes")
+    return if message_already_processed?(params["resource"])
+
+    MercadoLibre::IncomingMessageService.new(inbox: inbox, params: params).perform
   end
 
   def process_question_event(channel, params)
-    if valid_application_id?(params) && !question_already_processed?(params["resource"])
-      MercadoLibre::IncomingQuestionService.new(inbox: channel.inbox, params: params).perform
-    else
-      log_invalid_event(params)
-    end
+    return log_invalid_event(params) unless valid_application_id?(params)
+
+    inbox = find_or_create_inbox(channel, "Preguntas")
+    return if question_already_processed?(params["resource"])
+
+    MercadoLibre::IncomingQuestionService.new(inbox: inbox, params: params).perform
+  end
+
+  def find_or_create_inbox(channel, type)
+    inbox_name = "Mercado Libre - #{type}"
+    channel.account.inboxes.find_or_create_by!(channel: channel, name: inbox_name)
   end
 
   def valid_application_id?(params)
@@ -47,13 +53,7 @@ class Webhooks::MercadoLibreEventsJob < ApplicationJob
   end
 
   def log_invalid_event(params)
-    case params["topic"]
-    when "messages"
-      Rails.logger.info "Message already processed or topic is not 'messages'."
-    when "questions"
-      Rails.logger.info "Question already processed or topic is not 'questions'."
-    else
-      Rails.logger.error "Webhook application_id does not match the expected value or topic is invalid."
-    end
+    topic = params["topic"]
+    Rails.logger.info "Invalid event: #{topic}. Params: #{params.inspect}"
   end
 end
