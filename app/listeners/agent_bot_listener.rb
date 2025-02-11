@@ -55,11 +55,20 @@ class AgentBotListener < BaseListener
   def should_process_event?(inbox)
     return false unless connected_agent_bot_exist?(inbox)
 
+    # Si el checkbox offline_response está activado
     if inbox.offline_response?
+      # Si está fuera del horario laboral, el bot debe atender
       return !within_working_hours?(inbox)
     end
 
-    true
+    # Si no hay horarios de trabajo configurados
+    working_hour = get_working_hours_for_today(inbox)
+    if working_hour.nil? || working_hour.empty?
+      return true
+    end
+
+    # Si no está fuera del horario laboral, el bot debe atender
+    within_working_hours?(inbox)
   end
 
   def connected_agent_bot_exist?(inbox)
@@ -82,6 +91,16 @@ class AgentBotListener < BaseListener
     close_time = current_time.change(hour: working_hour.close_hour, min: working_hour.close_minutes)
 
     current_time.between?(open_time, close_time)
+  end
+
+  def get_working_hours_for_today(inbox)
+    current_time = Time.now.in_time_zone(inbox.timezone)
+    day_of_week = current_time.wday
+
+    working_hour = WorkingHour.where(inbox_id: inbox.id, day_of_week: day_of_week)
+    return [] if working_hour.empty?
+
+    working_hour
   end
 
   def process_message_event(method_name, agent_bot, message, event)
