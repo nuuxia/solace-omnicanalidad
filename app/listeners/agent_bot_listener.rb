@@ -70,7 +70,7 @@ class AgentBotListener < BaseListener
   end
 
   def within_working_hours?(inbox)
-    current_time = Time.now
+    current_time = Time.now.in_time_zone(inbox.timezone)
     day_of_week = current_time.wday
 
     working_hour = WorkingHour.find_by(inbox_id: inbox.id, day_of_week: day_of_week)
@@ -78,8 +78,8 @@ class AgentBotListener < BaseListener
     return false if working_hour.closed_all_day
     return true if working_hour.open_all_day
 
-    open_time = Time.new(current_time.year, current_time.month, current_time.day, working_hour.open_hour, working_hour.open_minutes)
-    close_time = Time.new(current_time.year, current_time.month, current_time.day, working_hour.close_hour, working_hour.close_minutes)
+    open_time = current_time.change(hour: working_hour.open_hour, min: working_hour.open_minutes)
+    close_time = current_time.change(hour: working_hour.close_hour, min: working_hour.close_minutes)
 
     current_time.between?(open_time, close_time)
   end
