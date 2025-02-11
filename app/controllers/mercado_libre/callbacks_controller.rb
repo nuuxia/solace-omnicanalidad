@@ -12,7 +12,7 @@ class MercadoLibre::CallbacksController < ApplicationController
     ActiveRecord::Base.transaction do
       token_data = MercadoLibre::TokenService.new(code, code_verifier).call
       inbox = create_inbox(token_data)
-      redirect_to app_mercado_libre_inbox_agents_url(account_id: account.id, inbox_id: inbox.id)
+      redirect_to app_mercado_libre_inbox_agents_url(account_id: account.id, inbox_id: inbox[:messages_inbox].id)
     end
   rescue StandardError => e
     ChatwootExceptionTracker.new(e).capture_exception
