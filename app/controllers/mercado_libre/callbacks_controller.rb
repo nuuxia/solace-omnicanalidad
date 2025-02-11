@@ -58,12 +58,20 @@ class MercadoLibre::CallbacksController < ApplicationController
         mercado_libre_user_id: token_data['user_id'],
         mercado_libre_token_expires_at: Time.current + token_data['expires_in']
       )
-      inbox = account.inboxes.create!(
+
+      messages_inbox = account.inboxes.create!(
         account: account,
         channel: channel_mercado_libre,
-        name: 'Mercado Libre'
+        name: 'Mercado Libre - Mensajes'
       )
-      inbox
+
+      questions_inbox = account.inboxes.create!(
+        account: account,
+        channel: channel_mercado_libre,
+        name: 'Mercado Libre - Preguntas'
+      )
+
+      { messages_inbox: messages_inbox, questions_inbox: questions_inbox }
     end
   end
 
