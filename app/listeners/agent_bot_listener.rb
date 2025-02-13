@@ -54,17 +54,12 @@ class AgentBotListener < BaseListener
 
   def should_process_event?(inbox)
     return false unless connected_agent_bot_exist?(inbox)
+    return true unless inbox.offline_response?
 
-    return true unless inbox.bot_offline?
+    return !within_working_hours?(inbox) if inbox.offline_response?
 
-    if inbox.offline_response?
-      return !within_working_hours?(inbox)
-    end
-
-    working_hour = get_working_hours_for_today(inbox)
-    if working_hour.nil? || working_hour.empty?
-      return true
-    end
+    working_hours = get_working_hours_for_today(inbox)
+    return true if working_hours.blank?
 
     within_working_hours?(inbox)
   end
