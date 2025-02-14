@@ -1,45 +1,92 @@
 version: '3.7'
 
 services:
-  solace:
+  postgres:
+    image: ankane/pgvector:latest  # PostgreSQL con extensión `vector`
+    container_name: postgres_local
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: nuuxia_chat_dev
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis_local
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+
+  rails:
     build:
       context: .
       dockerfile: docker/Dockerfile
       args:
-        RAILS_ENV: "production"
-        BUNDLE_WITHOUT: "development test"
-    container_name: solace_local
-    ports:
-      - "3001:3000"
+        RAILS_ENV: "development"
+    container_name: rails_local
     depends_on:
       - redis
+      - postgres
     env_file:
       - .env.local
+    ports:
+      - "3000:3000"
+      - "5173:5173"  # ⚡ Exponer Vite en el puerto 5173
+    volumes:
+      - .:/app
+      - bundle_cache:/gems
+      - node_modules:/app/node_modules # Evitar que se sobrescriba
     command: >
       sh -c "
-      bundle exec rails db:migrate &&
-      bundle exec rails s -b 0.0.0.0 -p 3000
-      "
+      rm -f /app/tmp/pids/server.pid &&
+      bin/rails db:prepare &&
+      exec bin/rails server -b 0.0.0.0 -p 3000"
+
+  vite:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      args:
+        RAILS_ENV: "development"
+    container_name: vite_local
+    depends_on:
+      - rails
+    env_file:
+      - .env.local
+    ports:
+      - "5174:5174"
+    volumes:
+      - .:/app
+      - node_modules:/app/node_modules
+    command: >
+      sh -c "
+      pnpm install &&
+      exec bin/vite dev --host 0.0.0.0"
 
   sidekiq:
     build:
       context: .
       dockerfile: docker/Dockerfile
       args:
-        RAILS_ENV: "production"
-        BUNDLE_WITHOUT: "development test"
+        RAILS_ENV: "development"
     container_name: sidekiq_local
     depends_on:
       - redis
+      - postgres
     env_file:
       - .env.local
+    volumes:
+      - .:/app
+      - bundle_cache:/gems
     command: >
       sh -c "
-      bundle exec sidekiq -C config/sidekiq.yml
-      "
+      exec bundle exec sidekiq -C config/sidekiq.yml"
 
-  redis:
-    image: redis:7-alpine
-    container_name: redis_local
-    restart: unless-stopped
-
+volumes:
+  postgres_data:
+  bundle_cache:
+  node_modules: # Evitar problemas de sobreescritura con node_modules

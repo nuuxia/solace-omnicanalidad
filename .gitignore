@@ -93,3 +93,7 @@ yarn-debug.log*
 
 .env.production
 .env.staging
+.env.local
+docker/Dockerfile
+docker-compose.local.yaml
+lib/tasks/auto_annotate_models.rake

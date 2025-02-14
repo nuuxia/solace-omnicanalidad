@@ -1,115 +1,115 @@
 ###################################################################
-# 1. Etapa de pre-build (compila gems y JS assets)
+# 1. Etapa de pre-build (instala dependencias y compila assets)
 ###################################################################
 FROM ruby:3.3.3-alpine3.19 AS pre-builder
 
-# Variables de entorno y argumentos de build
-ARG BUNDLE_WITHOUT="development:test"
+# Definir argumentos y variables de entorno
+ARG BUNDLE_WITHOUT="test"
+ARG BUNDLER_VERSION=2.5.11
+ARG RAILS_ENV=development
+
 ENV BUNDLE_WITHOUT=${BUNDLE_WITHOUT}
-ENV BUNDLER_VERSION=2.5.11
-
-ARG RAILS_ENV=production
+ENV BUNDLER_VERSION=${BUNDLER_VERSION}
 ENV RAILS_ENV=${RAILS_ENV}
-
-ARG RAILS_SERVE_STATIC_FILES=true
-ENV RAILS_SERVE_STATIC_FILES=${RAILS_SERVE_STATIC_FILES}
-
-ARG NODE_OPTIONS="--max-old-space-size=4096 --openssl-legacy-provider"
-ENV NODE_OPTIONS=${NODE_OPTIONS}
-
 ENV BUNDLE_PATH="/gems"
+ENV DOCKERIZED=true
+ENV PATH="/app/bin:$PATH"
 
-# Instalar dependencias requeridas para compilar gems y frontend
+# Instalar dependencias requeridas
 RUN apk update && apk add --no-cache \
   build-base \
   git \
   postgresql-dev \
   postgresql-client \
-  nodejs=20.15.1-r0 \
+  nodejs \
   npm \
   tzdata \
   openssl \
   vips \
-  linux-headers \
-  ruby-dev \
-  libc6-compat \
   && gem install bundler -v "${BUNDLER_VERSION}"
 
-# Instalar pnpm versión 9.x (la versión compatible)
+# Instalar `pnpm`
 RUN npm install -g pnpm@9
 
+# Configurar `pnpm`
 ENV PNPM_HOME="/root/.local/share/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 
+# Configurar directorio de trabajo
 WORKDIR /app
 
-# Copiar Gemfile y Gemfile.lock antes para usar la caché de Bundler
+# 🔥 **Arreglar el error de "dubious ownership"**
+RUN git config --global --add safe.directory /app
+
+# Copiar y preparar Ruby gems
 COPY Gemfile Gemfile.lock ./
+RUN bundle install -j4
 
-# AÑADIMOS la plataforma Alpine (musl) al lockfile para evitar errores:
-RUN bundle lock --add-platform x86_64-linux-musl
-
-# Instalar las gemas
-RUN bundle config set without 'development test' && bundle install -j4
-
-# Copiar package.json y pnpm-lock.yaml
+# Copiar archivos de frontend y preparar Node.js
 COPY package.json pnpm-lock.yaml ./
-RUN pnpm install
 
-# Copiar el resto de la app
+# Instalar módulos con `pnpm`
+RUN pnpm install --shamefully-hoist
+
+# Copiar toda la app
 COPY . /app
 
-# Crear directorio de logs (por si RAILS_LOG_TO_STDOUT está en false)
+# Limpiar caché y permisos
+RUN rm -rf /gems/ruby/3.3.0/cache/*.gem \
+  && find /gems/ruby/3.3.0/gems/ \( -name "*.c" -o -name "*.o" \) -delete
+
+RUN chown -R nobody:nobody /app
+USER nobody
+
+# Crear directorio de logs
 RUN mkdir -p /app/log
 
-# Precompilar assets en producción
-RUN SECRET_KEY_BASE=precompile_placeholder RAILS_LOG_TO_STDOUT=enabled \
-      bundle exec rake assets:precompile && \
-      rm -rf spec node_modules tmp/cache
-
-# Generar archivo .git_sha con el commit actual (opcional)
-RUN git rev-parse HEAD > /app/.git_sha
-
-# Limpiar archivos innecesarios
-RUN rm -rf /gems/ruby/3.3.0/cache/*.gem \
-  && find /gems/ruby/3.3.0/gems/ \( -name "*.c" -o -name "*.o" \) -delete \
-  && rm -rf .git \
-  && rm .gitignore
-
 ###################################################################
-# 2. Etapa final (imagen limpia para producción)
+# 2. Etapa final (imagen optimizada)
 ###################################################################
 FROM ruby:3.3.3-alpine3.19
 
-ARG BUNDLE_WITHOUT="development:test"
-ENV BUNDLE_WITHOUT=${BUNDLE_WITHOUT}
-ENV BUNDLER_VERSION=2.5.11
+# Variables de entorno
+ARG BUNDLER_VERSION=2.5.11
+ARG RAILS_ENV=development
 
-ARG RAILS_ENV=production
+ENV BUNDLE_WITHOUT="test"
+ENV BUNDLER_VERSION=${BUNDLER_VERSION}
 ENV RAILS_ENV=${RAILS_ENV}
 ENV BUNDLE_PATH="/gems"
-
-# Permite servir static files con Rails
-ENV RAILS_SERVE_STATIC_FILES=true
-# Desactiva ExecJS
 ENV EXECJS_RUNTIME="Disabled"
 
-# Instalar dependencias mínimas para runtime
+# Instalar dependencias mínimas
 RUN apk update && apk add --no-cache \
   tzdata \
   postgresql-client \
   vips \
   openssl \
-  libc6-compat
+  git \
+  nodejs \
+  npm
 
-# Copiar las gems y el código de la etapa anterior
+# Instalar `pnpm`
+RUN npm install -g pnpm@9
+
+# Copiar gems y código
 COPY --from=pre-builder /gems/ /gems/
 COPY --from=pre-builder /app /app
 
+# Configurar directorio de trabajo
 WORKDIR /app
 
-# (Opcional) confirmar que el .git_sha se copió
-COPY --from=pre-builder /app/.git_sha /app/.git_sha
+# Asegurar que `node_modules` están disponibles
+COPY --from=pre-builder /app/node_modules /app/node_modules
 
-# Exponer puerto para Rails
+# Configurar `pnpm`
+ENV PNPM_HOME="/root/.local/share/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+
+# 🔥 **Arreglar "dubious ownership" en el contenedor final**
+RUN git config --global --add safe.directory /app
+
+# Exponer el puerto de Rails
 EXPOSE 3000
+
+CMD ["sh", "-c", "rm -f /app/tmp/pids/server.pid && bundle exec rails server -b 0.0.0.0"]
