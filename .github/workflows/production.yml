@@ -3,7 +3,7 @@ name: Deploy to Production
 on:
   push:
     branches:
-      - production  # Se ejecuta cada vez que se sube código a production
+      - production
 
 jobs:
   deploy:
@@ -12,6 +12,12 @@ jobs:
       - name: Checkout código
         uses: actions/checkout@v3
 
+      - name: Debug SSH Connection
+        run: |
+          echo "${{ secrets.PROD_SSH_KEY }}" > key.pem
+          chmod 600 key.pem
+          ssh -o StrictHostKeyChecking=no -i key.pem ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} "echo 'Conexión SSH exitosa'"
+
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v0.1.8
         with:
@@ -19,6 +25,6 @@ jobs:
           username: ${{ secrets.PROD_USER }}
           key: ${{ secrets.PROD_SSH_KEY }}
           script: |
-            cd /home/nuuxia/nuuxia-chat  # Ajusta la ruta si es diferente en tu server
+            cd /nuuxia-chat  # ESTA ES LA RUTA CORRECTA
             git pull origin production
             docker-compose -f docker-compose.production.yaml up -d --build
