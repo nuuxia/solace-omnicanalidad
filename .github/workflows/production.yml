@@ -16,7 +16,7 @@ jobs:
         run: |
           echo "${{ secrets.PROD_SSH_KEY }}" > key.pem
           chmod 600 key.pem
-          ssh -o StrictHostKeyChecking=no -i key.pem ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} 'echo "Conexión SSH exitosa"'
+          ssh -o StrictHostKeyChecking=no -i key.pem ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} "echo 'Conexion SSH exitosa'"
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v0.1.8
