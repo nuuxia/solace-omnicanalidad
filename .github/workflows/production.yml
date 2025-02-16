@@ -9,15 +9,21 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      # 1. Descarga (checkout) del código del repo
+      - name: Checkout code
         uses: actions/checkout@v3
 
+      # 2. Debug: probamos conexión SSH para asegurarnos de que la llave funcione
       - name: Debug SSH Connection
         run: |
+          # Creamos el archivo key.pem con la llave privada tomada de los secrets
           echo "${{ secrets.PROD_SSH_KEY }}" > key.pem
+          # Ajustamos permisos para que SSH no se queje
           chmod 600 key.pem
-          ssh -o StrictHostKeyChecking=no -i key.pem ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} /bin/bash -c 'echo "Conexion SSH exitosa"'
+          # Intentamos conectarnos al servidor y mostramos un mensaje
+          ssh -o StrictHostKeyChecking=no -i key.pem ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} "echo 'Conexión SSH exitosa'"
 
+      # 3. Despliegue (Deploy) vía SSH, usando la acción appleboy/ssh-action
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v0.1.8
         with:
@@ -25,6 +31,11 @@ jobs:
           username: ${{ secrets.PROD_USER }}
           key: ${{ secrets.PROD_SSH_KEY }}
           script: |
+            # En tu servidor, nos movemos a /nuuxia-chat
             cd /nuuxia-chat
+
+            # Actualizamos la rama production (asumiendo que tu repo está ahí)
             git pull origin production
+
+            # Levantamos los contenedores con el docker-compose de producción
             docker-compose -f docker-compose.production.yaml up -d --build
