@@ -9,18 +9,15 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      # Paso 1: Checkout del código.
       - name: Checkout
         uses: actions/checkout@v3
 
-      # Paso 2: (Opcional) Hacer una prueba de conexión SSH para debug.
       - name: Debug SSH Connection
         run: |
           echo "${{ secrets.PROD_SSH_KEY }}" > key.pem
           chmod 600 key.pem
           ssh -o StrictHostKeyChecking=no -i key.pem ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} "echo 'Conexión SSH exitosa'"
 
-      # Paso 3: Deploy via SSH con appleboy/ssh-action
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v0.1.8
         with:
@@ -28,6 +25,6 @@ jobs:
           username: ${{ secrets.PROD_USER }}
           key: ${{ secrets.PROD_SSH_KEY }}
           script: |
-            cd /nuuxia-chat
+            cd /ruta/de/tu/proyecto
             git pull origin production
             docker-compose -f docker-compose.production.yaml up -d --build
