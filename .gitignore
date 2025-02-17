@@ -90,6 +90,9 @@ yarn-debug.log*
 # Vite uses dotenv and suggests to ignore local-only env files. See
 # https://vitejs.dev/guide/env-and-mode.html#env-files
 *.local
-
+# 🚀 Archivos que solo deben existir en desarrollo y NO en producción
+docker/Dockerfile
+.env.local
+docker-compose.production.yaml
 .env.production
 .env.staging
