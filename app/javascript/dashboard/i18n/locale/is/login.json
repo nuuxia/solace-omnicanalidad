@@ -1,6 +1,6 @@
 {
   "LOGIN": {
-    "TITLE": "Login to Solace",
+    "TITLE": "Login to test",
     "EMAIL": {
       "LABEL": "Tölvupóstfang",
       "PLACEHOLDER": "Tölvupóstfang t.d. someone{'@'}example.com",

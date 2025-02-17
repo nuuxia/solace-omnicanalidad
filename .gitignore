@@ -97,7 +97,5 @@ docker/Dockerfile
 docker-compose.production.yaml
 .env.production
 .env.staging
-docker/Dockerfile
 docker-compose.local.yaml
-
 lib/tasks/auto_annotate_models.rake

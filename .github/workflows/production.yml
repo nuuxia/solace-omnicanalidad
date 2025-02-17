@@ -3,14 +3,20 @@ name: Deploy to Production
 on:
   push:
     branches:
-      - production  # Se ejecuta cada vez que se sube código a production
+      - production
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout código
+      - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Debug SSH Connection
+        run: |
+          echo "${{ secrets.PROD_SSH_KEY }}" > key.pem
+          chmod 600 key.pem
+          ssh -o StrictHostKeyChecking=no -i key.pem ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} "echo 'Conexión SSH exitosa'"
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v0.1.8
@@ -19,6 +25,11 @@ jobs:
           username: ${{ secrets.PROD_USER }}
           key: ${{ secrets.PROD_SSH_KEY }}
           script: |
-            cd /home/nuuxia/nuuxia-chat  # Ajusta la ruta si es diferente en tu server
+            # Movernos a la carpeta donde está el proyecto
+            cd /home/nuuxia/solace
+
+            # Asegurar que tenemos la última versión del código
             git pull origin production
+
+            # Construir e iniciar los contenedores con Docker Compose
             docker-compose -f docker-compose.production.yaml up -d --build
