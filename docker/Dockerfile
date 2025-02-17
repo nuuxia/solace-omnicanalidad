@@ -1,133 +1,115 @@
-# pre-build stage
+###################################################################
+# 1. Etapa de pre-build (instala dependencias y compila assets)
+###################################################################
 FROM ruby:3.3.3-alpine3.19 AS pre-builder
 
-# ARG default to production settings
-# For development docker-compose file overrides ARGS
-ARG BUNDLE_WITHOUT="development:test"
-ENV BUNDLE_WITHOUT ${BUNDLE_WITHOUT}
-ENV BUNDLER_VERSION=2.5.11
+# Definir argumentos y variables de entorno
+ARG BUNDLE_WITHOUT="test"
+ARG BUNDLER_VERSION=2.5.11
+ARG RAILS_ENV=development
 
-ARG RAILS_SERVE_STATIC_FILES=true
-ENV RAILS_SERVE_STATIC_FILES ${RAILS_SERVE_STATIC_FILES}
-
-ARG RAILS_ENV=production
-ENV RAILS_ENV ${RAILS_ENV}
-
-ARG NODE_OPTIONS="--max-old-space-size=4096 --openssl-legacy-provider"
-ENV NODE_OPTIONS ${NODE_OPTIONS}
-
+ENV BUNDLE_WITHOUT=${BUNDLE_WITHOUT}
+ENV BUNDLER_VERSION=${BUNDLER_VERSION}
+ENV RAILS_ENV=${RAILS_ENV}
 ENV BUNDLE_PATH="/gems"
+ENV DOCKERIZED=true
+ENV PATH="/app/bin:$PATH"
 
+# Instalar dependencias requeridas
 RUN apk update && apk add --no-cache \
-  openssl \
-  tar \
   build-base \
-  tzdata \
+  git \
   postgresql-dev \
   postgresql-client \
-  nodejs=20.15.1-r0 \
-  git \
-  && mkdir -p /var/app \
-  && gem install bundler
+  nodejs \
+  npm \
+  tzdata \
+  openssl \
+  vips \
+  && gem install bundler -v "${BUNDLER_VERSION}"
 
-# Install pnpm and configure environment
-RUN wget -qO- https://get.pnpm.io/install.sh | ENV="$HOME/.shrc" SHELL="$(which sh)" sh - \
-    && echo 'export PNPM_HOME="/root/.local/share/pnpm"' >> /root/.shrc \
-    && echo 'export PATH="$PNPM_HOME:$PATH"' >> /root/.shrc \
-    && export PNPM_HOME="/root/.local/share/pnpm" \
-    && export PATH="$PNPM_HOME:$PATH" \
-    && pnpm --version
+# Instalar `pnpm`
+RUN npm install -g pnpm@9
 
-# Persist the environment variables in Docker
+# Configurar `pnpm`
 ENV PNPM_HOME="/root/.local/share/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 
+# Configurar directorio de trabajo
 WORKDIR /app
 
+# 🔥 **Arreglar el error de "dubious ownership"**
+RUN git config --global --add safe.directory /app
+
+# Copiar y preparar Ruby gems
 COPY Gemfile Gemfile.lock ./
+RUN bundle install -j4
 
-# natively compile grpc and protobuf to support alpine musl (dialogflow-docker workflow)
-# https://github.com/googleapis/google-cloud-ruby/issues/13306
-# adding xz as nokogiri was failing to build libxml
-# https://github.com/chatwoot/chatwoot/issues/4045
-RUN apk update && apk add --no-cache build-base musl ruby-full ruby-dev gcc make musl-dev openssl openssl-dev g++ linux-headers xz vips
-RUN bundle config set --local force_ruby_platform true
-
-# Do not install development or test gems in production
-RUN if [ "$RAILS_ENV" = "production" ]; then \
-  bundle config set without 'development test'; bundle install -j 4 -r 3; \
-  else bundle install -j 4 -r 3; \
-  fi
-
+# Copiar archivos de frontend y preparar Node.js
 COPY package.json pnpm-lock.yaml ./
-RUN pnpm i
 
+# Instalar módulos con `pnpm`
+RUN pnpm install --shamefully-hoist
+
+# Copiar toda la app
 COPY . /app
 
-# creating a log directory so that image wont fail when RAILS_LOG_TO_STDOUT is false
-# https://github.com/chatwoot/chatwoot/issues/701
+# Limpiar caché y permisos
+RUN rm -rf /gems/ruby/3.3.0/cache/*.gem \
+  && find /gems/ruby/3.3.0/gems/ \( -name "*.c" -o -name "*.o" \) -delete
+
+RUN chown -R nobody:nobody /app
+USER nobody
+
+# Crear directorio de logs
 RUN mkdir -p /app/log
 
-# generate production assets if production environment
-RUN if [ "$RAILS_ENV" = "production" ]; then \
-  SECRET_KEY_BASE=precompile_placeholder RAILS_LOG_TO_STDOUT=enabled bundle exec rake assets:precompile \
-  && rm -rf spec node_modules tmp/cache; \
-  fi
-
-# Generate .git_sha file with current commit hash
-RUN git rev-parse HEAD > /app/.git_sha
-
-# Remove unnecessary files
-RUN rm -rf /gems/ruby/3.3.0/cache/*.gem \
-  && find /gems/ruby/3.3.0/gems/ \( -name "*.c" -o -name "*.o" \) -delete \
-  && rm -rf .git \
-  && rm .gitignore
-
-# final build stage
+###################################################################
+# 2. Etapa final (imagen optimizada)
+###################################################################
 FROM ruby:3.3.3-alpine3.19
 
+# Variables de entorno
+ARG BUNDLER_VERSION=2.5.11
+ARG RAILS_ENV=development
 
-ARG BUNDLE_WITHOUT="development:test"
-ENV BUNDLE_WITHOUT ${BUNDLE_WITHOUT}
-ENV BUNDLER_VERSION=2.5.11
-
-ARG EXECJS_RUNTIME="Disabled"
-ENV EXECJS_RUNTIME ${EXECJS_RUNTIME}
-
-ARG RAILS_SERVE_STATIC_FILES=true
-ENV RAILS_SERVE_STATIC_FILES ${RAILS_SERVE_STATIC_FILES}
-
-ARG BUNDLE_FORCE_RUBY_PLATFORM=1
-ENV BUNDLE_FORCE_RUBY_PLATFORM ${BUNDLE_FORCE_RUBY_PLATFORM}
-
-ARG RAILS_ENV=production
-ENV RAILS_ENV ${RAILS_ENV}
+ENV BUNDLE_WITHOUT="test"
+ENV BUNDLER_VERSION=${BUNDLER_VERSION}
+ENV RAILS_ENV=${RAILS_ENV}
 ENV BUNDLE_PATH="/gems"
+ENV EXECJS_RUNTIME="Disabled"
 
+# Instalar dependencias mínimas
 RUN apk update && apk add --no-cache \
-  build-base \
-  openssl \
   tzdata \
   postgresql-client \
-  imagemagick \
-  git \
   vips \
-  && gem install bundler
+  openssl \
+  git \
+  nodejs \
+  npm
 
-RUN if [ "$RAILS_ENV" != "production" ]; then \
-  apk add --no-cache nodejs=20.15.1-r0; \
-  # Install pnpm and configure environment
-  wget -qO- https://get.pnpm.io/install.sh | ENV="$HOME/.shrc" SHELL="$(which sh)" sh - \
-  && source /root/.shrc \
-  && pnpm --version; \
-  fi
+# Instalar `pnpm`
+RUN npm install -g pnpm@9
 
+# Copiar gems y código
 COPY --from=pre-builder /gems/ /gems/
 COPY --from=pre-builder /app /app
 
-# Copy .git_sha file from pre-builder stage
-COPY --from=pre-builder /app/.git_sha /app/.git_sha
-
+# Configurar directorio de trabajo
 WORKDIR /app
 
+# Asegurar que `node_modules` están disponibles
+COPY --from=pre-builder /app/node_modules /app/node_modules
+
+# Configurar `pnpm`
+ENV PNPM_HOME="/root/.local/share/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+
+# 🔥 **Arreglar "dubious ownership" en el contenedor final**
+RUN git config --global --add safe.directory /app
+
+# Exponer el puerto de Rails
 EXPOSE 3000
+
+CMD ["sh", "-c", "rm -f /app/tmp/pids/server.pid && bundle exec rails server -b 0.0.0.0"]
