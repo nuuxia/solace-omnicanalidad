@@ -8,24 +8,28 @@
     "LIST": {
       "404": "No hay entradas adjuntas a esta cuenta."
     },
-    "CREATE_FLOW": {
-      "CHANNEL": {
-        "TITLE": "Elegir canal",
-        "BODY": "Elija el proveedor que desea integrar con Chatwoot."
+    "CREATE_FLOW": [
+      {
+        "title": "Elegir canal",
+        "route": "settings_inbox_new",
+        "body": "Elija el proveedor que desea integrar con Solace."
       },
-      "INBOX": {
-        "TITLE": "Crear bandeja de entrada",
-        "BODY": "Autenticar tu cuenta y crear una bandeja de entrada."
+      {
+        "title": "Crear bandeja de entrada",
+        "route": "settings_inboxes_page_channel",
+        "body": "Autenticar tu cuenta y crear una bandeja de entrada."
       },
-      "AGENT": {
-        "TITLE": "Añadir agentes",
-        "BODY": "Añadir agentes a la bandeja de entrada creada."
+      {
+        "title": "Añadir agentes",
+        "route": "settings_inboxes_add_agents",
+        "body": "Añadir agentes a la bandeja de entrada creada."
       },
-      "FINISH": {
-        "TITLE": "Voilà!",
-        "BODY": "¡Todo está listo!"
+      {
+        "title": "Voilà!",
+        "route": "settings_inbox_finish",
+        "body": "¡Todo está listo!"
       }
-    },
+    ],
     "ADD": {
       "CHANNEL_NAME": {
         "LABEL": "Nombre de la bandeja de entrada",
@@ -37,7 +41,7 @@
         "PLACEHOLDER": "Introduzca el nombre de su sitio web (por ejemplo: Acme Inc)"
       },
       "FB": {
-        "HELP": "PS: Al iniciar sesión, sólo tenemos acceso a los mensajes de tu Página. Tus mensajes privados nunca pueden ser accedidos por Chatwoot.",
+        "HELP": "PS: Al iniciar sesión, sólo tenemos acceso a los mensajes de tu Página. Tus mensajes privados nunca pueden ser accedidos por Solace.",
         "CHOOSE_PAGE": "Elegir página",
         "CHOOSE_PLACEHOLDER": "Seleccione una página de la lista",
         "INBOX_NAME": "Nombre de la bandeja de entrada",
@@ -208,7 +212,7 @@
         }
       },
       "WHATSAPP": {
-        "TITLE": "Canal de WhatsApp",
+        "TITLE": "Canal de WhatsApp Manual",
         "DESC": "Comience a apoyar a sus clientes mediante WhatsApp.",
         "PROVIDERS": {
           "LABEL": "Proveedor de API",
@@ -216,6 +220,12 @@
           "WHATSAPP_CLOUD": "Nube de WhatsApp",
           "360_DIALOG": "360 Diálogo"
         },
+        "CHOOSE_METHOD": "Elige cómo quieres conectar tu canal de WhatsApp. Puedes hacerlo automáticamente a través de Facebook o configurarlo manualmente.",
+        "LOGIN_WITH_FACEBOOK": {
+          "LABEL": "Iniciar sesión con Facebook"
+        },
+        "AUTOMATED_TITLE": "Canal de WhatsApp Automatizado",
+        "AUTOMATED_DESC": "Conecta tu cuenta de WhatsApp a través de Facebook. Ahora, en lugar de hacerlo manualmente, puedes aprovechar el registro integrado de Meta para automatizar todo el proceso.",
         "INBOX_NAME": {
           "LABEL": "Nombre de la bandeja de entrada",
           "PLACEHOLDER": "Por favor, introduzca un nombre de bandeja de entrada",
@@ -337,9 +347,17 @@
           "ERROR_MESSAGE": "No pudimos guardar el canal de telegram"
         }
       },
+      "MERCADO_LIBRE_CHANNEL": {
+        "HELP": "Para agregar Mercado Libre como un canal, necesitas autenticar tu cuenta haciendo clic en 'Iniciar sesión con Mercado Libre'.",
+        "ERROR_MESSAGE": "Hubo un error al conectar con Mercado Libre, por favor intenta nuevamente.",
+        "TITLE": "Canal de Mercado Libre",
+        "DESC": "Integra con el canal de Mercado Libre y comienza a atender a tus clientes.",
+        "SUBMIT_BUTTON": "Crear Canal de Mercado Libre",
+        "LOADING_MESSAGE": "Creando el canal, por favor espera..."
+      },
       "AUTH": {
         "TITLE": "Elija un canal",
-        "DESC": "Chatwoot soporta widgets de Live Chat, Facebook Messenger, perfiles de Twitter, WhatsApp, correos electrónicos, etc., como canales. Si quieres construir un canal personalizado, puedes crearlo usando el canal API. Para empezar, elige uno de los canales a continuación."
+        "DESC": "SoftwareArrows soporta widgets de Live Chat, Facebook Messenger, perfiles de Twitter, WhatsApp, correos electrónicos, etc., como canales. Si quieres construir un canal personalizado, puedes crearlo usando el canal API. Para empezar, elige uno de los canales a continuación."
       },
       "AGENTS": {
         "TITLE": "Agentes",
@@ -349,11 +367,11 @@
       },
       "DETAILS": {
         "TITLE": "Detalles de la bandeja de entrada",
-        "DESC": "En el menú desplegable de abajo, selecciona la página de Facebook que quieres conectar a Chatwoot. También puede dar un nombre personalizado a su bandeja de entrada para una mejor identificación."
+        "DESC": "En el menú desplegable de abajo, selecciona la página de Facebook que quieres conectar a Solace . También puede dar un nombre personalizado a su bandeja de entrada para una mejor identificación."
       },
       "FINISH": {
         "TITLE": "¡Se ha clavado!",
-        "DESC": "Has terminado de integrar correctamente tu página de Facebook con Chatwoot. La próxima vez que un cliente envíe un mensaje a tu Página, la conversación aparecerá automáticamente en tu bandeja de entrada.<br>También le estamos proporcionando un script de widget que puede agregar fácilmente a su sitio web. Una vez que esto está en vivo en tu sitio web, los clientes pueden enviarle mensajes directamente desde su sitio web sin la ayuda de ninguna herramienta externa y la conversación aparecerá aquí, en Chatwoot.<br>¿Genial, eh? Bueno, estamos seguros de que intentaremos ser :)"
+        "DESC": "Has terminado de integrar correctamente tu página de Facebook con Solace . La próxima vez que un cliente envíe un mensaje a tu Página, la conversación aparecerá automáticamente en tu bandeja de entrada.<br>También le estamos proporcionando un script de widget que puede agregar fácilmente a su sitio web. Una vez que esto está en vivo en tu sitio web, los clientes pueden enviarle mensajes directamente desde su sitio web sin la ayuda de ninguna herramienta externa y la conversación aparecerá aquí, en Solace .<br>¿Genial, eh? Bueno, estamos seguros de que intentaremos ser :)"
       },
       "EMAIL_PROVIDER": {
         "TITLE": "Selecciona tu proveedor de correo",
@@ -735,8 +753,8 @@
         "USER_MESSAGE": "Hola",
         "AGENT_MESSAGE": "Hola"
       },
-      "BRANDING_TEXT": "Desarrollado por Chatwoot",
-      "SCRIPT_SETTINGS": "\n      window.chatwootSettings = {options};"
+      "BRANDING_TEXT": "Desarrollado por Solace",
+      "SCRIPT_SETTINGS": "\n      window.arrowsSettings = {options};"
     },
     "EMAIL_PROVIDERS": {
       "MICROSOFT": "Microsoft",
@@ -753,6 +771,7 @@
       "EMAIL": "E-mail",
       "TELEGRAM": "Telegram",
       "LINE": "Line",
+      "MERCADO_LIBRE": "Mercado Libre",
       "API": "Canal API"
     }
   }

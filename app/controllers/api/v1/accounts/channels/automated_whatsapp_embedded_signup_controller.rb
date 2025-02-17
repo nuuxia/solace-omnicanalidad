@@ -1,0 +1,1 @@
+app/controllers/api/v1/accounts/channels/automated_whatsapp_embedded_signup_controller.rb
