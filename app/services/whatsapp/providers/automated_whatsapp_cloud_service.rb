@@ -40,7 +40,6 @@ module Whatsapp
         def register_phone_number
           url = "https://graph.facebook.com/#{@version}/#{@phone_number_id}/register"
   
-  
           response = Faraday.post(url) do |req|
             req.headers['Authorization'] = "Bearer #{@access_token}"
             req.headers['Content-Type'] = 'application/json'
@@ -55,7 +54,6 @@ module Whatsapp
   
         def subscribe_app_to_waba
           url = "https://graph.facebook.com/#{@version}/#{@waba_id}/subscribed_apps"
-  
   
           response = Faraday.post(url) do |req|
             req.headers['Authorization'] = "Bearer #{@access_token}"
@@ -90,7 +88,7 @@ module Whatsapp
           matching_phone_number = data.find { |phone| phone['id'] == @phone_number_id }
   
           if matching_phone_number
-            display_phone_number = matching_phone_number['display_phone_number'].gsub(/\s+/, '')
+            display_phone_number = clean_phone_number(matching_phone_number['display_phone_number'])
             verified_name = matching_phone_number['verified_name']
   
             {
@@ -106,8 +104,11 @@ module Whatsapp
           end
         end
   
+        def clean_phone_number(phone_number)
+          phone_number.gsub(/\D/, '')
+        end
+  
         def create_inbox(details)
-        
           begin
             channel = Channel::Whatsapp.create!(
               account_id: @account_id,
@@ -119,13 +120,13 @@ module Whatsapp
                 business_account_id: details[:business_account_id],
               }
             )
-        
+  
             inbox = Inbox.create!(
               account_id: @account_id,
               name: details[:inbox_name],
               channel: channel
             )
-        
+  
             inbox
           rescue StandardError => e
             Rails.logger.error "⛔️ Error creating the inbox: #{e.message}"
@@ -147,3 +148,4 @@ module Whatsapp
       end
     end
   end
+  
