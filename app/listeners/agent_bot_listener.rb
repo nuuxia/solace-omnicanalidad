@@ -2,7 +2,7 @@ class AgentBotListener < BaseListener
   def conversation_resolved(event)
     conversation = extract_conversation_and_account(event)[0]
     inbox = conversation.inbox
-    return unless connected_agent_bot_exist?(inbox)
+    return unless should_process_event?(inbox)
 
     event_name = __method__.to_s
     payload = conversation.webhook_data.merge(event: event_name)
@@ -12,7 +12,7 @@ class AgentBotListener < BaseListener
   def conversation_opened(event)
     conversation = extract_conversation_and_account(event)[0]
     inbox = conversation.inbox
-    return unless connected_agent_bot_exist?(inbox)
+    return unless should_process_event?(inbox)
 
     event_name = __method__.to_s
     payload = conversation.webhook_data.merge(event: event_name)
@@ -21,8 +21,14 @@ class AgentBotListener < BaseListener
 
   def message_created(event)
     message = extract_message_and_account(event)[0]
+    conversation = message.conversation
     inbox = message.inbox
-    return unless connected_agent_bot_exist?(inbox)
+
+    unless should_process_event?(inbox)
+      conversation.opened! unless conversation.open?
+      return
+    end
+
     return unless message.webhook_sendable?
 
     method_name = __method__.to_s
@@ -32,7 +38,7 @@ class AgentBotListener < BaseListener
   def message_updated(event)
     message = extract_message_and_account(event)[0]
     inbox = message.inbox
-    return unless connected_agent_bot_exist?(inbox)
+    return unless should_process_event?(inbox)
     return unless message.webhook_sendable?
 
     method_name = __method__.to_s
@@ -42,7 +48,7 @@ class AgentBotListener < BaseListener
   def webwidget_triggered(event)
     contact_inbox = event.data[:contact_inbox]
     inbox = contact_inbox.inbox
-    return unless connected_agent_bot_exist?(inbox)
+    return unless should_process_event?(inbox)
 
     event_name = __method__.to_s
     payload = contact_inbox.webhook_data.merge(event: event_name)
@@ -52,11 +58,48 @@ class AgentBotListener < BaseListener
 
   private
 
+  def should_process_event?(inbox)
+    return false unless connected_agent_bot_exist?(inbox)
+    return true unless inbox.offline_response?
+
+    return !within_working_hours?(inbox) if inbox.offline_response?
+
+    working_hours = get_working_hours_for_today(inbox)
+    return true if working_hours.blank?
+
+    within_working_hours?(inbox)
+  end
+
   def connected_agent_bot_exist?(inbox)
     return if inbox.agent_bot_inbox.blank?
     return unless inbox.agent_bot_inbox.active?
 
     true
+  end
+
+  def within_working_hours?(inbox)
+    current_time = Time.now.in_time_zone(inbox.timezone)
+    day_of_week = current_time.wday
+
+    working_hour = WorkingHour.find_by(inbox_id: inbox.id, day_of_week: day_of_week)
+    return false unless working_hour
+    return false if working_hour.closed_all_day
+    return true if working_hour.open_all_day
+
+    open_time = current_time.change(hour: working_hour.open_hour, min: working_hour.open_minutes)
+    close_time = current_time.change(hour: working_hour.close_hour, min: working_hour.close_minutes)
+
+    current_time.between?(open_time, close_time)
+  end
+
+  def get_working_hours_for_today(inbox)
+    current_time = Time.now.in_time_zone(inbox.timezone)
+    day_of_week = current_time.wday
+
+    working_hour = WorkingHour.where(inbox_id: inbox.id, day_of_week: day_of_week)
+    return [] if working_hour.empty?
+
+    working_hour
   end
 
   def process_message_event(method_name, agent_bot, message, event)
@@ -78,5 +121,4 @@ class AgentBotListener < BaseListener
   def process_csml_bot_event(event, agent_bot, message)
     AgentBots::CsmlJob.perform_later(event, agent_bot, message)
   end
-
 end

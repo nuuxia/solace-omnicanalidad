@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_01_16_142948) do
+ActiveRecord::Schema[7.0].define(version: 2025_02_06_180122) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
@@ -104,6 +104,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_16_142948) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "account_id"
+    t.boolean "offline_response", default: false
   end
 
   create_table "agent_bots", force: :cascade do |t|
@@ -678,6 +679,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_16_142948) do
     t.bigint "portal_id"
     t.integer "sender_name_type", default: 0, null: false
     t.string "business_name"
+    t.boolean "offline_response", default: false, null: false
     t.index ["account_id"], name: "index_inboxes_on_account_id"
     t.index ["channel_id", "channel_type"], name: "index_inboxes_on_channel_id_and_channel_type"
     t.index ["portal_id"], name: "index_inboxes_on_portal_id"

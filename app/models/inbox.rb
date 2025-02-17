@@ -6,7 +6,6 @@
 #
 #  id                            :integer          not null, primary key
 #  allow_messages_after_resolved :boolean          default(TRUE)
-#  assistantid                   :string
 #  auto_assignment_config        :jsonb
 #  business_name                 :string
 #  channel_type                  :string
@@ -18,6 +17,7 @@
 #  greeting_message              :string
 #  lock_to_single_conversation   :boolean          default(FALSE), not null
 #  name                          :string           not null
+#  offline_response              :boolean          default(FALSE), not null
 #  out_of_office_message         :string
 #  sender_name_type              :integer          default("friendly"), not null
 #  timezone                      :string           default("UTC")
