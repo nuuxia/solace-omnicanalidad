@@ -196,12 +196,12 @@ export default {
           {{ $t('SET_NEW_PASSWORD.CAPTCHA.ERROR') }}
         </span>
       </div>
-      <SubmitButton
+      <!-- <SubmitButton
         :button-text="$t('REGISTER.SUBMIT')"
         :disabled="isSignupInProgress || !hasAValidCaptcha"
         :loading="isSignupInProgress"
         icon-class="arrow-chevron-right"
-      />
+      /> -->
     </form>
     <GoogleOAuthButton v-if="showGoogleOAuth" class="flex-col-reverse">
       {{ $t('REGISTER.OAUTH.GOOGLE_SIGNUP') }}
