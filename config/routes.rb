@@ -86,6 +86,7 @@ Rails.application.routes.draw do
           resources :dashboard_apps, only: [:index, :show, :create, :update, :destroy]
           namespace :channels do
             resource :twilio_channel, only: [:create]
+            resources :automated_whatsapp_embedded_signup, only: [:create]
           end
           resources :conversations, only: [:index, :create, :show, :update] do
             collection do

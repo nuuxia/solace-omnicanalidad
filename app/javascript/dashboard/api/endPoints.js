@@ -51,6 +51,12 @@ const endPoints = {
   resendConfirmation: {
     url: '/api/v1/profile/resend_confirmation',
   },
+  
+  automatedWhatsappSignup: {
+    url(accountId) {
+      return `api/v1/accounts/${accountId}/channels/automated_whatsapp_embedded_signup`;
+    },
+  },
 };
 
 export default page => {
