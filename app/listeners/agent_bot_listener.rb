@@ -21,8 +21,14 @@ class AgentBotListener < BaseListener
 
   def message_created(event)
     message = extract_message_and_account(event)[0]
+    conversation = message.conversation
     inbox = message.inbox
-    return unless should_process_event?(inbox)
+
+    unless should_process_event?(inbox)
+      conversation.opened! unless conversation.open?
+      return
+    end
+
     return unless message.webhook_sendable?
 
     method_name = __method__.to_s
