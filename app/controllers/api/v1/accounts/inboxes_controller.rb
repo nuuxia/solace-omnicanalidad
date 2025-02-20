@@ -122,8 +122,8 @@ class Api::V1::Accounts::InboxesController < Api::V1::Accounts::BaseController
   end
 
   def inbox_attributes
-    [:name, :avatar, :greeting_enabled, :greeting_message, :offline_response, :enable_email_collect, :csat_survey_enabled,
-     :enable_auto_assignment, :working_hours_enabled, :out_of_office_message, :timezone, :allow_messages_after_resolved,
+    [:name, :avatar, :greeting_enabled, :greeting_message, :offline_response, :mercado_libre_pre_sale_questions, :enable_email_collect, :csat_survey_enabled,
+     :enable_auto_assignment, :working_hours_enabled, :out_of_office_message, :timezone, :allow_messages_after_resolved, :mercado_libre_post_sale_messages,
      :lock_to_single_conversation, :portal_id, :sender_name_type, :business_name]
   end
 

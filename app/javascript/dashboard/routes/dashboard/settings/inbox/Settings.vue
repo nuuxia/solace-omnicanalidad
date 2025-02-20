@@ -124,6 +124,7 @@ export default {
         this.isAMicrosoftInbox ||
         this.isAGoogleInbox ||
         this.isAWhatsAppChannel ||
+        this.isAMercadoLibreChannel ||
         this.isAWebWidgetInbox
       ) {
         visibleToAllChannelTabs = [
@@ -287,6 +288,8 @@ export default {
           allow_messages_after_resolved: this.allowMessagesAfterResolved,
           greeting_enabled: this.greetingEnabled,
           offline_response: this.inbox.offline_response,
+          mercado_libre_pre_sale_questions: this.inbox.mercado_libre_pre_sale_questions,
+          mercado_libre_post_sale_messages: this.inbox.mercado_libre_post_sale_messages,
           greeting_message: this.greetingMessage || '',
           portal_id: this.selectedPortalSlug
             ? this.portals.find(
@@ -628,6 +631,22 @@ export default {
           <p class="pb-1 text-sm not-italic text-slate-600 dark:text-slate-400">
             {{ $t('INBOX_MGMT.HELP_CENTER.SUB_TEXT') }}
           </p>
+        </div>
+
+        <div v-if="this.isAMercadoLibreChannel" class="w-3/4 pb-4">
+          <label class="font-bold text-lg">
+            {{ $t('INBOX_MGMT.MERCADO_LIBRE_OPTIONS_HEADER') }}
+          </label>
+          <div class="mt-2 space-y-2">
+            <label class="flex items-center space-x-2">
+              <input type="checkbox" v-model="inbox.mercado_libre_pre_sale_questions" />
+              <span>{{ $t('INBOX_MGMT.ENABLE_PRE_SALE_MESSAGES') }}</span>
+            </label>
+            <label class="flex items-center space-x-2">
+              <input type="checkbox" v-model="inbox.mercado_libre_post_sale_messages" />
+              <span>{{ $t('INBOX_MGMT.ENABLE_POST_SALE_MESSAGES') }}</span>
+            </label>
+          </div>
         </div>
 
         <label class="flex items-center space-x-2 mb-4 mt-4">

@@ -9,6 +9,10 @@
       "404": "No hay entradas adjuntas a esta cuenta."
     },
     "OFFLINE_RESPONSE_LABEL": "El bot asignado responde únicamente en horarios offline.",
+    "MERCADO_LIBRE_OPTIONS_HEADER": "Recepción de Mensajes en la Bandeja de Entrada",
+    "ENABLE_PRE_SALE_MESSAGES": "Habilitar preguntas pre venta",
+    "ENABLE_POST_SALE_MESSAGES": "Habilitar mensajería post venta",
+    "ENABLE_BOTH_MESSAGES": "Habilitar ambos",
     "CREATE_FLOW": [
       {
         "title": "Elegir canal",

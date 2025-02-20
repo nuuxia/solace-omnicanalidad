@@ -6,6 +6,10 @@
     "RECONNECTION_REQUIRED": "Your inbox is disconnected. You won't receive new messages until you reauthorize it.",
     "CLICK_TO_RECONNECT": "Click here to reconnect.",
     "OFFLINE_RESPONSE_LABEL": "The bot will only answer during offline hours.",
+    "MERCADO_LIBRE_OPTIONS_HEADER": "Reception of Messages in the Inbox",
+    "ENABLE_PRE_SALE_MESSAGES": "Enable pre-sale questions",
+    "ENABLE_POST_SALE_MESSAGES": "Enable post-sale messaging",
+    "ENABLE_BOTH_MESSAGES": "Enable both",
     "LIST": {
       "404": "There are no inboxes attached to this account."
     },

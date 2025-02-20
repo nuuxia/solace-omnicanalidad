@@ -5,11 +5,14 @@ class Webhooks::MercadoLibreEventsJob < ApplicationJob
     user_id = params.dig("user_id") || params.dig(:mercado_libre, :user_id)
     return unless user_id && (channel = Channel::MercadoLibre.find_by(mercado_libre_user_id: user_id))
 
+    inbox = channel.inbox
+    return unless inbox
+
     case params["topic"]
     when "messages"
-      process_message_event(channel, params)
+      process_message_event(channel, params) if inbox.mercado_libre_post_sale_messages?
     when "questions"
-      process_question_event(channel, params)
+      process_question_event(channel, params) if inbox.mercado_libre_pre_sale_questions?
     else
       log_invalid_event(params)
     end
@@ -18,26 +21,19 @@ class Webhooks::MercadoLibreEventsJob < ApplicationJob
   private
 
   def process_message_event(channel, params)
-    return log_invalid_event(params) unless valid_application_id?(params)
-
-    inbox = find_or_create_inbox(channel, "Mensajes")
-    return if message_already_processed?(params["resource"])
-
-    MercadoLibre::IncomingMessageService.new(inbox: inbox, params: params).perform
+    if valid_application_id?(params) && !message_already_processed?(params["resource"])
+      MercadoLibre::IncomingMessageService.new(inbox: channel.inbox, params: params).perform
+    else
+      log_invalid_event(params)
+    end
   end
 
   def process_question_event(channel, params)
-    return log_invalid_event(params) unless valid_application_id?(params)
-
-    inbox = find_or_create_inbox(channel, "Preguntas")
-    return if question_already_processed?(params["resource"])
-
-    MercadoLibre::IncomingQuestionService.new(inbox: inbox, params: params).perform
-  end
-
-  def find_or_create_inbox(channel, type)
-    inbox_name = "Mercado Libre - #{type}"
-    channel.account.inboxes.find_or_create_by!(channel: channel, name: inbox_name)
+    if valid_application_id?(params) && !question_already_processed?(params["resource"])
+      MercadoLibre::IncomingQuestionService.new(inbox: channel.inbox, params: params).perform
+    else
+      log_invalid_event(params)
+    end
   end
 
   def valid_application_id?(params)
@@ -53,7 +49,13 @@ class Webhooks::MercadoLibreEventsJob < ApplicationJob
   end
 
   def log_invalid_event(params)
-    topic = params["topic"]
-    Rails.logger.info "Invalid event: #{topic}. Params: #{params.inspect}"
+    case params["topic"]
+    when "messages"
+      Rails.logger.info "Message already processed or topic is not 'messages'."
+    when "questions"
+      Rails.logger.info "Question already processed or topic is not 'questions'."
+    else
+      Rails.logger.error "Webhook application_id does not match the expected value or topic is invalid."
+    end
   end
 end
