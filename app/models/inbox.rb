@@ -8,7 +8,7 @@
 #  allow_messages_after_resolved :boolean          default(TRUE)
 #  auto_assignment_config        :jsonb
 #  business_name                 :string
-#  channel_type                  :string
+#  channel_type                  :strinwhatsappg
 #  csat_survey_enabled           :boolean          default(FALSE)
 #  email_address                 :string
 #  enable_auto_assignment        :boolean          default(TRUE)
@@ -123,7 +123,21 @@ class Inbox < ApplicationRecord
   def whatsapp?
     channel_type == 'Channel::Whatsapp'
   end
+  
+  def phone_number_id
+    return unless whatsapp?
 
+    phone_number_id = channel.provider_config['phone_number_id']
+    puts "📋 [DEBUG] phone_number_id fetched for Inbox ID=#{id}: #{phone_number_id}"
+    phone_number_id
+  end
+
+  def whatsapp_api_key
+    return unless whatsapp?  
+    key_in_db = channel.provider_config['api_key']
+    key_in_db
+  end
+  
   def assignable_agents
     (account.users.where(id: members.select(:user_id)) + account.administrators).uniq
   end

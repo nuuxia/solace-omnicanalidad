@@ -44,6 +44,9 @@ Rails.application.routes.draw do
           namespace :actions do
             resource :contact_merge, only: [:create]
           end
+          namespace :whatsapp do
+            post :sync_whatsapp_templates, to: 'whatsapp#sync_whatsapp_templates'
+          end
           resource :bulk_actions, only: [:create]
           resources :agents, only: [:index, :create, :update, :destroy] do
             post :bulk_create, on: :collection
@@ -83,6 +86,11 @@ Rails.application.routes.draw do
           resources :sla_policies, only: [:index, :create, :show, :update, :destroy]
           resources :custom_roles, only: [:index, :create, :show, :update, :destroy]
           resources :campaigns, only: [:index, :create, :show, :update, :destroy]
+          resources :campaigns_whatsapp, only: [:index, :show, :create, :update, :destroy] do 
+            collection do
+               post :preview, to: 'campaigns_whatsapp_preview#create'
+            end
+          end
           resources :dashboard_apps, only: [:index, :show, :create, :update, :destroy]
           namespace :channels do
             resource :twilio_channel, only: [:create]
