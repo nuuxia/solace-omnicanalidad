@@ -96,3 +96,5 @@ docker/Dockerfile
 docker-compose.production.yaml
 .env.production
 .env.staging
+pnpm-lock.yaml
+yarn.lock
