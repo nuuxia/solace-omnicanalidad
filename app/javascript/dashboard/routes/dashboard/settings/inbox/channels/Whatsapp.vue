@@ -119,7 +119,7 @@ export default {
         return;
       }
 
-      const configId = 647035731172049;
+      const configId = 3902798696627928;
 
       // Calculamos el tamaño de la ventana (máximo 600x700, pero adaptable)
       const width = Math.min(600, window.innerWidth - 40);
