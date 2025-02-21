@@ -105,7 +105,8 @@ module Whatsapp
         end
   
         def clean_phone_number(phone_number)
-          phone_number.gsub(/\D/, '')
+          cleaned = phone_number.gsub(/\D/, '')
+          "+#{cleaned}"
         end
   
         def create_inbox(details)
