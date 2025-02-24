@@ -268,6 +268,17 @@ export const actions = {
       throw new Error(error);
     }
   },
+  getMercadoLibreUserInfo: async ({ commit }, { inbox }) => {
+    try {
+      commit(types.default.SET_INBOXES_UI_FLAG, { isFetchingItem: true });
+      const response = await InboxesAPI.getMercadoLibreUserInfo(inbox);
+      commit(types.default.SET_INBOXES_UI_FLAG, { isFetchingItem: false });
+      return response.data;
+    } catch (error) {
+      commit(types.default.SET_INBOXES_UI_FLAG, { isFetchingItem: false });
+      throw new Error(error.response?.data?.error || 'Error al obtener la información del usuario');
+    }
+  },
 };
 
 export const mutations = {

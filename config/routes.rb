@@ -476,6 +476,7 @@ Rails.application.routes.draw do
   get 'microsoft/callback', to: 'microsoft/callbacks#show'
   get 'google/callback', to: 'google/callbacks#show'
   get 'mercado_libre/callback', to: 'mercado_libre/callbacks#show'
+  get 'mercado_libre/user', to: 'mercado_libre/users#get_user_info'
 
   # ----------------------------------------------------------------------
   # Routes for external service verifications

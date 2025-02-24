@@ -7,6 +7,13 @@
     "CLICK_TO_RECONNECT": "Click here to reconnect.",
     "OFFLINE_RESPONSE_LABEL": "The bot will only answer during offline hours.",
     "MERCADO_LIBRE_OPTIONS_HEADER": "Reception of Messages in the Inbox",
+    "MERCADO_LIBRE_USER_INFO_BUTTON": "Get MercadoLibre user information",
+    "MERCADO_LIBRE_USER_INFO": {
+      "LOADING": "Loading user information...",
+      "NICKNAME": "Username",
+      "PERMALINK": "Permanent link",
+      "ERROR": "An error occurred while fetching user information"
+    },
     "ENABLE_PRE_SALE_MESSAGES": "Enable pre-sale questions",
     "ENABLE_POST_SALE_MESSAGES": "Enable post-sale messaging",
     "ENABLE_BOTH_MESSAGES": "Enable both",
