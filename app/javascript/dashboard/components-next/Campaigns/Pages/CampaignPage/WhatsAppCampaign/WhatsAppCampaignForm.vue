@@ -41,7 +41,7 @@ const v$ = useVuelidate(rules, state);
 // Helpers
 const store = useStore();
 const selectedInbox = computed(() =>
-  formState.inboxes.value ? formState.inboxes.value.find(inbox => inbox.id === state.inboxId) : null
+  formState.inboxes.value.find(inbox => inbox.id === state.inboxId)
 );
 const isCreating = computed(() => formState.uiFlags.value.isCreating);
 const isPreviewing = computed(() => formState.uiFlags.value.isPreviewing);
@@ -158,9 +158,6 @@ const handleSendPreview = async () => {
     useAlert(
       t('CAMPAIGN.WHATSAPP.CREATE.FORM.PREVIEW_SECTION.SUCCESS_MESSAGE')
     );
-    state.inboxId = null;
-    state.selectedWhatsAppTemplate = null;
-    state.phoneNumber = '';
   } catch (error) {
     // Manejar errores y mostrar mensaje de error
     const errorMessage =
@@ -299,8 +296,8 @@ const handleSendPreview = async () => {
               : t('CAMPAIGN.WHATSAPP.CREATE.FORM.PREVIEW_SECTION.BUTTON_LABEL')
           "
           :disabled="isPreviewDisabled || isPreviewing"
-          :is-loading="isPreviewing"
           @click="handleSendPreview"
+          :is-loading="isPreviewing"
         />
       </div>
     </form>
