@@ -1,6 +1,12 @@
 class MercadoLibre::UsersController < ApplicationController
   def get_user_info
-    user_info = MercadoLibre::GetUserInfoService.new(inbox: params[:inbox]).perform
+    inbox = Inbox.find_by(id: params[:inbox_id])
+
+    if inbox.nil?
+      return render json: { success: false, error: 'Inbox no encontrado' }, status: :not_found
+    end
+
+    user_info = MercadoLibre::GetUserInfoService.new(inbox: inbox).perform
 
     if user_info
       render json: { success: true, data: user_info }, status: :ok

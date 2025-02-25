@@ -238,7 +238,7 @@ export default {
       this.userInfo = null;
       try {
         const response = await this.$store.dispatch('inboxes/getMercadoLibreUserInfo', {
-          inbox: this.inbox,
+          inbox: this.inbox.id,
         });
         if (response.success) {
           this.userInfo = {

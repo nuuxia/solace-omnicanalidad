@@ -271,7 +271,7 @@ export const actions = {
   getMercadoLibreUserInfo: async ({ commit }, { inbox }) => {
     try {
       commit(types.default.SET_INBOXES_UI_FLAG, { isFetchingItem: true });
-      const response = await InboxesAPI.getMercadoLibreUserInfo(inbox);
+      const response = await InboxesAPI.getMercadoLibreUserInfo(inbox.id); // Enviar solo el ID
       commit(types.default.SET_INBOXES_UI_FLAG, { isFetchingItem: false });
       return response.data;
     } catch (error) {

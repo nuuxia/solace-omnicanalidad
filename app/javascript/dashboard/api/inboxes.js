@@ -29,8 +29,8 @@ class Inboxes extends CacheEnabledApiClient {
     });
   }
 
-  getMercadoLibreUserInfo(inbox) {
-    return axios.get('/mercado_libre/user', { params: { inbox } });
+  getMercadoLibreUserInfo(inboxId) {
+    return axios.get('/mercado_libre/user', { params: { inbox_id: inboxId } });
   }
 }
 
