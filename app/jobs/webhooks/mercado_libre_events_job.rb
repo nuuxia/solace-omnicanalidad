@@ -8,7 +8,15 @@ class Webhooks::MercadoLibreEventsJob < ApplicationJob
     inbox = channel.inbox
     return unless inbox
 
-    case params["topic"]
+    resource_id = params["resource"]
+    topic = params["topic"]
+    cache_key = "webhook_lock:#{topic}:#{resource_id}"
+
+    return if Rails.cache.read(cache_key) # 🚨 Si ya se está procesando, salir
+
+    Rails.cache.write(cache_key, true, expires_in: 10.seconds) # 🔒 Bloqueamos por 10s
+
+    case topic
     when "messages"
       process_message_event(inbox, params) if inbox.mercado_libre_post_sale_messages?
     when "questions"
@@ -21,7 +29,7 @@ class Webhooks::MercadoLibreEventsJob < ApplicationJob
   private
 
   def process_message_event(inbox, params)
-    if valid_application_id?(params) && !message_already_processed?(params["resource"])
+    if valid_application_id?(params)
       MercadoLibre::IncomingMessageService.new(inbox: inbox, params: params).perform
     else
       log_invalid_event(params)
@@ -29,7 +37,7 @@ class Webhooks::MercadoLibreEventsJob < ApplicationJob
   end
 
   def process_question_event(inbox, params)
-    if valid_application_id?(params) && !question_already_processed?(params["resource"])
+    if valid_application_id?(params)
       MercadoLibre::IncomingQuestionService.new(inbox: inbox, params: params).perform
     else
       log_invalid_event(params)
@@ -40,22 +48,7 @@ class Webhooks::MercadoLibreEventsJob < ApplicationJob
     params["application_id"].to_s == ENV["MERCADO_LIBRE_APP_ID"].to_s
   end
 
-  def message_already_processed?(resource_id)
-    Message.exists?(source_id: resource_id)
-  end
-
-  def question_already_processed?(resource_id)
-    Message.exists?(source_id: resource_id)
-  end
-
   def log_invalid_event(params)
-    case params["topic"]
-    when "messages"
-      Rails.logger.info "Message already processed or topic is not 'messages'."
-    when "questions"
-      Rails.logger.info "Question already processed or topic is not 'questions'."
-    else
-      Rails.logger.error "Webhook application_id does not match the expected value or topic is invalid."
-    end
+    Rails.logger.info "Webhook ignored: #{params.inspect}"
   end
 end
