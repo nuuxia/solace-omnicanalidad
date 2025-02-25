@@ -10,9 +10,9 @@ class Webhooks::MercadoLibreEventsJob < ApplicationJob
 
     case params["topic"]
     when "messages"
-      process_message_event(channel, params) if inbox.mercado_libre_post_sale_messages?
+      process_message_event(inbox, params) if inbox.mercado_libre_post_sale_messages?
     when "questions"
-      process_question_event(channel, params) if inbox.mercado_libre_pre_sale_questions?
+      process_question_event(inbox, params) if inbox.mercado_libre_pre_sale_questions?
     else
       log_invalid_event(params)
     end
@@ -20,17 +20,17 @@ class Webhooks::MercadoLibreEventsJob < ApplicationJob
 
   private
 
-  def process_message_event(channel, params)
+  def process_message_event(inbox, params)
     if valid_application_id?(params) && !message_already_processed?(params["resource"])
-      MercadoLibre::IncomingMessageService.new(inbox: channel.inbox, params: params).perform
+      MercadoLibre::IncomingMessageService.new(inbox: inbox, params: params).perform
     else
       log_invalid_event(params)
     end
   end
 
-  def process_question_event(channel, params)
+  def process_question_event(inbox, params)
     if valid_application_id?(params) && !question_already_processed?(params["resource"])
-      MercadoLibre::IncomingQuestionService.new(inbox: channel.inbox, params: params).perform
+      MercadoLibre::IncomingQuestionService.new(inbox: inbox, params: params).perform
     else
       log_invalid_event(params)
     end
