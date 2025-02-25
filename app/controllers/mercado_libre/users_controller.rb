@@ -1,6 +1,6 @@
 class MercadoLibre::UsersController < ApplicationController
   def get_user_info
-    user_info = MercadoLibre::GetUserInfoService.call(inbox: params[:inbox])
+    user_info = MercadoLibre::GetUserInfoService.new(inbox: params[:inbox]).perform
 
     if user_info
       render json: { success: true, data: user_info }, status: :ok
