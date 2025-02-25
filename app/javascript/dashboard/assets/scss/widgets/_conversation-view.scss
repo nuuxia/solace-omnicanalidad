@@ -11,7 +11,7 @@
   }
 
   .bubble-with-types {
-    @apply py-2 text-sm font-normal bg-woot-500 dark:bg-woot-500 relative px-4 m-0 text-white dark:text-white;
+    @apply py-2 text-sm font-normal bg-woot-700 dark:bg-woot-700 relative px-4 m-0 text-white dark:text-white;
 
     .message-text__wrap {
       @apply relative;
@@ -61,7 +61,7 @@
     }
 
     span {
-      @apply shadow-lg rounded-full bg-woot-500 dark:bg-woot-500 text-white dark:text-white text-xs font-medium my-2.5 mx-auto px-2.5 py-1.5;
+      @apply shadow-lg rounded-full bg-woot-700 dark:bg-woot-700 text-white dark:text-white text-xs font-medium my-2.5 mx-auto px-2.5 py-1.5;
     }
   }
 

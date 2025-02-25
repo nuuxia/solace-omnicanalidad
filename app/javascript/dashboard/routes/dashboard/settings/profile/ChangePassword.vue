@@ -132,7 +132,7 @@ export default {
 
       <FormButton
         type="submit"
-        color-scheme="primary"
+        color-scheme="brand"
         variant="solid"
         size="large"
         :disabled="isButtonDisabled"

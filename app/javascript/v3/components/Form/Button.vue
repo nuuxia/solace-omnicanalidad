@@ -19,7 +19,8 @@ const props = defineProps({
   colorScheme: {
     type: String,
     default: 'primary',
-    validator: value => ['primary', 'secondary', 'danger'].includes(value),
+    validator: value =>
+      ['primary', 'secondary', 'danger', 'brand'].includes(value),
   },
   trailingIcon: {
     type: Boolean,
@@ -56,6 +57,12 @@ const colorClass = computed(() => {
       outline: `${baseClasses.outline} outline-ruby-400 hover:text-ruby-600 active:text-ruby-600`,
       ghost: `${baseClasses.ghost} focus:outline-ruby-400`,
       solid: `${baseClasses.solid} bg-ruby-600 text-white focus:outline-ruby-400`,
+    },
+    brand: {
+      outline: `${baseClasses.outline} outline-[#36d69f] hover:text-[#36d69f] active:text-[#36d69f]`,
+      ghost: `${baseClasses.ghost} focus:outline-[#36d69f]`,
+      solid: `${baseClasses.solid} bg-[#36d69f] text-white focus:outline-[#36d69f]
+               hover:bg-[#36d69f]/90 active:bg-[#36d69f]/80`,
     },
   };
 

@@ -38,12 +38,7 @@ const updateSignature = () => {
       :enable-suggestions="false"
       show-image-resize-toolbar
     />
-    <FormButton
-      type="submit"
-      color-scheme="primary"
-      variant="solid"
-      size="large"
-    >
+    <FormButton type="submit" color-scheme="brand" variant="solid" size="large">
       {{ $t('PROFILE_SETTINGS.FORM.MESSAGE_SIGNATURE_SECTION.BTN_TEXT') }}
     </FormButton>
   </form>

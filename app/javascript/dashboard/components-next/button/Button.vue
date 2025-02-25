@@ -139,6 +139,14 @@ const STYLE_CONFIG = {
       link: 'text-n-teal-9 hover:underline outline-transparent',
       ghost: 'text-n-teal-9 hover:bg-n-alpha-2 outline-transparent',
     },
+    emeraldLight: {
+      solid: 'bg-[#37d69f] text-white hover:brightness-110 outline-transparent',
+      faded:
+        'bg-[#37d69f]/10 text-n-slate-12 hover:bg-[#37d69f]/20 outline-transparent',
+      outline: 'text-[#37d69f] hover:bg-[#37d69f]/10 outline-[#37d69f]',
+      ghost: 'text-[#37d69f] hover:bg-[#37d69f]/10 outline-[#37d69f]',
+      link: 'text-[#37d69f] hover:underline outline-[#37d69f]',
+    },
   },
   sizes: {
     regular: {

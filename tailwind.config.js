@@ -182,6 +182,21 @@ const tailwindConfig = {
           },
         },
       },
+      colors: {
+        'n-brand': '#36d69f',
+      },
+      ringColor: {
+        'n-brand': '#36d69f',
+      },
+      borderColor: {
+        'n-blue-border': '#36d69f',
+      },
+      textColor: {
+        'n-blue-text': '#36d69f',
+      },
+      backgroundColor: {
+        'n-brand': '#36d69f',
+      },
     },
     screens: {
       xs: '480px',

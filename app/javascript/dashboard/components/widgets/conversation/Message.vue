@@ -648,7 +648,7 @@ export default {
     }
 
     &.is-from-bot {
-      @apply bg-violet-400 dark:bg-violet-400;
+      @apply bg-woot-400 dark:bg-amber-400;
 
       .message-text--metadata .time {
         @apply text-violet-50 dark:text-violet-50;

@@ -1,0 +1,19 @@
+.multiselect__option--highlight {
+  @apply bg-woot-500 text-white;
+}
+
+.multiselect__tag {
+  @apply bg-woot-500;
+}
+
+.multiselect__tag-icon:hover {
+  @apply bg-woot-600;
+}
+
+.multiselect__tag-icon:after {
+  @apply text-white;
+}
+
+.multiselect__option--selected.multiselect__option--highlight {
+  @apply bg-woot-600;
+} 

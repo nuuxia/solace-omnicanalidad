@@ -95,3 +95,23 @@
     @apply w-full;
   }
 }
+
+.dp__active_date {
+  @apply bg-woot-500 text-white;
+}
+
+.dp__today {
+  @apply border-woot-500 text-woot-500;
+}
+
+.dp__range_between {
+  @apply bg-woot-50;
+}
+
+.dp__range_start, .dp__range_end {
+  @apply bg-woot-500;
+}
+
+.dp__range_hover {
+  @apply bg-woot-50;
+}
