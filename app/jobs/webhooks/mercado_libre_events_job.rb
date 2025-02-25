@@ -10,11 +10,12 @@ class Webhooks::MercadoLibreEventsJob < ApplicationJob
 
     resource_id = params["resource"]
     topic = params["topic"]
+    return unless resource_id.present? # Asegurarse de que el resource_id no sea nil o vacío
+
     cache_key = "webhook_lock:#{topic}:#{resource_id}"
 
-    return if Rails.cache.read(cache_key) # 🚨 Si ya se está procesando, salir
-
-    Rails.cache.write(cache_key, true, expires_in: 10.seconds) # 🔒 Bloqueamos por 10s
+    # Usar fetch para evitar problemas de concurrencia y hacer el bloqueo más seguro
+    return if Rails.cache.fetch(cache_key, expires_in: 10.seconds) { true } == true
 
     case topic
     when "messages"
