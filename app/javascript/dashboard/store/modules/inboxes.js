@@ -268,10 +268,10 @@ export const actions = {
       throw new Error(error);
     }
   },
-  getMercadoLibreUserInfo: async ({ commit }, { inbox }) => {
+  getMercadoLibreUserInfo: async ({ commit }, { inbox_id }) => {
     try {
       commit(types.default.SET_INBOXES_UI_FLAG, { isFetchingItem: true });
-      const response = await InboxesAPI.getMercadoLibreUserInfo(inbox.id); // Enviar solo el ID
+      const response = await InboxesAPI.getMercadoLibreUserInfo(inbox_id);
       commit(types.default.SET_INBOXES_UI_FLAG, { isFetchingItem: false });
       return response.data;
     } catch (error) {
