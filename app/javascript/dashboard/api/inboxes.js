@@ -28,6 +28,10 @@ class Inboxes extends CacheEnabledApiClient {
       agent_bot: botId,
     });
   }
+
+  getMercadoLibreUserInfo(inbox) {
+    return axios.get('/mercado_libre/user', { params: { inbox } });
+  }
 }
 
 export default new Inboxes();

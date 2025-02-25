@@ -27,6 +27,11 @@ module MercadoLibre
       handle_response(response)
     end
 
+    def fetch_user_details
+      response = self.class.get("/users/me", headers: headers)
+      handle_response(response)
+    end
+
     def fetch_order(order_id)
       response = self.class.get("/orders/#{order_id}", headers: headers)
       handle_response(response)

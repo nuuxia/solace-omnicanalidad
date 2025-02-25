@@ -9,6 +9,17 @@
       "404": "No hay entradas adjuntas a esta cuenta."
     },
     "OFFLINE_RESPONSE_LABEL": "El bot asignado responde únicamente en horarios offline.",
+    "MERCADO_LIBRE_OPTIONS_HEADER": "Recepción de Mensajes en la Bandeja de Entrada",
+    "MERCADO_LIBRE_USER_INFO_BUTTON": "Obtener información del usuario de MercadoLibre",
+    "MERCADO_LIBRE_USER_INFO": {
+      "LOADING": "Cargando información del usuario...",
+      "NICKNAME": "Nombre de usuario",
+      "PERMALINK": "Enlace permanente",
+      "ERROR": "Ocurrió un error al obtener la información del usuario"
+    },
+    "ENABLE_PRE_SALE_MESSAGES": "Habilitar preguntas pre venta",
+    "ENABLE_POST_SALE_MESSAGES": "Habilitar mensajería post venta",
+    "ENABLE_BOTH_MESSAGES": "Habilitar ambos",
     "CREATE_FLOW": [
       {
         "title": "Elegir canal",
