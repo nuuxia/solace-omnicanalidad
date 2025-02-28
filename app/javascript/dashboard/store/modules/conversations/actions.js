@@ -37,10 +37,13 @@ const actions = {
     }
   },
 
-  fetchAllConversations: async ({ commit, state, dispatch }) => {
+  fetchAllConversations: async ({ commit, state, dispatch }, { unread } = {}) => {
     commit(types.SET_LIST_LOADING_STATUS);
     try {
-      const params = state.conversationFilters;
+      const params = {
+        ...state.conversationFilters,
+        ...(unread !== undefined && { unread }), // Añadimos unread solo si está definido
+      };
       const {
         data: { data },
       } = await ConversationApi.get(params);
@@ -51,10 +54,11 @@ const actions = {
         params.assigneeType
       );
     } catch (error) {
-      // Handle error
+      console.error('Error fetching conversations:', error);
+    } finally {
+      commit(types.CLEAR_LIST_LOADING_STATUS);
     }
   },
-
   fetchFilteredConversations: async ({ commit, dispatch }, params) => {
     commit(types.SET_LIST_LOADING_STATUS);
     try {

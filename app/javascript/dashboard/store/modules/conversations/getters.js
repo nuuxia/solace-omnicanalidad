@@ -22,7 +22,7 @@ const getters = {
     return attachments[selectedChatId] || [];
   },
   getChatListFilters: ({ conversationFilters }) => conversationFilters,
-  getLastEmailInSelectedChat: (stage, _getters) => {
+  getLastEmailInSelectedChat: (state, _getters) => {
     const selectedChat = _getters.getSelectedChat;
     const { messages = [] } = selectedChat;
     const lastEmail = [...messages].reverse().find(message => {
@@ -39,19 +39,15 @@ const getters = {
       }
       return false;
     });
-
     return lastEmail;
   },
   getMineChats: (_state, _, __, rootGetters) => activeFilters => {
     const currentUserID = rootGetters.getCurrentUser?.id;
-
     return _state.allConversations.filter(conversation => {
       const { assignee } = conversation.meta;
       const isAssignedToMe = assignee && assignee.id === currentUserID;
       const shouldFilter = applyPageFilters(conversation, activeFilters);
-      const isChatMine = isAssignedToMe && shouldFilter;
-
-      return isChatMine;
+      return isAssignedToMe && shouldFilter;
     });
   },
   getAppliedConversationFilters: _state => {
@@ -105,7 +101,6 @@ const getters = {
   getConversationLastSeen: _state => {
     return _state.conversationLastSeen;
   },
-
   getContextMenuChatId: _state => {
     return _state.contextMenuChatId;
   },

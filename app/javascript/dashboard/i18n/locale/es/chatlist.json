@@ -39,7 +39,8 @@
     "SORT_TOOLTIP_LABEL": "Ordenar conversaciones",
     "CHAT_SORT": {
       "STATUS": "Estado",
-      "ORDER_BY": "Ordenar por"
+      "ORDER_BY": "Ordenar por",
+      "UNREAD": "No leídas"
     },
     "CHAT_TIME_STAMP": {
       "CREATED": {

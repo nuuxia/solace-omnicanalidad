@@ -67,6 +67,7 @@ class ConversationFinder
     filter_by_labels
     filter_by_query
     filter_by_source_id
+    filter_by_unread
   end
 
   def set_inboxes
@@ -157,6 +158,11 @@ class ConversationFinder
       @conversations.unassigned.count,
       @conversations.count
     ]
+  end
+
+  def filter_by_unread
+    return unless params[:unread] == 'true'
+    @conversations = @conversations.with_unread_notifications
   end
 
   def current_page
