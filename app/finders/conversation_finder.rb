@@ -161,7 +161,7 @@ class ConversationFinder
   end
 
   def filter_by_unread
-    return unless params[:unread] == 'true'
+    return unless params[:unread] == 'unread'
     @conversations = @conversations.with_unread_notifications
   end
 

@@ -12,6 +12,11 @@ const CHAT_STATUS_FILTER_ITEMS = Object.freeze([
   'all',
 ]);
 
+const CHAT_UNREAD_FILTER_ITEMS = Object.freeze([
+  'read',
+  'unread',
+]);
+
 const SORT_ORDER_ITEMS = Object.freeze([
   'last_activity_at_asc',
   'last_activity_at_desc',
@@ -40,16 +45,20 @@ export default {
       showActionsDropdown: false,
       chatStatusItems: CHAT_STATUS_FILTER_ITEMS,
       chatSortItems: SORT_ORDER_ITEMS,
-      unreadFilter: false,
+      chatUnreadItems: CHAT_UNREAD_FILTER_ITEMS,
     };
   },
   computed: {
     ...mapGetters({
       chatStatusFilter: 'getChatStatusFilter',
       chatSortFilter: 'getChatSortFilter',
+      chatUnreadFilter: 'getChatUnreadFilter',
     }),
     chatStatus() {
       return this.chatStatusFilter || wootConstants.STATUS_TYPE.OPEN;
+    },
+    chatUnread() {
+      return this.chatUnreadFilter || wootConstants.UNREAD_TYPE.READ;
     },
     sortFilter() {
       return (
@@ -68,29 +77,16 @@ export default {
     closeDropdown() {
       this.showActionsDropdown = false;
     },
-    // onChangeFilter(value, type) {
-    //   this.$emit('changeFilter', value, type);
-    //   this.saveSelectedFilter(type, value);
-    // },
     onChangeFilter(value, type) {
-      if (type === 'status') {
-        this.$store.dispatch('setChatStatusFilter', value);
-      } else if (type === 'sort') {
-        this.$store.dispatch('setChatSortFilter', value);
-      } else {
-        // Caso del checkbox unread, no persistimos en el store
-        this.$store.dispatch('fetchAllConversations', { unread: value });
-      }
-      this.$emit('changeFilter', value, type || 'unread');
-      this.saveSelectedFilter(type || 'unread', value);
+      this.$emit('changeFilter', value, type);
+      this.saveSelectedFilter(type, value);
     },
     saveSelectedFilter(type, value) {
       this.updateUISettings({
         conversations_filter_by: {
           status: type === 'status' ? value : this.chatStatus,
           order_by: type === 'sort' ? value : this.sortFilter,
-          // No persistimos unread en el store, pero lo guardamos en UI settings si es necesario
-          unread: type === 'unread' ? value : undefined,
+          unread: type === 'unread' ? value : this.chatUnread,
         },
       });
     },
@@ -127,16 +123,16 @@ export default {
       />
     </div>
     <div class="flex items-center space-x-2 mt-4">
-      <input
-        id="unreadCheckbox"
-        type="checkbox"
-        v-model="unreadFilter"
-        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-        @change="onChangeFilter"
+      <span class="text-xs font-medium text-slate-800 dark:text-slate-100">{{
+        $t('CHAT_LIST.CHAT_SORT.UNREAD')
+      }}</span>
+      <FilterItem
+        type="unread"
+        :selected-value="chatUnread"
+        :items="chatUnreadItems"
+        path-prefix="CHAT_LIST.CHAT_UNREAD_FILTER_ITEMS"
+        @on-change-filter="onChangeFilter"
       />
-      <label for="unreadCheckbox" class="text-xs font-medium text-slate-800 dark:text-slate-100">
-        {{ $t('CHAT_LIST.CHAT_SORT.UNREAD') }}
-      </label>
     </div>
     <div class="flex items-center justify-between last:mt-4">
       <span class="text-xs font-medium text-slate-800 dark:text-slate-100">{{

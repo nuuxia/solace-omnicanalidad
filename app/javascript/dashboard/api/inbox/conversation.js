@@ -15,6 +15,7 @@ class ConversationApi extends ApiClient {
     teamId,
     conversationType,
     sortBy,
+    unread,
     updatedWithin,
   }) {
     return axios.get(this.url, {
@@ -27,6 +28,7 @@ class ConversationApi extends ApiClient {
         labels,
         conversation_type: conversationType,
         sort_by: sortBy,
+        unread,
         updated_within: updatedWithin,
       },
     });

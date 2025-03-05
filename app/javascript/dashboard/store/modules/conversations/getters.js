@@ -39,6 +39,7 @@ const getters = {
       }
       return false;
     });
+
     return lastEmail;
   },
   getMineChats: (_state, _, __, rootGetters) => activeFilters => {
@@ -89,6 +90,7 @@ const getters = {
   },
   getChatStatusFilter: ({ chatStatusFilter }) => chatStatusFilter,
   getChatSortFilter: ({ chatSortFilter }) => chatSortFilter,
+  getChatUnreadFilter: ({ chatUnreadFilter }) => chatUnreadFilter,
   getSelectedInbox: ({ currentInbox }) => currentInbox,
   getConversationById: _state => conversationId => {
     return _state.allConversations.find(
