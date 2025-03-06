@@ -28,7 +28,10 @@ export default {
     onTabChange() {
       if (this.type === 'status') {
         this.$store.dispatch('setChatStatusFilter', this.activeValue);
-      } else {
+      } else if(this.type == 'unread'){
+        this.$store.dispatch('setChatUnreadFilter', this.activeValue);
+      }
+      else {
         this.$store.dispatch('setChatSortFilter', this.activeValue);
       }
       this.$emit('onChangeFilter', this.activeValue, this.type);

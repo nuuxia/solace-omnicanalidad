@@ -88,6 +88,12 @@ class Conversation < ApplicationRecord
     ).sort_on_last_user_message_at
   }
 
+  scope :with_unread_notifications, -> {
+    joins(:notifications)
+      .where(notifications: { read_at: nil })
+      .distinct
+  }
+
   belongs_to :account
   belongs_to :inbox
   belongs_to :assignee, class_name: 'User', optional: true, inverse_of: :assigned_conversations

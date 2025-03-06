@@ -82,6 +82,7 @@ const conversationDynamicScroller = ref(null);
 
 const activeAssigneeTab = ref(wootConstants.ASSIGNEE_TYPE.ME);
 const activeStatus = ref(wootConstants.STATUS_TYPE.OPEN);
+const activeUnread = ref(wootConstants.UNREAD_TYPE.READ);
 const activeSortBy = ref(wootConstants.SORT_BY_TYPE.LAST_ACTIVITY_AT_DESC);
 const showAdvancedFilters = ref(false);
 // chatsOnView is to store the chats that are currently visible on the screen,
@@ -277,6 +278,7 @@ const conversationFilters = computed(() => {
     assigneeType: activeAssigneeTab.value,
     status: activeStatus.value,
     sortBy: activeSortBy.value,
+    unread: activeUnread.value,
     page: conversationListPagination.value,
     labels: props.label ? [props.label] : undefined,
     teamId: props.teamId || undefined,
@@ -361,8 +363,9 @@ const uniqueInboxes = computed(() => {
 // ---------------------- Methods -----------------------
 function setFiltersFromUISettings() {
   const { conversations_filter_by: filterBy = {} } = uiSettings.value;
-  const { status, order_by: orderBy } = filterBy;
+  const { status, order_by: orderBy, unread } = filterBy;
   activeStatus.value = status || wootConstants.STATUS_TYPE.OPEN;
+  activeUnread.value = unread || wootConstants.UNREAD_TYPE.READ;
   activeSortBy.value =
     Object.keys(wootConstants.SORT_BY_TYPE).find(
       sortField => sortField === orderBy
@@ -587,7 +590,10 @@ function updateAssigneeTab(selectedTab) {
 function onBasicFilterChange(value, type) {
   if (type === 'status') {
     activeStatus.value = value;
-  } else {
+  } else if (type == 'unread') {
+    activeUnread.value = value;
+  }
+   else {
     activeSortBy.value = value;
   }
   resetAndFetchData();
@@ -714,6 +720,7 @@ onMounted(() => {
   setFiltersFromUISettings();
   store.dispatch('setChatStatusFilter', activeStatus.value);
   store.dispatch('setChatSortFilter', activeSortBy.value);
+  store.dispatch('setChatUnreadFilter', activeUnread.value);
   resetAndFetchData();
   if (hasActiveFolders.value) {
     store.dispatch('campaigns/get');

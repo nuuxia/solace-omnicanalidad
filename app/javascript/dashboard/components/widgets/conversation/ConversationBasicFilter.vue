@@ -12,6 +12,11 @@ const CHAT_STATUS_FILTER_ITEMS = Object.freeze([
   'all',
 ]);
 
+const CHAT_UNREAD_FILTER_ITEMS = Object.freeze([
+  'read',
+  'unread',
+]);
+
 const SORT_ORDER_ITEMS = Object.freeze([
   'last_activity_at_asc',
   'last_activity_at_desc',
@@ -40,15 +45,20 @@ export default {
       showActionsDropdown: false,
       chatStatusItems: CHAT_STATUS_FILTER_ITEMS,
       chatSortItems: SORT_ORDER_ITEMS,
+      chatUnreadItems: CHAT_UNREAD_FILTER_ITEMS,
     };
   },
   computed: {
     ...mapGetters({
       chatStatusFilter: 'getChatStatusFilter',
       chatSortFilter: 'getChatSortFilter',
+      chatUnreadFilter: 'getChatUnreadFilter',
     }),
     chatStatus() {
       return this.chatStatusFilter || wootConstants.STATUS_TYPE.OPEN;
+    },
+    chatUnread() {
+      return this.chatUnreadFilter || wootConstants.UNREAD_TYPE.READ;
     },
     sortFilter() {
       return (
@@ -76,6 +86,7 @@ export default {
         conversations_filter_by: {
           status: type === 'status' ? value : this.chatStatus,
           order_by: type === 'sort' ? value : this.sortFilter,
+          unread: type === 'unread' ? value : this.chatUnread,
         },
       });
     },
@@ -99,30 +110,42 @@ export default {
       v-on-clickaway="closeDropdown"
       class="right-0 mt-1 dropdown-pane dropdown-pane--open basic-filter"
     >
-      <div class="flex items-center justify-between last:mt-4">
-        <span class="text-xs font-medium text-slate-800 dark:text-slate-100">{{
-          $t('CHAT_LIST.CHAT_SORT.STATUS')
-        }}</span>
-        <FilterItem
-          type="status"
-          :selected-value="chatStatus"
-          :items="chatStatusItems"
-          path-prefix="CHAT_LIST.CHAT_STATUS_FILTER_ITEMS"
-          @on-change-filter="onChangeFilter"
-        />
-      </div>
-      <div class="flex items-center justify-between last:mt-4">
-        <span class="text-xs font-medium text-slate-800 dark:text-slate-100">{{
-          $t('CHAT_LIST.CHAT_SORT.ORDER_BY')
-        }}</span>
-        <FilterItem
-          type="sort"
-          :selected-value="sortFilter"
-          :items="chatSortItems"
-          path-prefix="CHAT_LIST.SORT_ORDER_ITEMS"
-          @on-change-filter="onChangeFilter"
-        />
-      </div>
+    <div class="flex items-center justify-between last:mt-4">
+      <span class="text-xs font-medium text-slate-800 dark:text-slate-100">{{
+        $t('CHAT_LIST.CHAT_SORT.STATUS')
+      }}</span>
+      <FilterItem
+        type="status"
+        :selected-value="chatStatus"
+        :items="chatStatusItems"
+        path-prefix="CHAT_LIST.CHAT_STATUS_FILTER_ITEMS"
+        @on-change-filter="onChangeFilter"
+      />
+    </div>
+    <div class="flex items-center space-x-2 mt-4">
+      <span class="text-xs font-medium text-slate-800 dark:text-slate-100">{{
+        $t('CHAT_LIST.CHAT_SORT.UNREAD')
+      }}</span>
+      <FilterItem
+        type="unread"
+        :selected-value="chatUnread"
+        :items="chatUnreadItems"
+        path-prefix="CHAT_LIST.CHAT_UNREAD_FILTER_ITEMS"
+        @on-change-filter="onChangeFilter"
+      />
+    </div>
+    <div class="flex items-center justify-between last:mt-4">
+      <span class="text-xs font-medium text-slate-800 dark:text-slate-100">{{
+        $t('CHAT_LIST.CHAT_SORT.ORDER_BY')
+      }}</span>
+      <FilterItem
+        type="sort"
+        :selected-value="sortFilter"
+        :items="chatSortItems"
+        path-prefix="CHAT_LIST.SORT_ORDER_ITEMS"
+        @on-change-filter="onChangeFilter"
+      />
+    </div>
     </div>
   </div>
 </template>
