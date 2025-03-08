@@ -1,6 +1,6 @@
 {
   "LOGIN": {
-    "TITLE": "Login to test",
+    "TITLE": "Login to Solace",
     "EMAIL": {
       "LABEL": "E-pasts",
       "PLACEHOLDER": "piemers{'@'}firmasnosaukums.com",
