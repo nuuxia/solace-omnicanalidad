@@ -1,7 +1,7 @@
 class ApplicationMailer < ActionMailer::Base
   include ActionView::Helpers::SanitizeHelper
 
-  default from: 'Solace <noreply@solace.nuuxia.com>'
+  default from: ENV.fetch('MAILER_SENDER_EMAIL', 'Solace <noreply@solace.nuuxia.com>')
   before_action { ensure_current_account(params.try(:[], :account)) }
   around_action :switch_locale
   layout 'mailer/base'
@@ -12,7 +12,7 @@ class ApplicationMailer < ActionMailer::Base
   helper :frontend_urls
   helper do
     def global_config
-      { brand_name: 'Solace', brand_url: 'https://solace.nuuxia.com' }
+      @global_config ||= { brand_name: 'Solace', brand_url: 'https://solace.nuuxia.com' }
     end
   end
 
@@ -58,8 +58,8 @@ class ApplicationMailer < ActionMailer::Base
       action_url: @action_url
     }
 
-    locals.merge({ attachment_url: @attachment_url }) if @attachment_url
-    locals.merge({ failed_contacts: @failed_contacts, imported_contacts: @imported_contacts })
+    locals.merge!({ attachment_url: @attachment_url }) if @attachment_url
+    locals.merge!({ failed_contacts: @failed_contacts, imported_contacts: @imported_contacts })
     locals
   end
 
