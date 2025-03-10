@@ -13,7 +13,7 @@ set :deploy_via,      :remote_cache
 set :deploy_to,       "/home/#{fetch(:user)}/#{fetch(:application)}"
 set :default_env, { 'NODE_OPTIONS' => '--max-old-space-size=4096 --openssl-legacy-provider' }
 # Change Port to 3001
-set :puma_bind, 'tcp://127.0.0.1:3000'
+set :puma_bind, 'tcp://127.0.0.1:3001'
 # set :puma_bind,       "unix://#{shared_path}/tmp/sockets/#{fetch(:application)}-puma.sock"
 set :puma_state,      "#{shared_path}/tmp/pids/puma.state"
 set :puma_pid,        "#{shared_path}/tmp/pids/puma.pid"

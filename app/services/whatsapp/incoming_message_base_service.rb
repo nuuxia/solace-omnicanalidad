@@ -57,10 +57,15 @@ class Whatsapp::IncomingMessageBaseService
   def create_messages
     message = @processed_params[:messages].first
     log_error(message) && return if error_webhook_event?(message)
-
     process_in_reply_to(message)
 
-    message_type == 'contacts' ? create_contact_messages(message) : create_regular_message(message)
+    if message_type == 'contacts'
+      create_contact_messages(message)
+    elsif message_type == 'order'
+      create_order_message(message)
+    else
+      create_regular_message(message)
+    end
   end
 
   def create_contact_messages(message)
@@ -75,6 +80,22 @@ class Whatsapp::IncomingMessageBaseService
     create_message(message)
     attach_files
     attach_location if message_type == 'location'
+    @message.save!
+  end
+
+  def create_order_message(message)
+    create_message(message)
+    order = message[:order]
+    content = order[:text] || "Pedido recibido"
+
+    if order[:product_items].present?
+      productos = order[:product_items].map do |item|
+        "Producto: #{item[:product_retailer_id]}, Cantidad: #{item[:quantity]}, Precio: #{item[:item_price]} #{item[:currency]}"
+      end.join("\n")
+      content += "\nProductos:\n" + productos
+    end
+
+    @message.content = content
     @message.save!
   end
 
