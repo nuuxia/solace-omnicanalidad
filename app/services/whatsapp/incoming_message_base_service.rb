@@ -89,14 +89,24 @@ class Whatsapp::IncomingMessageBaseService
     content = order[:text] || "Pedido recibido"
 
     if order[:product_items].present?
-      productos = order[:product_items].map do |item|
-        "Producto: #{item[:product_retailer_id]}, Cantidad: #{item[:quantity]}, Precio: #{item[:item_price]} #{item[:currency]}"
-      end.join("\n")
-      content += "\nProductos:\n" + productos
+      productos = order[:product_items].map.with_index(1) do |item, index|
+        "- #{index}. #{item[:product_retailer_id]} \n  Precio: #{format_currency(item[:item_price], item[:currency])} \n  Cantidad: #{item[:quantity]}"
+      end.join("\n\n")
+
+      total_price = order[:product_items].sum { |item| item[:item_price].to_f * item[:quantity].to_i }
+      currency = order[:product_items].first[:currency]
+
+      content += "\n\n🛒 *#{order[:product_items].size} artículos* \n\n#{productos} \n\n" \
+                 "*Total:* #{format_currency(total_price, currency)} (estimado)"
     end
 
     @message.content = content
     @message.save!
+  end
+
+  def format_currency(amount, currency)
+    formatted_amount = "%.2f" % amount
+    "#{currency} #{formatted_amount}"
   end
 
   def set_contact
