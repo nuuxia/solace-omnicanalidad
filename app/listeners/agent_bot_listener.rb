@@ -25,7 +25,7 @@ class AgentBotListener < BaseListener
     inbox = message.inbox
 
     unless should_process_event?(inbox)
-      conversation.opened! unless conversation.open?
+      conversation.update!(status: :open) unless conversation.open?
       return
     end
 
