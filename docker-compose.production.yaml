@@ -13,7 +13,7 @@ services:
     # Bind Rails on host IP:port -> container:port
     # Make sure to replace 5.161.216.75 with whichever IP you want to listen on
     ports:
-      - "5.161.216.75:3001:3000"
+      - "3001:3000"
 
     depends_on:
       - redis
