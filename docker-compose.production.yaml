@@ -9,12 +9,20 @@ services:
         RAILS_ENV: "production"
         BUNDLE_WITHOUT: "development test"
     container_name: solace_production
+
+    # Bind Rails on host IP:port -> container:port
+    # Make sure to replace 5.161.216.75 with whichever IP you want to listen on
     ports:
-      - "3001:3000"
+      - "5.161.216.75:3001:3000"
+
     depends_on:
       - redis
     env_file:
       - .env.production
+    environment:
+      # Make sure to include the password in the Redis URL
+      - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379/0
+
     command: >
       sh -c "
       bundle exec rails db:migrate &&
@@ -33,6 +41,9 @@ services:
       - redis
     env_file:
       - .env.production
+    environment:
+      - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379/0
+
     command: >
       sh -c "
       bundle exec sidekiq -C config/sidekiq.yml
@@ -41,5 +52,8 @@ services:
   redis:
     image: redis:7-alpine
     container_name: redis_production
+    # Use the requirepass argument to force password authentication
+    command: redis-server --requirepass "${REDIS_PASSWORD}"
     restart: unless-stopped
+    # No ports block here, so Redis won't be exposed on the host
 
