@@ -49,12 +49,12 @@ services:
       bundle exec sidekiq -C config/sidekiq.yml
       "
 
-  redis:
-    image: redis:7-alpine
-    container_name: redis_production
-    command: sh -c "redis-server --requirepass \"$REDIS_PASSWORD\""
-    env_file:
-      - .env.production
-    restart: unless-stopped
+redis:
+  image: redis:7-alpine
+  container_name: redis_production
+  env_file:
+    - .env.production
+  command: sh -c "redis-server --requirepass \"$REDIS_PASSWORD\""
+  restart: unless-stopped
 
 
