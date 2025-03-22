@@ -52,8 +52,9 @@ services:
   redis:
     image: redis:7-alpine
     container_name: redis_production
-    # Use the requirepass argument to force password authentication
-    command: redis-server --requirepass "${REDIS_PASSWORD}"
+    command: sh -c "redis-server --requirepass \"$REDIS_PASSWORD\""
+    env_file:
+      - .env.production
     restart: unless-stopped
-    # No ports block here, so Redis won't be exposed on the host
+
 
