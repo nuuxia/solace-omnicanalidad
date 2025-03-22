@@ -30,6 +30,6 @@ jobs:
 
             # Asegurar que tenemos la última versión del código
             git pull origin production
-
+            export REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}
             # Construir e iniciar los contenedores con Docker Compose
             docker-compose -f docker-compose.production.yaml up -d --build
