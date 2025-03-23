@@ -36,6 +36,8 @@ RUN wget -qO- https://get.pnpm.io/install.sh | ENV="$HOME/.shrc" SHELL="$(which 
     && echo 'export PATH="$PNPM_HOME:$PATH"' >> /root/.shrc \
     && export PNPM_HOME="/root/.local/share/pnpm" \
     && export PATH="$PNPM_HOME:$PATH" \
+    && pnpm --version  \
+    && pnpm i -g pnpm@9  \
     && pnpm --version
 
 # Persist the environment variables in Docker
