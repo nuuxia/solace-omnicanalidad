@@ -21,8 +21,8 @@ export default {
     };
   },
   mounted() {
-    const appId = import.meta.env.VITE_FB_APP_ID;
-    const graphApiVersion = import.meta.env.VITE_FB_GRAPH_API_VERSION;
+    const appId = 404207692182612;
+    const graphApiVersion = 'v20.0';
 
     const fbScript = document.createElement('script');
     fbScript.async = true;
@@ -123,7 +123,7 @@ export default {
         return;
       }
 
-      const configId = import.meta.env.VITE_FB_CONFIG_ID;
+      const configId = 1710763212991813;
 
       // Calculamos el tamaño de la ventana (máximo 600x700, pero adaptable)
       const width = Math.min(600, window.innerWidth - 40);
