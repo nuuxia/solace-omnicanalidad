@@ -23,8 +23,8 @@ jobs:
         with:
           host: ${{ secrets.PROD_HOST }}
           username: arrows  # Usamos el usuario "arrows" en lugar de "root"
-          password: ${{ secrets.PROD_SSH_PASSWORD }}
           key: ${{ secrets.PROD_SSH_KEY }}
+          password: ${{ secrets.PROD_SSH_PASSWORD }}
           script: |
             # Navegar a la carpeta donde está el proyecto
             cd /home/arrows/SoftwareArrows
