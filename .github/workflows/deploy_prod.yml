@@ -1,0 +1,42 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches:
+      - prod
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Debug SSH Connection
+        run: |
+          echo "${{ secrets.PROD_SSH_KEY }}" > key.pem
+          chmod 600 key.pem
+          ssh -o StrictHostKeyChecking=no -i key.pem ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} "echo 'Conexión SSH exitosa'"
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: ${{ secrets.PROD_HOST }}
+          username: arrows  # Usamos el usuario "arrows" en lugar de "root"
+          password: ${{ secrets.PROD_SSH_PASSWORD }}
+          key: ${{ secrets.PROD_SSH_KEY }}
+          script: |
+            # Navegar a la carpeta donde está el proyecto
+            cd /home/arrows/SoftwareArrows
+
+            # Si el repositorio no está clonado, clonarlo; de lo contrario, actualizarlo
+            if [ ! -d ".git" ]; then
+              git clone git@github.com:SoftwareArrows/SoftwareArrows.git .
+            else
+              git pull origin prod
+            fi
+
+            export REDIS_PASSWORD=${{ secrets.PROD_REDIS_PASSWORD }}
+
+            # Levantar los contenedores utilizando docker-compose.yaml y el archivo .env
+            docker compose up -d --build
