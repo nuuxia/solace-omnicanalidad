@@ -4,6 +4,7 @@ module MercadoLibre
     pattr_initialize [:inbox!, :params!]
 
     def perform
+      Rails.logger.info("[MessageService] Ejecutando IncomingMessageService para inbox #{inbox.id}")
       client = initialize_client
       fetch_and_process_new_messages(client)
     end
@@ -17,10 +18,16 @@ module MercadoLibre
     end
 
     def fetch_and_process_new_messages(client)
+      Rails.logger.info("[MessageService] Fetching mensajes con resource #{params['resource']}")
       new_messages = client.fetch_new_messages(params)
-      return if new_messages["messages"].blank?
+
+      if new_messages["messages"].blank?
+        Rails.logger.warn("[MessageService] No se encontraron mensajes nuevos")
+        return
+      end
 
       new_messages["messages"].each do |message|
+        Rails.logger.info("[MessageService] Procesando mensaje con ID #{message['id']}")
         next if message_from_channel_owner?(message)
 
         process_message(message, client)
@@ -34,6 +41,7 @@ module MercadoLibre
     end
 
     def process_message(message, client)
+      Rails.logger.info("[MessageService] Creando mensaje desde #{message['from']['user_id']}")
       pack_id = extract_pack_id(message)
       set_contact(message)
       set_conversation(pack_id, message, client)

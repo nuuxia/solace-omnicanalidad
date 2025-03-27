@@ -42,6 +42,7 @@ class Channel::MercadoLibre < ApplicationRecord
   end
 
   def ensure_token_valid
+    Rails.logger.info("[Channel::MercadoLibre] Verificando token para user_id #{mercado_libre_user_id}")
     refresh_token if token_expired?
   end
 
@@ -118,6 +119,7 @@ class Channel::MercadoLibre < ApplicationRecord
   end
 
   def refresh_token
+    Rails.logger.info("[Channel::MercadoLibre] Refrescando token...")
     token_service = MercadoLibre::RefreshTokenService.new(self)
     token_data = token_service.call
 
@@ -127,5 +129,6 @@ class Channel::MercadoLibre < ApplicationRecord
       mercado_libre_token_expires_at: Time.current + token_data['expires_in'].seconds,
       mercado_libre_user_id: token_data['user_id']
     )
+    Rails.logger.info("[Channel::MercadoLibre] Token actualizado exitosamente")
   end
 end
