@@ -12,6 +12,8 @@
     "MERCADO_LIBRE_OPTIONS_HEADER": "Recepción de Mensajes en la Bandeja de Entrada",
     "MERCADO_LIBRE_USER_INFO_BUTTON": "Obtener información del usuario de MercadoLibre",
     "MERCADO_LIBRE_USER_INFO": {
+      "TITLE": "Información de la cuenta de Mercado Libre",
+      "SUB_TEXT": "Mostrá el nombre de usuario y el enlace al perfil de la cuenta conectada.",
       "LOADING": "Cargando información del usuario...",
       "NICKNAME": "Nombre de usuario",
       "PERMALINK": "Enlace permanente",
