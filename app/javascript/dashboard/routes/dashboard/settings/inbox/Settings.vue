@@ -440,17 +440,6 @@ export default {
           "
           @blur="v$.selectedInboxName.$touch"
         />
-        <div v-if="this.isAMercadoLibreChannel">
-          <button @click="fetchMercadoLibreUserInfo">
-            {{ $t('INBOX_MGMT.MERCADO_LIBRE_USER_INFO_BUTTON') }}
-          </button>
-          <p v-if="loading">{{ $t('INBOX_MGMT.MERCADO_LIBRE_USER_INFO.LOADING') }}</p>
-          <p v-if="userInfo">
-            {{ $t('INBOX_MGMT.MERCADO_LIBRE_USER_INFO.NICKNAME') }}: {{ userInfo.nickname }}<br />
-            {{ $t('INBOX_MGMT.MERCADO_LIBRE_USER_INFO.PERMALINK') }}: <a :href="userInfo.permalink" target="_blank">{{ userInfo.permalink }}</a>
-          </p>
-          <p v-if="error">{{ error }}</p>
-        </div>
         <woot-input
           v-if="isAPIInbox"
           v-model="webhookUrl"
@@ -755,6 +744,44 @@ export default {
           <label for="use_inbox_avatar_for_bot">
             {{ $t('INBOX_MGMT.FEATURES.USE_INBOX_AVATAR_FOR_BOT') }}
           </label>
+        </div>
+      </SettingsSection>
+      <SettingsSection
+        v-if="isAMercadoLibreChannel"
+        :title="$t('INBOX_MGMT.MERCADO_LIBRE_USER_INFO.TITLE')"
+        :sub-title="$t('INBOX_MGMT.MERCADO_LIBRE_USER_INFO.SUB_TEXT')"
+        :show-border="false"
+      >
+        <div class="bg-gray-100 dark:bg-slate-900 p-4 rounded-2xl shadow-md">
+          <woot-button
+            variant="primary"
+            class="mb-4"
+            :loading="loading"
+            @click="fetchMercadoLibreUserInfo"
+          >
+            {{ $t('INBOX_MGMT.MERCADO_LIBRE_USER_INFO_BUTTON') }}
+          </woot-button>
+
+          <div v-if="loading" class="text-gray-600 dark:text-gray-300">
+            {{ $t('INBOX_MGMT.MERCADO_LIBRE_USER_INFO.LOADING') }}
+          </div>
+
+          <div v-if="userInfo" class="flex flex-col space-y-2">
+            <div class="flex items-center space-x-2">
+              <span class="font-semibold">{{ $t('INBOX_MGMT.MERCADO_LIBRE_USER_INFO.NICKNAME') }}:</span>
+              <span class="text-primary-600 dark:text-primary-400">{{ userInfo.nickname }}</span>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="font-semibold">{{ $t('INBOX_MGMT.MERCADO_LIBRE_USER_INFO.PERMALINK') }}:</span>
+              <a :href="userInfo.permalink" target="_blank" class="text-blue-600 dark:text-blue-400 underline">
+                {{ userInfo.permalink }}
+              </a>
+            </div>
+          </div>
+
+          <div v-if="error" class="text-red-500">
+            {{ error }}
+          </div>
         </div>
       </SettingsSection>
       <SettingsSection
