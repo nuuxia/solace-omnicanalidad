@@ -9,6 +9,8 @@
     "MERCADO_LIBRE_OPTIONS_HEADER": "Reception of Messages in the Inbox",
     "MERCADO_LIBRE_USER_INFO_BUTTON": "Get MercadoLibre user information",
     "MERCADO_LIBRE_USER_INFO": {
+      "TITLE": "Mercado Libre Account Info",
+      "SUB_TEXT": "Display the username and profile link of the connected Mercado Libre account.",
       "LOADING": "Loading user information...",
       "NICKNAME": "Username",
       "PERMALINK": "Permanent link",
