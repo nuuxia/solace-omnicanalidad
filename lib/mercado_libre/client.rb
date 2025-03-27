@@ -8,11 +8,13 @@ module MercadoLibre
     end
 
     def fetch_new_messages(notification)
+      Rails.logger.info("[MercadoLibre::Client] Fetching messages for resource=#{notification['resource']}")
       response = self.class.get("/messages/#{notification["resource"]}", headers: headers, query: { tag: 'post_sale' })
       handle_response(response)
     end
 
     def fetch_question_details(question_id)
+      Rails.logger.info("[MercadoLibre::Client] Fetching question #{question_id}")
       response = self.class.get("/questions/#{question_id}", headers: headers)
       handle_response(response)
     end
@@ -101,6 +103,7 @@ module MercadoLibre
     end
 
     def handle_response(response)
+      Rails.logger.info("[MercadoLibre::Client] Respuesta: #{response.code} - #{response.body}")
       response.success? ? JSON.parse(response.body) : (raise StandardError, "Error in Mercado Libre request: #{response.body}")
     end
   end
