@@ -26,6 +26,7 @@ export const useMacros = () => {
       case 'assign_agent':
         return [{ id: 'self', name: 'Self' }, ...agents.value];
       case 'add_label':
+      case 'send_webhook_event':
       case 'remove_label':
         return labels.value.map(i => ({
           id: i.title,
