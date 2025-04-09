@@ -9,7 +9,6 @@ const CHAT_STATUS_FILTER_ITEMS = Object.freeze([
   'resolved',
   'pending',
   'snoozed',
-  'all',
 ]);
 
 const CHAT_UNREAD_FILTER_ITEMS = Object.freeze([
@@ -35,10 +34,7 @@ export default {
   emits: ['changeFilter'],
   setup() {
     const { updateUISettings } = useUISettings();
-
-    return {
-      updateUISettings,
-    };
+    return { updateUISettings };
   },
   data() {
     return {
@@ -55,7 +51,9 @@ export default {
       chatUnreadFilter: 'getChatUnreadFilter',
     }),
     chatStatus() {
-      return this.chatStatusFilter || wootConstants.STATUS_TYPE.OPEN;
+      return this.chatStatusFilter.length
+        ? this.chatStatusFilter
+        : [wootConstants.STATUS_TYPE.OPEN];
     },
     chatUnread() {
       return this.chatUnreadFilter || wootConstants.UNREAD_TYPE.READ;
@@ -67,10 +65,6 @@ export default {
     },
   },
   methods: {
-    onTabChange(value) {
-      this.$emit('changeFilter', value);
-      this.closeDropdown();
-    },
     toggleDropdown() {
       this.showActionsDropdown = !this.showActionsDropdown;
     },
@@ -110,19 +104,19 @@ export default {
       v-on-clickaway="closeDropdown"
       class="right-0 mt-1 dropdown-pane dropdown-pane--open basic-filter"
     >
-    <div class="flex items-center justify-between last:mt-4">
-      <span class="text-xs font-medium text-slate-800 dark:text-slate-100">{{
-        $t('CHAT_LIST.CHAT_SORT.STATUS')
-      }}</span>
-      <FilterItem
-        type="status"
-        :selected-value="chatStatus"
-        :items="chatStatusItems"
-        path-prefix="CHAT_LIST.CHAT_STATUS_FILTER_ITEMS"
-        @on-change-filter="onChangeFilter"
-      />
-    </div>
-    <div class="flex items-center space-x-2 mt-4">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-medium text-slate-800 dark:text-slate-100">
+          {{ $t('CHAT_LIST.CHAT_SORT.STATUS') }}
+        </span>
+        <FilterItem
+          type="status"
+          :selected-value="chatStatus"
+          :items="chatStatusItems"
+          path-prefix="CHAT_LIST.CHAT_STATUS_FILTER_ITEMS"
+          @on-change-filter="onChangeFilter"
+        />
+      </div>
+      <div class="flex items-center space-x-2 mt-4">
       <span class="text-xs font-medium text-slate-800 dark:text-slate-100">{{
         $t('CHAT_LIST.CHAT_SORT.UNREAD')
       }}</span>
@@ -149,9 +143,3 @@ export default {
     </div>
   </div>
 </template>
-
-<style lang="scss" scoped>
-.basic-filter {
-  @apply w-52 p-4 top-6;
-}
-</style>
