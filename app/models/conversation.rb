@@ -88,10 +88,16 @@ class Conversation < ApplicationRecord
     ).sort_on_last_user_message_at
   }
 
+  # scope :with_unread_notifications, -> {
+  #   joins(:notifications)
+  #     .where(notifications: { read_at: nil })
+  #     .distinct
+  # }
+
   scope :with_unread_notifications, -> {
-    joins(:notifications)
-      .where(notifications: { read_at: nil })
-      .distinct
+    joins(:messages).where(
+      'conversations.assignee_last_seen_at IS NULL OR messages.created_at > conversations.assignee_last_seen_at'
+    ).distinct
   }
 
   belongs_to :account
