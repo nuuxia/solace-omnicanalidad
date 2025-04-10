@@ -95,9 +95,8 @@ class Conversation < ApplicationRecord
   # }
 
   scope :with_unread_notifications, -> {
-    joins(:messages).where(
-      'messages.created_at > conversations.assignee_last_seen_at'
-    ).distinct
+  joins(:last_incoming_message)
+  .where('conversations.assignee_last_seen_at IS NULL OR messages.created_at > conversations.assignee_last_seen_at')
   }
 
   belongs_to :account
@@ -111,6 +110,7 @@ class Conversation < ApplicationRecord
   has_many :mentions, dependent: :destroy_async
   has_many :messages, dependent: :destroy_async, autosave: true
   has_one :csat_survey_response, dependent: :destroy_async
+  has_one :last_incoming_message, -> { incoming.order(created_at: :desc) }, class_name: 'Message', inverse_of: :conversation
   has_many :conversation_participants, dependent: :destroy_async
   has_many :notifications, as: :primary_actor, dependent: :destroy_async
   has_many :attachments, through: :messages
