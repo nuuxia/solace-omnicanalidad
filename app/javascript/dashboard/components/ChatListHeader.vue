@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import ConversationBasicFilter from './widgets/conversation/ConversationBasicFilter.vue';
 
@@ -32,7 +32,12 @@ const emit = defineEmits([
 
 const { t } = useI18n();
 
+const currentStatuses = ref([...props.activeStatuses]);
+
 const onBasicFilterChange = (value, type) => {
+  if (type === 'status') {
+    currentStatuses.value = Array.isArray(value) ? [...value] : [value];
+  }
   emit('basicFilterChange', value, type);
 };
 
@@ -41,7 +46,7 @@ const hasAppliedFiltersOrActiveFolders = computed(() => {
 });
 
 const chatStatusLabel = computed(() => {
-  return props.activeStatuses
+  return currentStatuses.value
     .map(status => t(`CHAT_LIST.CHAT_STATUS_FILTER_ITEMS.${status}.TEXT`))
     .join(', ');
 });

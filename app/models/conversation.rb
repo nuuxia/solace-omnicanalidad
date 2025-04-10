@@ -96,7 +96,7 @@ class Conversation < ApplicationRecord
 
   scope :with_unread_notifications, -> {
     joins(:messages).where(
-      'conversations.assignee_last_seen_at IS NULL OR messages.created_at > conversations.assignee_last_seen_at'
+      'messages.created_at > conversations.assignee_last_seen_at'
     ).distinct
   }
 
