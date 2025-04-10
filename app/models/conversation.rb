@@ -95,8 +95,11 @@ class Conversation < ApplicationRecord
   # }
 
   scope :with_unread_notifications, -> {
-  joins(:last_incoming_message)
-  .where('conversations.assignee_last_seen_at IS NULL OR messages.created_at > conversations.assignee_last_seen_at')
+    joins(:notifications)
+      .joins(:messages) # Para acceder al último mensaje de cualquier tipo
+      .where(notifications: { read_at: nil }) # Notificaciones no leídas
+      .where('conversations.assignee_last_seen_at IS NULL OR messages.created_at > conversations.assignee_last_seen_at')
+      .distinct # Evitar duplicados si hay múltiples notificaciones o mensajes
   }
 
   belongs_to :account
