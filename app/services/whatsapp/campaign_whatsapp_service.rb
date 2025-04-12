@@ -3,14 +3,12 @@ module Whatsapp
     attr_reader :campaign
 
     def initialize(campaign)
-      # Usar la campaña existente, en vez de crear una nueva
       @campaign = campaign
-      Rails.logger.info "🔄 Initialized CampaignService for campaign #{campaign.id}"
+      Rails.logger.info "🔄 Initialized CampaignWhatsappService for campaign #{campaign.id}"
     end
 
     def perform
-      Rails.logger.info "🚀 Starting CampaignService for campaign #{campaign.id}"
-
+      Rails.logger.info "🚀 Starting CampaignWhatsappService for campaign #{campaign.id}"
       validate_campaign
       Rails.logger.info "✅ Campaign validation passed"
 

@@ -24,38 +24,37 @@ module Whatsapp
     end
 
     def perform
-      Rails.logger.info "[CampaignWhatsappPreviewService] Iniciando perform"
+      Rails.logger.info '[CampaignWhatsappPreviewService] Iniciando perform'
 
       validate_params
       process_placeholders
       upload_header_media_if_needed
       send_preview_message
 
-      Rails.logger.info "[CampaignWhatsappPreviewService] Finalizando perform"
+      Rails.logger.info '[CampaignWhatsappPreviewService] Finalizando perform'
     end
 
     private
 
     def validate_params
-      Rails.logger.info "[CampaignWhatsappPreviewService] Validando parámetros..."
+      Rails.logger.info '[CampaignWhatsappPreviewService] Validando parámetros...'
 
       @inbox = account.inboxes.find(inbox_id)
       raise 'Invalid inbox type' unless @inbox.whatsapp?
       raise 'Invalid phone number' unless phone_number.match?(/^\+[0-9]+$/)
       raise 'Template is required' if template.blank?
 
-      Rails.logger.info "[CampaignWhatsappPreviewService] Parámetros válidos"
+      Rails.logger.info '[CampaignWhatsappPreviewService] Parámetros válidos'
     end
 
-    # Procesa los placeholders para el BODY y ajusta los BOTONES según corresponda.
     def process_placeholders
-      Rails.logger.info "[CampaignWhatsappPreviewService] Procesando placeholders de body y botones..."
+      Rails.logger.info '[CampaignWhatsappPreviewService] Procesando placeholders de body y botones...'
 
-      # --- BODY ---
+      # BODY placeholders
       body_component = template_components.find { |c| c['type'] == 'BODY' }
       if body_component && body_component['text']
         placeholders = body_component['text'].scan(/{{(.*?)}}/)
-        Rails.logger.info "[CampaignWhatsappPreviewService] Se encontraron #{placeholders.size} placeholders en el cuerpo"
+        Rails.logger.info "[CampaignWhatsappPreviewService] Se encontraron #{placeholders.size} placeholders en el BODY"
 
         body_vars_enum = body_variables.each
         placeholders.each do |_placeholder|
@@ -63,7 +62,6 @@ module Whatsapp
           if var_info.nil?
             @body_variable_values << ' '
           elsif var_info['sourceType'] == 'contact_name'
-            # Siempre busca el nombre del contacto, sin importar el valor enviado
             @body_variable_values << fetch_contact_name_for(phone_number)
           elsif var_info['value'].to_s.strip.empty?
             @body_variable_values << ' '
@@ -74,17 +72,17 @@ module Whatsapp
         Rails.logger.info "[CampaignWhatsappPreviewService] Valores resultantes para el body: #{@body_variable_values.inspect}"
       end
 
-      # --- BOTONES ---
+      # BUTTON placeholders
       buttons_component = template_components.find { |c| c['type'] == 'BUTTONS' }
       return unless buttons_component && buttons_component['buttons'].present?
 
-      # Agrupar las variables de botones por tipo (según el valor de "type")
       url_vars       = button_variables.select { |bv| bv['type'].to_s.upcase == 'URL' }
       copy_code_vars = button_variables.select { |bv| bv['type'].to_s.upcase == 'COPY_CODE' }
       phone_vars     = button_variables.select { |bv| bv['type'].to_s.upcase == 'PHONE_NUMBER' }
 
-      new_buttons = buttons_component['buttons'].map.with_index do |btn, index|
+      new_buttons = buttons_component['buttons'].map do |btn|
         new_btn = btn.dup
+
         case new_btn['type']
         when 'URL'
           if new_btn['url'].to_s.match(/{{(.*?)}}/)
@@ -98,6 +96,7 @@ module Whatsapp
           else
             new_btn['dynamic'] = false
           end
+
         when 'PHONE_NUMBER'
           if new_btn['phone_number'].to_s.match(/{{(.*?)}}/)
             new_btn['dynamic'] = true
@@ -111,6 +110,7 @@ module Whatsapp
           else
             new_btn['dynamic'] = false
           end
+
         when 'COPY_CODE'
           if new_btn['example'].present?
             var_info = copy_code_vars.shift
@@ -119,9 +119,17 @@ module Whatsapp
             end
             new_btn['dynamic'] = true
           end
+
+        when 'FLOW'
+          # NUEVO: Para un botón de tipo FLOW,
+          # se asume que en este punto no hay placeholders (o si los hay, igual
+          # podrías hacer algo parecido a 'URL'). Por simplicidad:
+          new_btn['dynamic'] = false
+
         else
-          # No se realiza modificación para otros tipos
+          # Otros tipos no contemplados
         end
+
         new_btn
       end
 
@@ -129,7 +137,6 @@ module Whatsapp
       Rails.logger.info "[CampaignWhatsappPreviewService] Botones procesados: #{new_buttons.inspect}"
     end
 
-    # Sube el archivo de cabecera si el template tiene un componente HEADER con formato IMAGE, VIDEO o DOCUMENT.
     def upload_header_media_if_needed
       header_component = template_components.find { |c| c['type'] == 'HEADER' }
       return unless header_component
@@ -151,13 +158,10 @@ module Whatsapp
       Rails.logger.info "[CampaignWhatsappPreviewService] Archivo subido. URL: #{url}"
     end
 
-    # Envía el mensaje de vista previa usando el SendTemplateService
     def send_preview_message
-      Rails.logger.info "[CampaignWhatsappPreviewService] Enviando mensaje de vista previa..."
+      Rails.logger.info '[CampaignWhatsappPreviewService] Enviando mensaje de vista previa...'
 
-      # Asigna los valores procesados del body a la llave esperada por el payload de la API
       template['_cloudapi_body_params'] = @body_variable_values
-
       Whatsapp::SendTemplateService.new(
         phone_number_id: @inbox.phone_number_id,
         version: ENV['VITE_FB_GRAPH_API_VERSION'],
@@ -171,7 +175,6 @@ module Whatsapp
       template['components'] || []
     end
 
-    # Busca el contacto por número y retorna el nombre; si no se encuentra, retorna el teléfono
     def fetch_contact_name_for(phone)
       contact = Contact.find_by(account_id: account.id, phone_number: phone)
       contact && contact.name.present? ? contact.name : phone

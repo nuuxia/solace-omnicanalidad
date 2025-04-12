@@ -154,6 +154,35 @@
             "SUCCESS_MESSAGE": "WhatsApp campaign created successfully",
             "ERROR_MESSAGE": "There was an error. Please try again."
           },
+          "TEMPLATE":{
+            "FILE": "File: ",
+            "MEDIA":{
+              "HEADER_SECTION": "Select header template media",
+              "UPLOAD_DOCUMENT": "Upload a document .PDF",
+              "UPLOAD_IMAGE": "Upload a image .jpg or .png", 
+              "UPLOAD_VIDEO": "Upload a video .mp4"
+             
+            },
+            "BODY":{
+              "HEADER_SECTION": "Insert body template variables",
+              "VARIABLE_TITLE": "Variable",
+              "VARIABLE_PLACE_HOLDER": "Insert your variable here",
+              "CONTACT_NAME": "Contact Name",
+              "FREE_TEXT": "Text"
+
+            },
+            "BUTTONS":{
+              "HEADER_SECTION": "Insert buttons template variables",
+              "VARIABLE_TITLE": "Variable",
+              "VARIABLE_PLACE_HOLDER": "Insert your variable here"
+            }
+        },
+        "":{
+          "HEADER_SECTION": "Select media template",
+          "UPLOAD_DOCUMENT": "Upload a document .PDF",
+          "UPLOAD_IMAGE": "Upload a image .jpg or .png", 
+          "UPLOAD_VIDEO": "Upload a video .mp4" 
+      },
           "SYNC": {
             "SUCCESS_MESSAGE": "Templates synchronized successfully",
             "ERROR_MESSAGE": "Error synchronizing templates. Please try again."

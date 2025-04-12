@@ -5,20 +5,21 @@ import { useStore } from 'dashboard/composables/store';
 import { useAlert, useTrack } from 'dashboard/composables';
 import { CAMPAIGN_TYPES } from 'shared/constants/campaign.js';
 import { CAMPAIGNS_EVENTS } from 'dashboard/helper/AnalyticsHelper/events.js';
-import WhatsAppCampaignForm from 'dashboard/components-next/Campaigns/Pages/CampaignPage/WhatsAppCampaign/WhatsAppCampaignForm.vue';
+import WhatsAppCampaignForm from './WhatsAppCampaignForm.vue'; // Ajusta la ruta si cambia
+
 const emit = defineEmits(['close']);
 const store = useStore();
 const { t } = useI18n();
 const isSyncButtonDisabled = ref(false);
+
 // Cierra el diálogo
 const handleClose = () => emit('close');
-// Aquí despachamos al módulo `campaignsWhatsApp/create`
-const addCampaign = async campaignDetails => {
+
+// Despachar al módulo `campaignsWhatsApp/create`
+const addCampaign = async formData => {
   try {
-    await store.dispatch(
-      'campaignsWhatsApp/create',
-      campaignDetails.campaigns_whatsapp
-    );
+    // Enviamos directamente el FormData al store
+    await store.dispatch('campaignsWhatsApp/create', formData);
     useTrack(CAMPAIGNS_EVENTS.CREATE_CAMPAIGN, {
       type: CAMPAIGN_TYPES.ONE_OFF,
     });
@@ -31,11 +32,12 @@ const addCampaign = async campaignDetails => {
     useAlert(errorMessage);
   }
 };
-// El formulario emite `submit` con `campaignDetails`
-const handleSubmit = campaignDetails => {
-  // campaignDetails ya tiene la estructura correcta, pásalo directamente
-  addCampaign(campaignDetails);
+
+// El formulario emite `submit` con el FormData
+const handleSubmit = campaignFormData => {
+  addCampaign(campaignFormData);
 };
+
 // Para sincronizar plantillas
 const handleSyncTemplates = async () => {
   if (isSyncButtonDisabled.value) return;
@@ -60,7 +62,7 @@ const handleSyncTemplates = async () => {
   <div
     class="w-[400px] z-50 min-w-0 absolute top-10 ltr:right-0 rtl:left-0 bg-n-alpha-3 backdrop-blur-[100px] p-6 rounded-xl border border-slate-50 dark:border-slate-900 shadow-md flex flex-col gap-6"
   >
-    <!-- Encabezado: Título a la izquierda, botón de sync a la derecha -->
+    <!-- Encabezado: título y botón de sync -->
     <div class="flex items-center justify-between">
       <h3 class="text-base font-medium text-slate-900 dark:text-slate-50">
         {{ t('CAMPAIGN.WHATSAPP.CREATE.TITLE') }}
@@ -74,7 +76,8 @@ const handleSyncTemplates = async () => {
         @click="handleSyncTemplates"
       />
     </div>
-    <!-- Formulario WhatsAppCampaignForm -->
+
+    <!-- Formulario principal -->
     <WhatsAppCampaignForm @submit="handleSubmit" @cancel="handleClose" />
   </div>
 </template>
