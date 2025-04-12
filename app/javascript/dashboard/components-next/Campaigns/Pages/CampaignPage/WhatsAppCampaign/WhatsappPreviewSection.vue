@@ -31,6 +31,18 @@ const props = defineProps({
     type: String,
     default: '',
   },
+  headerMediaFile: {
+    type: [File, null],
+    default: null,
+  },
+  bodyVariables: {
+    type: Array,
+    default: () => [],
+  },
+  buttonVariables: {
+    type: Array,
+    default: () => [],
+  },
 });
 
 const emit = defineEmits(['update:phoneNumber', 'preview-success']);
@@ -40,9 +52,10 @@ const store = useStore();
 
 const phoneError = ref('');
 
+// Validamos un teléfono en formato +... (simple)
 const validatePhone = phone => /^\+[^\s]+$/.test(phone);
 
-// Configuración para v-model en el input de teléfono
+// Para el input del teléfono
 const localPhone = computed({
   get() {
     return props.phoneNumber;
@@ -52,14 +65,14 @@ const localPhone = computed({
   },
 });
 
-// Computar la plantilla seleccionada a partir de la inbox y el template seleccionado
+// Computar la plantilla seleccionada
 const selectedTemplate = computed(() => {
   return props.selectedInbox?.message_templates?.find(
     template => template.id === props.selectedWhatsAppTemplate
   );
 });
 
-// Lógica para deshabilitar el botón de preview
+// Deshabilitar el botón de preview
 const isPreviewDisabled = computed(() => {
   if (!props.inboxId) return true;
   if (!props.selectedWhatsAppTemplate) return true;
@@ -67,17 +80,24 @@ const isPreviewDisabled = computed(() => {
   return false;
 });
 
+// Enviar preview
 const handleSendPreview = async () => {
   if (!validatePhone(props.phoneNumber)) {
     phoneError.value = t('CAMPAIGN.WHATSAPP.CREATE.FORM.PREVIEW_SECTION.ERROR');
     return;
   }
   phoneError.value = '';
+
+  // Armamos el objeto con todo lo necesario
   const previewData = {
-    inbox_id: props.inboxId,
+    inboxId: props.inboxId,
+    phoneNumber: props.phoneNumber,
     template: selectedTemplate.value,
-    phone_number: props.phoneNumber,
+    headerMediaFile: props.headerMediaFile,
+    bodyVariables: props.bodyVariables, // <-- Agregar bodyVariables
+    buttonVariables: props.buttonVariables, // <-- Agregar buttonVariable
   };
+
   try {
     await store.dispatch('campaignsWhatsApp/preview', previewData);
     useAlert(
@@ -98,6 +118,7 @@ const handleSendPreview = async () => {
     <h3 class="text-base font-medium text-n-slate-12">
       {{ t('CAMPAIGN.WHATSAPP.CREATE.FORM.PREVIEW_SECTION.TITLE') }}
     </h3>
+
     <Input
       v-model="localPhone"
       :label="t('CAMPAIGN.WHATSAPP.CREATE.FORM.PREVIEW_SECTION.PHONE_LABEL')"
@@ -106,16 +127,21 @@ const handleSendPreview = async () => {
       "
       message-class="whitespace-pre-line break-words !overflow-visible"
     />
+
+    <!-- Error de teléfono -->
     <div
       v-if="phoneError"
       class="text-red-500 text-xs whitespace-pre-line break-words mt-1"
       v-html="phoneError"
     />
+
+    <!-- Error de preview -->
     <div
       v-if="previewError"
       class="text-red-500 text-xs whitespace-pre-line break-words mt-1"
       v-html="previewError"
     />
+
     <Button
       type="button"
       :label="
