@@ -3,10 +3,9 @@ import { reactive, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useVuelidate } from '@vuelidate/core';
 import { required, minLength } from '@vuelidate/validators';
-import { useMapGetter, useStore } from 'dashboard/composables/store';
+import { useMapGetter } from 'dashboard/composables/store';
 import { useAlert } from 'dashboard/composables';
 
-// Importa tus componentes
 import Input from 'dashboard/components-next/input/Input.vue';
 import Button from 'dashboard/components-next/button/Button.vue';
 import ComboBox from 'dashboard/components-next/combobox/ComboBox.vue';
@@ -16,14 +15,12 @@ import WhatsappPreviewSection from './WhatsappPreviewSection.vue';
 const emit = defineEmits(['submit', 'cancel']);
 const { t } = useI18n();
 
-// STORE MAPPINGS
 const formState = {
   uiFlags: useMapGetter('campaigns/getUIFlags'),
   labels: useMapGetter('labels/getLabels'),
   inboxes: useMapGetter('inboxes/getWhatsAppInboxes'),
 };
 
-// REACTIVE STATE
 const initialState = {
   title: '',
   inboxId: null,
@@ -35,15 +32,13 @@ const initialState = {
 
 const state = reactive({ ...initialState });
 
-// Manejo de media en HEADER
 const dynamicFields = reactive({
   headerMediaFile: null,
   displayFileName: '',
 });
 
-// Arrays para placeholders del BODY y variables dinámicas de botones
-const bodyVariables = reactive([]); // { sourceType: 'text'|'contact_name', value: '' }
-const buttonVariables = reactive([]); // { type: 'URL'|'COPY_CODE'|'PHONE_NUMBER', dynamic: true, value: '' }
+const bodyVariables = reactive([]);
+const buttonVariables = reactive([]);
 
 // VALIDATIONS
 const rules = {
@@ -55,8 +50,27 @@ const rules = {
 };
 const v$ = useVuelidate(rules, state);
 
-// HELPERS, COMPUTED, WATCH
-const store = useStore();
+const areBodyVariablesFilled = computed(() =>
+  bodyVariables.every(v => {
+    if (v.sourceType === 'text') {
+      return v.value.trim() !== '';
+    }
+    return true;
+  })
+);
+
+// Para validar placeholders de BUTTONS
+const areButtonVariablesFilled = computed(() =>
+  buttonVariables.every(btn => {
+    if (btn.dynamic) {
+      return btn.value.trim() !== '';
+    }
+    return true;
+  })
+);
+
+// Para verificar si el template exige un archivo en el header
+const needsHeaderFile = computed(() => showMediaHeaderSection.value);
 
 const selectedInbox = computed(() =>
   formState.inboxes.value.find(inbox => inbox.id === state.inboxId)
@@ -81,15 +95,32 @@ const inboxOptions = computed(() =>
   mapToOptions(formState.inboxes.value, 'id', 'name')
 );
 
-// Extraer templates
+function hasNamedPlaceholders(template) {
+  if (!template || !template.components) return false;
+  return template.components.some(component => {
+    if (!component.text) return false;
+
+    const matches = component.text.match(/\{\{(.*?)\}\}/g);
+    if (!matches) return false;
+
+    return matches.some(ph => {
+      const inside = ph.replace(/\{\{|}}/g, '').trim();
+      return !/^\d+$/.test(inside);
+    });
+  });
+}
+
 const whatsappTemplateOptions = computed(() => {
-  if (selectedInbox.value?.message_templates) {
-    return selectedInbox.value.message_templates.map(template => ({
+  if (!selectedInbox.value?.message_templates) {
+    return [];
+  }
+  return selectedInbox.value.message_templates
+
+    .filter(template => !hasNamedPlaceholders(template))
+    .map(template => ({
       value: template.id,
       label: template.name,
     }));
-  }
-  return [];
 });
 
 // Template seleccionado completo
@@ -122,17 +153,42 @@ const bodySourceTypeOptions = computed(() => [
   },
 ]);
 
-// Validación de variables de botones URL
-const areButtonVariablesValid = computed(() =>
-  buttonVariables.every(btn => {
-    if (btn.type === 'URL' && btn.dynamic) {
-      return btn.value.trim() !== '';
-    }
-    return true;
-  })
-);
+// FORM ERRORS
+function getErrorMessage(field, errorKey) {
+  const baseKey = 'CAMPAIGN.WHATSAPP.CREATE.FORM';
+  return v$.value[field].$error ? t(`${baseKey}.${errorKey}.ERROR`) : '';
+}
+const formErrors = computed(() => ({
+  title: getErrorMessage('title', 'TITLE'),
+  inbox: getErrorMessage('inboxId', 'INBOX'),
+  template: getErrorMessage('selectedWhatsAppTemplate', 'WHATSAPP_TEMPLATE'),
+  audience: getErrorMessage('selectedAudience', 'AUDIENCE'),
+}));
 
-// Parsear placeholders cuando cambia template
+const isSubmitDisabled = computed(() => {
+  return (
+    v$.value.$invalid ||
+    !areBodyVariablesFilled.value ||
+    !areButtonVariablesFilled.value ||
+    (needsHeaderFile.value && !dynamicFields.headerMediaFile)
+  );
+});
+
+function resetState() {
+  Object.assign(state, initialState);
+  dynamicFields.headerMediaFile = null;
+  dynamicFields.displayFileName = '';
+  bodyVariables.splice(0, bodyVariables.length);
+  buttonVariables.splice(0, buttonVariables.length);
+}
+function handleCancel() {
+  emit('cancel');
+}
+
+function formatToUTCString(localDateTime) {
+  return localDateTime ? new Date(localDateTime).toISOString() : null;
+}
+
 watch(
   () => state.selectedWhatsAppTemplate,
   () => {
@@ -143,18 +199,15 @@ watch(
 );
 
 function parseTemplateVariables() {
-  // Limpiamos arrays
   bodyVariables.splice(0, bodyVariables.length);
   buttonVariables.splice(0, buttonVariables.length);
 
   if (!selectedTemplate.value) return;
 
-  // 1) BODY placeholders
   const bodyComp = selectedTemplate.value.components.find(
     c => c.type === 'BODY'
   );
   if (bodyComp?.text) {
-    // Buscar {{...}} en el texto
     const matches = bodyComp.text.match(/{{(.*?)}}/g);
     if (matches) {
       matches.forEach(() => {
@@ -166,7 +219,6 @@ function parseTemplateVariables() {
     }
   }
 
-  // 2) Botones placeholders
   const buttonsComp = selectedTemplate.value.components.find(
     c => c.type === 'BUTTONS'
   );
@@ -198,53 +250,62 @@ function parseTemplateVariables() {
     });
   }
 }
-
-// FORM ERRORS
-function getErrorMessage(field, errorKey) {
-  const baseKey = 'CAMPAIGN.WHATSAPP.CREATE.FORM';
-  return v$.value[field].$error ? t(`${baseKey}.${errorKey}.ERROR`) : '';
+function getAcceptForHeader(format) {
+  switch (format) {
+    case 'IMAGE':
+      return 'image/jpeg,image/png';
+    case 'VIDEO':
+      return 'video/mp4';
+    case 'DOCUMENT':
+      return 'application/pdf';
+    default:
+      return '*/*';
+  }
 }
-const formErrors = computed(() => ({
-  title: getErrorMessage('title', 'TITLE'),
-  inbox: getErrorMessage('inboxId', 'INBOX'),
-  template: getErrorMessage('selectedWhatsAppTemplate', 'WHATSAPP_TEMPLATE'),
-  audience: getErrorMessage('selectedAudience', 'AUDIENCE'),
-}));
-const isSubmitDisabled = computed(() => v$.value.$invalid);
-
-// RESET & CANCEL
-function resetState() {
-  Object.assign(state, initialState);
-  dynamicFields.headerMediaFile = null;
-  dynamicFields.displayFileName = '';
-  bodyVariables.splice(0, bodyVariables.length);
-  buttonVariables.splice(0, buttonVariables.length);
-}
-function handleCancel() {
-  emit('cancel');
-}
-
-// Convertir fecha a UTC
-function formatToUTCString(localDateTime) {
-  return localDateTime ? new Date(localDateTime).toISOString() : null;
+function handleFileChange(event) {
+  const file = event.target.files[0];
+  if (!file) {
+    dynamicFields.headerMediaFile = null;
+    dynamicFields.displayFileName = '';
+    return;
+  }
+  dynamicFields.headerMediaFile = file;
+  const maxLength = 20;
+  dynamicFields.displayFileName =
+    file.name.length > maxLength
+      ? file.name.slice(0, maxLength) + '...'
+      : file.name;
 }
 
+// Submit
 async function handleSubmit() {
   const isFormValid = await v$.value.$validate();
   if (!isFormValid) return;
-  if (!areButtonVariablesValid.value) {
+
+  if (!areBodyVariablesFilled.value) {
+    useAlert(
+      t('CAMPAIGN.WHATSAPP.CREATE.FORM.TEMPLATE.BODY.ERROR_PLACEHOLDERS')
+    );
+    return;
+  }
+
+  if (!areButtonVariablesFilled.value) {
     useAlert(t('CAMPAIGN.WHATSAPP.CREATE.FORM.BUTTONS.ERROR_EMPTY_URL'));
     return;
   }
 
-  // Clonamos el template para no mutar el original
+  if (needsHeaderFile.value && !dynamicFields.headerMediaFile) {
+    useAlert(
+      t('CAMPAIGN.WHATSAPP.CREATE.FORM.TEMPLATE.MEDIA.ERROR_FILE_REQUIRED')
+    );
+    return;
+  }
+
   const template = selectedTemplate.value
     ? JSON.parse(JSON.stringify(selectedTemplate.value))
     : null;
 
-  // Construir FormData con todo
   const formData = new FormData();
-
   formData.append('title', state.title || '');
   formData.append('inbox_id', state.inboxId || '');
   if (template) {
@@ -273,42 +334,10 @@ async function handleSubmit() {
     handleCancel();
   } catch (err) {
     useAlert('Error al crear la campaña. Revisa la consola.');
-    console.error(err);
   }
 }
 
-// Manejo de archivo (HEADER MEDIA)
-function getAcceptForHeader(format) {
-  switch (format) {
-    case 'IMAGE':
-      return 'image/*';
-    case 'VIDEO':
-      return 'video/mp4,video/x-m4v,video/*';
-    case 'DOCUMENT':
-      return '.pdf,.doc,.docx,.xls,.xlsx';
-    default:
-      return '*/*';
-  }
-}
-function handleFileChange(event) {
-  const file = event.target.files[0];
-  if (!file) {
-    dynamicFields.headerMediaFile = null;
-    dynamicFields.displayFileName = '';
-    return;
-  }
-  dynamicFields.headerMediaFile = file;
-  const maxLength = 20;
-  dynamicFields.displayFileName =
-    file.name.length > maxLength
-      ? file.name.slice(0, maxLength) + '...'
-      : file.name;
-}
-
-// Opcional: preview
-function handlePreviewSuccess() {
-  // ...
-}
+function handlePreviewSuccess() {}
 </script>
 
 <template>
@@ -417,7 +446,7 @@ function handlePreviewSuccess() {
           <div
             v-for="(v, idx) in bodyVariables"
             :key="idx"
-            class="flex flex-col gap-1"
+            class="flex flex-col gap-3"
           >
             <label class="text-sm font-medium">
               {{
@@ -432,7 +461,7 @@ function handlePreviewSuccess() {
               :placeholder="
                 t('CAMPAIGN.WHATSAPP.CREATE.FORM.TEMPLATE.BODY.FREE_TEXT')
               "
-              :message="''"
+              message=""
               :disabled="false"
             />
             <input
@@ -537,16 +566,17 @@ function handlePreviewSuccess() {
 
     <hr class="my-2 border-n-slate-6" />
 
+    <!-- Sección de preview -->
     <WhatsappPreviewSection
-      v-model:phoneNumber="state.phoneNumber"
-      :inboxId="state.inboxId"
-      :selectedWhatsAppTemplate="state.selectedWhatsAppTemplate"
-      :selectedInbox="selectedInbox"
-      :headerMediaFile="dynamicFields.headerMediaFile"
-      :bodyVariables="bodyVariables"
-      :buttonVariables="buttonVariables"
-      :isPreviewing="isPreviewing"
-      :previewError="formState.uiFlags.value.previewError"
+      v-model:phone-number="state.phoneNumber"
+      :inbox-id="state.inboxId"
+      :selected-whats-app-template="state.selectedWhatsAppTemplate"
+      :selected-inbox="selectedInbox"
+      :header-media-file="dynamicFields.headerMediaFile"
+      :body-variables="bodyVariables"
+      :button-variables="buttonVariables"
+      :is-previewing="isPreviewing"
+      :preview-error="formState.uiFlags.value.previewError"
       @preview-success="handlePreviewSuccess"
     />
   </div>
