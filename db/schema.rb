@@ -255,6 +255,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_16_061033) do
     t.integer "messages_failed", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "body_variables", default: []
+    t.jsonb "button_variables", default: []
     t.index ["account_id"], name: "index_campaigns_whatsapp_on_account_id"
     t.index ["campaign_status"], name: "index_campaigns_whatsapp_on_campaign_status"
     t.index ["campaign_type"], name: "index_campaigns_whatsapp_on_campaign_type"
