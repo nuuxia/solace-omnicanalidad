@@ -4,11 +4,13 @@ import { useI18n } from 'vue-i18n';
 import { useMessageFormatter } from 'shared/composables/useMessageFormatter';
 import { getInboxIconByType } from 'dashboard/helper/inbox';
 
+// IMPORTS DE COMPONENTES
 import CardLayout from 'dashboard/components-next/CardLayout.vue';
 import Button from 'dashboard/components-next/button/Button.vue';
 import LiveChatCampaignDetails from './LiveChatCampaignDetails.vue';
 import SMSCampaignDetails from './SMSCampaignDetails.vue';
 
+// PROPS
 const props = defineProps({
   title: {
     type: String,
@@ -17,6 +19,11 @@ const props = defineProps({
   message: {
     type: String,
     default: '',
+  },
+  // Agregamos la prop 'template' que puede ser objeto, string o null
+  template: {
+    type: [Object, String, null],
+    default: null,
   },
   isLiveChatType: {
     type: Boolean,
@@ -44,14 +51,15 @@ const props = defineProps({
   },
 });
 
+// EMITS
 const emit = defineEmits(['edit', 'delete']);
 
+// CONSTANTES
 const { t } = useI18n();
-
 const STATUS_COMPLETED = 'completed';
-
 const { formatMessage } = useMessageFormatter();
 
+// COMPUTED O UTILIDADES
 const isActive = computed(() =>
   props.isLiveChatType ? props.isEnabled : props.status !== STATUS_COMPLETED
 );
@@ -61,6 +69,7 @@ const statusTextColor = computed(() => ({
   'text-n-slate-12': !isActive.value,
 }));
 
+// Status textual de la campaña
 const campaignStatus = computed(() => {
   if (props.isLiveChatType) {
     return props.isEnabled
@@ -68,22 +77,80 @@ const campaignStatus = computed(() => {
       : t('CAMPAIGN.LIVE_CHAT.CARD.STATUS.DISABLED');
   }
 
+  // Puede que uses esto solo si manejas SMS o WhatsApp.  
+  // Ajusta el texto a tu caso.
   return props.status === STATUS_COMPLETED
     ? t('CAMPAIGN.SMS.CARD.STATUS.COMPLETED')
     : t('CAMPAIGN.SMS.CARD.STATUS.SCHEDULED');
 });
 
 const inboxName = computed(() => props.inbox?.name || '');
-
 const inboxIcon = computed(() => {
-  const { phone_number: phoneNumber, channel_type: type } = props.inbox;
+  const { phone_number: phoneNumber, channel_type: type } = props.inbox || {};
   return getInboxIconByType(type, phoneNumber);
+});
+
+const parsedTemplate = computed(() => {
+  if (!props.template) return null;
+
+  try {
+    // Si ya es un objeto con estructura válida, retornarlo tal cual
+    if (typeof props.template === 'object' && !Array.isArray(props.template)) {
+      return props.template;
+    }
+
+    // Si es string, intentar parsearlo como JSON
+    if (typeof props.template === 'string') {
+      const parsed = JSON.parse(props.template);
+      if (typeof parsed === 'object' && !Array.isArray(parsed)) {
+        return parsed;
+      }
+    }
+
+    return null;
+  } catch (error) {
+    return null;
+  }
+});
+
+// Extraemos el texto principal del template (por ejemplo, el BODY)
+const getTemplateContent = computed(() => {
+  const template = parsedTemplate.value;
+  if (!template) return '';
+
+  // Si hay 'components', buscamos la parte BODY
+  if (template.components && Array.isArray(template.components)) {
+    const bodyComponent = template.components.find(c => c.type === 'BODY');
+    if (bodyComponent?.text) {
+      return bodyComponent.text;
+    }
+  }
+
+  // Si no hay BODY, ver si hay "template.name"
+  if (template.name) {
+    return `Template: ${template.name}`;
+  }
+
+  return '';
+});
+
+// Este computed decidirá si muestra el contenido del template o el 'message'
+const displayContent = computed(() => {
+  // Si el template existe y se pudo extraer contenido, lo mostramos
+  const templateContent = getTemplateContent.value;
+  if (templateContent) {
+    return templateContent;
+  }
+  // En caso contrario, mostramos el 'message' normal
+  return props.message;
 });
 </script>
 
 <template>
   <CardLayout layout="row">
+    <!-- Contenido principal -->
     <div class="flex flex-col items-start justify-between flex-1 min-w-0 gap-2">
+      <!-- Título y estado -->
       <div class="flex justify-between gap-3 w-fit">
         <span
           class="text-base font-medium capitalize text-n-slate-12 line-clamp-1"
@@ -97,17 +164,33 @@ const inboxIcon = computed(() => {
           {{ campaignStatus }}
         </span>
       </div>
+
+      <!-- Aquí se muestra el contenido del template (o el mensaje) -->
+      <!-- Fíjate que en lugar de props.message, usamos 'displayContent' -->
       <div
-        v-dompurify-html="formatMessage(message, false, false, false)"
+        v-dompurify-html="formatMessage(displayContent)"
         class="text-sm text-n-slate-11 line-clamp-1 [&>p]:mb-0 h-6"
       />
+
+      <!-- Detalles del campaign: LiveChat / SMS / WhatsApp -->
       <div class="flex items-center w-full h-6 gap-2 overflow-hidden">
+        <!-- Si es Live Chat -->
         <LiveChatCampaignDetails
           v-if="isLiveChatType"
           :sender="sender"
           :inbox-name="inboxName"
           :inbox-icon="inboxIcon"
         />
+        <!-- O si fuera WhatsApp (dependiendo de tu lógica) -->
+        <!--
+        <WhatsAppCampaignDetails
+          v-else-if="props.inbox?.channel_type === 'Channel::Whatsapp'"
+          :inbox-name="inboxName"
+          :inbox-icon="inboxIcon"
+          :scheduled-at="scheduledAt"
+        />
+        -->
+
         <SMSCampaignDetails
           v-else
           :inbox-name="inboxName"
