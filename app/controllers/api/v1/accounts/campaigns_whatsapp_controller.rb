@@ -53,7 +53,7 @@ class Api::V1::Accounts::CampaignsWhatsappController < Api::V1::Accounts::BaseCo
     if params[:headerMediaFile].present?
       begin
         Rails.logger.info "📂 Received headerMediaFile; uploading to S3..."
-        header_url = Whatsapp::CampaignPreviewFileUploadService.new(params[:headerMediaFile]).perform
+        header_url = Whatsapp::CampaignWhatsappFileUploadService.new(params[:headerMediaFile]).perform
         parsed_template["header_media_url"] = header_url
         Rails.logger.info "✅ Header media URL saved in template: #{header_url}"
       rescue => e
