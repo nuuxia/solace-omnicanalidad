@@ -147,7 +147,7 @@ module Whatsapp
 
       Rails.logger.info "[CampaignWhatsappPreviewService] Subiendo archivo de cabecera (#{format})..."
 
-      url = Whatsapp::CampaignPreviewFileUploadService.new(header_media_file).perform
+      url = Whatsapp::CampaignWhatsappFileUploadService.new(header_media_file).perform
       header_component['example'] ||= {}
       header_component['example']['header_handle'] = [url]
 
