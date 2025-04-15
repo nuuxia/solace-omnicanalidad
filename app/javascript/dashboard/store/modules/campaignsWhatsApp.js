@@ -3,6 +3,7 @@ import WhatsAppCampaignsAPI from '../../api/campaignsWhatsApp';
 import SyncWhatsAppTemplatesAPI from '../../api/syncWhatsAppTemplates';
 import WhatsAppCampaignsPreviewAPI from '../../api/campaignsWhatsAppPreview';
 import types from '../mutation-types';
+
 export const state = {
   records: [],
   uiFlags: {
@@ -16,6 +17,7 @@ export const state = {
     syncError: null,
   },
 };
+
 const processCampaignData = campaign => {
   if (!campaign) return null;
   try {
@@ -27,6 +29,7 @@ const processCampaignData = campaign => {
     return campaign;
   }
 };
+
 export const getters = {
   getUIFlags: _state => _state.uiFlags,
   getAllCampaigns: _state => {
@@ -42,6 +45,7 @@ export const getters = {
   previewError: _state => _state.uiFlags.previewError,
   syncError: _state => _state.uiFlags.syncError, // Opcional
 };
+
 export const actions = {
   async get({ commit }) {
     commit(types.SET_WHATSAPP_CAMPAIGN_UI_FLAG, { isFetching: true });
@@ -52,28 +56,28 @@ export const actions = {
       );
       commit(types.SET_WHATSAPP_CAMPAIGNS, processedCampaigns);
     } catch (error) {
-      /* Manejo de errores si es necesario */
-      // Opcional: Puedes manejar errores aquí y actualizar el estado
+      // Manejo de errores si es necesario
     } finally {
       commit(types.SET_WHATSAPP_CAMPAIGN_UI_FLAG, { isFetching: false });
     }
   },
-  async create({ commit }, campaignObj) {
+
+  // AQUÍ EL CAMBIO IMPORTANTE:
+  async create({ commit }, formData) {
     commit(types.SET_WHATSAPP_CAMPAIGN_UI_FLAG, { isCreating: true });
     try {
-      const response = await WhatsAppCampaignsAPI.create({
-        campaigns_whatsapp: campaignObj,
-      });
+      // Enviamos directamente el FormData
+      const response = await WhatsAppCampaignsAPI.create(formData);
       const processedCampaign = processCampaignData(response.data);
       commit(types.ADD_WHATSAPP_CAMPAIGN, processedCampaign);
       return processedCampaign;
     } catch (error) {
-      // Opcional: Puedes manejar errores aquí y actualizar el estado
       throw new Error(error);
     } finally {
       commit(types.SET_WHATSAPP_CAMPAIGN_UI_FLAG, { isCreating: false });
     }
   },
+
   async update({ commit }, { id, ...updateObj }) {
     commit(types.SET_WHATSAPP_CAMPAIGN_UI_FLAG, { isUpdating: true });
     try {
@@ -83,24 +87,24 @@ export const actions = {
       const processedCampaign = processCampaignData(response.data);
       commit(types.EDIT_WHATSAPP_CAMPAIGN, processedCampaign);
     } catch (error) {
-      // Opcional: Puedes manejar errores aquí y actualizar el estado
       throw new Error(error);
     } finally {
       commit(types.SET_WHATSAPP_CAMPAIGN_UI_FLAG, { isUpdating: false });
     }
   },
+
   async delete({ commit }, id) {
     commit(types.SET_WHATSAPP_CAMPAIGN_UI_FLAG, { isDeleting: true });
     try {
       await WhatsAppCampaignsAPI.delete(id);
       commit(types.DELETE_WHATSAPP_CAMPAIGN, id);
     } catch (error) {
-      // Opcional: Puedes manejar errores aquí y actualizar el estado
       throw new Error(error);
     } finally {
       commit(types.SET_WHATSAPP_CAMPAIGN_UI_FLAG, { isDeleting: false });
     }
   },
+
   // Integración de syncTemplates
   async syncTemplates({ commit }) {
     commit(types.SET_WHATSAPP_CAMPAIGN_UI_FLAG, {
@@ -109,17 +113,17 @@ export const actions = {
     });
     try {
       const response = await SyncWhatsAppTemplatesAPI.syncTemplates();
-      // Maneja la respuesta si es necesario
       return response.data;
     } catch (error) {
       commit(types.SET_WHATSAPP_CAMPAIGN_UI_FLAG, {
         syncError: error?.response?.data?.message || error.message,
       });
-      throw error; // Opcional: re-lanza el error para manejarlo en el componente
+      throw error;
     } finally {
       commit(types.SET_WHATSAPP_CAMPAIGN_UI_FLAG, { isSyncing: false });
     }
   },
+
   // Integración de preview
   async preview({ commit }, previewData) {
     commit(types.SET_WHATSAPP_CAMPAIGN_UI_FLAG, {
@@ -128,18 +132,18 @@ export const actions = {
     });
     try {
       const response = await WhatsAppCampaignsPreviewAPI.preview(previewData);
-      // Maneja la respuesta si es necesario, por ejemplo, puedes almacenar datos de previsualización
       return response.data;
     } catch (error) {
       commit(types.SET_WHATSAPP_CAMPAIGN_UI_FLAG, {
         previewError: error?.response?.data?.message || error.message,
       });
-      throw error; // Re-lanza el error para manejarlo en el componente si es necesario
+      throw error;
     } finally {
       commit(types.SET_WHATSAPP_CAMPAIGN_UI_FLAG, { isPreviewing: false });
     }
   },
 };
+
 export const mutations = {
   [types.SET_WHATSAPP_CAMPAIGN_UI_FLAG](_state, data) {
     _state.uiFlags = {
@@ -167,6 +171,7 @@ export const mutations = {
     _state.records = _state.records.filter(record => record.id !== id);
   },
 };
+
 export default {
   namespaced: true,
   state,
