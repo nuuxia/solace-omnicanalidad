@@ -1,4 +1,5 @@
 # app/services/whatsapp/template_placeholder_service.rb
+require 'uri'
 module Whatsapp
     class TemplatePlaceholderService
       attr_reader :template, :body_variables, :button_variables, :contact
@@ -112,7 +113,11 @@ module Whatsapp
         header_comp['example']['header_handle'] = [@header_media_url]
   
         if format == 'DOCUMENT'
-          fname = File.basename(@header_media_url)
+          # Parseamos la URL y nos quedamos solo con el nombre, sin parámetros
+          uri   = URI.parse(@header_media_url)
+          fname = File.basename(uri.path)   # => "text_example.pdf"
+        
+          header_comp['example'] ||= {}
           header_comp['example']['header_filename'] = [fname]
         end
       end

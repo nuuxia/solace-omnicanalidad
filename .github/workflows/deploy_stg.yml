@@ -32,7 +32,8 @@ jobs:
             if [ ! -d ".git" ]; then
               git clone git@github.com:nuuxia/solace.git .
             else
-              git pull origin stg
+              git fetch origin stg
+              git reset --hard origin/stg
             fi
 
             export REDIS_PASSWORD=${{ secrets.STG_REDIS_PASSWORD }}
