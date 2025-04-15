@@ -2,14 +2,13 @@
 #
 # Table name: agent_bot_inboxes
 #
-#  id               :bigint           not null, primary key
-#  offline_response :boolean          default(FALSE)
-#  status           :integer          default("active")
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
-#  account_id       :integer
-#  agent_bot_id     :integer
-#  inbox_id         :integer
+#  id           :bigint           not null, primary key
+#  status       :integer          default("active")
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  account_id   :integer
+#  agent_bot_id :integer
+#  inbox_id     :integer
 #
 
 class AgentBotInbox < ApplicationRecord
