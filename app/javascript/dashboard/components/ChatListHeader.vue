@@ -1,5 +1,6 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ConversationBasicFilter from './widgets/conversation/ConversationBasicFilter.vue';
 
 const props = defineProps({
@@ -15,9 +16,9 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
-  activeStatus: {
-    type: String,
-    required: true,
+  activeStatuses: {
+    type: Array,
+    default: () => ['open'],
   },
 });
 
@@ -29,12 +30,25 @@ const emit = defineEmits([
   'filtersModal',
 ]);
 
+const { t } = useI18n();
+
+const currentStatuses = ref([...props.activeStatuses]);
+
 const onBasicFilterChange = (value, type) => {
+  if (type === 'status') {
+    currentStatuses.value = Array.isArray(value) ? [...value] : [value];
+  }
   emit('basicFilterChange', value, type);
 };
 
 const hasAppliedFiltersOrActiveFolders = computed(() => {
   return props.hasAppliedFilters || props.hasActiveFolders;
+});
+
+const chatStatusLabel = computed(() => {
+  return currentStatuses.value
+    .map(status => t(`CHAT_LIST.CHAT_STATUS_FILTER_ITEMS.${status}.TEXT`))
+    .join(', ');
 });
 </script>
 
@@ -57,7 +71,7 @@ const hasAppliedFiltersOrActiveFolders = computed(() => {
         v-if="!hasAppliedFiltersOrActiveFolders"
         class="p-1 my-0.5 mx-1 rounded-md capitalize bg-slate-50 dark:bg-slate-800 text-xxs text-slate-600 dark:text-slate-300"
       >
-        {{ $t(`CHAT_LIST.CHAT_STATUS_FILTER_ITEMS.${activeStatus}.TEXT`) }}
+        {{ chatStatusLabel }}
       </span>
     </div>
     <div class="flex items-center gap-1">

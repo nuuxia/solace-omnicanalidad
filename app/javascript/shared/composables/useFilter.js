@@ -96,20 +96,20 @@ export const useFilter = ({ filteri18nKey, attributeModel }) => {
     activeAssigneeTab
   ) => {
     if (activeStatus !== '') {
+      const normalizedStatus = Array.isArray(activeStatus)
+        ? activeStatus
+        : [activeStatus];
+
       return {
         attribute_key: 'status',
         attribute_model: 'standard',
         filter_operator: 'equal_to',
-        values: [
-          {
-            id: activeStatus,
-            name: $t(`CHAT_LIST.CHAT_STATUS_FILTER_ITEMS.${activeStatus}.TEXT`),
-          },
-        ],
-        query_operator: 'and',
+        values: normalizedStatus,
+        query_operator: 'or',
         custom_attribute_type: '',
       };
     }
+
     if (activeAssigneeTab === wootConstants.ASSIGNEE_TYPE.ME) {
       return {
         attribute_key: 'assignee_id',
@@ -119,6 +119,7 @@ export const useFilter = ({ filteri18nKey, attributeModel }) => {
         custom_attribute_type: '',
       };
     }
+
     return null;
   };
 

@@ -81,7 +81,7 @@ const conversationListRef = ref(null);
 const conversationDynamicScroller = ref(null);
 
 const activeAssigneeTab = ref(wootConstants.ASSIGNEE_TYPE.ME);
-const activeStatus = ref(wootConstants.STATUS_TYPE.OPEN);
+const activeStatus = ref([wootConstants.STATUS_TYPE.OPEN]);
 const activeUnread = ref(wootConstants.UNREAD_TYPE.READ);
 const activeSortBy = ref(wootConstants.SORT_BY_TYPE.LAST_ACTIVITY_AT_DESC);
 const showAdvancedFilters = ref(false);
@@ -364,7 +364,7 @@ const uniqueInboxes = computed(() => {
 function setFiltersFromUISettings() {
   const { conversations_filter_by: filterBy = {} } = uiSettings.value;
   const { status, order_by: orderBy, unread } = filterBy;
-  activeStatus.value = status || wootConstants.STATUS_TYPE.OPEN;
+  activeStatus.value = status || [wootConstants.STATUS_TYPE.OPEN];
   activeUnread.value = unread || wootConstants.UNREAD_TYPE.READ;
   activeSortBy.value =
     Object.keys(wootConstants.SORT_BY_TYPE).find(
@@ -530,6 +530,14 @@ function onToggleAdvanceFiltersModal() {
 }
 
 function fetchConversations() {
+
+  const currentFilters = JSON.stringify(conversationFilters.value);
+  const lastFetchedFilters = JSON.stringify(store.state.conversations.conversationFilters);
+  if (currentFilters === lastFetchedFilters && !chatListLoading.value) {
+    emitConversationLoaded();
+    return; // No recargar si los filtros no cambiaron y no está cargando
+  }
+
   store.dispatch('updateChatListFilters', conversationFilters.value);
   store.dispatch('fetchAllConversations').then(emitConversationLoaded);
 }
