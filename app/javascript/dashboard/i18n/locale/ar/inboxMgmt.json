@@ -735,7 +735,7 @@
         "USER_MESSAGE": "مرحبا",
         "AGENT_MESSAGE": "مرحبا"
       },
-      "BRANDING_TEXT": "مدعوم بواسطة Chatwoot",
+      "BRANDING_TEXT": "مدعوم بواسطة Solace",
       "SCRIPT_SETTINGS": "\n      window.chatwootSettings = {options};"
     },
     "EMAIL_PROVIDERS": {
