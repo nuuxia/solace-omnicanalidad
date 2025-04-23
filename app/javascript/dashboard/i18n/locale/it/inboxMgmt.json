@@ -735,7 +735,7 @@
         "USER_MESSAGE": "Salve",
         "AGENT_MESSAGE": "Ciao"
       },
-      "BRANDING_TEXT": "Offerto da Chatwoot",
+      "BRANDING_TEXT": "Offerto da Solace",
       "SCRIPT_SETTINGS": "\n      window.chatwootSettings = {options};"
     },
     "EMAIL_PROVIDERS": {

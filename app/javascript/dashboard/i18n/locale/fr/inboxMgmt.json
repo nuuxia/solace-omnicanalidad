@@ -735,7 +735,7 @@
         "USER_MESSAGE": "Salut",
         "AGENT_MESSAGE": "Bonjour"
       },
-      "BRANDING_TEXT": "Propulsé par Chatwoot",
+      "BRANDING_TEXT": "Propulsé par Solace",
       "SCRIPT_SETTINGS": "\n      window.chatwootSettings = {options};"
     },
     "EMAIL_PROVIDERS": {

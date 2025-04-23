@@ -735,7 +735,7 @@
         "USER_MESSAGE": "Olá",
         "AGENT_MESSAGE": "Olá"
       },
-      "BRANDING_TEXT": "Desenvolvido por Chatwoot",
+      "BRANDING_TEXT": "Desenvolvido por Solace",
       "SCRIPT_SETTINGS": "\n      window.chatwootSettings = {options};"
     },
     "EMAIL_PROVIDERS": {
