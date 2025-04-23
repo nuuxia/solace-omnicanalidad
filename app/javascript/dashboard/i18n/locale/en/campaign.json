@@ -82,6 +82,7 @@
     "WHATSAPP": {
       "HEADER_TITLE": "WhatsApp campaigns",
       "NEW_CAMPAIGN": "Create campaign",
+      "NEW_DIRECT_CAMPAIGN": "Create direct campaign",
       "CARD": {
         "STATUS": {
           "ENABLED": "Enabled",
@@ -102,6 +103,7 @@
       },
       "CREATE": {
         "TITLE": "Create WhatsApp campaign",
+        "TITLE_DIRECT": "Create direct WhatsApp campaign",
         "CANCEL_BUTTON_TEXT": "Cancel",
         "CREATE_BUTTON_TEXT": "Create",
         "FORM": {

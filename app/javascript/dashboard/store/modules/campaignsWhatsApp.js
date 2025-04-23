@@ -3,7 +3,8 @@ import WhatsAppCampaignsAPI from '../../api/campaignsWhatsApp';
 import SyncWhatsAppTemplatesAPI from '../../api/syncWhatsAppTemplates';
 import WhatsAppCampaignsPreviewAPI from '../../api/campaignsWhatsAppPreview';
 import types from '../mutation-types';
-
+import WhatsAppCampaignsDirectAPI from '../../api/campaignsWhatsAppDirect';
+import WhatsAppCampaignDirectPreviewAPI from '../../api/campaignsWhatsAppDirectPreview';
 export const state = {
   records: [],
   uiFlags: {
@@ -132,6 +133,62 @@ export const actions = {
     });
     try {
       const response = await WhatsAppCampaignsPreviewAPI.preview(previewData);
+      return response.data;
+    } catch (error) {
+      commit(types.SET_WHATSAPP_CAMPAIGN_UI_FLAG, {
+        previewError: error?.response?.data?.message || error.message,
+      });
+      throw error;
+    } finally {
+      commit(types.SET_WHATSAPP_CAMPAIGN_UI_FLAG, { isPreviewing: false });
+    }
+  },
+
+  // --- CREATE Direct Campaign ---
+  async createDirectCampaign({ commit }, formData) {
+    commit(types.SET_WHATSAPP_CAMPAIGN_UI_FLAG, { isCreating: true });
+    try {
+      const response = await WhatsAppCampaignsDirectAPI.create(formData);
+      const processed = processCampaignData(response.data);
+      commit(types.ADD_WHATSAPP_CAMPAIGN, processed);
+      return processed;
+    } finally {
+      commit(types.SET_WHATSAPP_CAMPAIGN_UI_FLAG, { isCreating: false });
+    }
+  },
+
+  // --- UPDATE Direct Campaign ---
+  async updateDirectCampaign({ commit }, { id, ...updateObj }) {
+    commit(types.SET_WHATSAPP_CAMPAIGN_UI_FLAG, { isUpdating: true });
+    try {
+      const response = await WhatsAppCampaignsDirectAPI.update(id, updateObj);
+      const processed = processCampaignData(response.data);
+      commit(types.EDIT_WHATSAPP_CAMPAIGN, processed);
+      return processed;
+    } finally {
+      commit(types.SET_WHATSAPP_CAMPAIGN_UI_FLAG, { isUpdating: false });
+    }
+  },
+
+  // --- DELETE Direct Campaign ---
+  async deleteDirectCampaign({ commit }, id) {
+    commit(types.SET_WHATSAPP_CAMPAIGN_UI_FLAG, { isDeleting: true });
+    try {
+      await WhatsAppCampaignsDirectAPI.delete(id);
+      commit(types.DELETE_WHATSAPP_CAMPAIGN, id);
+    } finally {
+      commit(types.SET_WHATSAPP_CAMPAIGN_UI_FLAG, { isDeleting: false });
+    }
+  },
+
+  // --- PREVIEW Direct Campaign ---
+  async previewDirectCampaign({ commit }, previewData) {
+    commit(types.SET_WHATSAPP_CAMPAIGN_UI_FLAG, {
+      isPreviewing: true,
+      previewError: null,
+    });
+    try {
+      const response = await WhatsAppCampaignDirectPreviewAPI.create(previewData);
       return response.data;
     } catch (error) {
       commit(types.SET_WHATSAPP_CAMPAIGN_UI_FLAG, {
