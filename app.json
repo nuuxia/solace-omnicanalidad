@@ -1,9 +1,9 @@
 {
   "name": "Chatwoot",
-  "description": "Chatwoot is a customer support tool for instant messaging channels",
-  "website": "https://www.chatwoot.com/",
+  "description": "Solace is a customer support tool for instant messaging channels",
+  "website": "https://www.solace.nuuxia.com/",
   "repository": "https://github.com/chatwoot/chatwoot",
-  "logo": "https://app.chatwoot.com/brand-assets/logo_thumbnail.svg",
+  "logo": "https://solace.nuuxia.com/brand-assets/logo_thumbnail.svg",
   "keywords": [
     "live chat",
     "customer support",
