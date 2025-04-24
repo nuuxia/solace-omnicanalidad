@@ -239,11 +239,11 @@
     }
   },
   "ONBOARDING": {
-    "TITLE": "您好 👋, 欢迎来到 {installationName}!",
-    "DESCRIPTION": "感谢您注册。我们希望您能够充分使用 {installationName}。 这里有几件您可以在 {installationName} 做的事情，让体验变得愉快。",
-    "GREETING_MORNING": "👋 Good morning, {name}. Welcome to {installationName}.",
-    "GREETING_AFTERNOON": "👋 Good afternoon, {name}. Welcome to {installationName}.",
-    "GREETING_EVENING": "👋 Good evening, {name}. Welcome to {installationName}.",
+    "TITLE": "您好 👋, 欢迎来到 Solace!",
+    "DESCRIPTION": "感谢您注册。我们希望您能够充分使用 Solace。 这里有几件您可以在 Solace 做的事情，让体验变得愉快。",
+    "GREETING_MORNING": "👋 Good morning, {name}. Welcome to Solace.",
+    "GREETING_AFTERNOON": "👋 Good afternoon, {name}. Welcome to Solace.",
+    "GREETING_EVENING": "👋 Good evening, {name}. Welcome to Solace.",
     "READ_LATEST_UPDATES": "阅读我们的最新升级日志",
     "ALL_CONVERSATION": {
       "TITLE": "您的所有对话都在一个地方",

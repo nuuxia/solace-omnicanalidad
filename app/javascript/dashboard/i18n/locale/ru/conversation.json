@@ -239,11 +239,11 @@
     }
   },
   "ONBOARDING": {
-    "TITLE": "Привет 👋, добро пожаловать в {installationName}!",
-    "DESCRIPTION": "Спасибо за регистрацию. Мы хотим, чтобы вы получили максимум от {installationName}. Вот несколько вещей, которые вы можете сделать в {installationName}, чтобы получить ещё больше приятных впечатлений.",
-    "GREETING_MORNING": "👋 Good morning, {name}. Welcome to {installationName}.",
-    "GREETING_AFTERNOON": "👋 Good afternoon, {name}. Welcome to {installationName}.",
-    "GREETING_EVENING": "👋 Good evening, {name}. Welcome to {installationName}.",
+    "TITLE": "Привет 👋, добро пожаловать в Solace!",
+    "DESCRIPTION": "Спасибо за регистрацию. Мы хотим, чтобы вы получили максимум от Solace. Вот несколько вещей, которые вы можете сделать в Solace, чтобы получить ещё больше приятных впечатлений.",
+    "GREETING_MORNING": "👋 Good morning, {name}. Welcome to Solace.",
+    "GREETING_AFTERNOON": "👋 Good afternoon, {name}. Welcome to Solace.",
+    "GREETING_EVENING": "👋 Good evening, {name}. Welcome to Solace.",
     "READ_LATEST_UPDATES": "Читайте о наших последних обновлениях",
     "ALL_CONVERSATION": {
       "TITLE": "Все ваши диалоги в одном месте",

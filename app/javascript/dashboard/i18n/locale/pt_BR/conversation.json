@@ -239,11 +239,11 @@
     }
   },
   "ONBOARDING": {
-    "TITLE": "Olá, 👋. Bem-vindo ao {installationName}!",
-    "DESCRIPTION": "Obrigado por se inscrever. Queremos que você aproveite o máximo de {installationName}. Aqui estão algumas coisas que você consegue fazer no(a) {installationName} para que tenha uma experiência agradável.",
-    "GREETING_MORNING": "👋 Bom dia, {name}. Bem-vindo a {installationName}.",
-    "GREETING_AFTERNOON": "👋 Boa tarde, {name}. Bem-vindo a {installationName}.",
-    "GREETING_EVENING": "👋 Boa noite, {name}. Bem-vindo a {installationName}.",
+    "TITLE": "Olá, 👋. Bem-vindo ao Solace!",
+    "DESCRIPTION": "Obrigado por se inscrever. Queremos que você aproveite o máximo de Solace. Aqui estão algumas coisas que você consegue fazer no(a) Solace para que tenha uma experiência agradável.",
+    "GREETING_MORNING": "👋 Bom dia, {name}. Bem-vindo a Solace.",
+    "GREETING_AFTERNOON": "👋 Boa tarde, {name}. Bem-vindo a Solace.",
+    "GREETING_EVENING": "👋 Boa noite, {name}. Bem-vindo a Solace.",
     "READ_LATEST_UPDATES": "Leia as últimas atualizações",
     "ALL_CONVERSATION": {
       "TITLE": "Todas as suas conversas em um só lugar",
