@@ -88,7 +88,13 @@ Rails.application.routes.draw do
           resources :campaigns, only: [:index, :create, :show, :update, :destroy]
           resources :campaigns_whatsapp, only: [:index, :show, :create, :update, :destroy] do 
             collection do
-               post :preview, to: 'campaigns_whatsapp_preview#create'
+              post   :preview,            to: 'campaigns_whatsapp_preview#create'
+              post   :direct,             to: 'campaigns_whatsapp_direct#create'
+              post   'direct/preview',    to: 'campaigns_whatsapp_direct_preview#create'
+            end
+            member do
+              patch  :direct,             to: 'campaigns_whatsapp_direct#update'
+              delete :direct,             to: 'campaigns_whatsapp_direct#destroy'
             end
           end
           resources :dashboard_apps, only: [:index, :show, :create, :update, :destroy]
