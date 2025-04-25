@@ -100,7 +100,7 @@ class Whatsapp::IncomingMessageBaseService
   end
 
   def create_flow_message(message)
-    create_message(message) # inicializa @message con valores comunes
+    create_message(message)
 
     interactive = message[:interactive]
     return unless interactive && interactive[:type] == 'nfm_reply'
@@ -114,17 +114,23 @@ class Whatsapp::IncomingMessageBaseService
     parsed = JSON.parse(raw_json) rescue {}
     return if parsed.blank?
 
-    # Remover campos que no quieras mostrar
-    ignored_keys = ['flow_token', 'screen_id', 'step_id']
+    # Claves a ignorar explícitamente
+    ignored_keys = %w[flow_token screen_id step_id]
 
-    # Formatear contenido limpio
     formatted = parsed.map do |key, value|
       next if ignored_keys.include?(key.to_s)
-      field_name = key.to_s.tr('_', ' ').capitalize
-      "**#{field_name}:** #{value}"
+
+      # Limpieza del nombre del campo: elimina screen, números, reemplaza _ por espacios
+      clean_key = key.to_s
+                    .gsub(/^screen\s*\d+/i, '')   # elimina "screen 0" al inicio
+                    .gsub(/\d+/, '')              # elimina otros números
+                    .gsub(/[_\s]+/, ' ')          # reemplaza guiones bajos y múltiples espacios por uno solo
+                    .strip
+                    .split.map(&:capitalize).join(' ') # pone cada palabra con mayúscula
+
+      "**#{clean_key}:** #{value}"
     end.compact.join("\n")
 
-    # Título del flujo
     flow_title = flow_data[:name].to_s.strip
     flow_title = flow_title.blank? ? 'Formulario recibido' : "*#{flow_title}*"
 
