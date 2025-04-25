@@ -117,22 +117,22 @@ class Whatsapp::IncomingMessageBaseService
     # Claves a ignorar explícitamente
     ignored_keys = %w[flow_token screen_id step_id]
 
-    formatted = parsed.map do |key, value|
+    # Map the JSON keys and values in their original order, excluding ignored keys
+    formatted = parsed.each_with_index.map do |(key, value), index|
       next if ignored_keys.include?(key.to_s)
 
-      # Limpieza del nombre del campo: elimina screen, números, reemplaza _ por espacios
+      # Limpieza del nombre del campo: elimina números, reemplaza _ por espacios
       clean_key = key.to_s
-                    .gsub(/^screen\s*\d+/i, '')   # elimina "screen 0" al inicio
-                    .gsub(/\d+/, '')              # elimina otros números
+                    .gsub(/\d+/, '')              # elimina números
                     .gsub(/[_\s]+/, ' ')          # reemplaza guiones bajos y múltiples espacios por uno solo
                     .strip
                     .split.map(&:capitalize).join(' ') # pone cada palabra con mayúscula
 
-      "**#{clean_key}:** #{value}"
+      "#{index + 1}. #{clean_key}: #{value}"
     end.compact.join("\n")
 
     flow_title = flow_data[:name].to_s.strip
-    flow_title = flow_title.blank? ? 'Formulario recibido' : "*#{flow_title}*"
+    flow_title = flow_title.blank? ? 'Formulario recibido' : flow_title
 
     @message.content = "#{flow_title}\n\n#{formatted}"
     @message.save!
