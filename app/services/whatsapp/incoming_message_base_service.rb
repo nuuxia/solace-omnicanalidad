@@ -89,13 +89,13 @@ class Whatsapp::IncomingMessageBaseService
     create_message(message)
 
     interactive = message[:interactive]
-    return unless interactive && interactive[:type] == 'nfm_reply'
+    return unless interactive&.[](:type) == 'nfm_reply'
 
     flow_data = interactive[:nfm_reply]
     return unless flow_data
 
     raw_json = flow_data[:response_json]
-    return unless raw_json
+    return if raw_json.blank?
 
     parsed = JSON.parse(raw_json) rescue {}
     return if parsed.blank?
@@ -103,25 +103,25 @@ class Whatsapp::IncomingMessageBaseService
     ignored_keys = %w[flow_token screen_id step_id]
 
     index = 1
-    formatted = parsed.each_with_object([]) do |(key, value), output|
+    formatted = parsed.each_with_object([]) do |(key, value), lines|
       next if ignored_keys.include?(key.to_s)
 
-      # Limpieza del nombre del campo
-      clean_key = key
-                  .to_s
-                  .sub(/^screen_?/i, '')         # elimina "screen_"
-                  .gsub(/\b\d+\b/, '')           # elimina números aislados
-                  .tr('_', ' ')                  # reemplaza guiones bajos
-                  .squeeze(' ')                  # colapsa espacios dobles
-                  .strip
-                  .split.map(&:capitalize).join(' ') # capitaliza
+      clean_key = key.to_s
+                    .sub(/^screen_?/i, '')               # elimina "screen_"
+                    .gsub(/\b\d+\b/, '')                 # elimina números enteros aislados
+                    .gsub(/\A\d+\s*/, '')                # elimina números al inicio seguidos de espacios
+                    .gsub(/\s*\d+\z/, '')                # elimina números al final
+                    .tr('_', ' ')                        # reemplaza _
+                    .squeeze(' ')                        # colapsa dobles espacios
+                    .strip
+                    .split.map(&:capitalize).join(' ')  # capitaliza cada palabra
 
-      output << "#{index}. **#{clean_key}:** #{value}"
+      lines << "#{index}. **#{clean_key}:** #{value}"
       index += 1
     end.join("\n")
 
-    flow_title = flow_data[:name].to_s.strip
-    flow_title = flow_title.blank? ? 'Formulario recibido' : "*#{flow_title}*"
+    flow_title = flow_data[:name].to_s.strip.presence || 'Formulario recibido'
+    flow_title = "*#{flow_title}*"
 
     @message.content = "#{flow_title}\n\n#{formatted}"
     @message.save!
