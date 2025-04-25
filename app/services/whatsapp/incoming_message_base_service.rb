@@ -54,20 +54,6 @@ class Whatsapp::IncomingMessageBaseService
     message.save!
   end
 
-  # def create_messages
-  #   message = @processed_params[:messages].first
-  #   log_error(message) && return if error_webhook_event?(message)
-  #   process_in_reply_to(message)
-
-  #   if message_type == 'contacts'
-  #     create_contact_messages(message)
-  #   elsif message_type == 'order'
-  #     create_order_message(message)
-  #   else
-  #     create_regular_message(message)
-  #   end
-  # end
-
   def create_messages
     message = @processed_params[:messages].first
     log_error(message) && return if error_webhook_event?(message)
@@ -116,24 +102,22 @@ class Whatsapp::IncomingMessageBaseService
 
     ignored_keys = %w[flow_token screen_id step_id]
 
+    index = 1
     formatted = parsed.each_with_object([]) do |(key, value), output|
       next if ignored_keys.include?(key.to_s)
 
-      # Limpieza del campo:
-      # - quita screen_ al principio
-      # - quita números aislados
-      # - reemplaza guiones bajos por espacios
-      # - capitaliza cada palabra
+      # Limpieza del nombre del campo
       clean_key = key
                   .to_s
-                  .sub(/^screen_?/i, '')        # elimina "screen_" al inicio
-                  .gsub(/\b\d+\b/, '')          # elimina números aislados (como "_2")
-                  .tr('_', ' ')                 # reemplaza _ por espacios
-                  .squeeze(' ')                 # colapsa espacios dobles
+                  .sub(/^screen_?/i, '')         # elimina "screen_"
+                  .gsub(/\b\d+\b/, '')           # elimina números aislados
+                  .tr('_', ' ')                  # reemplaza guiones bajos
+                  .squeeze(' ')                  # colapsa espacios dobles
                   .strip
-                  .split.map(&:capitalize).join(' ') # capitaliza cada palabra
+                  .split.map(&:capitalize).join(' ') # capitaliza
 
-      output << "**#{clean_key}:** #{value}"
+      output << "#{index}. **#{clean_key}:** #{value}"
+      index += 1
     end.join("\n")
 
     flow_title = flow_data[:name].to_s.strip
