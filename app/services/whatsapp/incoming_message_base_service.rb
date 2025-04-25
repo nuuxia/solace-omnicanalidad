@@ -114,25 +114,30 @@ class Whatsapp::IncomingMessageBaseService
     parsed = JSON.parse(raw_json) rescue {}
     return if parsed.blank?
 
-    # Claves a ignorar explícitamente
     ignored_keys = %w[flow_token screen_id step_id]
 
-    # Map the JSON keys and values in their original order, excluding ignored keys
-    formatted = parsed.each_with_index.map do |(key, value), index|
+    formatted = parsed.each_with_object([]) do |(key, value), output|
       next if ignored_keys.include?(key.to_s)
 
-      # Limpieza del nombre del campo: elimina números, reemplaza _ por espacios
-      clean_key = key.to_s
-                    .gsub(/\d+/, '')              # elimina números
-                    .gsub(/[_\s]+/, ' ')          # reemplaza guiones bajos y múltiples espacios por uno solo
-                    .strip
-                    .split.map(&:capitalize).join(' ') # pone cada palabra con mayúscula
+      # Limpieza del campo:
+      # - quita screen_ al principio
+      # - quita números aislados
+      # - reemplaza guiones bajos por espacios
+      # - capitaliza cada palabra
+      clean_key = key
+                  .to_s
+                  .sub(/^screen_?/i, '')        # elimina "screen_" al inicio
+                  .gsub(/\b\d+\b/, '')          # elimina números aislados (como "_2")
+                  .tr('_', ' ')                 # reemplaza _ por espacios
+                  .squeeze(' ')                 # colapsa espacios dobles
+                  .strip
+                  .split.map(&:capitalize).join(' ') # capitaliza cada palabra
 
-      "#{index + 1}. #{clean_key}: #{value}"
-    end.compact.join("\n")
+      output << "**#{clean_key}:** #{value}"
+    end.join("\n")
 
     flow_title = flow_data[:name].to_s.strip
-    flow_title = flow_title.blank? ? 'Formulario recibido' : flow_title
+    flow_title = flow_title.blank? ? 'Formulario recibido' : "*#{flow_title}*"
 
     @message.content = "#{flow_title}\n\n#{formatted}"
     @message.save!
