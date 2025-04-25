@@ -156,6 +156,12 @@
             "SUCCESS_MESSAGE": "WhatsApp campaign created successfully",
             "ERROR_MESSAGE": "There was an error. Please try again."
           },
+          "FILE": {
+            "LABEL": "Select contacts file (.csv, .xls, .xlsx)",
+            "ERROR": "Contacts file is required",
+            "MISSING_COLUMNS": "The file must include a column named 'phone_number' and 'status'",
+            "INVALID_FORMAT": "Invalid format. Only .csv, .xls or .xlsx are supported"
+            },
           "TEMPLATE":{
             "FILE": "File: ",
             "MEDIA":{

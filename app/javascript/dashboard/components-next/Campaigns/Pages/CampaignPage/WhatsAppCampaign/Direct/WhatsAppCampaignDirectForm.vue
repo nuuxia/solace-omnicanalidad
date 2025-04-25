@@ -1,10 +1,3 @@
-<!-- -----------------------------------------------------------------------
-  CreateWhatsAppDirectCampaignForm.vue  (v6 – 22‑Abr‑2025)
-  · FIX: uiFlags puede llegar como undefined al montar -> defensas
-  · FIX: todas las lecturas de uiFlags usan valor por defecto {}
-  · Mantiene los arreglos anteriores (HEADER null‑safe, validaciones, etc.)
--------------------------------------------------------------------------- -->
-
 <script setup>
 import { reactive, ref, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -21,13 +14,13 @@ import ComboBox from 'dashboard/components-next/combobox/ComboBox.vue';
 import { useMapGetter } from 'dashboard/composables/store';
 import { useAlert } from 'dashboard/composables';
 
-/* ───────────────────────── i18n & emits ─────────────────────────────── */
+/* ───────────────────────── i18n & emits ─────────────────────────────── */
 const { t } = useI18n();
 const emit  = defineEmits(['submit', 'cancel', 'preview']);
 
 /* ───────────────────────── estado global ─────────────────────────────── */
 const formState = {
-  uiFlags : useMapGetter('campaignsWhatsapp/getUIFlags'),
+  uiFlags : useMapGetter('campaignsWhatsApp/getUIFlags'),
   inboxes : useMapGetter('inboxes/getWhatsAppInboxes'),
 };
 
@@ -149,9 +142,9 @@ const isPreviewDisabled = computed(
     (showMediaHeader.value && !files.headerMediaFile)
 );
 
-/* ─────────────────────── CSV / XLS helpers ───────────────────────────── */
+/* ─────────────────────── CSV / XLS helpers ───────────────────────────── */
 const validateHeaders = headers => {
-  const lower   = headers.map(h => h.trim().toLowerCase());
+  const lower = headers.map(h => h.trim().toLowerCase());
   const missing = ['phone_number', 'status'].filter(r => !lower.includes(r));
   return { valid: !missing.length, missing };
 };
@@ -159,7 +152,7 @@ const processHeaders = headers => {
   const { valid, missing } = validateHeaders(headers);
   if (!valid) {
     useAlert(
-      t('CAMPAIGN.WHATSAPP.CREATE.FORM.CONTACTS_FILE.MISSING_COLUMNS', {
+      t('CAMPAIGN.WHATSAPP.CREATE.FORM.MISSING_COLUMNS', {
         cols: missing.join(', '),
       })
     );
@@ -193,7 +186,7 @@ function handleContactsChange(e) {
       const arr = XLSX.utils.sheet_to_json(ws, { header: 1, range: 0, blankrows: false });
       processHeaders(arr[0] || []);
     } else {
-      useAlert(t('CAMPAIGN.WHATSAPP.CREATE.FORM.CONTACTS_FILE.INVALID_FORMAT'));
+      useAlert(t('CAMPAIGN.WHATSAPP.CREATE.FORM.FILE.INVALID_FORMAT'));
       files.contactsFile = null;
       files.contactsFileName = '';
       csvColumns.value = [];
@@ -215,7 +208,7 @@ function handleHeaderChange(e) {
     : '';
 }
 
-/* Cambios de plantilla → re‑parse placeholders */
+/* Cambios de plantilla → re-parse placeholders */
 watch(() => state.selectedWhatsAppTemplate, parseTemplateVars);
 function parseTemplateVars() {
   bodyVariables.splice(0);
@@ -266,13 +259,15 @@ async function handleSubmit() {
   fd.append('button_variables', JSON.stringify(buttonVariables));
   if (files.headerMediaFile) fd.append('headerMediaFile', files.headerMediaFile);
 
-  emit('submit', fd); // → campaignsWhatsapp/createDirectCampaign
+  emit('submit', fd); // → campaignsWhatsApp/createDirectCampaign
   resetForm();
 }
 
 function resetForm() {
   Object.assign(state, initialState);
-  Object.keys(files).forEach(k => (files[k] = k.includes('Name') ? '' : null));
+  Object.keys(files).forEach(k =>
+    (files[k] = k.includes('Name') ? '' : null)
+  );
   csvColumns.value = [];
   bodyVariables.splice(0);
   buttonVariables.splice(0);
@@ -286,7 +281,7 @@ const handleCancel = () => emit('cancel');
     <!-- Contacts file -->
     <div class="space-y-1">
       <label class="block text-sm font-medium text-n-slate-12">
-        {{ t('CAMPAIGN.WHATSAPP.CREATE.FORM.CONTACTS_FILE.LABEL') }}
+        {{ t('CAMPAIGN.WHATSAPP.CREATE.FORM.FILE.LABEL') }}
       </label>
 
       <label
@@ -306,7 +301,7 @@ const handleCancel = () => emit('cancel');
              class="sr-only" @change="handleContactsChange" />
 
       <p v-if="v$.contactsFile.$error" class="text-xs text-red-500 mt-1">
-        {{ t('CAMPAIGN.WHATSAPP.CREATE.FORM.CONTACTS_FILE.ERROR') }}
+        {{ t('CAMPAIGN.WHATSAPP.CREATE.FORM.FILE.ERROR') }}
       </p>
     </div>
 
@@ -434,7 +429,7 @@ const handleCancel = () => emit('cancel');
               type="button" @click="handleCancel"/>
       <div class="flex gap-2">
         <Button
-          :label="t('CAMPAIGN.WHATSAPP.CREATE.FORM.BUTTONS.PREVIEW')"
+          :label="t('CAMPAIGN.WHATSAPP.CREATE.FORM.PREVIEW_SECTION.BUTTON_LABEL')"
           :disabled="isPreviewing || isPreviewDisabled"
           :is-loading="isPreviewing"
           type="button"

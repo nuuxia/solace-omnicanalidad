@@ -7,42 +7,15 @@ import Input from 'dashboard/components-next/input/Input.vue';
 import Button from 'dashboard/components-next/button/Button.vue';
 
 const props = defineProps({
-  phoneNumber: {
-    type: String,
-    default: '',
-  },
-  inboxId: {
-    type: [Number, String],
-    default: null,
-  },
-  selectedWhatsAppTemplate: {
-    type: [Number, String],
-    default: null,
-  },
-  selectedInbox: {
-    type: Object,
-    default: null,
-  },
-  isPreviewing: {
-    type: Boolean,
-    default: false,
-  },
-  previewError: {
-    type: String,
-    default: '',
-  },
-  headerMediaFile: {
-    type: [File, null],
-    default: null,
-  },
-  bodyVariables: {
-    type: Array,
-    default: () => [],
-  },
-  buttonVariables: {
-    type: Array,
-    default: () => [],
-  },
+  phoneNumber: { type: String, default: '' },
+  inboxId: { type: [Number, String], default: null },
+  selectedWhatsAppTemplate: { type: [Number, String], default: null },
+  selectedInbox: { type: Object, default: null },
+  isPreviewing: { type: Boolean, default: false },
+  previewError: { type: String, default: '' },
+  headerMediaFile: { type: [File, null], default: null },
+  bodyVariables: { type: Array, default: () => [] },
+  buttonVariables: { type: Array, default: () => [] },
 });
 
 const emit = defineEmits(['update:phoneNumber', 'preview-success']);
@@ -52,127 +25,84 @@ const store = useStore();
 
 const phoneError = ref('');
 
-// Validamos que el teléfono:
-// Debe iniciar con '+', luego solo dígitos, sin espacios
-const validatePhone = phone => {
-  return /^\+\d+$/.test(phone);
-};
+const validatePhone = phone => /^\+\d{6,15}$/.test(phone);
 
-// Para el input del teléfono
+// Phone local
 const localPhone = computed({
-  get() {
-    return props.phoneNumber;
-  },
-  set(value) {
-    emit('update:phoneNumber', value);
-  },
+  get: () => props.phoneNumber,
+  set: value => emit('update:phoneNumber', value),
 });
 
-// Computar la plantilla seleccionada
-const selectedTemplate = computed(() => {
-  return props.selectedInbox?.message_templates?.find(
-    template => template.id === props.selectedWhatsAppTemplate
-  );
-});
+// Template seleccionado
+const selectedTemplate = computed(() =>
+  props.selectedInbox?.message_templates?.find(
+    t => t.id === props.selectedWhatsAppTemplate
+  )
+);
 
-// Reglas para placeholders (similar a lo que hicimos en el form)
+// Validaciones de placeholders
 const areBodyVariablesFilled = computed(() =>
-  props.bodyVariables.every(v => {
-    if (v.sourceType === 'text') {
-      return v.value.trim() !== '';
-    }
-    return true;
-  })
+  props.bodyVariables.every(v =>
+    v.sourceType === 'text' ? v.value.trim() !== '' : true
+  )
 );
 
 const areButtonVariablesFilled = computed(() =>
-  props.buttonVariables.every(btn => {
-    if (btn.dynamic) {
-      return btn.value.trim() !== '';
-    }
-    return true;
-  })
+  props.buttonVariables.every(b =>
+    b.dynamic ? b.value.trim() !== '' : true
+  )
 );
 
-// Para verificar si el template exige un archivo en el header
+// Header media
 const hasMediaHeader = computed(() => {
-  if (!selectedTemplate.value) return false;
-  const header = selectedTemplate.value.components?.find(
-    c => c.type === 'HEADER'
-  );
-  if (!header) return false;
-  return ['IMAGE', 'VIDEO', 'DOCUMENT'].includes(header.format);
+  const header = selectedTemplate.value?.components?.find(c => c.type === 'HEADER');
+  return header ? ['IMAGE', 'VIDEO', 'DOCUMENT'].includes(header.format) : false;
 });
 
-// Deshabilitar el botón de preview
-const isPreviewDisabled = computed(() => {
-  // 1) Inbox y template son obligatorios
-  if (!props.inboxId) return true;
-  if (!props.selectedWhatsAppTemplate) return true;
+// Deshabilitar botón de preview
+const isPreviewDisabled = computed(() =>
+  !props.inboxId ||
+  !props.selectedWhatsAppTemplate ||
+  !validatePhone(props.phoneNumber) ||
+  !areBodyVariablesFilled.value ||
+  !areButtonVariablesFilled.value ||
+  (hasMediaHeader.value && !props.headerMediaFile)
+);
 
-  // 2) Phone debe ser válido
-  if (!validatePhone(props.phoneNumber)) return true;
-
-  // 3) Variables deben estar llenas
-  if (!areBodyVariablesFilled.value) return true;
-  if (!areButtonVariablesFilled.value) return true;
-
-  // 4) Si el template necesita archivo y no se ha cargado
-  if (hasMediaHeader.value && !props.headerMediaFile) return true;
-
-  return false;
-});
-
-// Enviar preview
+// ENVIAR PREVIEW ────────────────
 const handleSendPreview = async () => {
-  /**
-   * 1) Guardamos el número *actual* y lo limpiamos inmediatamente.
-   *    Así evitamos que se pueda disparar varias veces con la misma info.
-   */
   const currentPhone = localPhone.value;
-  localPhone.value = ''; // <-- Se limpia "ni bien" se hace clic
+  localPhone.value = '';
 
-  // Valida teléfono con la variable "currentPhone"
   if (!validatePhone(currentPhone)) {
-    phoneError.value = t('CAMPAIGN.WHATSAPP.CREATE.FORM.PREVIEW_SECTION.ERROR');
+    phoneError.value = t('CAMPAIGN.WHATSAPP.CREATE.FORM.PREVIEW_SECTION.ERROR_PLUS');
     return;
   }
   phoneError.value = '';
 
-  // Chequear placeholders
   if (!areBodyVariablesFilled.value) {
-    useAlert(t('CAMPAIGN.WHATSAPP.CREATE.FORM.TEMPLATE.BODY.ERROR_PLACEHOLDERS'));
-    return;
+    return useAlert(t('CAMPAIGN.WHATSAPP.CREATE.FORM.TEMPLATE.BODY.ERROR_PLACEHOLDERS'));
   }
   if (!areButtonVariablesFilled.value) {
-    useAlert(t('CAMPAIGN.WHATSAPP.CREATE.FORM.BUTTONS.ERROR_EMPTY_URL'));
-    return;
+    return useAlert(t('CAMPAIGN.WHATSAPP.CREATE.FORM.BUTTONS.ERROR_EMPTY_URL'));
   }
-
-  // 4) Verifica si el template exige archivo y no se ha cargado
   if (hasMediaHeader.value && !props.headerMediaFile) {
-    useAlert(t('CAMPAIGN.WHATSAPP.CREATE.FORM.TEMPLATE.MEDIA.ERROR_FILE_REQUIRED'));
-    return;
+    return useAlert(t('CAMPAIGN.WHATSAPP.CREATE.FORM.TEMPLATE.MEDIA.ERROR_FILE_REQUIRED'));
   }
 
-  // Armamos el objeto con todo lo necesario
-  const previewData = {
-    inboxId: props.inboxId,
-    phoneNumber: currentPhone,
-    template: selectedTemplate.value,
-    headerMediaFile: props.headerMediaFile,
-    bodyVariables: props.bodyVariables,
-    buttonVariables: props.buttonVariables,
-  };
+  // SIEMPRE enviamos FormData (necesario si hay archivo)
+  const fd = new FormData();
+  fd.append('inbox_id', props.inboxId);
+  fd.append('phone_number', currentPhone);
+  fd.append('template', JSON.stringify(selectedTemplate.value));
+  fd.append('body_variables', JSON.stringify(props.bodyVariables));
+  fd.append('button_variables', JSON.stringify(props.buttonVariables));
+  if (props.headerMediaFile) fd.append('headerMediaFile', props.headerMediaFile);
 
   try {
-    await store.dispatch('campaignsWhatsApp/preview', previewData);
-    useAlert(
-      t('CAMPAIGN.WHATSAPP.CREATE.FORM.PREVIEW_SECTION.SUCCESS_MESSAGE')
-    );
+    await store.dispatch('campaignsWhatsApp/previewDirectCampaign', fd);
+    useAlert(t('CAMPAIGN.WHATSAPP.CREATE.FORM.PREVIEW_SECTION.SUCCESS_MESSAGE'));
     emit('preview-success');
-    // NOTA: No reestablecemos phoneNumber aquí,
-    //       porque ya lo limpiamos arriba "inmediatamente".
   } catch (error) {
     const errorMessage =
       error?.message ||
@@ -197,14 +127,12 @@ const handleSendPreview = async () => {
       message-class="whitespace-pre-line break-words !overflow-visible"
     />
 
-    <!-- Error de teléfono -->
+    <!-- Errores -->
     <div
       v-if="phoneError"
       class="text-red-500 text-xs whitespace-pre-line break-words mt-1"
       v-html="phoneError"
     />
-
-    <!-- Error de preview -->
     <div
       v-if="previewError"
       class="text-red-500 text-xs whitespace-pre-line break-words mt-1"
