@@ -54,6 +54,20 @@ class Whatsapp::IncomingMessageBaseService
     message.save!
   end
 
+  # def create_messages
+  #   message = @processed_params[:messages].first
+  #   log_error(message) && return if error_webhook_event?(message)
+  #   process_in_reply_to(message)
+
+  #   if message_type == 'contacts'
+  #     create_contact_messages(message)
+  #   elsif message_type == 'order'
+  #     create_order_message(message)
+  #   else
+  #     create_regular_message(message)
+  #   end
+  # end
+
   def create_messages
     message = @processed_params[:messages].first
     log_error(message) && return if error_webhook_event?(message)
@@ -63,6 +77,8 @@ class Whatsapp::IncomingMessageBaseService
       create_contact_messages(message)
     elsif message_type == 'order'
       create_order_message(message)
+    elsif message_type == 'interactive'
+      create_flow_message(message)
     else
       create_regular_message(message)
     end
@@ -80,6 +96,31 @@ class Whatsapp::IncomingMessageBaseService
     create_message(message)
     attach_files
     attach_location if message_type == 'location'
+    @message.save!
+  end
+
+  def create_flow_message(message)
+    create_message(message) # inicializa @message con valores comunes
+
+    interactive = message[:interactive]
+    return unless interactive && interactive[:type] == 'nfm_reply'
+
+    flow_data = interactive[:nfm_reply]
+    return unless flow_data
+
+    raw_json = flow_data[:response_json]
+    return unless raw_json
+
+    parsed = JSON.parse(raw_json) rescue {}
+    return unless parsed.present?
+
+    formatted = parsed.map do |key, value|
+      "#{key.to_s.humanize}: #{value}"
+    end.join("\n\n")
+
+    flow_title = flow_data[:name].to_s.presence || 'Formulario enviado'
+
+    @message.content = "*#{flow_title}*\n\n#{formatted}"
     @message.save!
   end
 
