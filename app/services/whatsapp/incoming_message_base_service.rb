@@ -112,15 +112,23 @@ class Whatsapp::IncomingMessageBaseService
     return unless raw_json
 
     parsed = JSON.parse(raw_json) rescue {}
-    return unless parsed.present?
+    return if parsed.blank?
 
+    # Remover campos que no quieras mostrar
+    ignored_keys = ['flow_token', 'screen_id', 'step_id']
+
+    # Formatear contenido limpio
     formatted = parsed.map do |key, value|
-      "#{key.to_s.humanize}: #{value}"
-    end.join("\n\n")
+      next if ignored_keys.include?(key.to_s)
+      field_name = key.to_s.tr('_', ' ').capitalize
+      "**#{field_name}:** #{value}"
+    end.compact.join("\n")
 
-    flow_title = flow_data[:name].to_s.presence || 'Formulario enviado'
+    # Título del flujo
+    flow_title = flow_data[:name].to_s.strip
+    flow_title = flow_title.blank? ? 'Formulario recibido' : "*#{flow_title}*"
 
-    @message.content = "*#{flow_title}*\n\n#{formatted}"
+    @message.content = "#{flow_title}\n\n#{formatted}"
     @message.save!
   end
 
