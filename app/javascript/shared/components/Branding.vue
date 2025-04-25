@@ -1,11 +1,8 @@
 <script>
 import globalConfigMixin from 'shared/mixins/globalConfigMixin';
 
-const {
-  LOGO_THUMBNAIL: logoThumbnail,
-  BRAND_NAME: brandName,
-  WIDGET_BRAND_URL: widgetBrandURL,
-} = window.globalConfig || {};
+const { LOGO_THUMBNAIL: logoThumbnail, BRAND_NAME: brandName } =
+  window.globalConfig || {};
 
 export default {
   mixins: [globalConfigMixin],
@@ -20,26 +17,8 @@ export default {
       globalConfig: {
         brandName,
         logoThumbnail,
-        widgetBrandURL,
       },
     };
-  },
-  computed: {
-    brandRedirectURL() {
-      try {
-        const referrerHost = this.$store.getters['appConfig/getReferrerHost'];
-        const baseURL = `${this.globalConfig.widgetBrandURL}?utm_source=${
-          referrerHost ? 'widget_branding' : 'survey_branding'
-        }`;
-        if (referrerHost) {
-          return `${baseURL}&utm_referrer=${referrerHost}`;
-        }
-        return baseURL;
-      } catch (e) {
-        // Suppressing the error as getter is not defined in some cases
-      }
-      return '';
-    },
   },
 };
 </script>
@@ -50,7 +29,7 @@ export default {
     class="px-0 py-3 flex justify-center"
   >
     <a
-      :href="brandRedirectURL"
+      href="https://nuuxia.com"
       rel="noreferrer noopener nofollow"
       target="_blank"
       class="branding--link justify-center items-center leading-3"
