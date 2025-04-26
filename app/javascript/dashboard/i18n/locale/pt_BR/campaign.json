@@ -3,6 +3,8 @@
     "LIVE_CHAT": {
       "HEADER_TITLE": "Campanhas de chat ao vivo",
       "NEW_CAMPAIGN": "Criar campanha",
+      "HEADER_TITLE": "Campanhas de chat ao vivo",
+      "NEW_CAMPAIGN": "Criar campanha",
       "CARD": {
         "STATUS": {
           "ENABLED": "Ativado",
@@ -18,6 +20,8 @@
       "EMPTY_STATE": {
         "TITLE": "Não há campanhas de chat ao vivo disponíveis",
         "SUBTITLE": "Conecte-se com seus clientes usando mensagens proativas. Clique em 'Criar campanha' para começar."
+        "TITLE": "Não há campanhas de chat ao vivo disponíveis",
+        "SUBTITLE": "Conecte-se com seus clientes usando mensagens proativas. Clique em 'Criar campanha' para começar."
       },
       "CREATE": {
         "TITLE": "Criar campanha de chat ao vivo",
@@ -31,6 +35,7 @@
           },
           "MESSAGE": {
             "LABEL": "Mensagem",
+            "LABEL": "Mensagem",
             "PLACEHOLDER": "Por favor, insira a mensagem da campanha",
             "ERROR": "A mensagem é obrigatória"
           },
@@ -41,6 +46,7 @@
           },
           "SENT_BY": {
             "LABEL": "Enviado por",
+            "PLACEHOLDER": "Por favor, selecione o remetente",
             "PLACEHOLDER": "Por favor, selecione o remetente",
             "ERROR": "Remetente é obrigatório"
           },
@@ -55,6 +61,7 @@
             "ERROR": "Tempo na página é obrigatório"
           },
           "OTHER_PREFERENCES": {
+            "TITLE": "Outras preferências",
             "TITLE": "Outras preferências",
             "ENABLED": "Ativar campanha",
             "TRIGGER_ONLY_BUSINESS_HOURS": "Ativar somente durante o horário comercial"
@@ -236,6 +243,7 @@
             "ERROR": "Título é obrigatório"
           },
           "MESSAGE": {
+            "LABEL": "Mensagem",
             "LABEL": "Mensagem",
             "PLACEHOLDER": "Por favor, insira a mensagem da campanha",
             "ERROR": "A mensagem é obrigatória"

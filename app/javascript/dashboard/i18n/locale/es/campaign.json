@@ -56,6 +56,7 @@
           },
           "OTHER_PREFERENCES": {
             "TITLE": "Otras preferencias",
+            "TITLE": "Otras preferencias",
             "ENABLED": "Habilitar campaña",
             "TRIGGER_ONLY_BUSINESS_HOURS": "Activar sólo durante horas de trabajo"
           },
@@ -211,6 +212,8 @@
     "SMS": {
       "HEADER_TITLE": "Campañas de SMS",
       "NEW_CAMPAIGN": "Crear campaña",
+      "HEADER_TITLE": "Campañas de SMS",
+      "NEW_CAMPAIGN": "Crear campaña",
       "EMPTY_STATE": {
         "TITLE": "No hay campañas de SMS disponibles",
         "SUBTITLE": "Lanza una campaña de SMS para alcanzar a tus clientes directamente. Envía ofertas o haz anuncios fácilmente. Haz clic en 'Crear campaña' para comenzar."
@@ -226,6 +229,7 @@
         }
       },
       "CREATE": {
+        "TITLE": "Crear campaña de SMS",
         "TITLE": "Crear campaña de SMS",
         "CANCEL_BUTTON_TEXT": "Cancelar",
         "CREATE_BUTTON_TEXT": "Crear",
@@ -260,6 +264,7 @@
             "CANCEL": "Cancelar"
           },
           "API": {
+            "SUCCESS_MESSAGE": "Campaña de SMS creada con éxito",
             "SUCCESS_MESSAGE": "Campaña de SMS creada con éxito",
             "ERROR_MESSAGE": "Se presentó un error. Por favor intente nuevamente."
           }
