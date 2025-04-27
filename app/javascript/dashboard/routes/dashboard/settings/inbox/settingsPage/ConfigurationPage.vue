@@ -113,7 +113,7 @@ export default {
         <woot-code
           :script="inbox.web_widget_script"
           lang="html"
-          :codepen-title="`${inbox.name} - Chatwoot Widget Test`"
+          :codepen-title="`${inbox.name} - Solace Widget Test`"
           enable-code-pen
         />
       </SettingsSection>
@@ -202,7 +202,7 @@ export default {
       >
         <woot-code :script="inbox.provider_config.webhook_verify_token" />
       </SettingsSection>
- <!--      <SettingsSection
+      <!--      <SettingsSection
         :title="$t('INBOX_MGMT.SETTINGS_POPUP.WHATSAPP_SECTION_TITLE')"
         :sub-title="$t('INBOX_MGMT.SETTINGS_POPUP.WHATSAPP_SECTION_SUBHEADER')"
       >
