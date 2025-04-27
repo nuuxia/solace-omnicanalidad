@@ -57,6 +57,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_04_16_182131) do
     t.jsonb "limits", default: {}
     t.jsonb "custom_attributes", default: {}
     t.integer "status", default: 0
+    t.boolean "restrict_agents", default: false
     t.jsonb "internal_attributes", default: {}, null: false
     t.index ["status"], name: "index_accounts_on_status"
   end
@@ -216,7 +217,12 @@ ActiveRecord::Schema[7.0].define(version: 2025_04_16_182131) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.boolean "active", default: true, null: false
+    t.bigint "inbox_id"
+    t.bigint "template_id"
+    t.string "phone_number"
     t.index ["account_id"], name: "index_automation_rules_on_account_id"
+    t.index ["inbox_id"], name: "index_automation_rules_on_inbox_id"
+    t.index ["template_id"], name: "index_automation_rules_on_template_id"
   end
 
   create_table "campaigns", force: :cascade do |t|
@@ -424,6 +430,17 @@ ActiveRecord::Schema[7.0].define(version: 2025_04_16_182131) do
     t.index ["line_channel_id"], name: "index_channel_line_on_line_channel_id", unique: true
   end
 
+  create_table "channel_mercado_libres", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "mercado_libre_access_token"
+    t.string "mercado_libre_refresh_token"
+    t.datetime "mercado_libre_token_expires_at"
+    t.integer "mercado_libre_user_id"
+    t.index ["account_id"], name: "index_channel_mercado_libres_on_account_id"
+  end
+
   create_table "channel_sms", force: :cascade do |t|
     t.integer "account_id", null: false
     t.string "phone_number", null: false
@@ -441,6 +458,18 @@ ActiveRecord::Schema[7.0].define(version: 2025_04_16_182131) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.index ["bot_token"], name: "index_channel_telegram_on_bot_token", unique: true
+  end
+
+  create_table "channel_tik_tok", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.string "tik_tok_access_token"
+    t.string "tik_tok_refresh_token"
+    t.string "tik_tok_user_id"
+    t.datetime "tik_tok_token_expires_at"
+    t.datetime "tok_tok_refresh_expires_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_channel_tik_tok_on_account_id"
   end
 
   create_table "channel_twilio_sms", force: :cascade do |t|
@@ -555,6 +584,15 @@ ActiveRecord::Schema[7.0].define(version: 2025_04_16_182131) do
     t.index ["conversation_id"], name: "index_conversation_participants_on_conversation_id"
     t.index ["user_id", "conversation_id"], name: "index_conversation_participants_on_user_id_and_conversation_id", unique: true
     t.index ["user_id"], name: "index_conversation_participants_on_user_id"
+  end
+
+  create_table "conversation_thread_records", force: :cascade do |t|
+    t.bigint "conversation_id", null: false
+    t.string "thread_id"
+    t.string "assistant_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["conversation_id"], name: "index_conversation_thread_records_on_conversation_id"
   end
 
   create_table "conversations", id: :serial, force: :cascade do |t|
@@ -730,6 +768,10 @@ ActiveRecord::Schema[7.0].define(version: 2025_04_16_182131) do
     t.bigint "portal_id"
     t.integer "sender_name_type", default: 0, null: false
     t.string "business_name"
+    t.string "assistantid"
+    t.boolean "offline_response", default: false, null: false
+    t.boolean "mercado_libre_pre_sale_questions", default: true, null: false
+    t.boolean "mercado_libre_post_sale_messages", default: true, null: false
     t.index ["account_id"], name: "index_inboxes_on_account_id"
     t.index ["channel_id", "channel_type"], name: "index_inboxes_on_channel_id_and_channel_type"
     t.index ["portal_id"], name: "index_inboxes_on_portal_id"
@@ -896,15 +938,6 @@ ActiveRecord::Schema[7.0].define(version: 2025_04_16_182131) do
     t.string "name", null: false
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
-  end
-
-  create_table "portal_members", force: :cascade do |t|
-    t.bigint "portal_id"
-    t.bigint "user_id"
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
-    t.index ["portal_id", "user_id"], name: "index_portal_members_on_portal_id_and_user_id", unique: true
-    t.index ["user_id", "portal_id"], name: "index_portal_members_on_user_id_and_portal_id", unique: true
   end
 
   create_table "portals", force: :cascade do |t|
@@ -1114,6 +1147,9 @@ ActiveRecord::Schema[7.0].define(version: 2025_04_16_182131) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "campaigns_whatsapp", "accounts"
   add_foreign_key "campaigns_whatsapp", "inboxes"
+  add_foreign_key "channel_mercado_libres", "accounts"
+  add_foreign_key "channel_tik_tok", "accounts"
+  add_foreign_key "conversation_thread_records", "conversations"
   add_foreign_key "inboxes", "portals"
   create_trigger("accounts_after_insert_row_tr", :generated => true, :compatibility => 1).
       on("accounts").
