@@ -1,61 +1,112 @@
 ###################################################################
-# Stage 0 – Node 23 + pnpm 10 (musl)
-###################################################################
-FROM node:23-alpine AS node-deps
-RUN corepack enable && corepack prepare pnpm@10 --activate
-WORKDIR /deps
-COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile
-
-###################################################################
-# Stage 1 – pre-builder Ruby
+# 1. Etapa de pre-build (compila gems y JS assets)
 ###################################################################
 FROM ruby:3.3.3-alpine3.19 AS pre-builder
-ARG BUNDLER_VERSION=2.5.11
-ENV BUNDLE_PATH=/gems \
-    RAILS_ENV=production \
-    RAILS_SERVE_STATIC_FILES=true \
-    NODE_OPTIONS="--max-old-space-size=4096 --openssl-legacy-provider"
 
+# ──────────── Variables de entorno y args ────────────
+ARG BUNDLE_WITHOUT="development:test"
+ENV BUNDLE_WITHOUT=${BUNDLE_WITHOUT}
+ENV BUNDLER_VERSION=2.5.11
+
+ARG RAILS_ENV=production
+ENV RAILS_ENV=${RAILS_ENV}
+
+ARG RAILS_SERVE_STATIC_FILES=true
+ENV RAILS_SERVE_STATIC_FILES=${RAILS_SERVE_STATIC_FILES}
+
+ARG NODE_OPTIONS="--max-old-space-size=4096 --openssl-legacy-provider"
+ENV NODE_OPTIONS=${NODE_OPTIONS}
+
+ENV BUNDLE_PATH="/gems"
+
+# ──────────── Dependencias de sistema (Ruby + build) ────────────
 RUN apk update && apk add --no-cache \
-      build-base git \
-      postgresql-dev postgresql-client \
-      tzdata openssl vips linux-headers \
-      ruby-dev libc6-compat
+  build-base \
+  git \
+  postgresql-dev postgresql-client \
+  libxml2-dev libxslt-dev \          # ← para Nokogiri
+  tzdata \
+  openssl \
+  vips \
+  linux-headers \
+  ruby-dev \
+  libc6-compat \
+  curl tar xz \
+  && gem install bundler -v "${BUNDLER_VERSION}"
 
-# Copiamos Node (binarios + pnpm store) desde el stage anterior
-COPY --from=node-deps /usr/local /usr/local
+# ──────────── Node 23 .x y pnpm 10 .x (binario MUSL) ────────────
+ARG NODE_VERSION=23.7.0
+RUN curl -fsSL "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-musl-x64.tar.xz" \
+      | tar -xJ -C /usr/local --strip-components=1 \
+  && corepack enable \
+  && corepack prepare pnpm@10 --activate
+
 ENV PNPM_HOME="/root/.local/share/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 
-# ── Bundler ───────────────────────────────────────────────────────
 WORKDIR /app
-COPY Gemfile Gemfile.lock ./
-RUN gem install bundler -v "$BUNDLER_VERSION" && \
-    bundle lock --add-platform x86_64-linux-musl && \
-    bundle config set without 'development test' && \
-    bundle install -j4
 
-# ── node_modules ya vienen del stage Node; copiamos resto app ─────
-COPY . .
-RUN mkdir -p log && \
-    SECRET_KEY_BASE=dummy bundle exec rake assets:precompile && \
-    rm -rf spec node_modules tmp/cache
+# ──────────── Ruby gems ────────────
+COPY Gemfile Gemfile.lock ./
+RUN bundle lock --add-platform x86_64-linux-musl \
+  && bundle config set without 'development test' \
+  && bundle install -j4
+
+# ──────────── Dependencias JS ────────────
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
+
+# ──────────── Copiar el resto de la app ────────────
+COPY . /app
+
+# Logs dir por si RAILS_LOG_TO_STDOUT=false
+RUN mkdir -p /app/log
+
+# ──────────── Pre-compilación de assets ────────────
+RUN SECRET_KEY_BASE=precompile_placeholder RAILS_LOG_TO_STDOUT=enabled \
+    bundle exec rake assets:precompile \
+ && rm -rf spec node_modules tmp/cache
+
+# Guardar el SHA del commit (opcional)
+RUN git rev-parse HEAD > /app/.git_sha
+
+# ──────────── Limpieza ────────────
+RUN rm -rf /gems/ruby/3.3.0/cache/*.gem \
+ && find /gems/ruby/3.3.0/gems/ \( -name "*.c" -o -name "*.o" \) -delete \
+ && rm -rf .git \
+ && rm .gitignore
 
 ###################################################################
-# Stage 2 – final
+# 2. Etapa final (imagen ligera para producción)
 ###################################################################
 FROM ruby:3.3.3-alpine3.19
-ENV BUNDLE_PATH=/gems \
-    RAILS_ENV=production \
-    RAILS_SERVE_STATIC_FILES=true \
-    EXECJS_RUNTIME=Disabled
 
+# ──────────── Variables ────────────
+ARG BUNDLE_WITHOUT="development:test"
+ENV BUNDLE_WITHOUT=${BUNDLE_WITHOUT}
+ENV BUNDLER_VERSION=2.5.11
+
+ARG RAILS_ENV=production
+ENV RAILS_ENV=${RAILS_ENV}
+ENV BUNDLE_PATH="/gems"
+
+ENV RAILS_SERVE_STATIC_FILES=true
+ENV EXECJS_RUNTIME="Disabled"
+
+# ──────────── Dependencias mínimas runtime ────────────
 RUN apk update && apk add --no-cache \
-      tzdata postgresql-client vips openssl libc6-compat
+  tzdata \
+  postgresql-client \
+  vips \
+  openssl \
+  libc6-compat \
+  libxml2 libxslt                # ← libs runtime para Nokogiri
 
+# ──────────── Copiar artefactos build ────────────
 COPY --from=pre-builder /gems/ /gems/
 COPY --from=pre-builder /app /app
+COPY --from=pre-builder /app/.git_sha /app/.git_sha      # opcional
+
 WORKDIR /app
 EXPOSE 3000
 CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
