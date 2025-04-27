@@ -38,7 +38,7 @@ services:
     depends_on:
       - redis
     env_file:
-      - .env.production
+      - .env
     environment:
       - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379/0
 
@@ -51,6 +51,7 @@ services:
     image: redis:7-alpine
     container_name: redis_production
     env_file:
-      - .env.production
+      - .env
     command: sh -c "redis-server --requirepass \"$REDIS_PASSWORD\""
     restart: unless-stopped
+
