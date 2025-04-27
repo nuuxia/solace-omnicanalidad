@@ -24,7 +24,7 @@ RUN apk update && apk add --no-cache \
   build-base \
   git \
   postgresql-dev postgresql-client \
-  libxml2-dev libxslt-dev \          # ← para Nokogiri
+  libxml2-dev libxslt-dev \
   tzdata \
   openssl \
   vips \
@@ -100,7 +100,7 @@ RUN apk update && apk add --no-cache \
   vips \
   openssl \
   libc6-compat \
-  libxml2 libxslt                # ← libs runtime para Nokogiri
+  libxml2 libxslt        
 
 # ──────────── Copiar artefactos build ────────────
 COPY --from=pre-builder /gems/ /gems/
