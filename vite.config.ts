@@ -71,6 +71,17 @@ export default defineConfig({
         }
       : undefined,
   },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        // Allow bare imports of reset, shared styles, etc.
+        includePaths: [
+          path.resolve(__dirname, 'app/javascript/widget/assets/scss'),
+          path.resolve(__dirname, 'app/javascript/shared/assets/stylesheets'),
+        ],
+      },
+    },
+  },
   resolve: {
     alias: {
       vue: 'vue/dist/vue.esm-bundler.js',
