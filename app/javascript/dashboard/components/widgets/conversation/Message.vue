@@ -651,7 +651,7 @@ export default {
     }
 
     &.is-from-bot {
-      @apply bg-woot-400 dark:bg-amber-400;
+      @apply bg-woot-900 dark:bg-amber-400;
 
       .message-text--metadata .time {
         @apply text-violet-50 dark:text-violet-50;
@@ -769,11 +769,11 @@ li.right {
 
 .right .bubble .text-content {
   p code {
-    @apply bg-woot-600 dark:bg-woot-600 text-white dark:text-white;
+    @apply bg-woot-200 dark:bg-woot-200 text-white dark:text-white;
   }
 
   pre {
-    @apply bg-woot-800 dark:bg-woot-800 border-woot-700 dark:border-woot-700 text-white dark:text-white;
+    @apply bg-woot-200 dark:bg-woot-800 border-woot-200 dark:border-woot-700 text-white dark:text-white;
 
     code {
       @apply bg-transparent text-white dark:text-white;
