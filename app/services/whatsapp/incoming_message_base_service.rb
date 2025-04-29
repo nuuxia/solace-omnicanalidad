@@ -103,7 +103,7 @@ class Whatsapp::IncomingMessageBaseService
     ignored_keys = %w[flow_token screen_id step_id]
 
     index = 1
-    formatted = parsed.each_with_object([]) do |(key, value), lines|
+    formatted_lines = parsed.to_a.each_with_object([]) do |(key, value), lines|
       next if ignored_keys.include?(key.to_s)
 
       clean_key = key.to_s
@@ -118,7 +118,9 @@ class Whatsapp::IncomingMessageBaseService
 
       lines << "#{index}. **#{clean_key}:** #{value}"
       index += 1
-    end.join("\n")
+    end
+
+    formatted = formatted_lines.join("\n")
 
     flow_title = flow_data[:name].to_s.strip.presence || 'Formulario recibido'
     flow_title = "*#{flow_title}*"
