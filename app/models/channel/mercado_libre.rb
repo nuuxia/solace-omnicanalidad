@@ -9,7 +9,7 @@
 #  created_at                     :datetime         not null
 #  updated_at                     :datetime         not null
 #  account_id                     :bigint           not null
-#  mercado_libre_user_id          :integer
+#  mercado_libre_user_id          :bigint
 #
 # Indexes
 #

@@ -87,13 +87,13 @@ export default {
       this.appliedFilters = [];
       this.appliedFilters = [...this.getAppliedConversationFilters];
     } else if (!this.isFolderView) {
-      this.appliedFilters.push({
+      this.appliedFilters = [{
         attribute_key: 'status',
         filter_operator: 'equal_to',
-        values: '',
+        values: null, // Set to null to match the second row's appearance
         query_operator: 'and',
         attribute_model: 'standard',
-      });
+      }];
     }
   },
   methods: {
@@ -252,7 +252,7 @@ export default {
         this.appliedFilters.push({
           attribute_key: 'status',
           filter_operator: 'equal_to',
-          values: '',
+          values: null, // Set to null to match the second row's appearance
           query_operator: 'and',
         });
       }
@@ -267,7 +267,7 @@ export default {
         this.appliedFilters.push({
           attribute_key: 'status',
           filter_operator: 'equal_to',
-          values: '',
+          values: null, // Set to null to match the second row's appearance
           query_operator: 'and',
         });
       });
@@ -305,7 +305,7 @@ export default {
       this.appliedFilters[index].filter_operator = this.filterTypes.find(
         filter => filter.attributeKey === currentFilter.attribute_key
       ).filterOperators[0].value;
-      this.appliedFilters[index].values = '';
+      this.appliedFilters[index].values = null; // Reset to null to match the second row's appearance
     },
     showUserInput(operatorType) {
       if (operatorType === 'is_present' || operatorType === 'is_not_present')
