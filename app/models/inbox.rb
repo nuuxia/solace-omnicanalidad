@@ -6,7 +6,6 @@
 #
 #  id                               :integer          not null, primary key
 #  allow_messages_after_resolved    :boolean          default(TRUE)
-#  assistantid                      :string
 #  auto_assignment_config           :jsonb
 #  business_name                    :string
 #  channel_type                     :string
