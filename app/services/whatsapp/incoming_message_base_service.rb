@@ -59,15 +59,29 @@ class Whatsapp::IncomingMessageBaseService
     log_error(message) && return if error_webhook_event?(message)
     process_in_reply_to(message)
 
-    if message_type == 'contacts'
+    case message_type
+    when 'contacts'
       create_contact_messages(message)
-    elsif message_type == 'order'
+    when 'order'
       create_order_message(message)
-    elsif message_type == 'interactive'
-      create_flow_message(message)
+    when 'interactive'
+      if flow_message?(message)
+        create_flow_message(message)
+      else
+        create_regular_message(message)
+      end
     else
       create_regular_message(message)
     end
+  end
+
+  def flow_message?(message)
+    interactive = message[:interactive]
+    interactive.present? &&
+      interactive[:type] == 'nfm_reply' &&
+      interactive[:nfm_reply].is_a?(Hash) &&
+      interactive[:nfm_reply][:name] == 'flow' &&
+      interactive[:nfm_reply][:response_json].present?
   end
 
   def create_contact_messages(message)
