@@ -121,16 +121,16 @@ class Whatsapp::IncomingMessageBaseService
       next if ignored_keys.include?(key.to_s)
 
       clean_key = key.to_s
-                    .sub(/^screen_?/i, '')
-                    .gsub(/\b\d+\b/, '')
-                    .gsub(/\A\d+\s*/, '')
-                    .gsub(/\s*\d+\z/, '')
-                    .tr('_', ' ')
-                    .squeeze(' ')
+                    .sub(/^screen_?/i, '')               # elimina "screen_"
+                    .gsub(/\b\d+\b/, '')                 # elimina números enteros aislados
+                    .gsub(/\A\d+\s*/, '')                # elimina números al inicio seguidos de espacios
+                    .gsub(/\s*\d+\z/, '')                # elimina números al final
+                    .tr('_', ' ')                        # reemplaza _
+                    .squeeze(' ')                        # colapsa dobles espacios
                     .strip
-                    .split.map(&:capitalize).join(' ')
+                    .split.map(&:capitalize).join(' ')  # capitaliza cada palabra
 
-      lines << "#{index}. **#{clean_key}:** #{value}\n────────"
+      lines << "#{index}. **#{clean_key}:** #{value}"
       index += 1
     end
 
