@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import ConversationBasicFilter from './widgets/conversation/ConversationBasicFilter.vue';
 
@@ -18,7 +18,7 @@ const props = defineProps({
   },
   activeStatuses: {
     type: Array,
-    default: () => ['open'],
+    default: () => [], // Empty array to avoid 'open' fallback
   },
 });
 
@@ -122,6 +122,7 @@ const chatStatusLabel = computed(() => {
       />
       <ConversationBasicFilter
         v-if="!hasAppliedFiltersOrActiveFolders"
+        :initial-statuses="currentStatuses"
         @change-filter="onBasicFilterChange"
       />
     </div>
