@@ -2,7 +2,10 @@ class AgentBotListener < BaseListener
   def conversation_resolved(event)
     conversation = extract_conversation_and_account(event)[0]
     inbox = conversation.inbox
-    return unless should_process_conversation?(conversation)
+    unless should_process_conversation?(conversation)
+      maybe_mark_as_open_if_skipped(conversation)
+      return
+    end
 
     event_name = __method__.to_s
     payload = conversation.webhook_data.merge(event: event_name)
@@ -12,7 +15,10 @@ class AgentBotListener < BaseListener
   def conversation_opened(event)
     conversation = extract_conversation_and_account(event)[0]
     inbox = conversation.inbox
-    return unless should_process_conversation?(conversation)
+    unless should_process_conversation?(conversation)
+      maybe_mark_as_open_if_skipped(conversation)
+      return
+    end
 
     event_name = __method__.to_s
     payload = conversation.webhook_data.merge(event: event_name)
@@ -25,7 +31,10 @@ class AgentBotListener < BaseListener
     inbox = message.inbox
 
     return unless message.webhook_sendable?
-    return unless should_process_conversation?(conversation)
+    unless should_process_conversation?(conversation)
+      maybe_mark_as_open_if_skipped(conversation)
+      return
+    end
 
     method_name = __method__.to_s
     process_message_event(method_name, inbox.agent_bot, message, event)
@@ -37,7 +46,10 @@ class AgentBotListener < BaseListener
     inbox = message.inbox
 
     return unless message.webhook_sendable?
-    return unless should_process_conversation?(conversation)
+    unless should_process_conversation?(conversation)
+      maybe_mark_as_open_if_skipped(conversation)
+      return
+    end
 
     method_name = __method__.to_s
     process_message_event(method_name, inbox.agent_bot, message, event)
@@ -59,12 +71,10 @@ class AgentBotListener < BaseListener
   def should_process_conversation?(conversation)
     inbox = conversation.inbox
     return false unless connected_agent_bot_exist?(inbox)
-    return false unless conversation.pending? # Solo se aceptan conversaciones 'pending'
+    return false unless conversation.pending?
 
-    # Si offline_response está desactivado, siempre se procesa si es pending
     return true unless inbox.offline_response?
 
-    # Si está activado, solo fuera del horario laboral
     !within_working_hours?(inbox)
   end
 
@@ -109,5 +119,13 @@ class AgentBotListener < BaseListener
 
   def process_csml_bot_event(event, agent_bot, message)
     AgentBots::CsmlJob.perform_later(event, agent_bot, message)
+  end
+
+  def maybe_mark_as_open_if_skipped(conversation)
+    return unless conversation.pending?
+    return if conversation.open?
+
+    Rails.logger.info("[AgentBotListener] Conversación ##{conversation.id} no procesada por AgentBot. Marcando como 'open'.")
+    conversation.update(status: 'open')
   end
 end
