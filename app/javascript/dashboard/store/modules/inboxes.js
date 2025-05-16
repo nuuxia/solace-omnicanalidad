@@ -117,6 +117,13 @@ export const getters = {
         (item.channel_type === INBOX_TYPES.TWILIO && item.medium === 'sms')
     );
   },
+  getWhatsAppInboxes($state) {
+    return $state.records.filter(
+      item =>
+        item.channel_type === INBOX_TYPES.WHATSAPP ||
+        (item.channel_type === INBOX_TYPES.TWILIO && item.medium === 'whatsapp')
+    );
+  },
   dialogFlowEnabledInboxes($state) {
     return $state.records.filter(
       item => item.channel_type !== INBOX_TYPES.EMAIL
@@ -280,6 +287,20 @@ export const actions = {
       await InboxesAPI.deleteInboxAvatar(inboxId);
     } catch (error) {
       throw new Error(error);
+    }
+  },
+  getMercadoLibreUserInfo: async ({ commit }, { inbox_id }) => {
+    try {
+      commit(types.default.SET_INBOXES_UI_FLAG, { isFetchingItem: true });
+      const response = await InboxesAPI.getMercadoLibreUserInfo(inbox_id);
+      commit(types.default.SET_INBOXES_UI_FLAG, { isFetchingItem: false });
+      return response.data;
+    } catch (error) {
+      commit(types.default.SET_INBOXES_UI_FLAG, { isFetchingItem: false });
+      throw new Error(
+        error.response?.data?.error ||
+          'Error al obtener la información del usuario'
+      );
     }
   },
 };

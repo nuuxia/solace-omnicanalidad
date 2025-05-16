@@ -80,6 +80,13 @@ export function useEditableAutomation() {
         message: params[0].message,
       };
     }
+    if (action.action_name === 'send_alert') {
+      return {
+        inbox_id: params[0]?.inbox_id || null,
+        template_id: params[0]?.template_id || null,
+        phone_number: params[0]?.phone_number || '',
+      };
+    }
     return [...params];
   };
 

@@ -13,6 +13,8 @@
     "BROWSER": "Browser",
     "OS": "Operating System",
     "INITIATED_FROM": "Initiated from",
+    "ORDER_DETAILS": "Order details",
+    "ORDER_ID": "Order number",
     "INITIATED_AT": "Initiated at",
     "IP_ADDRESS": "IP Address",
     "CREATED_AT_LABEL": "Created",
@@ -51,6 +53,12 @@
       "PREVIOUS_CONVERSATIONS": "Previous Conversations",
       "NO_RECORDS_FOUND": "No attributes found"
     }
+  },
+  "ORDER_PANEL": {
+    "ORDER_ID": "Order ID: ",
+    "ORDER_DATE": "Order date: ",
+    "ORDER_STATUS": "Order status: ",
+    "ORDER_ITEM": "Order item: "
   },
   "EDIT_CONTACT": {
     "BUTTON_LABEL": "Edit Contact",

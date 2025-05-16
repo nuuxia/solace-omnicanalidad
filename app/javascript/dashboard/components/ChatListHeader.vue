@@ -1,10 +1,6 @@
 <script setup>
-import { computed } from 'vue';
-import { useUISettings } from 'dashboard/composables/useUISettings';
-import { useMapGetter } from 'dashboard/composables/store.js';
-import wootConstants from 'dashboard/constants/globals';
-import { FEATURE_FLAGS } from 'dashboard/featureFlags';
-
+import { computed, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ConversationBasicFilter from './widgets/conversation/ConversationBasicFilter.vue';
 import SwitchLayout from 'dashboard/routes/dashboard/conversation/search/SwitchLayout.vue';
 import NextButton from 'dashboard/components-next/button/Button.vue';
@@ -22,9 +18,9 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
-  activeStatus: {
-    type: String,
-    required: true,
+  activeStatuses: {
+    type: Array,
+    default: () => [], // Empty array to avoid 'open' fallback
   },
   isOnExpandedLayout: {
     type: Boolean,
@@ -40,14 +36,14 @@ const emit = defineEmits([
   'filtersModal',
 ]);
 
-const { uiSettings, updateUISettings } = useUISettings();
+const { t } = useI18n();
 
-const currentAccountId = useMapGetter('getCurrentAccountId');
-const isFeatureEnabledonAccount = useMapGetter(
-  'accounts/isFeatureEnabledonAccount'
-);
+const currentStatuses = ref([...props.activeStatuses]);
 
 const onBasicFilterChange = (value, type) => {
+  if (type === 'status') {
+    currentStatuses.value = Array.isArray(value) ? [...value] : [value];
+  }
   emit('basicFilterChange', value, type);
 };
 
@@ -55,27 +51,11 @@ const hasAppliedFiltersOrActiveFolders = computed(() => {
   return props.hasAppliedFilters || props.hasActiveFolders;
 });
 
-const showV4View = computed(() => {
-  return isFeatureEnabledonAccount.value(
-    currentAccountId.value,
-    FEATURE_FLAGS.CHATWOOT_V4
-  );
+const chatStatusLabel = computed(() => {
+  return currentStatuses.value
+    .map(status => t(`CHAT_LIST.CHAT_STATUS_FILTER_ITEMS.${status}.TEXT`))
+    .join(', ');
 });
-
-const toggleConversationLayout = () => {
-  const { LAYOUT_TYPES } = wootConstants;
-  const {
-    conversation_display_type: conversationDisplayType = LAYOUT_TYPES.CONDENSED,
-  } = uiSettings.value;
-  const newViewType =
-    conversationDisplayType === LAYOUT_TYPES.CONDENSED
-      ? LAYOUT_TYPES.EXPANDED
-      : LAYOUT_TYPES.CONDENSED;
-  updateUISettings({
-    conversation_display_type: newViewType,
-    previously_used_conversation_display_type: newViewType,
-  });
-};
 </script>
 
 <template>
@@ -98,7 +78,7 @@ const toggleConversationLayout = () => {
         v-if="!hasAppliedFiltersOrActiveFolders"
         class="px-2 py-1 my-0.5 mx-1 rounded-md capitalize bg-n-slate-3 text-xxs text-n-slate-12 shrink-0"
       >
-        {{ $t(`CHAT_LIST.CHAT_STATUS_FILTER_ITEMS.${activeStatus}.TEXT`) }}
+        {{ chatStatusLabel }}
       </span>
     </div>
     <div class="flex items-center gap-1">
@@ -172,7 +152,7 @@ const toggleConversationLayout = () => {
       </div>
       <ConversationBasicFilter
         v-if="!hasAppliedFiltersOrActiveFolders"
-        :is-on-expanded-layout="isOnExpandedLayout"
+        :initial-statuses="currentStatuses"
         @change-filter="onBasicFilterChange"
       />
       <SwitchLayout

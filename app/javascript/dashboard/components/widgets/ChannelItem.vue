@@ -34,6 +34,12 @@ export default {
       if (key === 'email') {
         return this.enabledFeatures.channel_email;
       }
+      if (key === 'mercado_libre') {
+        return true;
+      }
+      // if (key === 'tik_tok') {
+      //   return true;
+      // }
 
       if (key === 'instagram') {
         return (
@@ -50,6 +56,8 @@ export default {
         'telegram',
         'line',
         'instagram',
+        'mercado_libre'
+        // 'tik_tok'
       ].includes(key);
     },
   },

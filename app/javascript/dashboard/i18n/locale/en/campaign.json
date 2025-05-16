@@ -79,6 +79,135 @@
         }
       }
     },
+    "WHATSAPP": {
+      "HEADER_TITLE": "WhatsApp campaigns",
+      "NEW_CAMPAIGN": "Create campaign",
+      "CARD": {
+        "STATUS": {
+          "ENABLED": "Enabled",
+          "DISABLED": "Disabled"
+        },
+        "CAMPAIGN_DETAILS": {
+          "SENT_BY": "Sent by",
+          "BOT": "Bot",
+          "FROM": "from",
+          "ON": "on",
+          "SENT_FROM": "Sent from",
+          "URL": "URL:"
+        }
+      },
+      "EMPTY_STATE": {
+        "TITLE": "No WhatsApp campaigns are available",
+        "SUBTITLE": "Connect with your customers using WhatsApp campaigns. Click 'Create campaign' to get started."
+      },
+      "CREATE": {
+        "TITLE": "Create WhatsApp campaign",
+        "CANCEL_BUTTON_TEXT": "Cancel",
+        "CREATE_BUTTON_TEXT": "Create",
+        "FORM": {
+          "TITLE": {
+            "LABEL": "Title",
+            "PLACEHOLDER": "Please enter the title of campaign",
+            "ERROR": "Title is required"
+          },
+          "WHATSAPP_TEMPLATE": {
+            "LABEL": "Select a WhatsApp Template",
+            "PLACEHOLDER": "Select a WhatsApp Template",
+            "ERROR": "A WhatsApp template is required"
+          },
+          "MESSAGE": {
+            "LABEL": "Message",
+            "PLACEHOLDER": "Please enter the message of campaign",
+            "ERROR": "Message is required"
+          },
+          "INBOX": {
+            "LABEL": "Select Inbox",
+            "PLACEHOLDER": "Select Inbox",
+            "ERROR": "Inbox is required"
+          },
+          "AUDIENCE": {
+            "LABEL": "Audience",
+            "PLACEHOLDER": "Select the customer labels",
+            "ERROR": "Audience is required"
+          },
+          "SCHEDULED_AT": {
+            "LABEL": "Scheduled time",
+            "PLACEHOLDER": "Please select the time",
+            "ERROR": "Scheduled time is required"
+          },
+          "PREVIEW_SECTION": {
+            "TITLE": "Send WhatsApp Preview",
+            "PHONE_LABEL": "Enter a phone number to receive the preview",
+            "PLACEHOLDER": "Enter phone number",
+            "ERROR": "Please provide a valid phone number starting with\na `+` sign. No spaces allowed",
+            "BUTTON_LABEL": "Send template preview",
+            "LOADING_LABEL": "Sending...",
+            "SUCCESS_MESSAGE": "Preview sent successfully",
+            "ERROR_MESSAGE": "Error sending preview",
+            "TOOL_TIP": "You must select an inbox and a template to send a preview"
+          },
+          "BUTTONS": {
+            "CREATE": "Create",
+            "CANCEL": "Cancel"
+          },
+          "API": {
+            "SUCCESS_MESSAGE": "WhatsApp campaign created successfully",
+            "ERROR_MESSAGE": "There was an error. Please try again."
+          },
+          "TEMPLATE": {
+            "FILE": "File: ",
+            "MEDIA": {
+              "HEADER_SECTION": "Select header template media",
+              "UPLOAD_DOCUMENT": "Upload a document .PDF",
+              "UPLOAD_IMAGE": "Upload a image .jpg or .png",
+              "UPLOAD_VIDEO": "Upload a video .mp4"
+            },
+            "BODY": {
+              "HEADER_SECTION": "Insert body template variables",
+              "VARIABLE_TITLE": "Variable",
+              "VARIABLE_PLACE_HOLDER": "Insert your variable here",
+              "CONTACT_NAME": "Contact Name",
+              "FREE_TEXT": "Text"
+            },
+            "BUTTONS": {
+              "HEADER_SECTION": "Insert buttons template variables",
+              "VARIABLE_TITLE": "Variable",
+              "VARIABLE_PLACE_HOLDER": "Insert your variable here"
+            }
+          },
+          "": {
+            "HEADER_SECTION": "Select media template",
+            "UPLOAD_DOCUMENT": "Upload a document .PDF",
+            "UPLOAD_IMAGE": "Upload a image .jpg or .png",
+            "UPLOAD_VIDEO": "Upload a video .mp4"
+          },
+          "SYNC": {
+            "SUCCESS_MESSAGE": "Templates synchronized successfully",
+            "ERROR_MESSAGE": "Error synchronizing templates. Please try again."
+          },
+          "SYNC_BUTTON_LABEL": "Sync",
+          "SYNC_BUTTON_TOOLTIP": "Synchronize templates"
+        }
+      },
+      "CONFIRM_DELETE": {
+        "TITLE": "Delete WhatsApp Campaign",
+        "DESCRIPTION": "Are you sure you want to delete this campaign? This action cannot be undone.",
+        "CONFIRM": "Delete",
+        "API": {
+          "SUCCESS_MESSAGE": "WhatsApp campaign deleted successfully",
+          "ERROR_MESSAGE": "Could not delete campaign. Please try again."
+        }
+      },
+      "EDIT": {
+        "TITLE": "Edit WhatsApp campaign",
+        "FORM": {
+          "API": {
+            "SUCCESS_MESSAGE": "WhatsApp campaign updated successfully",
+            "ERROR_MESSAGE": "There was an error. Please try again."
+          }
+        }
+      }
+    },
     "SMS": {
       "HEADER_TITLE": "SMS campaigns",
       "NEW_CAMPAIGN": "Create campaign",

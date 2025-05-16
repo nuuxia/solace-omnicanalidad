@@ -47,6 +47,11 @@ class Macros::ExecutionService < ActionService
     mb.perform
   end
 
+  def send_webhook_event(webhook_url)
+    payload = @conversation.webhook_data.merge(event: "macro_event.macro_#{@macro.id}")
+    WebhookJob.perform_later(webhook_url[0], payload)
+  end
+
   def send_attachment(blob_ids)
     return if conversation_a_tweet?
 

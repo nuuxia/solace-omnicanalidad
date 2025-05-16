@@ -10,6 +10,8 @@ class SendReplyJob < ApplicationJob
       'Channel::TwitterProfile' => ::Twitter::SendOnTwitterService,
       'Channel::TwilioSms' => ::Twilio::SendOnTwilioService,
       'Channel::Line' => ::Line::SendOnLineService,
+      'Channel::MercadoLibre' => ::MercadoLibre::SendOnMercadoLibreService,
+      # 'Channel::TikTok' => ::TikTok::SendOnTikTokService,
       'Channel::Telegram' => ::Telegram::SendOnTelegramService,
       'Channel::Whatsapp' => ::Whatsapp::SendOnWhatsappService,
       'Channel::Sms' => ::Sms::SendOnSmsService,

@@ -17,6 +17,8 @@
 :queues:
   - critical
   - high
+  - whatsapp_messages
+  - whatsapp_campaigns
   - medium
   - default
   - mailers

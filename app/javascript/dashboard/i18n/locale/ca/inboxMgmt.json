@@ -8,24 +8,28 @@
     "LIST": {
       "404": "No hi ha cap safata d'entrada connectat a aquest compte."
     },
-    "CREATE_FLOW": {
-      "CHANNEL": {
-        "TITLE": "Triar canal",
-        "BODY": "Trieu el proveïdor que vulgueu integrar amb Chatwoot."
+    "CREATE_FLOW": [
+      {
+        "title": "Triar canal",
+        "route": "settings_inbox_new",
+        "body": "Trieu el proveïdor que vulgueu integrar amb Software Arrows."
       },
-      "INBOX": {
-        "TITLE": "Crear safata d'entrada",
-        "BODY": "Autentiqueu el vostre compte i creeu una safata d'entrada."
+      {
+        "title": "Crear safata d'entrada",
+        "route": "settings_inboxes_page_channel",
+        "body": "Autentiqueu el vostre compte i creeu una safata d'entrada."
       },
-      "AGENT": {
-        "TITLE": "Afegir agents",
-        "BODY": "Afegir agents a la safata d'entrada creada."
+      {
+        "title": "Afegir agents",
+        "route": "settings_inboxes_add_agents",
+        "body": "Afegir agents a la safata d'entrada creada."
       },
-      "FINISH": {
-        "TITLE": "Voilà!",
-        "BODY": "Ja estàs preparat!"
+      {
+        "title": "Voilà!",
+        "route": "settings_inbox_finish",
+        "body": "Ja estàs preparat!"
       }
-    },
+    ],
     "ADD": {
       "CHANNEL_NAME": {
         "LABEL": "Nom de la safata d'entrada",
@@ -37,23 +41,13 @@
         "PLACEHOLDER": "Introdueix el nom del vostre lloc web (per exemple: Acme Inc)"
       },
       "FB": {
-        "HELP": "PD: Al iniciar la sessió, només accediu als missatges de la vostra pàgina. Chatwoot mai no podrà accedir als vostres missatges privats.",
+        "HELP": "PD: Al iniciar la sessió, només accediu als missatges de la vostra pàgina. Software Arrows mai no podrà accedir als vostres missatges privats.",
         "CHOOSE_PAGE": "Trieu la pàgina",
         "CHOOSE_PLACEHOLDER": "Selecciona una pàgina de la llista",
         "INBOX_NAME": "Nom de la safata d'entrada",
         "ADD_NAME": "Afegeix un nom per a la safata d'entrada",
         "PICK_NAME": "Tria un nom per a la teva safata d'entrada",
-        "PICK_A_VALUE": "Tria un valor",
-        "CREATE_INBOX": "Crear safata d'entrada"
-      },
-      "INSTAGRAM": {
-        "CONTINUE_WITH_INSTAGRAM": "Continue with Instagram",
-        "CONNECT_YOUR_INSTAGRAM_PROFILE": "Connect your Instagram Profile",
-        "HELP": "To add your Instagram profile as a channel, you need to authenticate your Instagram Profile by clicking on 'Continue with Instagram' ",
-        "ERROR_MESSAGE": "There was an error connecting to Instagram, please try again",
-        "ERROR_AUTH": "There was an error connecting to Instagram, please try again",
-        "NEW_INBOX_SUGGESTION": "This Instagram account was previously linked to a different inbox and has now been migrated here. All new messages will appear here. The old inbox will no longer be able to send or receive messages for this account.",
-        "DUPLICATE_INBOX_BANNER": "This Instagram account was migrated to the new Instagram channel inbox. You won’t be able to send/receive Instagram messages from this inbox anymore."
+        "PICK_A_VALUE": "Tria un valor"
       },
       "TWITTER": {
         "HELP": "Per afegir el teu perfil de Twitter com a canal, has d'autentificar el vostre perfil de Twitter fent clic a 'Inicieu la sessió amb Twitter' ",
@@ -349,7 +343,7 @@
       },
       "AUTH": {
         "TITLE": "Escull un canal",
-        "DESC": "Chatwoot admet widgets de xat en directe, Facebook Messenger, WhatsApp, correus electrònics, etc., com a canals. Si voleu crear un canal personalitzat, podeu crear-lo mitjançant el canal API. Per començar, tria un dels canals següents."
+        "DESC": "SoftwareArrows admet widgets de xat en directe, Facebook Messenger, WhatsApp, correus electrònics, etc., com a canals. Si voleu crear un canal personalitzat, podeu crear-lo mitjançant el canal API. Per començar, tria un dels canals següents."
       },
       "AGENTS": {
         "TITLE": "Agents",
@@ -359,11 +353,11 @@
       },
       "DETAILS": {
         "TITLE": "Detalls de la safata d'entrada",
-        "DESC": "Des del següent menú desplegable, seleccioneu la pàgina de Facebook que voleu connectar a Chatwoot. També podeu donar un nom personalitzat a la safata d'entrada per a una millor identificació."
+        "DESC": "Des del següent menú desplegable, seleccioneu la pàgina de Facebook que voleu connectar a Software Arrows . També podeu donar un nom personalitzat a la safata d'entrada per a una millor identificació."
       },
       "FINISH": {
         "TITLE": "L'has clavat!",
-        "DESC": "Heu acabat d'integrar la vostra pàgina de Facebook amb Chatwoot. La propera vegada que un client escrigui un missatge a la vostra pàgina, la conversa apareixerà automàticament a la safata d'entrada. <br>També us proporcionem un script del widget que podeu afegir fàcilment al vostre web. Una vegada que estigui operatiu al vostre web, els clients us podran enviar missatges des del web sense l’ajuda de cap eina externa i la conversa apareixerà aquí mateix, a Chatwoot. <br>Genial, eh? Bé, segur que intentem ser-ho :)"
+        "DESC": "Heu acabat d'integrar la vostra pàgina de Facebook amb Software Arrows . La propera vegada que un client escrigui un missatge a la vostra pàgina, la conversa apareixerà automàticament a la safata d'entrada. <br>També us proporcionem un script del widget que podeu afegir fàcilment al vostre web. Una vegada que estigui operatiu al vostre web, els clients us podran enviar missatges des del web sense l’ajuda de cap eina externa i la conversa apareixerà aquí mateix, a Software Arrows . <br>Genial, eh? Bé, segur que intentem ser-ho :)"
       },
       "EMAIL_PROVIDER": {
         "TITLE": "Selecciona el teu proveïdor de correu electrònic",
@@ -745,8 +739,8 @@
         "USER_MESSAGE": "Hola",
         "AGENT_MESSAGE": "Hola"
       },
-      "BRANDING_TEXT": "Desenvolupat per Chatwoot",
-      "SCRIPT_SETTINGS": "\n      window.chatwootSettings = {options};"
+      "BRANDING_TEXT": "Desenvolupat per Software Arrows",
+      "SCRIPT_SETTINGS": "\n      window.arrowsSettings = {options};"
     },
     "EMAIL_PROVIDERS": {
       "MICROSOFT": "Microsoft",
@@ -763,8 +757,7 @@
       "EMAIL": "Correu electrònic",
       "TELEGRAM": "Telegram",
       "LINE": "Line",
-      "API": "Canal de l'API",
-      "INSTAGRAM": "Instagram"
+      "API": "Canal de l'API"
     }
   }
 }

@@ -12,6 +12,10 @@ export default {
     SNOOZED: 'snoozed',
     ALL: 'all',
   },
+  UNREAD_TYPE: {
+    READ: 'read',
+    UNREAD: 'unread',
+  },
   SORT_BY_TYPE: {
     LAST_ACTIVITY_AT_ASC: 'last_activity_at_asc',
     LAST_ACTIVITY_AT_DESC: 'last_activity_at_desc',

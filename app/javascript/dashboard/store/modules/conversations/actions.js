@@ -388,6 +388,10 @@ const actions = {
     commit(types.CHANGE_CHAT_STATUS_FILTER, data);
   },
 
+  setChatUnreadFilter({ commit }, data) {
+    commit(types.CHANGE_CHAT_UNREAD_FILTER, data);
+  },
+
   setChatSortFilter({ commit }, data) {
     commit(types.CHANGE_CHAT_SORT_FILTER, data);
   },

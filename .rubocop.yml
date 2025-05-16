@@ -166,3 +166,6 @@ AllCops:
     - 'tmp/**/*'
     - 'storage/**/*'
     - 'db/migrate/20230426130150_init_schema.rb'
+    - 'app/controllers/api/v1/accounts/inboxes_controller.rb'
+    - 'app/javascript/dashboard/routes/dashboard/settings/inbox/Settings.vue'
+    - 'config/deploy.rb'

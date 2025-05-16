@@ -2,20 +2,25 @@
 #
 # Table name: automation_rules
 #
-#  id          :bigint           not null, primary key
-#  actions     :jsonb            not null
-#  active      :boolean          default(TRUE), not null
-#  conditions  :jsonb            not null
-#  description :text
-#  event_name  :string           not null
-#  name        :string           not null
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  account_id  :bigint           not null
+#  id           :bigint           not null, primary key
+#  actions      :jsonb            not null
+#  active       :boolean          default(TRUE), not null
+#  conditions   :jsonb            not null
+#  description  :text
+#  event_name   :string           not null
+#  name         :string           not null
+#  phone_number :string
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  account_id   :bigint           not null
+#  inbox_id     :bigint
+#  template_id  :bigint
 #
 # Indexes
 #
-#  index_automation_rules_on_account_id  (account_id)
+#  index_automation_rules_on_account_id   (account_id)
+#  index_automation_rules_on_inbox_id     (inbox_id)
+#  index_automation_rules_on_template_id  (template_id)
 #
 class AutomationRule < ApplicationRecord
   include Rails.application.routes.url_helpers
@@ -29,6 +34,7 @@ class AutomationRule < ApplicationRecord
   validate :query_operator_presence
   validate :query_operator_value
   validates :account_id, presence: true
+  validates :phone_number, format: { with: /\A\+\d{10,15}\z/, message: 'must be a valid international number' }, allow_nil: true
 
   after_update_commit :reauthorized!, if: -> { saved_change_to_conditions? }
 
@@ -40,8 +46,8 @@ class AutomationRule < ApplicationRecord
   end
 
   def actions_attributes
-    %w[send_message add_label remove_label send_email_to_team assign_team assign_agent send_webhook_event mute_conversation
-       send_attachment change_status resolve_conversation snooze_conversation change_priority send_email_transcript].freeze
+    %w[send_message send_alert add_label remove_label send_email_to_team assign_team assign_agent send_webhook_event mute_conversation
+       send_attachment change_status resolve_conversation open_conversation snooze_conversation change_priority send_email_transcript].freeze
   end
 
   def file_base_data

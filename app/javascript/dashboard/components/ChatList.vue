@@ -95,7 +95,8 @@ const conversationListScrollLock = useScrollLock(
 );
 
 const activeAssigneeTab = ref(wootConstants.ASSIGNEE_TYPE.ME);
-const activeStatus = ref(wootConstants.STATUS_TYPE.OPEN);
+const activeStatus = ref([wootConstants.STATUS_TYPE.OPEN]);
+const activeUnread = ref(wootConstants.UNREAD_TYPE.READ);
 const activeSortBy = ref(wootConstants.SORT_BY_TYPE.LAST_ACTIVITY_AT_DESC);
 const showAdvancedFilters = ref(false);
 // chatsOnView is to store the chats that are currently visible on the screen,
@@ -129,6 +130,7 @@ const inboxesList = useMapGetter('inboxes/getInboxes');
 const campaigns = useMapGetter('campaigns/getAllCampaigns');
 const labels = useMapGetter('labels/getLabels');
 const currentAccountId = useMapGetter('getCurrentAccountId');
+const getAccount = useMapGetter('accounts/getAccount');
 // We can't useFunctionGetter here since it needs to be called on setup?
 const getTeamFn = useMapGetter('teams/getTeam');
 
@@ -178,6 +180,10 @@ const activeFolder = computed(() => {
   return undefined;
 });
 
+
+const currentAccount = computed(() => getAccount.value(currentAccountId.value));
+
+
 const activeFolderName = computed(() => {
   return activeFolder.value?.name;
 });
@@ -200,15 +206,25 @@ const userPermissions = computed(() => {
 });
 
 const assigneeTabItems = computed(() => {
+  const isAgent = currentUser.value.role === 'agent';
+  const isRestrictedAccount = currentAccount.value.restrict_agents;
+
   return filterItemsByPermission(
     ASSIGNEE_TYPE_TAB_PERMISSIONS,
     userPermissions.value,
     item => item.permissions
-  ).map(({ key, count: countKey }) => ({
-    key,
-    name: t(`CHAT_LIST.ASSIGNEE_TYPE_TABS.${key}`),
-    count: conversationStats.value[countKey] || 0,
-  }));
+  )
+    .filter(({ key }) => {
+      if (key === 'all' && isAgent && isRestrictedAccount) {
+        return false;
+      }
+      return true;
+    })
+    .map(({ key, count: countKey }) => ({
+      key,
+      name: t(`CHAT_LIST.ASSIGNEE_TYPE_TABS.${key}`),
+      count: conversationStats.value[countKey] || 0,
+    }));
 });
 
 const showAssigneeInConversationCard = computed(() => {
@@ -276,6 +292,7 @@ const conversationFilters = computed(() => {
     assigneeType: activeAssigneeTab.value,
     status: activeStatus.value,
     sortBy: activeSortBy.value,
+    unread: activeUnread.value,
     page: conversationListPagination.value,
     labels: props.label ? [props.label] : undefined,
     teamId: props.teamId || undefined,
@@ -368,13 +385,13 @@ const uniqueInboxes = computed(() => {
 // ---------------------- Methods -----------------------
 function setFiltersFromUISettings() {
   const { conversations_filter_by: filterBy = {} } = uiSettings.value;
-  const { status, order_by: orderBy } = filterBy;
-  activeStatus.value = status || wootConstants.STATUS_TYPE.OPEN;
-  activeSortBy.value = Object.values(wootConstants.SORT_BY_TYPE).includes(
-    orderBy
-  )
-    ? orderBy
-    : wootConstants.SORT_BY_TYPE.LAST_ACTIVITY_AT_DESC;
+  const { status, order_by: orderBy, unread } = filterBy;
+  activeStatus.value = status || [wootConstants.STATUS_TYPE.OPEN];
+  activeUnread.value = unread || wootConstants.UNREAD_TYPE.READ;
+  activeSortBy.value =
+    Object.keys(wootConstants.SORT_BY_TYPE).find(
+      sortField => sortField === orderBy
+    ) || wootConstants.SORT_BY_TYPE.LAST_ACTIVITY_AT_DESC;
 }
 
 function emitConversationLoaded() {
@@ -567,6 +584,14 @@ function onToggleAdvanceFiltersModal() {
 }
 
 function fetchConversations() {
+
+  const currentFilters = JSON.stringify(conversationFilters.value);
+  const lastFetchedFilters = JSON.stringify(store.state.conversations.conversationFilters);
+  if (currentFilters === lastFetchedFilters && !chatListLoading.value) {
+    emitConversationLoaded();
+    return; // No recargar si los filtros no cambiaron y no está cargando
+  }
+
   store.dispatch('updateChatListFilters', conversationFilters.value);
   store.dispatch('fetchAllConversations').then(emitConversationLoaded);
 }
@@ -627,7 +652,10 @@ function updateAssigneeTab(selectedTab) {
 function onBasicFilterChange(value, type) {
   if (type === 'status') {
     activeStatus.value = value;
-  } else {
+  } else if (type == 'unread') {
+    activeUnread.value = value;
+  }
+   else {
     activeSortBy.value = value;
   }
   resetAndFetchData();
@@ -764,6 +792,7 @@ onMounted(() => {
   setFiltersFromUISettings();
   store.dispatch('setChatStatusFilter', activeStatus.value);
   store.dispatch('setChatSortFilter', activeSortBy.value);
+  store.dispatch('setChatUnreadFilter', activeUnread.value);
   resetAndFetchData();
   if (hasActiveFolders.value) {
     store.dispatch('campaigns/get');

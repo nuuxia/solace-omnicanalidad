@@ -70,6 +70,7 @@ test/cypress/videos/*
 
 /config/master.key
 /config/*.enc
+/config.yml
 
 #ignore files under .vscode directory
 .vscode
@@ -94,3 +95,27 @@ yarn-debug.log*
 
 # Claude.ai config file
 CLAUDE.md
+# Vite Ruby
+/public/vite*
+node_modules
+# Vite uses dotenv and suggests to ignore local-only env files. See
+# https://vitejs.dev/guide/env-and-mode.html#env-files
+*.local
+
+/tmp/
+/tmp/pids/
+/tmp/cache/
+/tmp/cache/bootsnap/
+/tmp/cache/bootsnap/load-path-cache
+
+/tmp/pids/*
+!/tmp/pids/
+!/tmp/pids/.keep
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+/storage
+/public/packs
+/public/packs/js
+/coverage

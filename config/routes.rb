@@ -19,11 +19,13 @@ Rails.application.routes.draw do
     get '/app/accounts/:account_id/settings/inboxes/new/twitter', to: 'dashboard#index', as: 'app_new_twitter_inbox'
     get '/app/accounts/:account_id/settings/inboxes/new/microsoft', to: 'dashboard#index', as: 'app_new_microsoft_inbox'
     get '/app/accounts/:account_id/settings/inboxes/new/instagram', to: 'dashboard#index', as: 'app_new_instagram_inbox'
+    get '/app/accounts/:account_id/settings/inboxes/new/mercado_libre', to: 'dashboard#index', as: 'app_new_mercado_libre_inbox'
     get '/app/accounts/:account_id/settings/inboxes/new/:inbox_id/agents', to: 'dashboard#index', as: 'app_twitter_inbox_agents'
     get '/app/accounts/:account_id/settings/inboxes/new/:inbox_id/agents', to: 'dashboard#index', as: 'app_email_inbox_agents'
     get '/app/accounts/:account_id/settings/inboxes/new/:inbox_id/agents', to: 'dashboard#index', as: 'app_instagram_inbox_agents'
     get '/app/accounts/:account_id/settings/inboxes/:inbox_id', to: 'dashboard#index', as: 'app_instagram_inbox_settings'
     get '/app/accounts/:account_id/settings/inboxes/:inbox_id', to: 'dashboard#index', as: 'app_email_inbox_settings'
+    get '/app/accounts/:account_id/settings/inboxes/new/:inbox_id/agents', to: 'dashboard#index', as: 'app_mercado_libre_inbox_agents'
 
     resource :widget, only: [:show]
     namespace :survey do
@@ -41,6 +43,11 @@ Rails.application.routes.draw do
         member do
           post :update_active_at
           get :cache_keys
+        end
+        scope module: :accounts do
+          namespace :whatsapp do
+            post :sync_whatsapp_templates, to: 'whatsapp#sync_whatsapp_templates'
+          end
         end
 
         scope module: :accounts do
@@ -93,9 +100,15 @@ Rails.application.routes.draw do
           resources :sla_policies, only: [:index, :create, :show, :update, :destroy]
           resources :custom_roles, only: [:index, :create, :show, :update, :destroy]
           resources :campaigns, only: [:index, :create, :show, :update, :destroy]
+          resources :campaigns_whatsapp, only: [:index, :show, :create, :update, :destroy] do
+            collection do
+               post :preview, to: 'campaigns_whatsapp_preview#create'
+            end
+          end
           resources :dashboard_apps, only: [:index, :show, :create, :update, :destroy]
           namespace :channels do
             resource :twilio_channel, only: [:create]
+            resources :automated_whatsapp_embedded_signup, only: [:create]
           end
           resources :conversations, only: [:index, :create, :show, :update] do
             collection do
@@ -216,6 +229,10 @@ Rails.application.routes.draw do
           end
 
           namespace :microsoft do
+            resource :authorization, only: [:create]
+          end
+
+          namespace :mercado_libre do
             resource :authorization, only: [:create]
           end
 
@@ -352,6 +369,7 @@ Rails.application.routes.draw do
               get :inboxes
               get :labels
               get :teams
+              get :contacts
               get :conversations
               get :conversation_traffic
               get :bot_metrics
@@ -467,6 +485,7 @@ Rails.application.routes.draw do
   post 'webhooks/whatsapp/:phone_number', to: 'webhooks/whatsapp#process_payload'
   get 'webhooks/instagram', to: 'webhooks/instagram#verify'
   post 'webhooks/instagram', to: 'webhooks/instagram#events'
+  post 'webhooks/mercado_libre', to: 'webhooks/mercado_libre#process_payload'
 
   namespace :twitter do
     resource :callback, only: [:show]
@@ -488,6 +507,9 @@ Rails.application.routes.draw do
   get 'microsoft/callback', to: 'microsoft/callbacks#show'
   get 'google/callback', to: 'google/callbacks#show'
   get 'instagram/callback', to: 'instagram/callbacks#show'
+  get 'mercado_libre/callback', to: 'mercado_libre/callbacks#show'
+  get 'mercado_libre/user', to: 'mercado_libre/users#get_user_info'
+
   # ----------------------------------------------------------------------
   # Routes for external service verifications
   get '.well-known/assetlinks.json' => 'android_app#assetlinks'

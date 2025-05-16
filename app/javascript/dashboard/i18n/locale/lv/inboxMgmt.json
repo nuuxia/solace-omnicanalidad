@@ -8,24 +8,28 @@
     "LIST": {
       "404": "Šim kontam nav pievienota neviena Iesūtne."
     },
-    "CREATE_FLOW": {
-      "CHANNEL": {
-        "TITLE": "Izvēlieties Kanālu",
-        "BODY": "Izvēlieties pakalpojumu sniedzēju, kuru vēlaties integrēt ar Chatwoot."
+    "CREATE_FLOW": [
+      {
+        "title": "Izvēlieties Kanālu",
+        "route": "settings_inbox_new",
+        "body": "Izvēlieties pakalpojumu sniedzēju, kuru vēlaties integrēt ar Software Arrows."
       },
-      "INBOX": {
-        "TITLE": "Izveidot Iesūtni",
-        "BODY": "Autentificēt savu kontu un izveidot iesūtni."
+      {
+        "title": "Izveidot Iesūtni",
+        "route": "settings_inboxes_page_channel",
+        "body": "Autentificēt savu kontu un izveidot iesūtni."
       },
-      "AGENT": {
-        "TITLE": "Pievienot Aģentus",
-        "BODY": "Pievienojiet aģentus izveidotajai iesūtnei."
+      {
+        "title": "Pievienot Aģentus",
+        "route": "settings_inboxes_add_agents",
+        "body": "Pievienojiet aģentus izveidotajai iesūtnei."
       },
-      "FINISH": {
-        "TITLE": "Gatavs!",
-        "BODY": "Jūs varat sākt darboties!"
+      {
+        "title": "Gatavs!",
+        "route": "settings_inbox_finish",
+        "body": "Jūs varat sākt darboties!"
       }
-    },
+    ],
     "ADD": {
       "CHANNEL_NAME": {
         "LABEL": "Iesūtnes Nosaukums",
@@ -37,23 +41,13 @@
         "PLACEHOLDER": "Ievadiet Jūsu tīmekļa vietnes nosaukumu (piemēram: Acme Inc)"
       },
       "FB": {
-        "HELP": "PS: Pierakstoties mēs iegūstam piekļuvi tikai pie Jūsu lapas ziņojumiem. Chatwoot nekad nevar piekļūt jūsu privātajām ziņām.",
+        "HELP": "PS: Pierakstoties mēs iegūstam piekļuvi tikai pie Jūsu lapas ziņojumiem. Software Arrows nekad nevar piekļūt jūsu privātajām ziņām.",
         "CHOOSE_PAGE": "Izvēlieties Lapu",
         "CHOOSE_PLACEHOLDER": "Izvēlieties lapu no saraksta",
         "INBOX_NAME": "Iesūtnes Nosaukums",
         "ADD_NAME": "Pievienojiet savas iesūtnes nosaukumu",
         "PICK_NAME": "Lūdzu ievadiet Iesūtnes nosaukumu",
-        "PICK_A_VALUE": "Izvēlieties vērtību",
-        "CREATE_INBOX": "Izveidot Iesūtni"
-      },
-      "INSTAGRAM": {
-        "CONTINUE_WITH_INSTAGRAM": "Turpināt ar Instagram",
-        "CONNECT_YOUR_INSTAGRAM_PROFILE": "Pievienot savu Instagram Profilu",
-        "HELP": "Lai pievienotu savu Instagram profilu kā kanālu, jums ir jāautentificē savs Instagram profils, noklikšķinot uz 'Turpināt ar Instagram' ",
-        "ERROR_MESSAGE": "Veidojot savienojumu ar Instagram, radās kļūda. Lūdzu, mēģiniet vēlreiz",
-        "ERROR_AUTH": "Veidojot savienojumu ar Instagram, radās kļūda. Lūdzu, mēģiniet vēlreiz",
-        "NEW_INBOX_SUGGESTION": "This Instagram account was previously linked to a different inbox and has now been migrated here. All new messages will appear here. The old inbox will no longer be able to send or receive messages for this account.",
-        "DUPLICATE_INBOX_BANNER": "This Instagram account was migrated to the new Instagram channel inbox. You won’t be able to send/receive Instagram messages from this inbox anymore."
+        "PICK_A_VALUE": "Izvēlieties vērtību"
       },
       "TWITTER": {
         "HELP": "Lai pievienotu savu Twitter profilu kā kanālu, Jums ir jāautentificē savs Twitter profils, noklikšķinot uz \"Pierakstīties ar Twitter\"' ",
@@ -349,7 +343,7 @@
       },
       "AUTH": {
         "TITLE": "Izvēlieties kanālu",
-        "DESC": "Chatwoot atbalsta tiešraides tērzēšanas logrīkus, Facebook Messenger, Twitter profilus, WhatsApp, e-pastus kā kanālus. Ja vēlaties izveidot pielāgotu kanālu, varat to izveidot, izmantojot API kanālu. Lai sāktu, izvēlieties vienu no tālāk norādītajiem kanāliem."
+        "DESC": "SoftwareArrows atbalsta tiešraides tērzēšanas logrīkus, Facebook Messenger, Twitter profilus, WhatsApp, e-pastus kā kanālus. Ja vēlaties izveidot pielāgotu kanālu, varat to izveidot, izmantojot API kanālu. Lai sāktu, izvēlieties vienu no tālāk norādītajiem kanāliem."
       },
       "AGENTS": {
         "TITLE": "Aģenti",
@@ -359,11 +353,11 @@
       },
       "DETAILS": {
         "TITLE": "Informācija par Iesūtni",
-        "DESC": "Tālāk esošajā nolaižamajā izvēlnē izvēlieties Facebook lapu, kuru vēlaties savienot ar Chatwoot. Jūs varat savai iesūtnei, lai to labāk atpazītu, piešķirt pielāgotu nosaukumu."
+        "DESC": "Tālāk esošajā nolaižamajā izvēlnē izvēlieties Facebook lapu, kuru vēlaties savienot ar Software Arrows . Jūs varat savai iesūtnei, lai to labāk atpazītu, piešķirt pielāgotu nosaukumu."
       },
       "FINISH": {
         "TITLE": "Sanāca!",
-        "DESC": "Jūs esat veiksmīgi pabeidzis savas Facebook lapas integrēšanu ar Chatwoot. Nākamreiz, kad klients nosūtīs ziņojumu Jūsu lapai, saruna automātiski parādīsies Jūsu iesūtnē.<br>Mēs nodrošinām Jums arī logrīka skriptu, ko varat viegli pievienot savai tīmekļa vietnei. Kad tas būs pieejams Jūsu vietnē, klienti varēs Jums nosūtīt ziņojumus tieši no Jūsu tīmekļa vietnes, neizmantojot ārējus rīkus, un saruna tiks parādīta tieši šeit, vietnē Chatwoot.<br>"
+        "DESC": "Jūs esat veiksmīgi pabeidzis savas Facebook lapas integrēšanu ar Software Arrows . Nākamreiz, kad klients nosūtīs ziņojumu Jūsu lapai, saruna automātiski parādīsies Jūsu iesūtnē.<br>Mēs nodrošinām Jums arī logrīka skriptu, ko varat viegli pievienot savai tīmekļa vietnei. Kad tas būs pieejams Jūsu vietnē, klienti varēs Jums nosūtīt ziņojumus tieši no Jūsu tīmekļa vietnes, neizmantojot ārējus rīkus, un saruna tiks parādīta tieši šeit, vietnē Software Arrows .<br>"
       },
       "EMAIL_PROVIDER": {
         "TITLE": "Izvēlieties savu e-pasta pakalpojumu sniedzēju",
@@ -745,8 +739,8 @@
         "USER_MESSAGE": "Sveicināti",
         "AGENT_MESSAGE": "Labdien"
       },
-      "BRANDING_TEXT": "Darbināts ar Chatwoot",
-      "SCRIPT_SETTINGS": "\nwindow.chatwootSettings = {options};"
+      "BRANDING_TEXT": "Darbināts ar Software Arrows",
+      "SCRIPT_SETTINGS": "\nwindow.arrowsSettings = {options};"
     },
     "EMAIL_PROVIDERS": {
       "MICROSOFT": "Microsoft",
@@ -763,8 +757,7 @@
       "EMAIL": "E-pasts",
       "TELEGRAM": "Telegram",
       "LINE": "Line",
-      "API": "API Kanāls",
-      "INSTAGRAM": "Instagram"
+      "API": "API Kanāls"
     }
   }
 }

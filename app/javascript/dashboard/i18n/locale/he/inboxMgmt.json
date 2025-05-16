@@ -8,24 +8,28 @@
     "LIST": {
       "404": "אין תיבות דואר נכנס מצורפות לחשבון זה."
     },
-    "CREATE_FLOW": {
-      "CHANNEL": {
-        "TITLE": "בחר ערוץ",
-        "BODY": "בחר את הספק שברצונך לשלב עם Chatwoot."
+    "CREATE_FLOW": [
+      {
+        "title": "בחר ערוץ",
+        "route": "settings_inbox_new",
+        "body": "בחר את הספק שברצונך לשלב עם Software Arrows."
       },
-      "INBOX": {
-        "TITLE": "צור תיבת דואר נכנס",
-        "BODY": "אמת את חשבונך וצור תיבת דואר נכנס."
+      {
+        "title": "צור תיבת דואר נכנס",
+        "route": "settings_inboxes_page_channel",
+        "body": "אמת את חשבונך וצור תיבת דואר נכנס."
       },
-      "AGENT": {
-        "TITLE": "הוסף נציג",
-        "BODY": "הוסף נציגים לתיבת הדואר הנכנס שנוצרה."
+      {
+        "title": "הוסף נציג",
+        "route": "settings_inboxes_add_agents",
+        "body": "הוסף נציגים לתיבת הדואר הנכנס שנוצרה."
       },
-      "FINISH": {
-        "TITLE": "Voilà!",
-        "BODY": "אתם מוכנים לצאת לדרך!"
+      {
+        "title": "Voilà!",
+        "route": "settings_inbox_finish",
+        "body": "אתם מוכנים לצאת לדרך!"
       }
-    },
+    ],
     "ADD": {
       "CHANNEL_NAME": {
         "LABEL": "שם תיבת הדואר הנכנס",
@@ -37,23 +41,13 @@
         "PLACEHOLDER": "הזן את שם האתר שלך (למשל: Acme Inc)"
       },
       "FB": {
-        "HELP": "נ. ב: על ידי כניסה, אנו מקבלים גישה רק להודעות של הדף שלך. לעולם לא ניתן לגשת להודעות הפרטיות שלך על ידי Chatwoot.",
+        "HELP": "נ. ב: על ידי כניסה, אנו מקבלים גישה רק להודעות של הדף שלך. לעולם לא ניתן לגשת להודעות הפרטיות שלך על ידי Software Arrows.",
         "CHOOSE_PAGE": "בחר עמוד",
         "CHOOSE_PLACEHOLDER": "בחר עמוד מהרשימה",
         "INBOX_NAME": "שם תיבת הדואר הנכנס",
         "ADD_NAME": "הוסף שם לתיבת הדואר הנכנס שלך",
         "PICK_NAME": "Pick a Name for your Inbox",
-        "PICK_A_VALUE": "בחר ערך",
-        "CREATE_INBOX": "צור תיבת דואר נכנס"
-      },
-      "INSTAGRAM": {
-        "CONTINUE_WITH_INSTAGRAM": "Continue with Instagram",
-        "CONNECT_YOUR_INSTAGRAM_PROFILE": "Connect your Instagram Profile",
-        "HELP": "To add your Instagram profile as a channel, you need to authenticate your Instagram Profile by clicking on 'Continue with Instagram' ",
-        "ERROR_MESSAGE": "There was an error connecting to Instagram, please try again",
-        "ERROR_AUTH": "There was an error connecting to Instagram, please try again",
-        "NEW_INBOX_SUGGESTION": "This Instagram account was previously linked to a different inbox and has now been migrated here. All new messages will appear here. The old inbox will no longer be able to send or receive messages for this account.",
-        "DUPLICATE_INBOX_BANNER": "This Instagram account was migrated to the new Instagram channel inbox. You won’t be able to send/receive Instagram messages from this inbox anymore."
+        "PICK_A_VALUE": "בחר ערך"
       },
       "TWITTER": {
         "HELP": "כדי להוסיף את פרופיל הטוויטר שלך כערוץ, עליך לאמת את פרופיל הטוויטר שלך על ידי לחיצה על 'היכנס באמצעות טוויטר' ",
@@ -359,11 +353,11 @@
       },
       "DETAILS": {
         "TITLE": "פרטי תיבת דואר נכנס",
-        "DESC": "מהתפריט הנפתח למטה, בחר את דף הפייסבוק שברצונך להתחבר ל-Chatwoot. אתה יכול גם לתת שם מותאם אישית לתיבת הדואר הנכנס שלך לזיהוי טוב יותר."
+        "DESC": "מהתפריט הנפתח למטה, בחר את דף הפייסבוק שברצונך להתחבר ל-Software Arrows. אתה יכול גם לתת שם מותאם אישית לתיבת הדואר הנכנס שלך לזיהוי טוב יותר."
       },
       "FINISH": {
         "TITLE": "הצלחתי!",
-        "DESC": "סיימת בהצלחה לשלב את דף הפייסבוק שלך עם Chatwoot. בפעם הבאה שלקוח ישלח הודעה לדף שלך, השיחה תופיע אוטומטית בתיבת הדואר הנכנס שלך.<br>אנחנו גם מספקים לך סקריפט ווידג'ט שתוכל להוסיף בקלות לאתר שלך. ברגע שזה פעיל באתר שלך, לקוחות יכולים לשלוח לך הודעות ישירות מהאתר שלך ללא עזרה של כל כלי חיצוני והשיחה תופיע ממש כאן, ב-Chatwoot.<br>מגניב, הא? ובכן, אנחנו בטוח מנסים להיות :)"
+        "DESC": "סיימת בהצלחה לשלב את דף הפייסבוק שלך עם Software Arrows . בפעם הבאה שלקוח ישלח הודעה לדף שלך, השיחה תופיע אוטומטית בתיבת הדואר הנכנס שלך.<br>אנחנו גם מספקים לך סקריפט ווידג'ט שתוכל להוסיף בקלות לאתר שלך. ברגע שזה פעיל באתר שלך, לקוחות יכולים לשלוח לך הודעות ישירות מהאתר שלך ללא עזרה של כל כלי חיצוני והשיחה תופיע ממש כאן, ב-Software Arrows.<br>מגניב, הא? ובכן, אנחנו בטוח מנסים להיות :)"
       },
       "EMAIL_PROVIDER": {
         "TITLE": "בחר את ספק הדוא\"ל שלך",
@@ -745,8 +739,8 @@
         "USER_MESSAGE": "היי",
         "AGENT_MESSAGE": "שלום"
       },
-      "BRANDING_TEXT": "מופעל על ידי Chatwoot",
-      "SCRIPT_SETTINGS": "\n      window.chatwootSettings = {options};"
+      "BRANDING_TEXT": "מופעל על ידי Software Arrows",
+      "SCRIPT_SETTINGS": "\n      window.arrowsSettings = {options};"
     },
     "EMAIL_PROVIDERS": {
       "MICROSOFT": "מיקרוסופט",
@@ -763,8 +757,7 @@
       "EMAIL": "אימייל",
       "TELEGRAM": "Telegram",
       "LINE": "Line",
-      "API": "ערוץ API",
-      "INSTAGRAM": "Instagram"
+      "API": "ערוץ API"
     }
   }
 }

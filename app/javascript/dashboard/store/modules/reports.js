@@ -258,6 +258,19 @@ export const actions = {
         console.error(error);
       });
   },
+  downloadContactReports(_, reportObj) {
+    return Report.getContactReports(reportObj)
+      .then(response => {
+        downloadCsvFile(reportObj.fileName, response.data);
+        AnalyticsHelper.track(REPORTS_EVENTS.DOWNLOAD_REPORT, {
+          reportType: 'contact',
+          businessHours: reportObj?.businessHours,
+        });
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  },
   downloadAccountConversationHeatmap(_, reportObj) {
     Report.getConversationTrafficCSV({ daysBefore: reportObj.daysBefore })
       .then(response => {

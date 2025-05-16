@@ -94,6 +94,20 @@ class Conversation < ApplicationRecord
     ).sort_on_last_user_message_at
   }
 
+  # scope :with_unread_notifications, -> {
+  #   joins(:notifications)
+  #     .where(notifications: { read_at: nil })
+  #     .distinct
+  # }
+
+  scope :with_unread_notifications, -> {
+    joins(:notifications)
+      .joins(:messages) # Para acceder al último mensaje de cualquier tipo
+      .where(notifications: { read_at: nil }) # Notificaciones no leídas
+      .where('conversations.assignee_last_seen_at IS NULL OR messages.created_at > conversations.assignee_last_seen_at')
+      .distinct # Evitar duplicados si hay múltiples notificaciones o mensajes
+  }
+
   belongs_to :account
   belongs_to :inbox
   belongs_to :assignee, class_name: 'User', optional: true, inverse_of: :assigned_conversations
@@ -105,9 +119,11 @@ class Conversation < ApplicationRecord
   has_many :mentions, dependent: :destroy_async
   has_many :messages, dependent: :destroy_async, autosave: true
   has_one :csat_survey_response, dependent: :destroy_async
+  has_one :last_incoming_message, -> { incoming.order(created_at: :desc) }, class_name: 'Message', inverse_of: :conversation
   has_many :conversation_participants, dependent: :destroy_async
   has_many :notifications, as: :primary_actor, dependent: :destroy_async
   has_many :attachments, through: :messages
+  has_many :conversation_thread_records, dependent: :destroy
 
   before_save :ensure_snooze_until_reset
   before_create :determine_conversation_status

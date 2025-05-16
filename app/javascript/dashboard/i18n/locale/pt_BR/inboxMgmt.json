@@ -8,24 +8,28 @@
     "LIST": {
       "404": "Não há caixas de entrada anexadas a esta conta."
     },
-    "CREATE_FLOW": {
-      "CHANNEL": {
-        "TITLE": "Escolha o Canal",
-        "BODY": "Escolha o provedor que você deseja integrar com o Chatwoot."
+    "CREATE_FLOW": [
+      {
+        "title": "Escolha o canal",
+        "route": "settings_inbox_new",
+        "body": "Escolha o provedor que você deseja integrar com o Software Arrows."
       },
-      "INBOX": {
-        "TITLE": "Criar Caixa de Entrada",
-        "BODY": "Autenticar sua conta e criar uma caixa de entrada."
+      {
+        "title": "Criar Caixa de Entrada",
+        "route": "settings_inboxes_page_channel",
+        "body": "Autenticar sua conta e criar uma caixa de entrada."
       },
-      "AGENT": {
-        "TITLE": "Adicionar Agentes",
-        "BODY": "Adicionar agentes à caixa de entrada criada."
+      {
+        "title": "Adicionar Agentes",
+        "route": "settings_inboxes_add_agents",
+        "body": "Adicionar agentes à caixa de entrada criada."
       },
-      "FINISH": {
-        "TITLE": "Então!",
-        "BODY": "Está tudo pronto para começar!"
+      {
+        "title": "Então!",
+        "route": "settings_inbox_finish",
+        "body": "Está tudo pronto para começar!"
       }
-    },
+    ],
     "ADD": {
       "CHANNEL_NAME": {
         "LABEL": "Nome da Caixa de Entrada",
@@ -37,23 +41,13 @@
         "PLACEHOLDER": "Informe o nome do seu site (por exemplo: Acme Inc)"
       },
       "FB": {
-        "HELP": "Obs: ao fazer login, apenas temos acesso às mensagens da sua página. Suas mensagens privadas nunca podem ser acessadas pelo Chatwoot.",
+        "HELP": "Obs: ao fazer login, apenas temos acesso às mensagens da sua página. Suas mensagens privadas nunca podem ser acessadas pelo Software Arrows.",
         "CHOOSE_PAGE": "Escolher Página",
         "CHOOSE_PLACEHOLDER": "Selecione uma página da lista",
         "INBOX_NAME": "Nome da Caixa de Entrada",
         "ADD_NAME": "Adicione um nome para sua caixa de entrada",
         "PICK_NAME": "Escolha um nome para sua caixa de entrada",
-        "PICK_A_VALUE": "Escolha um valor",
-        "CREATE_INBOX": "Criar Caixa de Entrada"
-      },
-      "INSTAGRAM": {
-        "CONTINUE_WITH_INSTAGRAM": "Continuar com o Instagram",
-        "CONNECT_YOUR_INSTAGRAM_PROFILE": "Conecte seu perfil do Instagram",
-        "HELP": "Para adicionar seu perfil do Instagram como um canal, você precisa autenticar seu perfil do Instagram clicando em 'Continuar com o Instagram' ",
-        "ERROR_MESSAGE": "Houve um erro ao conectar ao Instagram, por favor, tente novamente",
-        "ERROR_AUTH": "Houve um erro ao conectar ao Instagram, por favor, tente novamente",
-        "NEW_INBOX_SUGGESTION": "Esta conta do Instagram estava conectada a uma caixa de entrada diferente e agora foi migrada para aqui. Todas as novas mensagens aparecerão aqui. A caixa de entrada antiga não poderá mais enviar ou receber mensagens para esta conta.",
-        "DUPLICATE_INBOX_BANNER": "Esta conta do Instagram foi migrada para a nova caixa de entrada de canal do Instagram. Você não poderá mais enviar/receber mensagens do Instagram desta caixa de entrada."
+        "PICK_A_VALUE": "Escolha um valor"
       },
       "TWITTER": {
         "HELP": "Para adicionar seu perfil do Twitter como um canal, você precisa autenticar seu perfil do Twitter clicando em 'Entrar com o Twitter' ",
@@ -88,7 +82,7 @@
         },
         "CHANNEL_GREETING_MESSAGE": {
           "LABEL": "Mensagem de saudação do canal",
-          "PLACEHOLDER": "Acme Inc normalmente responde em algumas horas."
+          "PLACEHOLDER": "Acme Inc tipicamente retorna em algumas horas."
         },
         "CHANNEL_GREETING_TOGGLE": {
           "LABEL": "Ativar saudação do canal",
@@ -157,8 +151,8 @@
           "ERROR": "Por favor, forneça um número de telefone válido que comece com o símbolo \"+\" e não contenha espaços."
         },
         "API_CALLBACK": {
-          "TITLE": "URL de Callback",
-          "SUBTITLE": "Você precisa configurar a URL de Callback de mensagem no Twilio com a URL mencionada aqui."
+          "TITLE": "URL de retorno",
+          "SUBTITLE": "Você precisa configurar o URL de retorno de mensagem no Twilio com a URL mencionada aqui."
         },
         "SUBMIT_BUTTON": "Criar canal Twilio",
         "API": {
@@ -167,7 +161,7 @@
       },
       "SMS": {
         "TITLE": "Canal SMS",
-        "DESC": "Comece a oferecer suporte a seus clientes por SMS.",
+        "DESC": "Comece a apoiar seus clientes via SMS.",
         "PROVIDERS": {
           "LABEL": "Provedor de API",
           "TWILIO": "Twilio",
@@ -212,14 +206,14 @@
             "ERROR_MESSAGE": "Não pudemos autenticar as credenciais de Bandwidth, por favor, tente novamente"
           },
           "API_CALLBACK": {
-            "TITLE": "URL de Callback",
-            "SUBTITLE": "Você precisa configurar a URL de callback de mensagem no Bandwidth com a URL mencionada aqui."
+            "TITLE": "URL de retorno",
+            "SUBTITLE": "Você precisa configurar o URL de retorno de mensagem na banda com a URL mencionada aqui."
           }
         }
       },
       "WHATSAPP": {
         "TITLE": "Canal do WhatsApp",
-        "DESC": "Comece a oferecer suporte a seus clientes pelo WhatsApp.",
+        "DESC": "Comece a apoiar seus clientes via WhatsApp.",
         "PROVIDERS": {
           "LABEL": "Provedor de API",
           "TWILIO": "Twilio",
@@ -234,7 +228,7 @@
         "PHONE_NUMBER": {
           "LABEL": "Número de telefone",
           "PLACEHOLDER": "Por favor, insira o número de telefone do qual a mensagem será enviada.",
-          "ERROR": "Por favor, forneça um número de telefone válido que comece com o símbolo \"+\" e não contém quaisquer espaços."
+          "ERROR": "Por favor, forneça um número de telefone válido que começa com uma placa `+` e não contém quaisquer espaços."
         },
         "PHONE_NUMBER_ID": {
           "LABEL": "ID do número de telefone",
@@ -242,8 +236,8 @@
           "ERROR": "Por favor, insira um valor válido."
         },
         "BUSINESS_ACCOUNT_ID": {
-          "LABEL": "ID da conta do WhatsApp Business",
-          "PLACEHOLDER": "Por favor, insira o ID da conta do WhatsApp Business obtido do painel do desenvolvedor do Facebook.",
+          "LABEL": "ID da Conta de Negócios",
+          "PLACEHOLDER": "Por favor, insira o ID da Conta de Negócios obtido do painel do desenvolvedor do Facebook.",
           "ERROR": "Por favor, insira um valor válido."
         },
         "WEBHOOK_VERIFY_TOKEN": {
@@ -258,7 +252,7 @@
           "ERROR": "Por favor, insira um valor válido."
         },
         "API_CALLBACK": {
-          "TITLE": "URL de callback",
+          "TITLE": "URL de retorno",
           "SUBTITLE": "Você deve configurar a URL do webhook e o token de verificação no portal do desenvolvedor do Facebook com os valores mostrados abaixo.",
           "WEBHOOK_URL": "URL do Webhook",
           "WEBHOOK_VERIFICATION_TOKEN": "Token de verificação Webhook"
@@ -278,7 +272,7 @@
         },
         "WEBHOOK_URL": {
           "LABEL": "URL do Webhook",
-          "SUBTITLE": "Configure a URL onde você deseja receber callbacks em eventos.",
+          "SUBTITLE": "Configure a URL onde você deseja receber retornos de chamada em eventos.",
           "PLACEHOLDER": "URL do Webhook"
         },
         "SUBMIT_BUTTON": "Criar canal de API",
@@ -349,7 +343,7 @@
       },
       "AUTH": {
         "TITLE": "Escolha um canal",
-        "DESC": "O Chatwoot suporta widgets de chats ao vivo, Facebook Messenger, perfis do Twitter, WhatsApp, E-mails, etc., como canais. Se você quiser criar um canal personalizado, você pode criá-lo usando o canal API. Para começar, escolha um dos canais abaixo."
+        "DESC": "O Software Arrows suporta widgets de chats ao vivo, Facebook Messenger, perfis do Twitter, WhatsApp, E-mails, etc., como canais. Se você quiser criar um canal personalizado, você pode criá-lo usando o canal API. Para começar, escolha um dos canais abaixo."
       },
       "AGENTS": {
         "TITLE": "Agentes",
@@ -359,11 +353,11 @@
       },
       "DETAILS": {
         "TITLE": "Detalhes da Caixa de Entrada",
-        "DESC": "No menu abaixo, selecione a Página do Facebook que você deseja se conectar ao Chatwoot. Você também pode dar um nome personalizado para sua caixa de entrada para uma melhor identificação."
+        "DESC": "No menu abaixo, selecione a Página do Facebook que você deseja se conectar ao Software Arrows . Você também pode dar um nome personalizado para sua caixa de entrada para uma melhor identificação."
       },
       "FINISH": {
         "TITLE": "Tudo funcionando. Deu certo!",
-        "DESC": "Você concluiu a integração da sua página do Facebook com o Chatwoot. Na próxima vez que um cliente enviar uma mensagem para sua página, a conversa aparecerá automaticamente na sua caixa de entrada. <br> Também estamos fornecendo um script de widget que você pode adicionar facilmente ao seu site. Assim que estiver disponível no seu site, os clientes poderão enviar mensagens diretamente do seu site, sem a ajuda de nenhuma ferramenta externa, e a conversa aparecerá aqui, no Chatwoot. Legal, hein? Com certeza estamos tentamos ser :)"
+        "DESC": "Você concluiu a integração da sua página do Facebook com o Software Arrows . Na próxima vez que um cliente enviar uma mensagem para sua página, a conversa aparecerá automaticamente na sua caixa de entrada. <br> Também estamos fornecendo um script de widget que você pode adicionar facilmente ao seu site. Assim que estiver disponível no seu site, os clientes poderão enviar mensagens diretamente do seu site, sem a ajuda de nenhuma ferramenta externa, e a conversa aparecerá aqui, no Software Arrows . Legal, hein? Com certeza estamos tentamos ser :)"
       },
       "EMAIL_PROVIDER": {
         "TITLE": "Selecione seu provedor de e-mail",
@@ -427,7 +421,7 @@
         "FOR_EG": "Por ex:",
         "FRIENDLY": {
           "TITLE": "Amigável",
-          "FROM": "de",
+          "FROM": "De",
           "SUBTITLE": "Adicione o nome do agente que enviou a resposta ao nome do remetente para torná-la amigável."
         },
         "PROFESSIONAL": {
@@ -453,7 +447,7 @@
         "DISABLED": "Desativado"
       },
       "ENABLE_HMAC": {
-        "LABEL": "Ativar"
+        "LABEL": "Habilitado"
       }
     },
     "DELETE": {
@@ -483,7 +477,7 @@
       "WIDGET_BUILDER": "Construtor de Widget",
       "BOT_CONFIGURATION": "Configuração do Bot"
     },
-    "SETTINGS": "Configurações",
+    "SETTINGS": "Confirgurações",
     "FEATURES": {
       "LABEL": "Funcionalidades",
       "DISPLAY_FILE_PICKER": "Exibir seletor de arquivos no widget",
@@ -510,7 +504,7 @@
       "ENABLE_CONTINUITY_VIA_EMAIL_SUB_TEXT": "As conversas continuarão sobre o e-mail se o endereço de e-mail de contato estiver disponível.",
       "LOCK_TO_SINGLE_CONVERSATION": "Bloquear para conversa única",
       "LOCK_TO_SINGLE_CONVERSATION_SUB_TEXT": "Ativar ou desativar várias conversas para o mesmo contato nesta caixa de entrada",
-      "INBOX_UPDATE_TITLE": "Configurações da Caixa de Entrada",
+      "INBOX_UPDATE_TITLE": "Configurações da Caixa de entrada",
       "INBOX_UPDATE_SUB_TEXT": "Atualize suas configurações de caixa de entrada",
       "AUTO_ASSIGNMENT_SUB_TEXT": "Ativar ou desativar a atribuição automática de novas conversas aos agentes adicionados a essa caixa de entrada.",
       "HMAC_VERIFICATION": "Validação de Identidade do Usuário",
@@ -665,7 +659,7 @@
       "OPEN_SSL_VERIFY_MODE": "Abrir modo de verificação SSL",
       "AUTH_MECHANISM": "Autenticação"
     },
-    "NOTE": "Nota: ",
+    "NOTE": "Observação: ",
     "WIDGET_BUILDER": {
       "WIDGET_OPTIONS": {
         "AVATAR": {
@@ -705,7 +699,7 @@
           "PLACE_HOLDER": "Fale conosco no chat"
         },
         "UPDATE": {
-          "BUTTON_TEXT": "Atualizar Configurações do Widget",
+          "BUTTON_TEXT": "Atualizar configurações do widget",
           "API": {
             "SUCCESS_MESSAGE": "Configurações do widget atualizadas com sucesso",
             "ERROR_MESSAGE": "Não é possível atualizar as configurações do widget"
@@ -730,8 +724,8 @@
       },
       "REPLY_TIME": {
         "IN_A_FEW_MINUTES": "Normalmente responde em alguns minutos",
-        "IN_A_FEW_HOURS": "Normalmente responde em algumas horas",
-        "IN_A_DAY": "Normalmente responde em um dia"
+        "IN_A_FEW_HOURS": "Responde normalmente em algumas horas",
+        "IN_A_DAY": "Responde normalmente em um dia"
       },
       "FOOTER": {
         "START_CONVERSATION_BUTTON_TEXT": "Iniciar Conversa",
@@ -745,8 +739,8 @@
         "USER_MESSAGE": "Oi",
         "AGENT_MESSAGE": "Olá"
       },
-      "BRANDING_TEXT": "Desenvolvido por Chatwoot",
-      "SCRIPT_SETTINGS": "\n      window.chatwootSettings = {options};"
+      "BRANDING_TEXT": "Desenvolvido por Software Arrows",
+      "SCRIPT_SETTINGS": "\n      window.arrowsSettings = {options};"
     },
     "EMAIL_PROVIDERS": {
       "MICROSOFT": "Microsoft",
@@ -763,8 +757,7 @@
       "EMAIL": "e-mail",
       "TELEGRAM": "Telegram",
       "LINE": "Line",
-      "API": "Canal da API",
-      "INSTAGRAM": "Instagram"
+      "API": "Canal da API"
     }
   }
 }

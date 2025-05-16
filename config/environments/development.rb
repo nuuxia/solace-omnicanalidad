@@ -32,6 +32,15 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = ENV.fetch('ACTIVE_STORAGE_SERVICE', 'local').to_sym
 
+  config.mercado_libre_auth_url = 'https://auth.mercadolibre.com/authorization'
+  config.mercado_libre_redirect_uri = 'https://b15f-2800-810-803-1e9-1112-4b52-8cc6-16ee.ngrok-free.app/mercado_libre/callback'
+  config.mercado_libre_base_url = 'https://api.mercadolibre.com/'
+
+  config.tik_tok_auth_url = 'https://www.tiktok.com/v2/auth/authorize/'
+  config.tik_tok_redirect_uri = 'https://b15f-2800-810-803-1e9-1112-4b52-8cc6-16ee.ngrok-free.app/tik_tok/callback'
+
+  config.tik_tok_base_url = 'https://open.tiktokapis.com/v2'
+
   config.active_job.queue_adapter = :sidekiq
 
   Rails.application.routes.default_url_options = { host: ENV['FRONTEND_URL'] }

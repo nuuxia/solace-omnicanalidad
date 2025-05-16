@@ -1,31 +1,49 @@
 {
   "INBOX_MGMT": {
     "HEADER": "Entradas",
-    "DESCRIPTION": "Un canal es el modo de comunicación que tu cliente elige para interactuar contigo. Una bandeja de entrada es donde administras interacciones para un canal específico. Puede incluir comunicaciones de diversas fuentes como correo electrónico, chat en vivo y redes sociales.",
-    "LEARN_MORE": "Aprende más sobre las entradas",
+    "DESCRIPTION": "A channel is the mode of communication your customer chooses to interact with you. An inbox is where you manage interactions for a specific channel. It can include communications from various sources such as email, live chat, and social media.",
+    "LEARN_MORE": "Learn more about inboxes",
     "RECONNECTION_REQUIRED": "Tu bandeja de entrada está desconectada. No recibirás mensajes nuevos hasta que lo vuelvas a autorizar.",
     "CLICK_TO_RECONNECT": "Haga clic aquí para volver a conectar.",
     "LIST": {
       "404": "No hay entradas adjuntas a esta cuenta."
     },
-    "CREATE_FLOW": {
-      "CHANNEL": {
-        "TITLE": "Elegir canal",
-        "BODY": "Elija el proveedor que desea integrar con Chatwoot."
-      },
-      "INBOX": {
-        "TITLE": "Crear bandeja de entrada",
-        "BODY": "Autenticar tu cuenta y crear una bandeja de entrada."
-      },
-      "AGENT": {
-        "TITLE": "Añadir agentes",
-        "BODY": "Añadir agentes a la bandeja de entrada creada."
-      },
-      "FINISH": {
-        "TITLE": "Voilà!",
-        "BODY": "¡Todo está listo!"
-      }
+    "OFFLINE_RESPONSE_LABEL": "El bot asignado responde únicamente en horarios offline.",
+    "MERCADO_LIBRE_OPTIONS_HEADER": "Recepción de Mensajes en la Bandeja de Entrada",
+    "MERCADO_LIBRE_USER_INFO_BUTTON": "Obtener información del usuario de MercadoLibre",
+    "MERCADO_LIBRE_USER_INFO": {
+      "TITLE": "Información de la cuenta de Mercado Libre",
+      "SUB_TEXT": "Mostrá el nombre de usuario y el enlace al perfil de la cuenta conectada.",
+      "LOADING": "Cargando información del usuario...",
+      "NICKNAME": "Nombre de usuario",
+      "PERMALINK": "Enlace permanente",
+      "ERROR": "Ocurrió un error al obtener la información del usuario"
     },
+    "ENABLE_PRE_SALE_MESSAGES": "Habilitar preguntas pre venta",
+    "ENABLE_POST_SALE_MESSAGES": "Habilitar mensajería post venta",
+    "ENABLE_BOTH_MESSAGES": "Habilitar ambos",
+    "CREATE_FLOW": [
+      {
+        "title": "Elegir canal",
+        "route": "settings_inbox_new",
+        "body": "Elija el proveedor que desea integrar con Software Arrows."
+      },
+      {
+        "title": "Crear bandeja de entrada",
+        "route": "settings_inboxes_page_channel",
+        "body": "Autenticar tu cuenta y crear una bandeja de entrada."
+      },
+      {
+        "title": "Añadir agentes",
+        "route": "settings_inboxes_add_agents",
+        "body": "Añadir agentes a la bandeja de entrada creada."
+      },
+      {
+        "title": "Voilà!",
+        "route": "settings_inbox_finish",
+        "body": "¡Todo está listo!"
+      }
+    ],
     "ADD": {
       "CHANNEL_NAME": {
         "LABEL": "Nombre de la bandeja de entrada",
@@ -37,23 +55,13 @@
         "PLACEHOLDER": "Introduzca el nombre de su sitio web (por ejemplo: Acme Inc)"
       },
       "FB": {
-        "HELP": "PS: Al iniciar sesión, sólo tenemos acceso a los mensajes de tu Página. Tus mensajes privados nunca pueden ser accedidos por Chatwoot.",
+        "HELP": "PS: Al iniciar sesión, sólo tenemos acceso a los mensajes de tu Página. Tus mensajes privados nunca pueden ser accedidos por Software Arrows.",
         "CHOOSE_PAGE": "Elegir página",
         "CHOOSE_PLACEHOLDER": "Seleccione una página de la lista",
         "INBOX_NAME": "Nombre de la bandeja de entrada",
         "ADD_NAME": "Añada un nombre para su bandeja de entrada",
         "PICK_NAME": "Elija un nombre para su bandeja de entrada",
-        "PICK_A_VALUE": "Elija un valor",
-        "CREATE_INBOX": "Crear bandeja de entrada"
-      },
-      "INSTAGRAM": {
-        "CONTINUE_WITH_INSTAGRAM": "Continue with Instagram",
-        "CONNECT_YOUR_INSTAGRAM_PROFILE": "Connect your Instagram Profile",
-        "HELP": "To add your Instagram profile as a channel, you need to authenticate your Instagram Profile by clicking on 'Continue with Instagram' ",
-        "ERROR_MESSAGE": "There was an error connecting to Instagram, please try again",
-        "ERROR_AUTH": "There was an error connecting to Instagram, please try again",
-        "NEW_INBOX_SUGGESTION": "This Instagram account was previously linked to a different inbox and has now been migrated here. All new messages will appear here. The old inbox will no longer be able to send or receive messages for this account.",
-        "DUPLICATE_INBOX_BANNER": "This Instagram account was migrated to the new Instagram channel inbox. You won’t be able to send/receive Instagram messages from this inbox anymore."
+        "PICK_A_VALUE": "Elija un valor"
       },
       "TWITTER": {
         "HELP": "Para añadir tu perfil de Twitter como un canal, necesitas autenticar tu perfil de Twitter haciendo clic en 'Iniciar sesión con Twitter' ",
@@ -218,7 +226,7 @@
         }
       },
       "WHATSAPP": {
-        "TITLE": "Canal de WhatsApp",
+        "TITLE": "Canal de WhatsApp Manual",
         "DESC": "Comience a apoyar a sus clientes mediante WhatsApp.",
         "PROVIDERS": {
           "LABEL": "Proveedor de API",
@@ -226,6 +234,12 @@
           "WHATSAPP_CLOUD": "Nube de WhatsApp",
           "360_DIALOG": "360 Diálogo"
         },
+        "CHOOSE_METHOD": "Elige cómo quieres conectar tu canal de WhatsApp. Puedes hacerlo automáticamente a través de Facebook o configurarlo manualmente.",
+        "LOGIN_WITH_FACEBOOK": {
+          "LABEL": "Iniciar sesión con Facebook"
+        },
+        "AUTOMATED_TITLE": "Canal de WhatsApp Automatizado",
+        "AUTOMATED_DESC": "Conecta tu cuenta de WhatsApp a través de Facebook. Ahora, en lugar de hacerlo manualmente, puedes aprovechar el registro integrado de Meta para automatizar todo el proceso.",
         "INBOX_NAME": {
           "LABEL": "Nombre de la bandeja de entrada",
           "PLACEHOLDER": "Por favor, introduzca un nombre de bandeja de entrada",
@@ -347,9 +361,25 @@
           "ERROR_MESSAGE": "No pudimos guardar el canal de telegram"
         }
       },
+      "MERCADO_LIBRE_CHANNEL": {
+        "HELP": "Para agregar Mercado Libre como un canal, necesitas autenticar tu cuenta haciendo clic en 'Iniciar sesión con Mercado Libre'.",
+        "ERROR_MESSAGE": "Hubo un error al conectar con Mercado Libre, por favor intenta nuevamente.",
+        "TITLE": "Canal de Mercado Libre",
+        "DESC": "Integra con el canal de Mercado Libre y comienza a atender a tus clientes.",
+        "SUBMIT_BUTTON": "Crear Canal de Mercado Libre",
+        "LOADING_MESSAGE": "Creando el canal, por favor espera..."
+      },
+      "TIK_TOK_CHANNEL": {
+        "HELP": "Para agregar Tik Tok como un canal, necesitas autenticar tu cuenta haciendo clic en 'Iniciar sesión con Tik Tok'.",
+        "ERROR_MESSAGE": "Hubo un error al conectar con Tik Tok, por favor intenta nuevamente.",
+        "TITLE": "Canal de Tik Tok",
+        "DESC": "Integra con el canal de Tik Tok y comienza a atender a tus clientes.",
+        "SUBMIT_BUTTON": "Crear Canal de Tik Tok",
+        "LOADING_MESSAGE": "Creando el canal, por favor espera..."
+      },
       "AUTH": {
         "TITLE": "Elija un canal",
-        "DESC": "Chatwoot soporta widgets de Live Chat, Facebook Messenger, perfiles de Twitter, WhatsApp, correos electrónicos, etc., como canales. Si quieres construir un canal personalizado, puedes crearlo usando el canal API. Para empezar, elige uno de los canales a continuación."
+        "DESC": "SoftwareArrows soporta widgets de Live Chat, Facebook Messenger, perfiles de Twitter, WhatsApp, correos electrónicos, etc., como canales. Si quieres construir un canal personalizado, puedes crearlo usando el canal API. Para empezar, elige uno de los canales a continuación."
       },
       "AGENTS": {
         "TITLE": "Agentes",
@@ -359,11 +389,11 @@
       },
       "DETAILS": {
         "TITLE": "Detalles de la bandeja de entrada",
-        "DESC": "En el menú desplegable de abajo, selecciona la página de Facebook que quieres conectar a Chatwoot. También puede dar un nombre personalizado a su bandeja de entrada para una mejor identificación."
+        "DESC": "En el menú desplegable de abajo, selecciona la página de Facebook que quieres conectar a Software Arrows . También puede dar un nombre personalizado a su bandeja de entrada para una mejor identificación."
       },
       "FINISH": {
         "TITLE": "¡Se ha clavado!",
-        "DESC": "Has terminado de integrar correctamente tu página de Facebook con Chatwoot. La próxima vez que un cliente envíe un mensaje a tu Página, la conversación aparecerá automáticamente en tu bandeja de entrada.<br>También le estamos proporcionando un script de widget que puede agregar fácilmente a su sitio web. Una vez que esto está en vivo en tu sitio web, los clientes pueden enviarle mensajes directamente desde su sitio web sin la ayuda de ninguna herramienta externa y la conversación aparecerá aquí, en Chatwoot.<br>¿Genial, eh? Bueno, estamos seguros de que intentaremos ser :)"
+        "DESC": "Has terminado de integrar correctamente tu página de Facebook con Software Arrows . La próxima vez que un cliente envíe un mensaje a tu Página, la conversación aparecerá automáticamente en tu bandeja de entrada.<br>También le estamos proporcionando un script de widget que puede agregar fácilmente a su sitio web. Una vez que esto está en vivo en tu sitio web, los clientes pueden enviarle mensajes directamente desde su sitio web sin la ayuda de ninguna herramienta externa y la conversación aparecerá aquí, en Software Arrows .<br>¿Genial, eh? Bueno, estamos seguros de que intentaremos ser :)"
       },
       "EMAIL_PROVIDER": {
         "TITLE": "Selecciona tu proveedor de correo",
@@ -377,16 +407,16 @@
         "ERROR_MESSAGE": "Hubo un error al conectarse a Microsoft, por favor inténtalo de nuevo"
       },
       "GOOGLE": {
-        "TITLE": "Correo de Google",
-        "DESCRIPTION": "Haga clic en el botón Iniciar sesión con Google para empezar. Serás redirigido a la página de inicio de sesión de correo electrónico. Una vez que aceptes los permisos solicitados, serás redirigido al paso de creación de la bandeja de entrada.",
-        "SIGN_IN": "Iniciar sesión con Google",
+        "TITLE": "Google Email",
+        "DESCRIPTION": "Click on the Sign in with Google button to get started. You will redirected to the email sign in page. Once you accept the requested permissions, you would be redirected back to the inbox creation step.",
+        "SIGN_IN": "Sign in with Google",
         "EMAIL_PLACEHOLDER": "Introduzca la dirección de correo",
-        "ERROR_MESSAGE": "Se ha producido un error al conectar a Google, por favor inténtelo nuevamente"
+        "ERROR_MESSAGE": "There was an error connecting to Google, please try again"
       }
     },
     "DETAILS": {
       "LOADING_FB": "Autenticándote con Facebook...",
-      "ERROR_FB_LOADING": "Error al cargar Facebook SDK. Deshabilite cualquier bloqueador de anuncios e inténtelo de nuevo desde un navegador diferente.",
+      "ERROR_FB_LOADING": "Error loading Facebook SDK. Please disable any ad-blockers and try again from a different browser.",
       "ERROR_FB_AUTH": "Algo salió mal, Por favor actualiza la página...",
       "ERROR_FB_UNAUTHORIZED": "No estás autorizado a realizar esta acción. ",
       "ERROR_FB_UNAUTHORIZED_HELP": "Asegúrate de tener acceso a la página de Facebook con control completo. Puedes leer más sobre los roles de Facebook <a href=\" https://www.facebook.com/help/187316341316631\">here</a>.",
@@ -745,8 +775,8 @@
         "USER_MESSAGE": "Hola",
         "AGENT_MESSAGE": "Hola"
       },
-      "BRANDING_TEXT": "Desarrollado por Chatwoot",
-      "SCRIPT_SETTINGS": "\n      window.chatwootSettings = {options};"
+      "BRANDING_TEXT": "Desarrollado por Software Arrows",
+      "SCRIPT_SETTINGS": "\n      window.arrowsSettings = {options};"
     },
     "EMAIL_PROVIDERS": {
       "MICROSOFT": "Microsoft",
@@ -763,8 +793,9 @@
       "EMAIL": "E-mail",
       "TELEGRAM": "Telegram",
       "LINE": "Line",
-      "API": "Canal API",
-      "INSTAGRAM": "Instagram"
+      "MERCADO_LIBRE": "Mercado Libre",
+      "TIK_TOK": "Tik Tok",
+      "API": "Canal API"
     }
   }
 }

@@ -8,24 +8,28 @@
     "LIST": {
       "404": "Nema prijamnih sandučeta povezanih sa ovim nalogom."
     },
-    "CREATE_FLOW": {
-      "CHANNEL": {
-        "TITLE": "Izaberite kanal",
-        "BODY": "Izaberte provajdera kojeg želite da integrišete sa Chatwoot-om."
+    "CREATE_FLOW": [
+      {
+        "title": "Izaberite kanal",
+        "route": "settings_inbox_new",
+        "body": "Izaberte provajdera kojeg želite da integrišete sa Software Arrows -om."
       },
-      "INBOX": {
-        "TITLE": "Napravi prijemno sanduče",
-        "BODY": "Potvrdite vaš nalog i napravite prijemno sanduće."
+      {
+        "title": "Napravi prijemno sanduče",
+        "route": "settings_inboxes_page_channel",
+        "body": "Potvrdite vaš nalog i napravite prijemno sanduće."
       },
-      "AGENT": {
-        "TITLE": "Dodaj agente",
-        "BODY": "Dodajte agente napravljenom prijamnom sandučetu."
+      {
+        "title": "Dodaj agente",
+        "route": "settings_inboxes_add_agents",
+        "body": "Dodajte agente napravljenom prijamnom sandučetu."
       },
-      "FINISH": {
-        "TITLE": "Voilà!",
-        "BODY": "Sve je spremno za početak!"
+      {
+        "title": "Voilà!",
+        "route": "settings_inbox_finish",
+        "body": "Sve je spremno za početak!"
       }
-    },
+    ],
     "ADD": {
       "CHANNEL_NAME": {
         "LABEL": "Naziv prijemnog sandučeta",
@@ -37,23 +41,13 @@
         "PLACEHOLDER": "Unesite naziv vašeg veb sajta (npr.: Acme Inc)"
       },
       "FB": {
-        "HELP": "PS: Prihvatanjem, mi imamo pristup samo tvojim porukama Stranice. Chatwoot vašim privatnim porukama nikada ne može pristupiti.",
+        "HELP": "PS: Prihvatanjem, mi imamo pristup samo tvojim porukama Stranice. Software Arrows vašim privatnim porukama nikada ne može pristupiti.",
         "CHOOSE_PAGE": "Izaberite stranicu",
         "CHOOSE_PLACEHOLDER": "Izaberite stranicu iz spiska",
         "INBOX_NAME": "Naziv prijemnog sandučeta",
         "ADD_NAME": "Dodajte naziv vašem prijemnom sandučetu",
         "PICK_NAME": "Pick a Name for your Inbox",
-        "PICK_A_VALUE": "Izaberite vrednost",
-        "CREATE_INBOX": "Napravi prijemno sanduče"
-      },
-      "INSTAGRAM": {
-        "CONTINUE_WITH_INSTAGRAM": "Continue with Instagram",
-        "CONNECT_YOUR_INSTAGRAM_PROFILE": "Connect your Instagram Profile",
-        "HELP": "To add your Instagram profile as a channel, you need to authenticate your Instagram Profile by clicking on 'Continue with Instagram' ",
-        "ERROR_MESSAGE": "There was an error connecting to Instagram, please try again",
-        "ERROR_AUTH": "There was an error connecting to Instagram, please try again",
-        "NEW_INBOX_SUGGESTION": "This Instagram account was previously linked to a different inbox and has now been migrated here. All new messages will appear here. The old inbox will no longer be able to send or receive messages for this account.",
-        "DUPLICATE_INBOX_BANNER": "This Instagram account was migrated to the new Instagram channel inbox. You won’t be able to send/receive Instagram messages from this inbox anymore."
+        "PICK_A_VALUE": "Izaberite vrednost"
       },
       "TWITTER": {
         "HELP": "Da bi ste dodali Tviter profil kao kanal, morate da autentifikujete vaš Tviter profil klikom na 'Prijavi se sa Tviterom' ",
@@ -349,7 +343,7 @@
       },
       "AUTH": {
         "TITLE": "Izaberite kanal",
-        "DESC": "Chatwoot podržava vidžete ćaskanja, Fejbuk Mesindžer, Tviter profile, WhatsApp, E-poštu, itd., kao kanale. Ako želite da izgradite proizvoljan kanal, možete kreirati ga korišćenjem API kanala. Da bi ste počeli, izaberite jedan od kanala ispod."
+        "DESC": "SoftwareArrows podržava vidžete ćaskanja, Fejbuk Mesindžer, Tviter profile, WhatsApp, E-poštu, itd., kao kanale. Ako želite da izgradite proizvoljan kanal, možete kreirati ga korišćenjem API kanala. Da bi ste počeli, izaberite jedan od kanala ispod."
       },
       "AGENTS": {
         "TITLE": "Agenti",
@@ -359,11 +353,11 @@
       },
       "DETAILS": {
         "TITLE": "Detalji prijemnog sandučeta",
-        "DESC": "Iz padajućeg menija ispod, izaberite Fejsbuk stranicu koju želite da povežete sa Chatwoot-om. Takođe možete navesti proizvoljan naziv prijemnog sandučeta za bolju identifikaciju."
+        "DESC": "Iz padajućeg menija ispod, izaberite Fejsbuk stranicu koju želite da povežete sa Software Arrows -om. Takođe možete navesti proizvoljan naziv prijemnog sandučeta za bolju identifikaciju."
       },
       "FINISH": {
         "TITLE": "Uspeli ste!",
-        "DESC": "Uspešno ste završili integraciju vaše Fejsbuk stranice sa Chatwoo-om. Kada potrošač sledeći put pošalje poruku na tvojoj stranici, razgovor će se automatski pojaviti u prijemnom sandučetu.<br>Takođe vam pružamo skriptu za vidžet koju možete jednostavno dodati na veb sajt. Onda kada je postavljen na veb sajt, potrošači mogu da vam pošalju poruku direktno sa veb sajta bez pomoći eksternih alata i razgovor će se pojaviti ovde, na Chatwoot-u.<br>Kul, zar ne? Pa, svakako se trudimo da bude :)"
+        "DESC": "Uspešno ste završili integraciju vaše Fejsbuk stranice sa Chatwoo-om. Kada potrošač sledeći put pošalje poruku na tvojoj stranici, razgovor će se automatski pojaviti u prijemnom sandučetu.<br>Takođe vam pružamo skriptu za vidžet koju možete jednostavno dodati na veb sajt. Onda kada je postavljen na veb sajt, potrošači mogu da vam pošalju poruku direktno sa veb sajta bez pomoći eksternih alata i razgovor će se pojaviti ovde, na Software Arrows -u.<br>Kul, zar ne? Pa, svakako se trudimo da bude :)"
       },
       "EMAIL_PROVIDER": {
         "TITLE": "Select your email provider",
@@ -745,8 +739,8 @@
         "USER_MESSAGE": "Ćao",
         "AGENT_MESSAGE": "Zdravo"
       },
-      "BRANDING_TEXT": "Pokreće Chatwoot",
-      "SCRIPT_SETTINGS": "\n      window.chatwootSettings ={options};"
+      "BRANDING_TEXT": "Pokreće Software Arrows",
+      "SCRIPT_SETTINGS": "\n      window.arrowsSettings ={options};"
     },
     "EMAIL_PROVIDERS": {
       "MICROSOFT": "Microsoft",
@@ -763,8 +757,7 @@
       "EMAIL": "E-pošta",
       "TELEGRAM": "Telegram",
       "LINE": "Line",
-      "API": "API kanal",
-      "INSTAGRAM": "Instagram"
+      "API": "API kanal"
     }
   }
 }

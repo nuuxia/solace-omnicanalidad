@@ -8,24 +8,28 @@
     "LIST": {
       "404": "لا توجد صناديق وارد لقنوات تواصل مرتبطة بهذا الحساب."
     },
-    "CREATE_FLOW": {
-      "CHANNEL": {
-        "TITLE": "اختر قناة",
-        "BODY": "اختر الخدمة التي تود ربطها مع حسابك في Chatwoot."
+    "CREATE_FLOW": [
+      {
+        "title": "اختر قناة",
+        "route": "settings_inbox_new",
+        "body": "اختر الخدمة التي تود ربطها مع حسابك في Software Arrows."
       },
-      "INBOX": {
-        "TITLE": "إنشاء قناة تواصل",
-        "BODY": "قم بالمصادقة على حسابك وإنشاء قناة التواصل."
+      {
+        "title": "إنشاء قناة تواصل",
+        "route": "settings_inboxes_page_channel",
+        "body": "قم بالمصادقة على حسابك وإنشاء قناة التواصل."
       },
-      "AGENT": {
-        "TITLE": "إضافة وكلاء",
-        "BODY": "إضافة وكلاء إلى صندوق الوارد الخاص بقناة التواصل التي تم إنشاؤها."
+      {
+        "title": "إضافة وكيل",
+        "route": "settings_inboxes_add_agents",
+        "body": "إضافة وكلاء إلى صندوق الوارد الخاص بقناة التواصل التي تم إنشاؤها."
       },
-      "FINISH": {
-        "TITLE": "Voilà!",
-        "BODY": "أصبح كل شيء جاهزاً الآن!"
+      {
+        "title": "Voilà!",
+        "route": "settings_inbox_finish",
+        "body": "أصبح كل شيء جاهزاً الآن!"
       }
-    },
+    ],
     "ADD": {
       "CHANNEL_NAME": {
         "LABEL": "اسم صندوق الوارد لقناة التواصل",
@@ -37,23 +41,13 @@
         "PLACEHOLDER": "أدخل اسم موقع الويب الخاص بك (مثال: Acme Inc)"
       },
       "FB": {
-        "HELP": "ملحوظة: بالمصادقة على حسابك، فنحن يمكننا فقط الوصول إلى الرسائل الواردة لصفحتك. لا يستطيع Chatwoot أبداً بأي شكل من الأشكال الوصول إلى رسائلك الخاصة في حسابك الشخصي.",
+        "HELP": "ملحوظة: بالمصادقة على حسابك، فنحن يمكننا فقط الوصول إلى الرسائل الواردة لصفحتك. لا يستطيع Software Arrows أبداً بأي شكل من الأشكال الوصول إلى رسائلك الخاصة في حسابك الشخصي.",
         "CHOOSE_PAGE": "اختر صفحة",
         "CHOOSE_PLACEHOLDER": "اختر صفحة من القائمة",
         "INBOX_NAME": "اسم صندوق الوارد لقناة التواصل",
         "ADD_NAME": "قم بتعيين اسم لصندوق الوارد الخاص بقناتك الجديدة",
         "PICK_NAME": "Pick a Name for your Inbox",
-        "PICK_A_VALUE": "اختر قيمة",
-        "CREATE_INBOX": "إنشاء قناة تواصل"
-      },
-      "INSTAGRAM": {
-        "CONTINUE_WITH_INSTAGRAM": "Continue with Instagram",
-        "CONNECT_YOUR_INSTAGRAM_PROFILE": "Connect your Instagram Profile",
-        "HELP": "To add your Instagram profile as a channel, you need to authenticate your Instagram Profile by clicking on 'Continue with Instagram' ",
-        "ERROR_MESSAGE": "There was an error connecting to Instagram, please try again",
-        "ERROR_AUTH": "There was an error connecting to Instagram, please try again",
-        "NEW_INBOX_SUGGESTION": "This Instagram account was previously linked to a different inbox and has now been migrated here. All new messages will appear here. The old inbox will no longer be able to send or receive messages for this account.",
-        "DUPLICATE_INBOX_BANNER": "This Instagram account was migrated to the new Instagram channel inbox. You won’t be able to send/receive Instagram messages from this inbox anymore."
+        "PICK_A_VALUE": "اختر قيمة"
       },
       "TWITTER": {
         "HELP": "لإضافة حساب تويتر الخاص بك كقناة تواصل، تحتاج إلى مصادقة حسابك على تويتر بك بالنقر على زر \"تسجيل الدخول باستخدام تويتر\" ",
@@ -237,13 +231,13 @@
           "ERROR": "الرجاء تقديم رقم هاتف صالح يبدأ بإشارة '+' ولا يحتوي على أي مسافات."
         },
         "PHONE_NUMBER_ID": {
-          "LABEL": "مُعرف رَقَم الهاتف",
+          "LABEL": "رقم الهاتف",
           "PLACEHOLDER": "الرجاء إدخال رقم الهاتف الذي تم الحصول عليه من لوحة تحكم مطور الفيسبوك.",
           "ERROR": "الرجاء إدخال اسم صالح."
         },
         "BUSINESS_ACCOUNT_ID": {
-          "LABEL": "مُعرف حساب الأعمال",
-          "PLACEHOLDER": "الرجاء إدخال مُعرف حساب الأعمال الذي تم الحصول عليه من لوحة تحكم مطور الفيسبوك.",
+          "LABEL": "معرف حساب الأعمال",
+          "PLACEHOLDER": "الرجاء إدخال معرف حساب الأعمال الذي تم الحصول عليه من لوحة تحكم مطور الفيسبوك.",
           "ERROR": "الرجاء إدخال اسم صالح."
         },
         "WEBHOOK_VERIFY_TOKEN": {
@@ -359,11 +353,11 @@
       },
       "DETAILS": {
         "TITLE": "تفاصيل قناة التواصل",
-        "DESC": "من القائمة المنسدلة أدناه، حدد صفحة فيس بوك التي تريد ربطها بـ Chatwoot. يمكنك أيضًا تخصيص اسم لصندوق الوارد الخاص بهذه الصفحة للحصول على تجربة وصول أفضل."
+        "DESC": "من القائمة المنسدلة أدناه، حدد صفحة فيس بوك التي تريد ربطها بـ Software Arrows . يمكنك أيضًا تخصيص اسم لصندوق الوارد الخاص بهذه الصفحة للحصول على تجربة وصول أفضل."
       },
       "FINISH": {
         "TITLE": "تم!",
-        "DESC": "لقد تم بنجاح ربط صفحة فيسبوك الخاصة بك مع Chatwoot. في المرة القادمة التي يرسل فيها العملاء رسالة إلى صفحتك، ستظهر المحادثة تلقائيًا على صندوق الوارد الخاص بك هنا.<br>نحن نزودك أيضًا بالكود النصي لصندوق دردشة الماسنجر والذي يمكنك إضافته بسهولة إلى الموقع الخاص بك لاستقبال الرسائل من الزوار كذلك. بمجرد أن يتم ذلك على موقع الويب الخاص بك، يمكن للعملاء مراسلتك من موقع الويب الخاص بك بدون الحاجة لأي أدوات خارجية وستظهر المحادثة هنا على Chatwoot.<br>رائع، أليس كذلك؟ نحن بالتأكيد نحاول أن نكون الأفضل :)"
+        "DESC": "لقد تم بنجاح ربط صفحة فيسبوك الخاصة بك مع Software Arrows . في المرة القادمة التي يرسل فيها العملاء رسالة إلى صفحتك، ستظهر المحادثة تلقائيًا على صندوق الوارد الخاص بك هنا.<br>نحن نزودك أيضًا بالكود النصي لصندوق دردشة الماسنجر والذي يمكنك إضافته بسهولة إلى الموقع الخاص بك لاستقبال الرسائل من الزوار كذلك. بمجرد أن يتم ذلك على موقع الويب الخاص بك، يمكن للعملاء مراسلتك من موقع الويب الخاص بك بدون الحاجة لأي أدوات خارجية وستظهر المحادثة هنا على Software Arrows .<br>رائع، أليس كذلك؟ نحن بالتأكيد نحاول أن نكون الأفضل :)"
       },
       "EMAIL_PROVIDER": {
         "TITLE": "حدد مزود البريد الإلكتروني الخاص بك",
@@ -745,8 +739,8 @@
         "USER_MESSAGE": "مرحبا",
         "AGENT_MESSAGE": "مرحبا"
       },
-      "BRANDING_TEXT": "مدعوم بواسطة Chatwoot",
-      "SCRIPT_SETTINGS": "\n      window.chatwootSettings = {options};"
+      "BRANDING_TEXT": "مدعوم بواسطة Software Arrows",
+      "SCRIPT_SETTINGS": "\n      window.arrowsSettings = {options};"
     },
     "EMAIL_PROVIDERS": {
       "MICROSOFT": "Microsoft",
@@ -763,8 +757,7 @@
       "EMAIL": "البريد الإلكتروني",
       "TELEGRAM": "تيليجرام",
       "LINE": "Line",
-      "API": "قناة API",
-      "INSTAGRAM": "Instagram"
+      "API": "قناة API"
     }
   }
 }

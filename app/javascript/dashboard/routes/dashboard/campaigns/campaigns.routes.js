@@ -3,12 +3,7 @@ import { frontendURL } from 'dashboard/helper/URLHelper.js';
 import CampaignsPageRouteView from './pages/CampaignsPageRouteView.vue';
 import LiveChatCampaignsPage from './pages/LiveChatCampaignsPage.vue';
 import SMSCampaignsPage from './pages/SMSCampaignsPage.vue';
-import { FEATURE_FLAGS } from 'dashboard/featureFlags';
-
-const meta = {
-  featureFlag: FEATURE_FLAGS.CAMPAIGNS,
-  permissions: ['administrator'],
-};
+import WhatsappCampaignsPage from './pages/WhatsAppCampaignsPage.vue';
 
 const campaignsRoutes = {
   routes: [
@@ -49,6 +44,14 @@ const campaignsRoutes = {
           name: 'campaigns_sms_index',
           meta,
           component: SMSCampaignsPage,
+        },
+        {
+          path: 'whatsapp',
+          name: 'campaigns_whatsapp_index',
+          meta: {
+            permissions: ['administrator'],
+          },
+          component: WhatsappCampaignsPage,
         },
       ],
     },

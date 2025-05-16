@@ -8,6 +8,8 @@ import Email from './channels/Email.vue';
 import Sms from './channels/Sms.vue';
 import Whatsapp from './channels/Whatsapp.vue';
 import Line from './channels/Line.vue';
+import MercadoLibre from './channels/MercadoLibre.vue';
+// import TikTok from './channels/TikTok.vue';
 import Telegram from './channels/Telegram.vue';
 import Instagram from './channels/Instagram.vue';
 
@@ -22,6 +24,8 @@ const channelViewList = {
   line: Line,
   telegram: Telegram,
   instagram: Instagram,
+  mercado_libre: MercadoLibre,
+  // tik_tok: TikTok,
 };
 
 export default defineComponent({

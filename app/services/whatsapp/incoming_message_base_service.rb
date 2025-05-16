@@ -57,10 +57,31 @@ class Whatsapp::IncomingMessageBaseService
   def create_messages
     message = @processed_params[:messages].first
     log_error(message) && return if error_webhook_event?(message)
-
     process_in_reply_to(message)
 
-    message_type == 'contacts' ? create_contact_messages(message) : create_regular_message(message)
+    case message_type
+    when 'contacts'
+      create_contact_messages(message)
+    when 'order'
+      create_order_message(message)
+    when 'interactive'
+      if flow_message?(message)
+        create_flow_message(message)
+      else
+        create_regular_message(message)
+      end
+    else
+      create_regular_message(message)
+    end
+  end
+
+  def flow_message?(message)
+    interactive = message[:interactive]
+    interactive.present? &&
+      interactive[:type] == 'nfm_reply' &&
+      interactive[:nfm_reply].is_a?(Hash) &&
+      interactive[:nfm_reply][:name] == 'flow' &&
+      interactive[:nfm_reply][:response_json].present?
   end
 
   def create_contact_messages(message)
@@ -76,6 +97,76 @@ class Whatsapp::IncomingMessageBaseService
     attach_files
     attach_location if message_type == 'location'
     @message.save!
+  end
+
+  def create_flow_message(message)
+    create_message(message)
+
+    interactive = message[:interactive]
+    return unless interactive&.[](:type) == 'nfm_reply'
+
+    flow_data = interactive[:nfm_reply]
+    return unless flow_data
+
+    raw_json = flow_data[:response_json]
+    return if raw_json.blank?
+
+    parsed = JSON.parse(raw_json) rescue {}
+    return if parsed.blank?
+
+    ignored_keys = %w[flow_token screen_id step_id]
+
+    index = 1
+    formatted_lines = parsed.to_a.each_with_object([]) do |(key, value), lines|
+      next if ignored_keys.include?(key.to_s)
+
+      clean_key = key.to_s
+                    .sub(/^screen_?/i, '')               # elimina "screen_"
+                    .gsub(/\b\d+\b/, '')                 # elimina números enteros aislados
+                    .gsub(/\A\d+\s*/, '')                # elimina números al inicio seguidos de espacios
+                    .gsub(/\s*\d+\z/, '')                # elimina números al final
+                    .tr('_', ' ')                        # reemplaza _
+                    .squeeze(' ')                        # colapsa dobles espacios
+                    .strip
+                    .split.map(&:capitalize).join(' ')  # capitaliza cada palabra
+
+      lines << "#{index}. **#{clean_key}:** #{value}"
+      index += 1
+    end
+
+    formatted = formatted_lines.join("\n")
+
+    flow_title = flow_data[:name].to_s.strip.presence || 'Formulario recibido'
+    flow_title = "*#{flow_title}*"
+
+    @message.content = "#{flow_title}\n\n#{formatted}"
+    @message.save!
+  end
+
+  def create_order_message(message)
+    create_message(message)
+    order = message[:order]
+    content = order[:text] || "Pedido recibido"
+
+    if order[:product_items].present?
+      productos = order[:product_items].map.with_index(1) do |item, index|
+        "- #{index}. #{item[:product_retailer_id]} \n  Precio: #{format_currency(item[:item_price], item[:currency])} \n  Cantidad: #{item[:quantity]}"
+      end.join("\n\n")
+
+      total_price = order[:product_items].sum { |item| item[:item_price].to_f * item[:quantity].to_i }
+      currency = order[:product_items].first[:currency]
+
+      content += "\n\n🛒 *#{order[:product_items].size} artículos* \n\n#{productos} \n\n" \
+                 "*Total:* #{format_currency(total_price, currency)} (estimado)"
+    end
+
+    @message.content = content
+    @message.save!
+  end
+
+  def format_currency(amount, currency)
+    formatted_amount = "%.2f" % amount
+    "#{currency} #{formatted_amount}"
   end
 
   def set_contact

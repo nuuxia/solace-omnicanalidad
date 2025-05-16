@@ -505,6 +505,56 @@
     "FRIDAY": "Viernes",
     "SATURDAY": "Sábado"
   },
+  "COMPANY_REPORTS": {
+    "HEADER": "Informes de la Empresa",
+    "NO_RECORDS": "No hay reportes relacionados con la empresa disponibles.",
+    "LOADING": "Cargando datos de la empresa...",
+    "DOWNLOAD_COMPANY_REPORTS": "Descargar reportes de la empresa",
+    "DOWNLOAD_FAILED": "Error al descargar reportes de la empresa",
+    "DROPDOWN": {
+      "ADD_FILTER": "Añadir filtro",
+      "CLEAR_ALL": "Limpiar todo",
+      "CLEAR_FILTER": "Limpiar filtros",
+      "EMPTY_LIST": "No se encontraron resultados",
+      "NO_FILTER": "No hay filtros disponibles",
+      "SEARCH": "Buscar filtro",
+      "INPUT_PLACEHOLDER": {
+        "COMPANY": "Nombre de la empresa",
+        "AGENTS": "Nombre del agente",
+        "INBOXES": "Nombre de la bandeja de entrada",
+        "LABELS": "Nombre de la etiqueta",
+        "TEAMS": "Nombre del equipo"
+      },
+      "COMPANY": "Empresa",
+      "INBOXES": "Bandeja de entrada",
+      "AGENTS": "Agente",
+      "LABELS": "Etiqueta",
+      "TEAMS": "Equipo"
+    },
+    "WITH": "con",
+    "METRICS": {
+      "REVENUE": {
+        "LABEL": "Ingresos",
+        "TOOLTIP": "Total de ingresos generados por la empresa en un período determinado"
+      },
+      "NO_OF_CLIENTS": {
+        "LABEL": "Número de clientes",
+        "TOOLTIP": "Número total de clientes asociados con la empresa"
+      },
+      "NO_OF_TRANSACTIONS": {
+        "LABEL": "Número de transacciones",
+        "TOOLTIP": "Número total de transacciones realizadas por la empresa"
+      }
+    },
+    "TABLE": {
+      "HEADER": {
+        "COMPANY": "Empresa",
+        "TRANSACTION": "Transacción",
+        "AGENT": "Agente"
+      },
+      "VIEW_DETAILS": "Ver detalles"
+    }
+  },
   "SLA_REPORTS": {
     "HEADER": "Informes de SLA",
     "NO_RECORDS": "SLA applied conversations are not available.",

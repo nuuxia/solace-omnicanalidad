@@ -11,7 +11,7 @@
 #  limits                :jsonb
 #  locale                :integer          default("en")
 #  name                  :string           not null
-#  settings              :jsonb
+#  restrict_agents       :boolean          default(FALSE)
 #  status                :integer          default("active")
 #  support_email         :string(100)
 #  created_at            :datetime         not null
@@ -61,6 +61,7 @@ class Account < ApplicationRecord
   has_many :automation_rules, dependent: :destroy_async
   has_many :macros, dependent: :destroy_async
   has_many :campaigns, dependent: :destroy_async
+  has_many :campaigns_whatsapp, class_name: 'CampaignsWhatsapp', foreign_key: 'account_id', dependent: :destroy_async
   has_many :canned_responses, dependent: :destroy_async
   has_many :categories, dependent: :destroy_async, class_name: '::Category'
   has_many :contacts, dependent: :destroy_async
@@ -87,6 +88,8 @@ class Account < ApplicationRecord
   has_many :teams, dependent: :destroy_async
   has_many :telegram_bots, dependent: :destroy_async
   has_many :telegram_channels, dependent: :destroy_async, class_name: '::Channel::Telegram'
+  has_many :channel_mercado_libres, dependent: :destroy_async, class_name: '::Channel::MercadoLibre'
+  # has_many :tik_tok_channels, dependent: :destroy_async, class_name: '::Channel::TikTok'
   has_many :twilio_sms, dependent: :destroy_async, class_name: '::Channel::TwilioSms'
   has_many :twitter_profiles, dependent: :destroy_async, class_name: '::Channel::TwitterProfile'
   has_many :users, through: :account_users
@@ -105,6 +108,7 @@ class Account < ApplicationRecord
   before_validation :validate_limit_keys
   after_create_commit :notify_creation
   after_destroy :remove_account_sequences
+  after_initialize :set_default_values, if: :new_record?
 
   def agents
     users.where(account_users: { role: :agent })
@@ -156,6 +160,16 @@ class Account < ApplicationRecord
   end
 
   private
+
+  def set_default_values
+    self.locale = 'es'
+    enable_features(:inbound_emails, :channel_email, :channel_facebook, :channel_twitter,
+                    :ip_lookup, :email_continuity_on_api_channel, :help_center, :agent_bots,
+                    :macros, :agent_management, :team_management, :inbox_management, :labels,
+                    :custom_attributes, :automations, :canned_responses, :integrations, :voice_recorder,
+                    :mobile_v2, :channel_website, :channel_mercado_libre, :reports, :crm, :auto_resolve_conversations,
+                    :custom_reply_email, :custom_reply_domain, :message_reply_to, :insert_article_in_reply)
+  end
 
   def notify_creation
     Rails.configuration.dispatcher.dispatch(ACCOUNT_CREATED, Time.zone.now, account: self)

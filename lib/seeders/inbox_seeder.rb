@@ -25,6 +25,7 @@ class Seeders::InboxSeeder
     seed_email_inbox
     seed_api_inbox
     seed_telegram_inbox
+    seed_mercado_libre_inbox
     seed_line_inbox
   end
 
@@ -77,6 +78,16 @@ class Seeders::InboxSeeder
   def seed_api_inbox
     channel = Channel::Api.create!(account: @account)
     Inbox.create!(channel: channel, account: @account, name: "#{@company_data['name']} API")
+  end
+
+  def seed_mercado_libre_inbox
+    channel = Channel::MercadoLibre.create!(account: @account)
+    Inbox.create!(channel: channel, account: @account, name: "#{@company_data['name']} Mobile")
+  end
+
+  def seed_tik_tok_inbox
+    channel = Channel::TikTok.create!(account: @account)
+    Inbox.create!(channel: channel, account: @account, name: "#{@company_data['name']} Mobile")
   end
 
   def seed_telegram_inbox

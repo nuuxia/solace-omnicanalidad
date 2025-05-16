@@ -8,24 +8,28 @@
     "LIST": {
       "404": "Bu hesaba bağlı gelen kutusu yok."
     },
-    "CREATE_FLOW": {
-      "CHANNEL": {
-        "TITLE": "Kanal Seçin",
-        "BODY": "Chatwoot ile entegre etmek istediğiniz sağlayıcıyı seçin."
+    "CREATE_FLOW": [
+      {
+        "title": "Kanal Seçin",
+        "route": "settings_inbox_new",
+        "body": "SoftwareArrows ile entegre etmek istediğiniz sağlayıcıyı seçin."
       },
-      "INBOX": {
-        "TITLE": "Gelen Kutusu Oluştur",
-        "BODY": "Hesabınızın kimliğini doğrulayın ve bir gelen kutusu oluşturun."
+      {
+        "title": "Gelen Kutusu Oluştur",
+        "route": "settings_inboxes_page_channel",
+        "body": "Hesabınızın kimliğini doğrulayın ve bir gelen kutusu oluşturun."
       },
-      "AGENT": {
-        "TITLE": "Kullanıcı Ekle",
-        "BODY": "Temsilcileri oluşturulan gelen kutusuna ekleyin."
+      {
+        "title": "Kullanıcı Ekle",
+        "route": "settings_inboxes_add_agents",
+        "body": "Temsilcileri oluşturulan gelen kutusuna ekleyin."
       },
-      "FINISH": {
-        "TITLE": "Voilà!",
-        "BODY": "Hepiniz gitmeye hazırsınız!"
+      {
+        "title": "Voilà!",
+        "route": "settings_inbox_finish",
+        "body": "Hepiniz gitmeye hazırsınız!"
       }
-    },
+    ],
     "ADD": {
       "CHANNEL_NAME": {
         "LABEL": "Gelen Kutusu Adı",
@@ -37,23 +41,13 @@
         "PLACEHOLDER": "Web sitenizin adını girin"
       },
       "FB": {
-        "HELP": "Not: Oturum açarak, yalnızca Sayfanızın mesajlarına erişebiliriz. Özel mesajlarınıza Chatwoot ile asla erişilemez.",
+        "HELP": "Not: Oturum açarak, yalnızca Sayfanızın mesajlarına erişebiliriz. Özel mesajlarınıza Software Arrows ile asla erişilemez.",
         "CHOOSE_PAGE": "Sayfa Seçin",
         "CHOOSE_PLACEHOLDER": "Listeden bir sayfa seçin",
         "INBOX_NAME": "Gelen Kutusu Adı",
         "ADD_NAME": "Gelen kutunuza bir isim ekleyin",
         "PICK_NAME": "Pick a Name for your Inbox",
-        "PICK_A_VALUE": "Bir değer seçin",
-        "CREATE_INBOX": "Gelen Kutusu Oluştur"
-      },
-      "INSTAGRAM": {
-        "CONTINUE_WITH_INSTAGRAM": "Continue with Instagram",
-        "CONNECT_YOUR_INSTAGRAM_PROFILE": "Connect your Instagram Profile",
-        "HELP": "To add your Instagram profile as a channel, you need to authenticate your Instagram Profile by clicking on 'Continue with Instagram' ",
-        "ERROR_MESSAGE": "There was an error connecting to Instagram, please try again",
-        "ERROR_AUTH": "There was an error connecting to Instagram, please try again",
-        "NEW_INBOX_SUGGESTION": "This Instagram account was previously linked to a different inbox and has now been migrated here. All new messages will appear here. The old inbox will no longer be able to send or receive messages for this account.",
-        "DUPLICATE_INBOX_BANNER": "This Instagram account was migrated to the new Instagram channel inbox. You won’t be able to send/receive Instagram messages from this inbox anymore."
+        "PICK_A_VALUE": "Bir değer seçin"
       },
       "TWITTER": {
         "HELP": "Twitter profilinizi bir kanal olarak eklemek için, 'Twitter ile Giriş Yap'ı tıklayarak Twitter Profilinizi doğrulamanız gerekir.",
@@ -349,7 +343,7 @@
       },
       "AUTH": {
         "TITLE": "Bir Kanal Seçin",
-        "DESC": "Chatwoot, canlı sohbet widget'ları, Facebook Messenger, Twitter profilleri, WhatsApp, E-postalar vb. olarak kanalları destekler. Özel bir kanal oluşturmak istiyorsanız, API kanalını kullanarak bunu oluşturabilirsiniz. Başlamak için aşağıdaki kanallardan birini seçin."
+        "DESC": "SoftwareArrow, canlı sohbet widget'ları, Facebook Messenger, Twitter profilleri, WhatsApp, E-postalar vb. olarak kanalları destekler. Özel bir kanal oluşturmak istiyorsanız, API kanalını kullanarak bunu oluşturabilirsiniz. Başlamak için aşağıdaki kanallardan birini seçin."
       },
       "AGENTS": {
         "TITLE": "Kullanıcılar",
@@ -359,11 +353,11 @@
       },
       "DETAILS": {
         "TITLE": "Gelen Kutusu Ayrıntıları",
-        "DESC": "Chatwoot'a bağlanmak istediğiniz Facebook Sayfasını seçmek için aşağıdaki açılır menüden seçim yapın. Daha iyi tanımlama için gelen kutunuza özel bir ad da verebilirsiniz."
+        "DESC": "Software Arrows'a bağlanmak istediğiniz Facebook Sayfasını seçmek için aşağıdaki açılır menüden seçim yapın. Daha iyi tanımlama için gelen kutunuza özel bir ad da verebilirsiniz."
       },
       "FINISH": {
         "TITLE": "Başardın!",
-        "DESC": "Facebook Sayfanızı Chatwoot ile entegre etmeyi başarıyla tamamladınız. Bir müşteri Sayfanıza bir dahaki sefere mesaj gönderdiğinde, konuşma otomatik olarak gelen kutunuzda görünecektir. <br> Ayrıca, web sitenize kolayca ekleyebileceğiniz bir pencere öğesi komut dosyası da sağlıyoruz. Bu web sitenizde yayınlandıktan sonra, müşteriler herhangi bir harici aracın yardımı olmadan doğrudan web sitenizden size mesaj gönderebilir ve sohbet burada, Chatwoot'ta görünecektir. <br> Harika, ha? Peki, emin olmaya çalışıyoruz :)"
+        "DESC": "Facebook Sayfanızı Software Arrows ile entegre etmeyi başarıyla tamamladınız. Bir müşteri Sayfanıza bir dahaki sefere mesaj gönderdiğinde, konuşma otomatik olarak gelen kutunuzda görünecektir. <br> Ayrıca, web sitenize kolayca ekleyebileceğiniz bir pencere öğesi komut dosyası da sağlıyoruz. Bu web sitenizde yayınlandıktan sonra, müşteriler herhangi bir harici aracın yardımı olmadan doğrudan web sitenizden size mesaj gönderebilir ve sohbet burada, Software Arrows'ta görünecektir. <br> Harika, ha? Peki, emin olmaya çalışıyoruz :)"
       },
       "EMAIL_PROVIDER": {
         "TITLE": "E-posta Sağlayıcınızı Seçin",
@@ -745,8 +739,8 @@
         "USER_MESSAGE": "Merhaba",
         "AGENT_MESSAGE": "Merhaba"
       },
-      "BRANDING_TEXT": "Chatwoot tarafından desteklenmektedir",
-      "SCRIPT_SETTINGS": "\nwindow.chatwootSettings = {options};"
+      "BRANDING_TEXT": "SoftwareArrows tarafından desteklenmektedir",
+      "SCRIPT_SETTINGS": "\nwindow.arrowsSettings = {options};"
     },
     "EMAIL_PROVIDERS": {
       "MICROSOFT": "Microsoft",
@@ -763,8 +757,7 @@
       "EMAIL": "E-Posta",
       "TELEGRAM": "Telegram",
       "LINE": "Line",
-      "API": "API Kanalı",
-      "INSTAGRAM": "Instagram"
+      "API": "API Kanalı"
     }
   }
 }

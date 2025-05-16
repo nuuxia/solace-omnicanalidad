@@ -59,6 +59,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_14_045638) do
     t.integer "status", default: 0
     t.jsonb "internal_attributes", default: {}, null: false
     t.jsonb "settings", default: {}
+    t.boolean "restrict_agents", default: false
     t.index ["status"], name: "index_accounts_on_status"
   end
 
@@ -106,6 +107,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_14_045638) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "account_id"
+    t.boolean "offline_response", default: false
   end
 
   create_table "agent_bots", force: :cascade do |t|
@@ -217,7 +219,12 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_14_045638) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "active", default: true, null: false
+    t.bigint "inbox_id"
+    t.bigint "template_id"
+    t.string "phone_number"
     t.index ["account_id"], name: "index_automation_rules_on_account_id"
+    t.index ["inbox_id"], name: "index_automation_rules_on_inbox_id"
+    t.index ["template_id"], name: "index_automation_rules_on_template_id"
   end
 
   create_table "campaigns", force: :cascade do |t|
@@ -242,6 +249,33 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_14_045638) do
     t.index ["campaign_type"], name: "index_campaigns_on_campaign_type"
     t.index ["inbox_id"], name: "index_campaigns_on_inbox_id"
     t.index ["scheduled_at"], name: "index_campaigns_on_scheduled_at"
+  end
+
+  create_table "campaigns_whatsapp", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.bigint "inbox_id", null: false
+    t.string "title", null: false
+    t.jsonb "template", default: {}
+    t.boolean "enabled", default: true
+    t.boolean "trigger_only_during_business_hours", default: false
+    t.integer "sender_id"
+    t.datetime "scheduled_at"
+    t.jsonb "audience", default: []
+    t.jsonb "trigger_rules", default: {}
+    t.integer "campaign_status", default: 0
+    t.integer "campaign_type", default: 0
+    t.integer "messages_total", default: 0, null: false
+    t.integer "messages_sent", default: 0, null: false
+    t.integer "messages_failed", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.jsonb "body_variables", default: []
+    t.jsonb "button_variables", default: []
+    t.index ["account_id"], name: "index_campaigns_whatsapp_on_account_id"
+    t.index ["campaign_status"], name: "index_campaigns_whatsapp_on_campaign_status"
+    t.index ["campaign_type"], name: "index_campaigns_whatsapp_on_campaign_type"
+    t.index ["inbox_id"], name: "index_campaigns_whatsapp_on_inbox_id"
+    t.index ["scheduled_at"], name: "index_campaigns_whatsapp_on_scheduled_at"
   end
 
   create_table "canned_responses", id: :serial, force: :cascade do |t|
@@ -398,6 +432,17 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_14_045638) do
     t.index ["line_channel_id"], name: "index_channel_line_on_line_channel_id", unique: true
   end
 
+  create_table "channel_mercado_libres", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "mercado_libre_access_token"
+    t.string "mercado_libre_refresh_token"
+    t.datetime "mercado_libre_token_expires_at"
+    t.bigint "mercado_libre_user_id"
+    t.index ["account_id"], name: "index_channel_mercado_libres_on_account_id"
+  end
+
   create_table "channel_sms", force: :cascade do |t|
     t.integer "account_id", null: false
     t.string "phone_number", null: false
@@ -415,6 +460,18 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_14_045638) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["bot_token"], name: "index_channel_telegram_on_bot_token", unique: true
+  end
+
+  create_table "channel_tik_tok", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.string "tik_tok_access_token"
+    t.string "tik_tok_refresh_token"
+    t.string "tik_tok_user_id"
+    t.datetime "tik_tok_token_expires_at"
+    t.datetime "tok_tok_refresh_expires_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_channel_tik_tok_on_account_id"
   end
 
   create_table "channel_twilio_sms", force: :cascade do |t|
@@ -475,6 +532,15 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_14_045638) do
     t.index ["phone_number"], name: "index_channel_whatsapp_on_phone_number", unique: true
   end
 
+  create_table "companies", force: :cascade do |t|
+    t.string "name", null: false
+    t.bigint "account_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id", "name"], name: "index_companies_on_account_id_and_name", unique: true
+    t.index ["account_id"], name: "index_companies_on_account_id"
+  end
+
   create_table "contact_inboxes", force: :cascade do |t|
     t.bigint "contact_id"
     t.bigint "inbox_id"
@@ -507,12 +573,14 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_14_045638) do
     t.string "location", default: ""
     t.string "country_code", default: ""
     t.boolean "blocked", default: false, null: false
+    t.bigint "company_id"
     t.index "lower((email)::text), account_id", name: "index_contacts_on_lower_email_account_id"
     t.index ["account_id", "email", "phone_number", "identifier"], name: "index_contacts_on_nonempty_fields", where: "(((email)::text <> ''::text) OR ((phone_number)::text <> ''::text) OR ((identifier)::text <> ''::text))"
     t.index ["account_id", "last_activity_at"], name: "index_contacts_on_account_id_and_last_activity_at", order: { last_activity_at: "DESC NULLS LAST" }
     t.index ["account_id"], name: "index_contacts_on_account_id"
     t.index ["account_id"], name: "index_resolved_contact_account_id", where: "(((email)::text <> ''::text) OR ((phone_number)::text <> ''::text) OR ((identifier)::text <> ''::text))"
     t.index ["blocked"], name: "index_contacts_on_blocked"
+    t.index ["company_id"], name: "index_contacts_on_company_id"
     t.index ["email", "account_id"], name: "uniq_email_per_account_contact", unique: true
     t.index ["identifier", "account_id"], name: "uniq_identifier_per_account_contact", unique: true
     t.index ["name", "email", "phone_number", "identifier"], name: "index_contacts_on_name_email_phone_number_identifier", opclass: :gin_trgm_ops, using: :gin
@@ -730,6 +798,9 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_14_045638) do
     t.integer "sender_name_type", default: 0, null: false
     t.string "business_name"
     t.jsonb "csat_config", default: {}, null: false
+    t.boolean "offline_response", default: false, null: false
+    t.boolean "mercado_libre_pre_sale_questions", default: true, null: false
+    t.boolean "mercado_libre_post_sale_messages", default: true, null: false
     t.index ["account_id"], name: "index_inboxes_on_account_id"
     t.index ["channel_id", "channel_type"], name: "index_inboxes_on_channel_id_and_channel_type"
     t.index ["portal_id"], name: "index_inboxes_on_portal_id"
@@ -1103,6 +1174,12 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_14_045638) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "campaigns_whatsapp", "accounts"
+  add_foreign_key "campaigns_whatsapp", "inboxes"
+  add_foreign_key "channel_mercado_libres", "accounts"
+  add_foreign_key "channel_tik_tok", "accounts"
+  add_foreign_key "companies", "accounts"
+  add_foreign_key "contacts", "companies"
   add_foreign_key "inboxes", "portals"
   create_trigger("accounts_after_insert_row_tr", :generated => true, :compatibility => 1).
       on("accounts").

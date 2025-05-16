@@ -42,8 +42,58 @@ const platformName = computed(() => {
 
 const createdAtIp = computed(() => props.contactAttributes.created_at_ip);
 
-const staticElements = computed(() =>
-  [
+const orderId = computed(() => {
+  const orderDetails = props.conversationAttributes.order_details;
+  return orderDetails?.id ? `#${orderDetails.id}` : null;
+});
+
+function formatDateTime(dateTime) {
+  if (!dateTime) return null;
+  const date = new Date(dateTime);
+  const options = { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' };
+  return date.toLocaleDateString('es-ES', options).replace('de ', '').replace(', ', ' ');
+}
+
+const orderDate = computed(() => {
+  const orderDetails = props.conversationAttributes.order_details;
+  return orderDetails?.date_created
+    ? formatDateTime(orderDetails.date_created)
+    : null;
+});
+
+const orderStatus = computed(() => {
+  const orderDetails = props.conversationAttributes.order_details;
+  if (!orderDetails?.status) return null;
+
+  const statusMap = {
+    pending: 'Pendiente',
+    completed: 'Completada',
+    cancelled: 'Cancelada',
+    paid: 'Pagado'
+  };
+
+  return statusMap[orderDetails.status] || `${orderDetails.status}`;
+});
+
+const orderItems = props.conversationAttributes?.order_details?.order_items || [];
+
+console.log('Order Items:', orderItems);
+
+const staticElements = computed(() => {
+  if (props.conversationAttributes.type_of_conversation === 'questions') {
+    const itemPermalink = props.conversationAttributes.item_permalink || '';
+    const itemTitle = props.conversationAttributes.item_title || 'Item desconocido';
+
+    return [
+      {
+        content: itemPermalink,
+        title: `Preguntas sobre la publicación:`,
+        type: 'link',
+      },
+    ];
+  }
+
+  const baseElements = [
     {
       content: initiatedAt,
       title: 'CONTACT_PANEL.INITIATED_AT',
@@ -80,14 +130,62 @@ const staticElements = computed(() =>
       key: 'static-ip-address',
       type: 'static_attribute',
     },
-  ].filter(attribute => !!attribute.content.value)
-);
+    {
+      content: orderId,
+      title: 'ORDER_PANEL.ORDER_ID',
+    },
+    {
+      content: orderDate,
+      title: 'ORDER_PANEL.ORDER_DATE',
+    },
+    {
+      content: orderStatus,
+      title: 'ORDER_PANEL.ORDER_STATUS',
+    },
+  ].filter(attribute => !!attribute.content?.value);
+
+  const orderDetails = props.conversationAttributes?.order_details || {};
+  const orderItems = orderDetails.order_items || [];
+
+  const orderItemElements = orderItems.map(orderItem => ({
+    title: orderItem.item?.title || 'Producto sin nombre',
+    content: `$${orderItem.unit_price || 0} x ${orderItem.quantity || 0} unidad(es)`,
+  }));
+
+  return [...baseElements, ...orderItemElements];
+});
+
 </script>
 
 <template>
   <div class="conversation--details">
+    <ContactDetailsItem
+      v-for="element in staticElements"
+      :key="element.title"
+      :title="$t(element.title)"
+      :value="element.content.value || element.content"
+      class="conversation--attribute"
+    >
+      <!-- Agregar enlace solo para el caso de item_permalink -->
+      <template v-if="element.type === 'link'">
+        <a
+          :href="element.content"
+          rel="noopener noreferrer nofollow"
+          target="_blank"
+          class="text-woot-400 dark:text-woot-600"
+        >
+          {{ element.content }}
+        </a>
+      </template>
+
+      <!-- Renderizar el contenido original cuando no sea un enlace -->
+      <template v-else>
+        {{ element.content }}
+      </template>
+    </ContactDetailsItem>
+
     <CustomAttributes
-      :static-elements="staticElements"
+      :class="staticElements.length % 2 === 0 ? 'even' : 'odd'"
       attribute-class="conversation--attribute"
       attribute-from="conversation_panel"
       attribute-type="conversation_attribute"
@@ -112,3 +210,27 @@ const staticElements = computed(() =>
     </CustomAttributes>
   </div>
 </template>
+
+<style scoped lang="scss">
+.conversation--attribute {
+  @apply border-slate-50 dark:border-slate-700/50 border-b border-solid;
+}
+
+.order-details--title {
+  font-weight: bold;
+}
+
+.order-details p,
+.order-details ul {
+  margin-top: 10px;
+}
+
+.order-details ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.order-details li {
+  margin-bottom: 8px;
+}
+</style>

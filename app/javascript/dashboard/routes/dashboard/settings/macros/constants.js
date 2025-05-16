@@ -66,7 +66,7 @@ export const MACRO_ACTION_TYPES = [
   },
   {
     key: 'send_webhook_event',
-    label: 'SEND_WEBHOOK_EVENT',
+    label: 'Send Webhook Event',
     inputType: 'url',
   },
 ];

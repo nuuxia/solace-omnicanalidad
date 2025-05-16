@@ -27,6 +27,8 @@ const i18nMap = {
   'Channel::Email': 'EMAIL',
   'Channel::Telegram': 'TELEGRAM',
   'Channel::Line': 'LINE',
+  'Channel::MercadoLibre': 'MERCADO_LIBRE',
+  // 'Channel::TikTok': 'TIK_TOK',
   'Channel::Api': 'API',
   'Channel::Instagram': 'INSTAGRAM',
 };

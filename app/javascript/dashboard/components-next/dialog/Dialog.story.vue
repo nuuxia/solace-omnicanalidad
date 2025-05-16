@@ -48,22 +48,24 @@ const onConfirm = dialog => {};
         confirm-button-label="Save"
         @confirm="onConfirm()"
       >
-        <div class="flex flex-col gap-6">
-          <Input
-            id="portal-name"
-            type="text"
-            placeholder="User Guide | Chatwoot"
-            label="Name"
-            message="This will be the name of your public facing portal"
-          />
-          <Input
-            id="portal-slug"
-            type="text"
-            placeholder="user-guide"
-            label="Slug"
-            message="app.chatwoot.com/hc/my-portal/en-US/categories/my-slug"
-          />
-        </div>
+        <template #form>
+          <div class="flex flex-col gap-6">
+            <Input
+              id="portal-name"
+              type="text"
+              placeholder="User Guide | Arrows"
+              label="Name"
+              message="This will be the name of your public facing portal"
+            />
+            <Input
+              id="portal-slug"
+              type="text"
+              placeholder="user-guide"
+              label="Slug"
+              message="app.chatwoot.com/hc/my-portal/en-US/categories/my-slug"
+            />
+          </div>
+        </template>
       </Dialog>
     </Variant>
 

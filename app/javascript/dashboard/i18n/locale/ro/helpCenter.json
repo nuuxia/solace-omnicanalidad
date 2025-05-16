@@ -391,7 +391,7 @@
         "SLUG": {
           "LABEL": "Slug",
           "PLACEHOLDER": "Slug-ul categoriei pentru url-uri",
-          "HELP_TEXT": "app.chatwoot.com/hc/my-portal/en-US/categories/my-slug",
+          "HELP_TEXT": "app.softwarearrows.com/hc/my-portal/en-US/categories/my-slug",
           "ERROR": "Slug-ul este obligatoriu"
         },
         "DESCRIPTION": {
@@ -422,7 +422,7 @@
         "SLUG": {
           "LABEL": "Slug",
           "PLACEHOLDER": "Slug-ul categoriei pentru url-uri",
-          "HELP_TEXT": "app.chatwoot.com/hc/my-portal/en-US/categories/my-slug",
+          "HELP_TEXT": "app.softwarearrows.com/hc/my-portal/en-US/categories/my-slug",
           "ERROR": "Slug-ul este obligatoriu"
         },
         "DESCRIPTION": {

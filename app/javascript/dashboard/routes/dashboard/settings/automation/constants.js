@@ -71,6 +71,11 @@ export const AUTOMATIONS = {
         name: 'SEND_MESSAGE',
       },
       {
+        key: 'send_alert',
+        name: 'Send an alert',
+        attributeI18nKey: 'SEND_ALERT',
+      },
+      {
         key: 'send_email_transcript',
         name: 'SEND_EMAIL_TRANSCRIPT',
       },
@@ -82,10 +87,14 @@ export const AUTOMATIONS = {
         key: 'snooze_conversation',
         name: 'SNOOZE_CONVERSATION',
       },
-
       {
         key: 'resolve_conversation',
         name: 'RESOLVE_CONVERSATION',
+      },
+      {
+        key: 'open_conversation',
+        name: 'Open conversation',
+        attributeI18nKey: 'OPEN_CONVERSATION',
       },
       {
         key: 'send_webhook_event',
@@ -182,6 +191,11 @@ export const AUTOMATIONS = {
         name: 'SEND_MESSAGE',
       },
       {
+        key: 'send_alert',
+        name: 'Send an alert',
+        attributeI18nKey: 'SEND_ALERT',
+      },
+      {
         key: 'send_email_transcript',
         name: 'SEND_EMAIL_TRANSCRIPT',
       },
@@ -196,6 +210,11 @@ export const AUTOMATIONS = {
       {
         key: 'resolve_conversation',
         name: 'RESOLVE_CONVERSATION',
+      },
+      {
+        key: 'open_conversation',
+        name: 'Open conversation',
+        attributeI18nKey: 'OPEN_CONVERSATION',
       },
       {
         key: 'send_webhook_event',
@@ -304,6 +323,11 @@ export const AUTOMATIONS = {
         name: 'SEND_MESSAGE',
       },
       {
+        key: 'send_alert',
+        name: 'Send an alert',
+        attributeI18nKey: 'SEND_ALERT',
+      },
+      {
         key: 'send_email_transcript',
         name: 'SEND_EMAIL_TRANSCRIPT',
       },
@@ -318,6 +342,11 @@ export const AUTOMATIONS = {
       {
         key: 'resolve_conversation',
         name: 'RESOLVE_CONVERSATION',
+      },
+      {
+        key: 'open_conversation',
+        name: 'Open conversation',
+        attributeI18nKey: 'OPEN_CONVERSATION',
       },
       {
         key: 'send_webhook_event',
@@ -420,6 +449,11 @@ export const AUTOMATIONS = {
         name: 'SEND_MESSAGE',
       },
       {
+        key: 'send_alert',
+        name: 'Send an alert',
+        attributeI18nKey: 'SEND_ALERT',
+      },
+      {
         key: 'send_email_transcript',
         name: 'SEND_EMAIL_TRANSCRIPT',
       },
@@ -509,6 +543,11 @@ export const AUTOMATION_ACTION_TYPES = [
     inputType: null,
   },
   {
+    key: 'open_conversation',
+    label: 'Open conversation',
+    inputType: null,
+  },
+  {
     key: 'send_webhook_event',
     label: 'SEND_WEBHOOK_EVENT',
     inputType: 'url',
@@ -522,6 +561,11 @@ export const AUTOMATION_ACTION_TYPES = [
     key: 'send_message',
     label: 'SEND_MESSAGE',
     inputType: 'textarea',
+  },
+  {
+    key: 'send_alert',
+    label: 'Send an alert',
+    inputType: null,
   },
   {
     key: 'change_priority',

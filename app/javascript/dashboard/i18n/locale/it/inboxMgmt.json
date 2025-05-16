@@ -8,24 +8,28 @@
     "LIST": {
       "404": "Non ci sono caselle allegate a questo account."
     },
-    "CREATE_FLOW": {
-      "CHANNEL": {
-        "TITLE": "Scegli il canale",
-        "BODY": "Scegli il provider che vuoi integrare con Chatwoot."
+    "CREATE_FLOW": [
+      {
+        "title": "Scegli il canale",
+        "route": "Nuovo",
+        "body": "Scegli il provider che vuoi integrare con Software Arrows."
       },
-      "INBOX": {
-        "TITLE": "Crea casella",
-        "BODY": "Autentica il tuo account e creare una casella."
+      {
+        "title": "Crea casella",
+        "route": "Canale",
+        "body": "Autentica il tuo account e creare una casella."
       },
-      "AGENT": {
-        "TITLE": "Aggiungi agenti",
-        "BODY": "Aggiungi agenti alla casella creata."
+      {
+        "title": "Aggiungi agenti",
+        "route": "Inboxes_add_agenti",
+        "body": "Aggiungi agenti alla casella creata."
       },
-      "FINISH": {
-        "TITLE": "Voilà!",
-        "BODY": "Sei pronto per iniziare!"
+      {
+        "title": "Voilà!",
+        "route": "Finitura",
+        "body": "Sei pronto per iniziare!"
       }
-    },
+    ],
     "ADD": {
       "CHANNEL_NAME": {
         "LABEL": "Nome casella",
@@ -37,23 +41,13 @@
         "PLACEHOLDER": "Inserisci il nome del tuo sito web (ad esempio: Acme Inc)"
       },
       "FB": {
-        "HELP": "PS: Accedendo, abbiamo accesso solo ai messaggi della tua pagina. Chatwoot, non potrà accedere ai tuoi messaggi privati.",
+        "HELP": "PS: Accedendo, abbiamo accesso solo ai messaggi della tua pagina. Software Arrows, non potrà accedere ai tuoi messaggi privati.",
         "CHOOSE_PAGE": "Scegli una pagina",
         "CHOOSE_PLACEHOLDER": "Seleziona una pagina dalla lista",
         "INBOX_NAME": "Nome casella",
         "ADD_NAME": "Aggiungi un nome per la tua casella",
         "PICK_NAME": "Pick a Name for your Inbox",
-        "PICK_A_VALUE": "Scegli un valore",
-        "CREATE_INBOX": "Crea casella"
-      },
-      "INSTAGRAM": {
-        "CONTINUE_WITH_INSTAGRAM": "Continue with Instagram",
-        "CONNECT_YOUR_INSTAGRAM_PROFILE": "Connect your Instagram Profile",
-        "HELP": "To add your Instagram profile as a channel, you need to authenticate your Instagram Profile by clicking on 'Continue with Instagram' ",
-        "ERROR_MESSAGE": "There was an error connecting to Instagram, please try again",
-        "ERROR_AUTH": "There was an error connecting to Instagram, please try again",
-        "NEW_INBOX_SUGGESTION": "This Instagram account was previously linked to a different inbox and has now been migrated here. All new messages will appear here. The old inbox will no longer be able to send or receive messages for this account.",
-        "DUPLICATE_INBOX_BANNER": "This Instagram account was migrated to the new Instagram channel inbox. You won’t be able to send/receive Instagram messages from this inbox anymore."
+        "PICK_A_VALUE": "Scegli un valore"
       },
       "TWITTER": {
         "HELP": "Per aggiungere il tuo profilo Twitter come canale, devi autenticare il tuo profilo Twitter cliccando su 'Accedi con Twitter' ",
@@ -349,7 +343,7 @@
       },
       "AUTH": {
         "TITLE": "Scegli un canale",
-        "DESC": "Chatwoot supporta i widget di chat live, Facebook Messenger, profili Twitter, WhatsApp, Email, ecc., come canali. Se vuoi costruire un canale personalizzato, puoi crearlo usando il canale API. Per iniziare, scegli uno dei canali qui sotto."
+        "DESC": "SoftwareArrows supporta i widget di chat live, Facebook Messenger, profili Twitter, WhatsApp, Email, ecc., come canali. Se vuoi costruire un canale personalizzato, puoi crearlo usando il canale API. Per iniziare, scegli uno dei canali qui sotto."
       },
       "AGENTS": {
         "TITLE": "Agenti",
@@ -359,11 +353,11 @@
       },
       "DETAILS": {
         "TITLE": "Dettagli casella",
-        "DESC": "Dal menu a tendina qui sotto, seleziona la pagina Facebook che vuoi collegare a Chatwoot. Puoi anche assegnare un nome personalizzato alla tua casella per una migliore identificazione."
+        "DESC": "Dal menu a tendina qui sotto, seleziona la pagina Facebook che vuoi collegare a Software Arrows . Puoi anche assegnare un nome personalizzato alla tua casella per una migliore identificazione."
       },
       "FINISH": {
         "TITLE": "Azzeccato!",
-        "DESC": "Hai completato con successo l'integrazione della tua pagina Facebook con il Chatwoot. La prossima volta che un cliente invia un messaggio alla tua pagina, la conversazione apparirà automaticamente nella tua casella.<br>Ti forniamo anche uno script per widget che puoi facilmente aggiungere al tuo sito web. Una volta dal vivo sul tuo sito web, i clienti possono inviarti messaggi direttamente dal tuo sito web senza l'aiuto di alcuno strumento esterno e la conversazione apparirà proprio qui, su Chatwoot.<br>Bello, eh? Beh, cerchiamo di esserlo :)"
+        "DESC": "Hai completato con successo l'integrazione della tua pagina Facebook con il Software Arrows . La prossima volta che un cliente invia un messaggio alla tua pagina, la conversazione apparirà automaticamente nella tua casella.<br>Ti forniamo anche uno script per widget che puoi facilmente aggiungere al tuo sito web. Una volta dal vivo sul tuo sito web, i clienti possono inviarti messaggi direttamente dal tuo sito web senza l'aiuto di alcuno strumento esterno e la conversazione apparirà proprio qui, su Software Arrows .<br>Bello, eh? Beh, cerchiamo di esserlo :)"
       },
       "EMAIL_PROVIDER": {
         "TITLE": "Select your email provider",
@@ -745,8 +739,8 @@
         "USER_MESSAGE": "Salve",
         "AGENT_MESSAGE": "Ciao"
       },
-      "BRANDING_TEXT": "Offerto da Chatwoot",
-      "SCRIPT_SETTINGS": "\n      window.chatwootSettings = {options};"
+      "BRANDING_TEXT": "Offerto da Software Arrows",
+      "SCRIPT_SETTINGS": "\n      window.arrowsSettings = {options};"
     },
     "EMAIL_PROVIDERS": {
       "MICROSOFT": "Microsoft",
@@ -763,8 +757,7 @@
       "EMAIL": "Email",
       "TELEGRAM": "Telegram",
       "LINE": "Line",
-      "API": "Canale API",
-      "INSTAGRAM": "Instagram"
+      "API": "Canale API"
     }
   }
 }

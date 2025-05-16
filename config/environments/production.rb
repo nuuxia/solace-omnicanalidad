@@ -90,6 +90,18 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
 
+  config.mercado_libre_auth_url = 'https://auth.mercadolibre.com/authorization'
+  config.mercado_libre_redirect_uri = 'https://app.softwarearrows.com/mercado_libre/callback'
+  config.mercado_libre_base_url = 'https://api.mercadolibre.com/'
+
+  config.tik_tok_auth_url = 'https://www.tiktok.com/auth/authorize/'
+  config.tik_tok_redirect_uri = 'https://app.softwarearrows.com/tik_tok/callback'
+  config.tik_tok_base_url = 'https://open.tiktokapis.com/v2'
+
+  # config.mercado_libre_auth_url = 'https://auth.mercadolibre.com/authorization'
+  # config.mercado_libre_redirect_uri = 'https://staging.softwarearrows.com/mercado_libre/callback'
+  # config.mercado_libre_base_url = 'https://api.mercadolibre.com/'
+
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false

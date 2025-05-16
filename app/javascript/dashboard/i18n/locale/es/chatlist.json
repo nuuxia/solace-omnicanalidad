@@ -19,6 +19,14 @@
       "unassigned": "Sin asignar",
       "all": "Todos"
     },
+    "CHAT_UNREAD_FILTER_ITEMS": {
+      "read": {
+        "TEXT": "Todas"
+      },
+      "unread": {
+        "TEXT": "No leídas"
+      }
+    },
     "CHAT_STATUS_FILTER_ITEMS": {
       "open": {
         "TEXT": "Abiertas"
@@ -40,7 +48,8 @@
     "SORT_TOOLTIP_LABEL": "Ordenar conversaciones",
     "CHAT_SORT": {
       "STATUS": "Estado",
-      "ORDER_BY": "Ordenar por"
+      "ORDER_BY": "Ordenar por",
+      "UNREAD": "Notificación"
     },
     "CHAT_TIME_STAMP": {
       "CREATED": {

@@ -10,6 +10,7 @@ import auth from './modules/auth';
 import automations from './modules/automations';
 import bulkActions from './modules/bulkActions';
 import campaigns from './modules/campaigns';
+import campaignsWhatsApp from './modules/campaignsWhatsApp';
 import cannedResponse from './modules/cannedResponse';
 import categories from './modules/helpCenterCategories';
 import contactConversations from './modules/contactConversations';
@@ -65,6 +66,7 @@ export default createStore({
     automations,
     bulkActions,
     campaigns,
+    campaignsWhatsApp,
     cannedResponse,
     categories,
     contactConversations,

@@ -194,6 +194,7 @@ const tailwindConfig = {
     colors: {
       transparent: 'transparent',
       white: '#fff',
+      arrow: 'rgb(178, 149, 201)',
       'modal-backdrop-light': 'rgba(0, 0, 0, 0.4)',
       'modal-backdrop-dark': 'rgba(0, 0, 0, 0.6)',
       current: 'currentColor',

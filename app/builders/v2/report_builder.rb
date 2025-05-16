@@ -99,6 +99,10 @@ class V2::ReportBuilder
     @team ||= account.teams.find(params[:id])
   end
 
+  def contact
+    @contact ||= account.contacts.find(params[:id])
+  end
+
   def get_grouped_values(object_scope)
     @grouped_values = object_scope.group_by_period(
       params[:group_by] || DEFAULT_GROUP_BY,

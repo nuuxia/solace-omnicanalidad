@@ -1,7 +1,7 @@
 class ConversationFinder
   attr_reader :current_user, :current_account, :params
 
-  DEFAULT_STATUS = 'open'.freeze
+  DEFAULT_STATUS = ['open'].freeze
   SORT_OPTIONS = {
     'last_activity_at_asc' => %w[sort_on_last_activity_at asc],
     'last_activity_at_desc' => %w[sort_on_last_activity_at desc],
@@ -68,6 +68,7 @@ class ConversationFinder
     filter_by_labels
     filter_by_query
     filter_by_source_id
+    filter_by_unread
   end
 
   def set_inboxes
@@ -138,10 +139,19 @@ class ConversationFinder
                                   .where(messages: { message_type: allowed_message_types })
   end
 
-  def filter_by_status
-    return if params[:status] == 'all'
+  # def filter_by_status
+  #   return if params[:status] == 'all'
 
-    @conversations = @conversations.where(status: params[:status] || DEFAULT_STATUS)
+  #   @conversations = @conversations.where(status: params[:status] || DEFAULT_STATUS)
+  # end
+
+  def filter_by_status
+    statuses = Array(params[:status]) # convierte en array si no lo es
+    return if statuses.include?('all')
+
+    statuses = [DEFAULT_STATUS] if statuses.empty?
+
+    @conversations = @conversations.where(status: statuses)
   end
 
   def filter_by_team
@@ -169,6 +179,11 @@ class ConversationFinder
       @conversations.unassigned.count,
       @conversations.count
     ]
+  end
+
+  def filter_by_unread
+    return unless params[:unread] == 'unread'
+    @conversations = @conversations.with_unread_notifications
   end
 
   def current_page

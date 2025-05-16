@@ -8,122 +8,65 @@ import { useMapGetter, useStore } from 'dashboard/composables/store.js';
 import wootConstants from 'dashboard/constants/globals';
 import SelectMenu from 'dashboard/components-next/selectmenu/SelectMenu.vue';
 import NextButton from 'dashboard/components-next/button/Button.vue';
-
-defineProps({
-  isOnExpandedLayout: {
-    type: Boolean,
-    required: true,
-  },
-});
+import FilterItem from 'dashboard/components/FilterItem.vue'; // Asegurate de que exista este componente
 
 const emit = defineEmits(['changeFilter']);
-
-const store = useStore();
 const { t } = useI18n();
-
+const store = useStore();
 const { updateUISettings } = useUISettings();
 
-const chatStatusFilter = useMapGetter('getChatStatusFilter');
-const chatSortFilter = useMapGetter('getChatSortFilter');
+const CHAT_STATUS_FILTER_ITEMS = Object.freeze([
+  'open',
+  'resolved',
+  'pending',
+  'snoozed',
+]);
+
+const CHAT_UNREAD_FILTER_ITEMS = Object.freeze([
+  'read',
+  'unread',
+]);
+
+const SORT_ORDER_ITEMS = Object.freeze([
+  'last_activity_at_asc',
+  'last_activity_at_desc',
+  'created_at_desc',
+  'created_at_asc',
+  'priority_desc',
+  'priority_asc',
+  'waiting_since_asc',
+  'waiting_since_desc',
+]);
 
 const [showActionsDropdown, toggleDropdown] = useToggle();
 
-const currentStatusFilter = computed(() => {
-  return chatStatusFilter.value || wootConstants.STATUS_TYPE.OPEN;
-});
+const chatStatusFilter = useMapGetter('getChatStatusFilter');
+const chatSortFilter = useMapGetter('getChatSortFilter');
+const chatUnreadFilter = useMapGetter('getChatUnreadFilter');
 
-const currentSortBy = computed(() => {
-  return (
-    chatSortFilter.value || wootConstants.SORT_BY_TYPE.LAST_ACTIVITY_AT_DESC
-  );
-});
-
-const chatStatusOptions = [
-  {
-    label: t('CHAT_LIST.CHAT_STATUS_FILTER_ITEMS.open.TEXT'),
-    value: 'open',
-  },
-  {
-    label: t('CHAT_LIST.CHAT_STATUS_FILTER_ITEMS.resolved.TEXT'),
-    value: 'resolved',
-  },
-  {
-    label: t('CHAT_LIST.CHAT_STATUS_FILTER_ITEMS.pending.TEXT'),
-    value: 'pending',
-  },
-  {
-    label: t('CHAT_LIST.CHAT_STATUS_FILTER_ITEMS.snoozed.TEXT'),
-    value: 'snoozed',
-  },
-  {
-    label: t('CHAT_LIST.CHAT_STATUS_FILTER_ITEMS.all.TEXT'),
-    value: 'all',
-  },
-];
-
-const chatSortOptions = [
-  {
-    label: t('CHAT_LIST.SORT_ORDER_ITEMS.last_activity_at_asc.TEXT'),
-    value: 'last_activity_at_asc',
-  },
-  {
-    label: t('CHAT_LIST.SORT_ORDER_ITEMS.last_activity_at_desc.TEXT'),
-    value: 'last_activity_at_desc',
-  },
-  {
-    label: t('CHAT_LIST.SORT_ORDER_ITEMS.created_at_desc.TEXT'),
-    value: 'created_at_desc',
-  },
-  {
-    label: t('CHAT_LIST.SORT_ORDER_ITEMS.created_at_asc.TEXT'),
-    value: 'created_at_asc',
-  },
-  {
-    label: t('CHAT_LIST.SORT_ORDER_ITEMS.priority_desc.TEXT'),
-    value: 'priority_desc',
-  },
-  {
-    label: t('CHAT_LIST.SORT_ORDER_ITEMS.priority_asc.TEXT'),
-    value: 'priority_asc',
-  },
-  {
-    label: t('CHAT_LIST.SORT_ORDER_ITEMS.waiting_since_asc.TEXT'),
-    value: 'waiting_since_asc',
-  },
-  {
-    label: t('CHAT_LIST.SORT_ORDER_ITEMS.waiting_since_desc.TEXT'),
-    value: 'waiting_since_desc',
-  },
-];
-
-const activeChatStatusLabel = computed(
-  () =>
-    chatStatusOptions.find(m => m.value === chatStatusFilter.value)?.label || ''
+const chatStatus = computed(() =>
+  chatStatusFilter.value.length
+    ? chatStatusFilter.value
+    : [wootConstants.STATUS_TYPE.OPEN]
 );
 
-const activeChatSortLabel = computed(
-  () => chatSortOptions.find(m => m.value === chatSortFilter.value)?.label || ''
+const chatUnread = computed(() =>
+  chatUnreadFilter.value || wootConstants.UNREAD_TYPE.READ
 );
 
-const saveSelectedFilter = (type, value) => {
+const sortFilter = computed(() =>
+  chatSortFilter.value || wootConstants.SORT_BY_TYPE.LAST_ACTIVITY_AT_DESC
+);
+
+const onChangeFilter = (value, type) => {
+  emit('changeFilter', value, type);
   updateUISettings({
     conversations_filter_by: {
-      status: type === 'status' ? value : currentStatusFilter.value,
-      order_by: type === 'sort' ? value : currentSortBy.value,
+      status: type === 'status' ? value : chatStatus.value,
+      order_by: type === 'sort' ? value : sortFilter.value,
+      unread: type === 'unread' ? value : chatUnread.value,
     },
   });
-};
-
-const handleStatusChange = value => {
-  emit('changeFilter', value, 'status');
-  store.dispatch('setChatStatusFilter', value);
-  saveSelectedFilter('status', value);
-};
-
-const handleSortChange = value => {
-  emit('changeFilter', value, 'sort');
-  store.dispatch('setChatSortFilter', value);
-  saveSelectedFilter('sort', value);
 };
 </script>
 
@@ -146,28 +89,42 @@ const handleSortChange = value => {
         'ltr:right-0 rtl:left-0': isOnExpandedLayout,
       }"
     >
-      <div class="flex items-center justify-between last:mt-4 gap-2">
-        <span class="text-sm truncate text-n-slate-12">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-medium text-slate-800 dark:text-slate-100">
           {{ $t('CHAT_LIST.CHAT_SORT.STATUS') }}
         </span>
-        <SelectMenu
-          :model-value="chatStatusFilter"
-          :options="chatStatusOptions"
-          :label="activeChatStatusLabel"
-          :sub-menu-position="isOnExpandedLayout ? 'left' : 'right'"
-          @update:model-value="handleStatusChange"
+        <FilterItem
+          type="status"
+          :selected-value="chatStatus"
+          :items="CHAT_STATUS_FILTER_ITEMS"
+          path-prefix="CHAT_LIST.CHAT_STATUS_FILTER_ITEMS"
+          @on-change-filter="onChangeFilter"
         />
       </div>
-      <div class="flex items-center justify-between last:mt-4 gap-2">
-        <span class="text-sm truncate text-n-slate-12">
+
+      <div class="flex items-center space-x-2 mt-4">
+        <span class="text-xs font-medium text-slate-800 dark:text-slate-100">
+          {{ $t('CHAT_LIST.CHAT_SORT.UNREAD') }}
+        </span>
+        <FilterItem
+          type="unread"
+          :selected-value="chatUnread"
+          :items="CHAT_UNREAD_FILTER_ITEMS"
+          path-prefix="CHAT_LIST.CHAT_UNREAD_FILTER_ITEMS"
+          @on-change-filter="onChangeFilter"
+        />
+      </div>
+
+      <div class="flex items-center justify-between last:mt-4">
+        <span class="text-xs font-medium text-slate-800 dark:text-slate-100">
           {{ $t('CHAT_LIST.CHAT_SORT.ORDER_BY') }}
         </span>
-        <SelectMenu
-          :model-value="chatSortFilter"
-          :options="chatSortOptions"
-          :label="activeChatSortLabel"
-          :sub-menu-position="isOnExpandedLayout ? 'left' : 'right'"
-          @update:model-value="handleSortChange"
+        <FilterItem
+          type="sort"
+          :selected-value="sortFilter"
+          :items="SORT_ORDER_ITEMS"
+          path-prefix="CHAT_LIST.SORT_ORDER_ITEMS"
+          @on-change-filter="onChangeFilter"
         />
       </div>
     </div>

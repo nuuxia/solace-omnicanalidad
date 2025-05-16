@@ -46,6 +46,9 @@ export default {
       domain: '',
       supportEmail: '',
       features: {},
+      autoResolveDuration: null,
+      latestChatwootVersion: null,
+      restrict_agents: false,
     };
   },
   validations: {
@@ -101,8 +104,17 @@ export default {
   methods: {
     async initializeAccount() {
       try {
-        const { name, locale, id, domain, support_email, features } =
-          this.getAccount(this.accountId);
+        const {
+          name,
+          locale,
+          id,
+          domain,
+          support_email,
+          restrict_agents,
+          features,
+          auto_resolve_duration,
+          latest_chatwoot_version: latestChatwootVersion,
+        } = this.getAccount(this.accountId);
 
         this.$root.$i18n.locale = locale;
         this.name = name;
@@ -110,7 +122,10 @@ export default {
         this.id = id;
         this.domain = domain;
         this.supportEmail = support_email;
+        this.restrict_agents = restrict_agents;
         this.features = features;
+        this.autoResolveDuration = auto_resolve_duration;
+        this.latestChatwootVersion = latestChatwootVersion;
       } catch (error) {
         // Ignore error
       }
@@ -128,6 +143,8 @@ export default {
           name: this.name,
           domain: this.domain,
           support_email: this.supportEmail,
+          restrict_agents: this.restrict_agents,
+          auto_resolve_duration: this.autoResolveDuration,
         });
         this.$root.$i18n.locale = this.locale;
         this.getAccount(this.id).locale = this.locale;
@@ -232,13 +249,70 @@ export default {
         </form>
       </SectionLayout>
 
+      <div
+        class="flex flex-row p-4 border-slate-25 dark:border-slate-700 text-black-900 dark:text-slate-300"
+      >
+        <div
+          class="flex-grow-0 flex-shrink-0 flex-[25%] min-w-0 py-4 pr-6 pl-0"
+        >
+          <h4 class="text-lg font-medium text-black-900 dark:text-slate-200">
+            {{ $t('GENERAL_SETTINGS.FORM.ACCOUNT_ID.TITLE') }}
+          </h4>
+          <p>
+            {{ $t('GENERAL_SETTINGS.FORM.ACCOUNT_ID.NOTE') }}
+          </p>
+        </div>
+        <div class="p-4 flex-grow-0 flex-shrink-0 flex-[50%]">
+          <woot-code :script="getAccountId" />
+        </div>
+      </div>
+      <div class="p-4 text-sm text-center">
+        <div>{{ `v${globalConfig.appVersion}` }}</div>
+        <div v-if="hasAnUpdateAvailable && globalConfig.displayManifest">
+          {{
+            $t('GENERAL_SETTINGS.UPDATE_CHATWOOT', {
+              latestChatwootVersion: latestChatwootVersion,
+            })
+          }}
+        </div>
+        <div class="build-id">
+          <div>{{ `Build ${globalConfig.gitSha}` }}</div>
+        </div>
+      </div>
+      <div class="flex flex-row p-4 border-b border-slate-25 dark:border-slate-800">
+        <div class="flex-grow-0 flex-shrink-0 flex-[25%] min-w-0 py-4 pr-6 pl-0">
+          <h4 class="text-lg font-medium text-black-900 dark:text-slate-200">
+            {{ $t('GENERAL_SETTINGS.FORM.RESTRICT_AGENTS_ENABLED.TITLE') }}
+          </h4>
+          <p>
+            {{ $t('GENERAL_SETTINGS.FORM.RESTRICT_AGENTS_ENABLED.DESCRIPTION') }}
+          </p>
+        </div>
+        <div class="p-4 flex-grow-0 flex-shrink-0 flex-[50%]">
+          <label class="flex items-center">
+            <input
+              v-model="restrict_agents"
+              type="checkbox"
+              class="mr-2"
+            />
+            <span>
+              {{ $t('GENERAL_SETTINGS.FORM.RESTRICT_AGENTS_ENABLED.LABEL') }}
+            </span>
+          </label>
+        </div>
+      </div>
+      <woot-submit-button
+        class="button nice success button--fixed-top"
+        :button-text="$t('GENERAL_SETTINGS.SUBMIT')"
+        :loading="isUpdating"
+      />
       <woot-loading-state v-if="uiFlags.isFetchingItem" />
+      <AutoResolve v-if="showAutoResolutionConfig" />
+      <AccountId />
+      <div v-if="!uiFlags.isFetchingItem && isOnChatwootCloud">
+        <AccountDelete />
+      </div>
+      <BuildInfo />
     </div>
-    <AutoResolve v-if="showAutoResolutionConfig" />
-    <AccountId />
-    <div v-if="!uiFlags.isFetchingItem && isOnChatwootCloud">
-      <AccountDelete />
-    </div>
-    <BuildInfo />
   </div>
 </template>

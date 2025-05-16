@@ -78,6 +78,8 @@ export default {
         sms: 'sms',
         'Channel::Line': 'line',
         'Channel::Telegram': 'telegram',
+        'Channel::MercadoLibre': 'mercado_libre',
+        // 'Channel::TikTok': 'tik_tok',
         'Channel::WebWidget': '',
       }[this.badge];
     },

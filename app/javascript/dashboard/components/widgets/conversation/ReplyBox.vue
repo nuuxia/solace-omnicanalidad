@@ -273,8 +273,9 @@ export default {
         this.isAnEmailChannel ||
         this.isASmsInbox ||
         this.isATelegramChannel ||
-        this.isALineChannel ||
-        this.isAnInstagramChannel
+        this.isAMercadoLibreChannel ||
+        this.isAnInstagramChannel ||
+        this.isALineChannel
       );
     },
     replyButtonLabel() {

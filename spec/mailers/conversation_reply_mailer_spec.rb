@@ -50,7 +50,7 @@ RSpec.describe ConversationReplyMailer do
       let(:cc_mail) { described_class.reply_with_summary(cc_message.conversation, message.id).deliver_now }
 
       it 'renders the default subject' do
-        expect(mail.subject).to eq("[##{message.conversation.display_id}] New messages on this conversation")
+        expect(mail.subject).to eq("[##{message_2.conversation.display_id}] Nuevos mensajes en esta conversación")
       end
 
       it 'renders the subject in conversation as reply' do
@@ -109,7 +109,7 @@ RSpec.describe ConversationReplyMailer do
       end
 
       it 'renders the default subject' do
-        expect(mail.subject).to eq("[##{message_2.conversation.display_id}] New messages on this conversation")
+        expect(mail.subject).to eq("[##{message_2.conversation.display_id}] Nuevos mensajes en esta conversación")
       end
 
       it 'renders the subject in conversation' do
@@ -143,7 +143,7 @@ RSpec.describe ConversationReplyMailer do
       let(:mail) { described_class.email_reply(message).deliver_now }
 
       it 'renders the subject' do
-        expect(mail.subject).to eq("[##{message.conversation.display_id}] New messages on this conversation")
+        expect(mail.subject).to eq("[##{message_2.conversation.display_id}] Nuevos mensajes en esta conversación")
       end
 
       it 'renders the body' do
@@ -403,7 +403,7 @@ RSpec.describe ConversationReplyMailer do
     end
 
     context 'when inbox email address is available' do
-      let(:inbox) { create(:inbox, account: account, email_address: 'noreply@chatwoot.com') }
+      let(:inbox) { create(:inbox, account: account, email_address: 'noreply@softwarearrows.com') }
       let(:conversation) { create(:conversation, assignee: agent, inbox: inbox, account: account) }
       let!(:message) { create(:message, conversation: conversation, account: account) }
       let(:mail) { described_class.reply_with_summary(message.conversation, message.id).deliver_now }
