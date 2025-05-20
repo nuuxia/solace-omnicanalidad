@@ -1,4 +1,3 @@
-FROM node:23-alpine as node
 FROM ruby:3.3.3-alpine3.19 AS pre-builder
 
 ARG NODE_VERSION="23.7.0"
@@ -21,13 +20,7 @@ ENV NODE_OPTIONS ${NODE_OPTIONS}
 
 ENV BUNDLE_PATH="/gems"
 
-# Copy Node.js and corepack binaries from the node stage
-COPY --from=node /usr/local/bin/node /usr/local/bin/
-COPY --from=node /usr/local/lib/node_modules/corepack /usr/local/lib/node_modules/corepack
-COPY --from=node /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/npm
-RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
-    && ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx
-
+# Install Node.js and dependencies, including corepack
 RUN apk update && apk add --no-cache \
   openssl \
   tar \
@@ -38,6 +31,9 @@ RUN apk update && apk add --no-cache \
   git \
   curl \
   xz \
+  nodejs~=${NODE_VERSION} \
+  npm \
+  && npm install -g corepack \
   && mkdir -p /var/app \
   && gem install bundler
 
@@ -113,22 +109,19 @@ RUN apk update && apk add --no-cache \
   imagemagick \
   git \
   vips \
+  nodejs~=${NODE_VERSION} \
+  npm \
+  && npm install -g corepack \
   && gem install bundler
-
-COPY --from=node /usr/local/bin/node /usr/local/bin/
-COPY --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
 
 RUN if [ "$RAILS_ENV" != "production" ]; then \
   apk add --no-cache curl \
-  && ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
-  && ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx \
   && npm install -g pnpm@${PNPM_VERSION} \
   && pnpm --version; \
   fi
 
 COPY --from=pre-builder /gems/ /gems/
 COPY --from=pre-builder /app /app
-
 COPY --from=pre-builder /app/.git_sha /app/.git_sha
 
 WORKDIR /app
