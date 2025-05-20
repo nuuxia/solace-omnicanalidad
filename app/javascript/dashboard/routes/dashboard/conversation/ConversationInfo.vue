@@ -50,8 +50,16 @@ const orderId = computed(() => {
 function formatDateTime(dateTime) {
   if (!dateTime) return null;
   const date = new Date(dateTime);
-  const options = { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' };
-  return date.toLocaleDateString('es-ES', options).replace('de ', '').replace(', ', ' ');
+  const options = {
+    day: 'numeric',
+    month: 'long',
+    hour: '2-digit',
+    minute: '2-digit',
+  };
+  return date
+    .toLocaleDateString('es-ES', options)
+    .replace('de ', '')
+    .replace(', ', ' ');
 }
 
 const orderDate = computed(() => {
@@ -69,20 +77,22 @@ const orderStatus = computed(() => {
     pending: 'Pendiente',
     completed: 'Completada',
     cancelled: 'Cancelada',
-    paid: 'Pagado'
+    paid: 'Pagado',
   };
 
   return statusMap[orderDetails.status] || `${orderDetails.status}`;
 });
 
-const orderItems = props.conversationAttributes?.order_details?.order_items || [];
+const orderItems =
+  props.conversationAttributes?.order_details?.order_items || [];
 
 console.log('Order Items:', orderItems);
 
 const staticElements = computed(() => {
   if (props.conversationAttributes.type_of_conversation === 'questions') {
     const itemPermalink = props.conversationAttributes.item_permalink || '';
-    const itemTitle = props.conversationAttributes.item_title || 'Item desconocido';
+    const itemTitle =
+      props.conversationAttributes.item_title || 'Item desconocido';
 
     return [
       {
@@ -154,7 +164,6 @@ const staticElements = computed(() => {
 
   return [...baseElements, ...orderItemElements];
 });
-
 </script>
 
 <template>

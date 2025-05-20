@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_05_14_045638) do
+ActiveRecord::Schema[7.0].define(version: 2025_05_14_122506) do
   # These extensions should be enabled to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
@@ -57,8 +57,6 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_14_045638) do
     t.jsonb "limits", default: {}
     t.jsonb "custom_attributes", default: {}
     t.integer "status", default: 0
-    t.jsonb "internal_attributes", default: {}, null: false
-    t.jsonb "settings", default: {}
     t.boolean "restrict_agents", default: false
     t.index ["status"], name: "index_accounts_on_status"
   end
@@ -797,10 +795,10 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_14_045638) do
     t.bigint "portal_id"
     t.integer "sender_name_type", default: 0, null: false
     t.string "business_name"
-    t.jsonb "csat_config", default: {}, null: false
     t.boolean "offline_response", default: false, null: false
     t.boolean "mercado_libre_pre_sale_questions", default: true, null: false
     t.boolean "mercado_libre_post_sale_messages", default: true, null: false
+    t.jsonb "csat_config", default: {}, null: false
     t.index ["account_id"], name: "index_inboxes_on_account_id"
     t.index ["channel_id", "channel_type"], name: "index_inboxes_on_channel_id_and_channel_type"
     t.index ["portal_id"], name: "index_inboxes_on_portal_id"

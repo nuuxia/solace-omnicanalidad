@@ -180,9 +180,7 @@ const activeFolder = computed(() => {
   return undefined;
 });
 
-
 const currentAccount = computed(() => getAccount.value(currentAccountId.value));
-
 
 const activeFolderName = computed(() => {
   return activeFolder.value?.name;
@@ -584,9 +582,10 @@ function onToggleAdvanceFiltersModal() {
 }
 
 function fetchConversations() {
-
   const currentFilters = JSON.stringify(conversationFilters.value);
-  const lastFetchedFilters = JSON.stringify(store.state.conversations.conversationFilters);
+  const lastFetchedFilters = JSON.stringify(
+    store.state.conversations.conversationFilters
+  );
   if (currentFilters === lastFetchedFilters && !chatListLoading.value) {
     emitConversationLoaded();
     return; // No recargar si los filtros no cambiaron y no está cargando
@@ -654,8 +653,7 @@ function onBasicFilterChange(value, type) {
     activeStatus.value = value;
   } else if (type == 'unread') {
     activeUnread.value = value;
-  }
-   else {
+  } else {
     activeSortBy.value = value;
   }
   resetAndFetchData();

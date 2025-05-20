@@ -6,13 +6,10 @@ import { vOnClickOutside } from '@vueuse/components';
 import { useUISettings } from 'dashboard/composables/useUISettings';
 import { useMapGetter, useStore } from 'dashboard/composables/store.js';
 import wootConstants from 'dashboard/constants/globals';
-import SelectMenu from 'dashboard/components-next/selectmenu/SelectMenu.vue';
 import NextButton from 'dashboard/components-next/button/Button.vue';
-import FilterItem from 'dashboard/components/FilterItem.vue'; // Asegurate de que exista este componente
+import FilterItem from 'dashboard/components/widgets/conversation/FilterItem.vue';
 
 const emit = defineEmits(['changeFilter']);
-const { t } = useI18n();
-const store = useStore();
 const { updateUISettings } = useUISettings();
 
 const CHAT_STATUS_FILTER_ITEMS = Object.freeze([
@@ -22,10 +19,7 @@ const CHAT_STATUS_FILTER_ITEMS = Object.freeze([
   'snoozed',
 ]);
 
-const CHAT_UNREAD_FILTER_ITEMS = Object.freeze([
-  'read',
-  'unread',
-]);
+const CHAT_UNREAD_FILTER_ITEMS = Object.freeze(['read', 'unread']);
 
 const SORT_ORDER_ITEMS = Object.freeze([
   'last_activity_at_asc',
@@ -50,12 +44,12 @@ const chatStatus = computed(() =>
     : [wootConstants.STATUS_TYPE.OPEN]
 );
 
-const chatUnread = computed(() =>
-  chatUnreadFilter.value || wootConstants.UNREAD_TYPE.READ
+const chatUnread = computed(
+  () => chatUnreadFilter.value || wootConstants.UNREAD_TYPE.READ
 );
 
-const sortFilter = computed(() =>
-  chatSortFilter.value || wootConstants.SORT_BY_TYPE.LAST_ACTIVITY_AT_DESC
+const sortFilter = computed(
+  () => chatSortFilter.value || wootConstants.SORT_BY_TYPE.LAST_ACTIVITY_AT_DESC
 );
 
 const onChangeFilter = (value, type) => {

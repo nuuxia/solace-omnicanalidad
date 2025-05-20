@@ -31,7 +31,8 @@ export default {
   },
   methods: {
     onTabChange() {
-      const value = this.type === 'status' ? this.activeValue : this.activeValue;
+      const value =
+        this.type === 'status' ? this.activeValue : this.activeValue;
       this.updateStore(value);
       this.$emit('onChangeFilter', value, this.type);
     },
@@ -52,7 +53,9 @@ export default {
   <div class="flex items-center space-x-2">
     <!-- Multiselect para type === 'status' -->
     <div v-if="type === 'status'" class="relative">
-      <div class="w-56 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm">
+      <div
+        class="w-56 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm"
+      >
         <div class="max-h-48 overflow-y-auto">
           <label
             v-for="value in items"
@@ -60,8 +63,8 @@ export default {
             class="flex items-center px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer"
           >
             <input
-              type="checkbox"
               v-model="activeValue"
+              type="checkbox"
               :value="value"
               class="w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500"
               @change="onTabChange"

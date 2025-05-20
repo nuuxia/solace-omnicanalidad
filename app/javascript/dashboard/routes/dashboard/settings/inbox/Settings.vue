@@ -259,9 +259,12 @@ export default {
       this.error = null;
       this.userInfo = null;
       try {
-        const response = await this.$store.dispatch('inboxes/getMercadoLibreUserInfo', {
-          inbox_id: this.currentInboxId,
-        });
+        const response = await this.$store.dispatch(
+          'inboxes/getMercadoLibreUserInfo',
+          {
+            inbox_id: this.currentInboxId,
+          }
+        );
         if (response.success) {
           this.userInfo = {
             nickname: response.data.nickname,
@@ -271,7 +274,8 @@ export default {
           this.error = response.error;
         }
       } catch (err) {
-        this.error = err.message || this.$t('INBOX_MGMT.MERCADO_LIBRE_USER_INFO.ERROR');
+        this.error =
+          err.message || this.$t('INBOX_MGMT.MERCADO_LIBRE_USER_INFO.ERROR');
       } finally {
         this.loading = false;
       }
@@ -333,8 +337,10 @@ export default {
           allow_messages_after_resolved: this.allowMessagesAfterResolved,
           greeting_enabled: this.greetingEnabled,
           offline_response: this.inbox.offline_response,
-          mercado_libre_pre_sale_questions: this.inbox.mercado_libre_pre_sale_questions,
-          mercado_libre_post_sale_messages: this.inbox.mercado_libre_post_sale_messages,
+          mercado_libre_pre_sale_questions:
+            this.inbox.mercado_libre_pre_sale_questions,
+          mercado_libre_post_sale_messages:
+            this.inbox.mercado_libre_post_sale_messages,
           greeting_message: this.greetingMessage || '',
           portal_id: this.selectedPortalSlug
             ? this.portals.find(
@@ -541,27 +547,35 @@ export default {
                 {{ p.name }}
               </option>
             </select>
-            <p class="pb-1 text-sm not-italic text-slate-600 dark:text-slate-400">
+            <p
+              class="pb-1 text-sm not-italic text-slate-600 dark:text-slate-400"
+            >
               {{ $t('INBOX_MGMT.HELP_CENTER.SUB_TEXT') }}
             </p>
           </div>
-          <div v-if="this.isAMercadoLibreChannel" class="w-3/4 pb-4">
+          <div v-if="isAMercadoLibreChannel" class="w-3/4 pb-4">
             <label class="font-bold text-lg">
               {{ $t('INBOX_MGMT.MERCADO_LIBRE_OPTIONS_HEADER') }}
             </label>
             <div class="mt-2 space-y-2">
               <label class="flex items-center space-x-2">
-                <input type="checkbox" v-model="inbox.mercado_libre_pre_sale_questions" />
+                <input
+                  v-model="inbox.mercado_libre_pre_sale_questions"
+                  type="checkbox"
+                />
                 <span>{{ $t('INBOX_MGMT.ENABLE_PRE_SALE_MESSAGES') }}</span>
               </label>
               <label class="flex items-center space-x-2">
-                <input type="checkbox" v-model="inbox.mercado_libre_post_sale_messages" />
+                <input
+                  v-model="inbox.mercado_libre_post_sale_messages"
+                  type="checkbox"
+                />
                 <span>{{ $t('INBOX_MGMT.ENABLE_POST_SALE_MESSAGES') }}</span>
               </label>
             </div>
           </div>
           <label class="flex items-center space-x-2 mb-4 mt-4">
-            <input type="checkbox" v-model="inbox.offline_response" />
+            <input v-model="inbox.offline_response" type="checkbox" />
             <span>{{ $t('INBOX_MGMT.OFFLINE_RESPONSE_LABEL') }}</span>
           </label>
           <label v-if="canLocktoSingleConversation" class="w-3/4 pb-4">
@@ -574,7 +588,9 @@ export default {
                 {{ $t('INBOX_MGMT.EDIT.LOCK_TO_SINGLE_CONVERSATION.DISABLED') }}
               </option>
             </select>
-            <p class="pb-1 text-sm not-italic text-slate-600 dark:text-slate-400">
+            <p
+              class="pb-1 text-sm not-italic text-slate-600 dark:text-slate-400"
+            >
               {{
                 $t(
                   'INBOX_MGMT.SETTINGS_POPUP.LOCK_TO_SINGLE_CONVERSATION_SUB_TEXT'
@@ -625,12 +641,22 @@ export default {
             </div>
             <div v-if="userInfo" class="flex flex-col space-y-2">
               <div class="flex items-center space-x-2">
-                <span class="font-semibold">{{ $t('INBOX_MGMT.MERCADO_LIBRE_USER_INFO.NICKNAME') }}:</span>
-                <span class="text-primary-600 dark:text-primary-400">{{ userInfo.nickname }}</span>
+                <span class="font-semibold">{{
+                    $t('INBOX_MGMT.MERCADO_LIBRE_USER_INFO.NICKNAME')
+                  }}:</span>
+                <span class="text-primary-600 dark:text-primary-400">{{
+                  userInfo.nickname
+                }}</span>
               </div>
               <div class="flex items-center space-x-2">
-                <span class="font-semibold">{{ $t('INBOX_MGMT.MERCADO_LIBRE_USER_INFO.PERMALINK') }}:</span>
-                <a :href="userInfo.permalink" target="_blank" class="text-blue-600 dark:text-blue-400 underline">
+                <span class="font-semibold">{{
+                    $t('INBOX_MGMT.MERCADO_LIBRE_USER_INFO.PERMALINK')
+                  }}:</span>
+                <a
+                  :href="userInfo.permalink"
+                  target="_blank"
+                  class="text-blue-600 dark:text-blue-400 underline"
+                >
                   {{ userInfo.permalink }}
                 </a>
               </div>

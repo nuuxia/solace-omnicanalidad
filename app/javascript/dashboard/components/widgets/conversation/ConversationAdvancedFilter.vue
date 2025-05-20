@@ -87,13 +87,15 @@ export default {
       this.appliedFilters = [];
       this.appliedFilters = [...this.getAppliedConversationFilters];
     } else if (!this.isFolderView) {
-      this.appliedFilters = [{
-        attribute_key: 'status',
-        filter_operator: 'equal_to',
-        values: null, // Set to null to match the second row's appearance
-        query_operator: 'and',
-        attribute_model: 'standard',
-      }];
+      this.appliedFilters = [
+        {
+          attribute_key: 'status',
+          filter_operator: 'equal_to',
+          values: null, // Set to null to match the second row's appearance
+          query_operator: 'and',
+          attribute_model: 'standard',
+        },
+      ];
     }
   },
   methods: {

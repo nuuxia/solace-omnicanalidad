@@ -141,7 +141,9 @@ const handleSendPreview = async () => {
 
   // Chequear placeholders
   if (!areBodyVariablesFilled.value) {
-    useAlert(t('CAMPAIGN.WHATSAPP.CREATE.FORM.TEMPLATE.BODY.ERROR_PLACEHOLDERS'));
+    useAlert(
+      t('CAMPAIGN.WHATSAPP.CREATE.FORM.TEMPLATE.BODY.ERROR_PLACEHOLDERS')
+    );
     return;
   }
   if (!areButtonVariablesFilled.value) {
@@ -151,7 +153,9 @@ const handleSendPreview = async () => {
 
   // 4) Verifica si el template exige archivo y no se ha cargado
   if (hasMediaHeader.value && !props.headerMediaFile) {
-    useAlert(t('CAMPAIGN.WHATSAPP.CREATE.FORM.TEMPLATE.MEDIA.ERROR_FILE_REQUIRED'));
+    useAlert(
+      t('CAMPAIGN.WHATSAPP.CREATE.FORM.TEMPLATE.MEDIA.ERROR_FILE_REQUIRED')
+    );
     return;
   }
 
@@ -219,8 +223,8 @@ const handleSendPreview = async () => {
           : t('CAMPAIGN.WHATSAPP.CREATE.FORM.PREVIEW_SECTION.BUTTON_LABEL')
       "
       :disabled="isPreviewDisabled || isPreviewing"
-      @click="handleSendPreview"
       :is-loading="isPreviewing"
+      @click="handleSendPreview"
     />
   </div>
 </template>

@@ -21,7 +21,6 @@ import CsatResponses from './CsatResponses.vue';
 import BotReports from './BotReports.vue';
 import LiveReports from './LiveReports.vue';
 import SLAReports from './SLAReports.vue';
-import ContactReports from './ContactReports.vue';
 
 const meta = {
   featureFlag: FEATURE_FLAGS.REPORTS,
@@ -150,25 +149,6 @@ export default {
           name: 'bot_reports',
           meta,
           component: BotReports,
-        },
-      ],
-    },
-    {
-      path: frontendURL('accounts/:accountId/reports'),
-      component: SettingsContent,
-      props: {
-        headerTitle: 'COMPANY_REPORTS.HEADER',
-        icon: 'briefcase',
-        keepAlive: false,
-      },
-      children: [
-        {
-          path: 'contacts',
-          name: 'contact_reports',
-          meta: {
-            permissions: ['administrator', 'report_manage'],
-          },
-          component: ContactReports,
         },
       ],
     },

@@ -4,6 +4,12 @@ import CampaignsPageRouteView from './pages/CampaignsPageRouteView.vue';
 import LiveChatCampaignsPage from './pages/LiveChatCampaignsPage.vue';
 import SMSCampaignsPage from './pages/SMSCampaignsPage.vue';
 import WhatsappCampaignsPage from './pages/WhatsAppCampaignsPage.vue';
+import { FEATURE_FLAGS } from 'dashboard/featureFlags';
+
+const meta = {
+  featureFlag: FEATURE_FLAGS.CAMPAIGNS,
+  permissions: ['administrator'],
+};
 
 const campaignsRoutes = {
   routes: [

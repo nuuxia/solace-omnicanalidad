@@ -56,7 +56,7 @@ export default {
         'telegram',
         'line',
         'instagram',
-        'mercado_libre'
+        'mercado_libre',
         // 'tik_tok'
       ].includes(key);
     },

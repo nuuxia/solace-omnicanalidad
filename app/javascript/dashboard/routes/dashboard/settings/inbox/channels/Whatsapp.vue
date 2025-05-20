@@ -48,13 +48,10 @@ export default {
           return;
         }
 
-
         try {
           const data = JSON.parse(event.data);
 
           if (data.type === 'WA_EMBEDDED_SIGNUP') {
-
-
             if (data.event === 'CANCEL') {
               this.isFacebookLoading = false;
               return;
@@ -94,7 +91,6 @@ export default {
   methods: {
     async createWhatsappChannel(payload) {
       try {
-
         const response = await WhatsappChannel.automatedSignup(payload);
 
         return response.data;
@@ -132,35 +128,31 @@ export default {
       const left = Math.round((window.innerWidth - width) / 2);
       const top = Math.round((window.innerHeight - height) / 2);
 
-      FB.login(
-        response => {
+      FB.login(response => {}, {
+        config_id: configId,
+        response_type: 'code',
+        override_default_response_type: true,
+        extras: {
+          setup: {},
+          featureType: '',
+          sessionInfoVersion: '3',
         },
-        {
-          config_id: configId,
-          response_type: 'code',
-          override_default_response_type: true,
-          extras: {
-            setup: {},
-            featureType: '',
-            sessionInfoVersion: '3',
-          },
-          auth_type: 'rerequest',
-          display: 'popup',
-          width,
-          height,
-          window_features: [
-            `width=${width}`,
-            `height=${height}`,
-            `left=${left}`,
-            `top=${top}`,
-            'status=1',
-            'toolbar=0',
-            'menubar=0',
-            'resizable=1',
-            'scrollbars=1',
-          ].join(','),
-        }
-      );
+        auth_type: 'rerequest',
+        display: 'popup',
+        width,
+        height,
+        window_features: [
+          `width=${width}`,
+          `height=${height}`,
+          `left=${left}`,
+          `top=${top}`,
+          'status=1',
+          'toolbar=0',
+          'menubar=0',
+          'resizable=1',
+          'scrollbars=1',
+        ].join(','),
+      });
     },
   },
 };
@@ -170,7 +162,6 @@ export default {
   <div
     class="border border-slate-25 dark:border-slate-800/60 bg-white dark:bg-slate-900 p-6 w-full max-w-full md:w-3/4 md:max-w-[75%] flex-shrink-0 flex-grow-0 h-[1100px]"
   >
-
     <p class="mb-6 text-sm text-gray-500">
       {{ $t('INBOX_MGMT.ADD.WHATSAPP.CHOOSE_METHOD') }}
     </p>
@@ -198,9 +189,7 @@ export default {
       </button>
     </div>
 
-
     <hr class="my-6 border-t border-gray-200 dark:border-slate-700" />
-
 
     <PageHeader
       :header-title="$t('INBOX_MGMT.ADD.WHATSAPP.TITLE')"

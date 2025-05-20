@@ -279,22 +279,24 @@ export default {
           <div>{{ `Build ${globalConfig.gitSha}` }}</div>
         </div>
       </div>
-      <div class="flex flex-row p-4 border-b border-slate-25 dark:border-slate-800">
-        <div class="flex-grow-0 flex-shrink-0 flex-[25%] min-w-0 py-4 pr-6 pl-0">
+      <div
+        class="flex flex-row p-4 border-b border-slate-25 dark:border-slate-800"
+      >
+        <div
+          class="flex-grow-0 flex-shrink-0 flex-[25%] min-w-0 py-4 pr-6 pl-0"
+        >
           <h4 class="text-lg font-medium text-black-900 dark:text-slate-200">
             {{ $t('GENERAL_SETTINGS.FORM.RESTRICT_AGENTS_ENABLED.TITLE') }}
           </h4>
           <p>
-            {{ $t('GENERAL_SETTINGS.FORM.RESTRICT_AGENTS_ENABLED.DESCRIPTION') }}
+            {{
+              $t('GENERAL_SETTINGS.FORM.RESTRICT_AGENTS_ENABLED.DESCRIPTION')
+            }}
           </p>
         </div>
         <div class="p-4 flex-grow-0 flex-shrink-0 flex-[50%]">
           <label class="flex items-center">
-            <input
-              v-model="restrict_agents"
-              type="checkbox"
-              class="mr-2"
-            />
+            <input v-model="restrict_agents" type="checkbox" class="mr-2" />
             <span>
               {{ $t('GENERAL_SETTINGS.FORM.RESTRICT_AGENTS_ENABLED.LABEL') }}
             </span>

@@ -15,12 +15,6 @@ export default {
       phoneNumber: '',
     };
   },
-  mounted() {
-    const { inbox_id: inboxId, template_id: templateId, phone_number: phoneNumber } = this.modelValue;
-    this.selectedInboxId = inboxId;
-    this.selectedTemplateId = templateId;
-    this.phoneNumber = phoneNumber;
-  },
   computed: {
     whatsappInboxes() {
       return this.$store.getters['inboxes/getWhatsAppInboxes'] || [];
@@ -28,10 +22,20 @@ export default {
     availableTemplates() {
       if (!this.selectedInboxId) return [];
       const selectedInbox = this.whatsappInboxes.find(
-        (inbox) => inbox.id === this.selectedInboxId
+        inbox => inbox.id === this.selectedInboxId
       );
       return selectedInbox?.message_templates || [];
     },
+  },
+  mounted() {
+    const {
+      inbox_id: inboxId,
+      template_id: templateId,
+      phone_number: phoneNumber,
+    } = this.modelValue;
+    this.selectedInboxId = inboxId;
+    this.selectedTemplateId = templateId;
+    this.phoneNumber = phoneNumber;
   },
   methods: {
     updateValue() {
@@ -48,15 +52,21 @@ export default {
 <template>
   <div class="automation-action-alert-input">
     <!-- WhatsApp Inbox Selection -->
-    <label for="whatsappInbox" class="form-label mt-4">Select WhatsApp Inbox:</label>
+    <label for="whatsappInbox"
+class="form-label mt-4"
+      >Select WhatsApp Inbox:</label>
     <select
       id="whatsappInbox"
-      class="form-select"
       v-model="selectedInboxId"
+      class="form-select"
       @change="updateValue"
     >
       <option value="" disabled>Select an inbox</option>
-      <option v-for="inbox in whatsappInboxes" :key="inbox.id" :value="inbox.id">
+      <option
+        v-for="inbox in whatsappInboxes"
+        :key="inbox.id"
+        :value="inbox.id"
+      >
         {{ inbox.name }}
       </option>
     </select>
@@ -68,20 +78,27 @@ export default {
     <label for="template" class="form-label">Select Template:</label>
     <select
       id="template"
-      class="form-select"
       v-model="selectedTemplateId"
-      @change="updateValue"
+      class="form-select"
       :disabled="!selectedInboxId || !availableTemplates.length"
+      @change="updateValue"
     >
       <option value="" disabled>Select a template</option>
-      <option v-for="template in availableTemplates" :key="template.id" :value="template.id">
+      <option
+        v-for="template in availableTemplates"
+        :key="template.id"
+        :value="template.id"
+      >
         {{ template.name }}
       </option>
     </select>
     <small v-if="!selectedInboxId" class="text-muted">
       Select a WhatsApp inbox to view templates.
     </small>
-    <small v-if="selectedInboxId && !availableTemplates.length" class="text-muted">
+    <small
+      v-if="selectedInboxId && !availableTemplates.length"
+      class="text-muted"
+    >
       No templates available for the selected inbox.
     </small>
 
@@ -89,11 +106,11 @@ export default {
     <label for="phoneNumber" class="form-label">Phone Number:</label>
     <input
       id="phoneNumber"
+      v-model="phoneNumber"
       type="tel"
       class="form-control"
-      v-model="phoneNumber"
-      @input="updateValue"
       placeholder="Enter phone number (e.g., +1234567890)"
+      @input="updateValue"
     />
     <small class="text-muted">
       Please enter a valid international phone number starting with +.
