@@ -1,54 +1,38 @@
+# Pre-build stage
 FROM ruby:3.3.3-alpine3.19 AS pre-builder
 
-ARG NODE_VERSION="23.7.0"
+ARG NODE_VERSION="20.15.1"
 ARG PNPM_VERSION="10.2.0"
-ENV NODE_VERSION=${NODE_VERSION}
-ENV PNPM_VERSION=${PNPM_VERSION}
-
 ARG BUNDLE_WITHOUT="development:test"
 ENV BUNDLE_WITHOUT ${BUNDLE_WITHOUT}
 ENV BUNDLER_VERSION=2.5.11
 
-ARG RAILS_SERVE_STATIC_FILES=true
-ENV RAILS_SERVE_STATIC_FILES ${RAILS_SERVE_STATIC_FILES}
-
 ARG RAILS_ENV=production
 ENV RAILS_ENV ${RAILS_ENV}
-
-ARG NODE_OPTIONS="--max-old-space-size=4096 --openssl-legacy-provider"
-ENV NODE_OPTIONS ${NODE_OPTIONS}
-
 ENV BUNDLE_PATH="/gems"
+ENV NODE_OPTIONS="--max-old-space-size=4096 --openssl-legacy-provider"
 
-# Install Node.js and dependencies, including corepack
 RUN apk update && apk add --no-cache \
-  curl \
-  tar \
-  xz \
   openssl \
+  tar \
   build-base \
-  git \
   tzdata \
   postgresql-dev \
   postgresql-client \
-  bash \
-  python3 \
-  make \
-  g++ \
-  && curl -fsSL https://unofficial-builds.nodejs.org/download/release/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz -o node.tar.xz \
-  && mkdir -p /usr/local/lib/nodejs \
-  && tar -xJf node.tar.xz -C /usr/local/lib/nodejs \
-  && rm node.tar.xz \
-  && ln -s /usr/local/lib/nodejs/node-v${NODE_VERSION}-linux-x64/bin/node /usr/bin/node \
-  && ln -s /usr/local/lib/nodejs/node-v${NODE_VERSION}-linux-x64/bin/npm /usr/bin/npm \
-  && ln -s /usr/local/lib/nodejs/node-v${NODE_VERSION}-linux-x64/bin/corepack /usr/bin/corepack \
-  && corepack enable \
+  nodejs=${NODE_VERSION}-r0 \
+  git \
+  curl \
+  && mkdir -p /var/app \
   && gem install bundler
 
-# Install pnpm using corepack
-RUN corepack enable \
-    && corepack prepare pnpm@${PNPM_VERSION} --activate \
-    && pnpm --version
+# Instalar pnpm
+RUN wget -qO- https://get.pnpm.io/install.sh | sh - \
+  && echo 'export PNPM_HOME="/root/.local/share/pnpm"' >> /root/.profile \
+  && echo 'export PATH="$PNPM_HOME:$PATH"' >> /root/.profile \
+  && export PNPM_HOME="/root/.local/share/pnpm" \
+  && export PATH="$PNPM_HOME:$PATH" \
+  && pnpm add -g pnpm@${PNPM_VERSION} \
+  && pnpm --version
 
 ENV PNPM_HOME="/root/.local/share/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
@@ -57,9 +41,8 @@ WORKDIR /app
 
 COPY Gemfile Gemfile.lock ./
 
-RUN apk update && apk add --no-cache build-base musl ruby-full ruby-dev gcc make musl-dev openssl openssl-dev g++ linux-headers xz vips
+RUN apk add --no-cache build-base musl ruby-full ruby-dev gcc make musl-dev openssl openssl-dev g++ linux-headers xz vips
 RUN bundle config set --local force_ruby_platform true
-
 RUN if [ "$RAILS_ENV" = "production" ]; then \
   bundle config set without 'development test'; bundle install -j 4 -r 3; \
   else bundle install -j 4 -r 3; \
@@ -69,7 +52,6 @@ COPY package.json pnpm-lock.yaml ./
 RUN pnpm i
 
 COPY . /app
-
 RUN mkdir -p /app/log
 
 RUN if [ "$RAILS_ENV" = "production" ]; then \
@@ -84,29 +66,18 @@ RUN rm -rf /gems/ruby/3.3.0/cache/*.gem \
   && rm -rf .git \
   && rm .gitignore
 
-# final build stage
+# Final stage
 FROM ruby:3.3.3-alpine3.19
 
-ARG NODE_VERSION="23.7.0"
+ARG NODE_VERSION="20.15.1"
 ARG PNPM_VERSION="10.2.0"
-ENV NODE_VERSION=${NODE_VERSION}
-ENV PNPM_VERSION=${PNPM_VERSION}
-
 ARG BUNDLE_WITHOUT="development:test"
 ENV BUNDLE_WITHOUT ${BUNDLE_WITHOUT}
 ENV BUNDLER_VERSION=2.5.11
-
-ARG EXECJS_RUNTIME="Disabled"
-ENV EXECJS_RUNTIME ${EXECJS_RUNTIME}
-
-ARG RAILS_SERVE_STATIC_FILES=true
-ENV RAILS_SERVE_STATIC_FILES ${RAILS_SERVE_STATIC_FILES}
-
-ARG BUNDLE_FORCE_RUBY_PLATFORM=1
-ENV BUNDLE_FORCE_RUBY_PLATFORM ${BUNDLE_FORCE_RUBY_PLATFORM}
-
-ARG RAILS_ENV=production
-ENV RAILS_ENV ${RAILS_ENV}
+ENV EXECJS_RUNTIME="Disabled"
+ENV RAILS_SERVE_STATIC_FILES=true
+ENV BUNDLE_FORCE_RUBY_PLATFORM=1
+ENV RAILS_ENV=production
 ENV BUNDLE_PATH="/gems"
 
 RUN apk update && apk add --no-cache \
@@ -117,14 +88,17 @@ RUN apk update && apk add --no-cache \
   imagemagick \
   git \
   vips \
-  nodejs~=${NODE_VERSION} \
-  npm \
-  && npm install -g corepack \
+  nodejs=${NODE_VERSION}-r0 \
   && gem install bundler
 
+# Solo instalar pnpm en no-producción (por compatibilidad)
 RUN if [ "$RAILS_ENV" != "production" ]; then \
-  apk add --no-cache curl \
-  && npm install -g pnpm@${PNPM_VERSION} \
+  wget -qO- https://get.pnpm.io/install.sh | sh - \
+  && echo 'export PNPM_HOME="/root/.local/share/pnpm"' >> /root/.profile \
+  && echo 'export PATH="$PNPM_HOME:$PATH"' >> /root/.profile \
+  && export PNPM_HOME="/root/.local/share/pnpm" \
+  && export PATH="$PNPM_HOME:$PATH" \
+  && pnpm add -g pnpm@${PNPM_VERSION} \
   && pnpm --version; \
   fi
 
