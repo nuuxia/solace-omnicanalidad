@@ -16,25 +16,33 @@ ARG RAILS_ENV=production
 ENV RAILS_ENV ${RAILS_ENV}
 
 ARG NODE_OPTIONS="--max-old-space-size=4096 --openssl-legacy-provider"
-ENV NODE_OPTIONS ${NODE_OPTIONS}
+ENV NODE_OPTIONS ${NODE_OPTIONS
 
 ENV BUNDLE_PATH="/gems"
 
 # Install Node.js and dependencies, including corepack
 RUN apk update && apk add --no-cache \
-  openssl \
+  curl \
   tar \
+  xz \
+  openssl \
   build-base \
+  git \
   tzdata \
   postgresql-dev \
   postgresql-client \
-  git \
-  curl \
-  xz \
-  nodejs~=${NODE_VERSION} \
-  npm \
-  && npm install -g corepack \
-  && mkdir -p /var/app \
+  bash \
+  python3 \
+  make \
+  g++ \
+  && curl -fsSL https://unofficial-builds.nodejs.org/download/release/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz -o node.tar.xz \
+  && mkdir -p /usr/local/lib/nodejs \
+  && tar -xJf node.tar.xz -C /usr/local/lib/nodejs \
+  && rm node.tar.xz \
+  && ln -s /usr/local/lib/nodejs/node-v${NODE_VERSION}-linux-x64/bin/node /usr/bin/node \
+  && ln -s /usr/local/lib/nodejs/node-v${NODE_VERSION}-linux-x64/bin/npm /usr/bin/npm \
+  && ln -s /usr/local/lib/nodejs/node-v${NODE_VERSION}-linux-x64/bin/corepack /usr/bin/corepack \
+  && corepack enable \
   && gem install bundler
 
 # Install pnpm using corepack
