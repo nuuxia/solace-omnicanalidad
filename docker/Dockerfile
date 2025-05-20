@@ -1,4 +1,3 @@
-# pre-build stage
 FROM node:23-alpine as node
 FROM ruby:3.3.3-alpine3.19 AS pre-builder
 
@@ -22,6 +21,13 @@ ENV NODE_OPTIONS ${NODE_OPTIONS}
 
 ENV BUNDLE_PATH="/gems"
 
+# Copy Node.js and corepack binaries from the node stage
+COPY --from=node /usr/local/bin/node /usr/local/bin/
+COPY --from=node /usr/local/lib/node_modules/corepack /usr/local/lib/node_modules/corepack
+COPY --from=node /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/npm
+RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
+    && ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx
+
 RUN apk update && apk add --no-cache \
   openssl \
   tar \
@@ -35,10 +41,10 @@ RUN apk update && apk add --no-cache \
   && mkdir -p /var/app \
   && gem install bundler
 
-# Instala pnpm usando corepack de forma estable, sin dependencias rotas de shell
+# Install pnpm using corepack
 RUN corepack enable \
-  && corepack prepare pnpm@${PNPM_VERSION} --activate \
-  && pnpm --version
+    && corepack prepare pnpm@${PNPM_VERSION} --activate \
+    && pnpm --version
 
 ENV PNPM_HOME="/root/.local/share/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
