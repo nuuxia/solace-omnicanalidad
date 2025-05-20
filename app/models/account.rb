@@ -12,6 +12,7 @@
 #  locale                :integer          default("en")
 #  name                  :string           not null
 #  restrict_agents       :boolean          default(FALSE)
+#  settings              :jsonb
 #  status                :integer          default("active")
 #  support_email         :string(100)
 #  created_at            :datetime         not null
@@ -61,7 +62,7 @@ class Account < ApplicationRecord
   has_many :automation_rules, dependent: :destroy_async
   has_many :macros, dependent: :destroy_async
   has_many :campaigns, dependent: :destroy_async
-  has_many :campaigns_whatsapp, class_name: 'CampaignsWhatsapp', foreign_key: 'account_id', dependent: :destroy_async
+  has_many :campaigns_whatsapp, class_name: 'CampaignsWhatsapp', dependent: :destroy_async
   has_many :canned_responses, dependent: :destroy_async
   has_many :categories, dependent: :destroy_async, class_name: '::Category'
   has_many :contacts, dependent: :destroy_async
@@ -105,10 +106,10 @@ class Account < ApplicationRecord
 
   scope :with_auto_resolve, -> { where("(settings ->> 'auto_resolve_after')::int IS NOT NULL") }
 
+  after_initialize :set_default_values, if: :new_record?
   before_validation :validate_limit_keys
   after_create_commit :notify_creation
   after_destroy :remove_account_sequences
-  after_initialize :set_default_values, if: :new_record?
 
   def agents
     users.where(account_users: { role: :agent })
