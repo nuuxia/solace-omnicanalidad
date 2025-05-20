@@ -26,13 +26,7 @@ RUN apk update && apk add --no-cache \
   && gem install bundler
 
 # Instalar pnpm
-RUN wget -qO- https://get.pnpm.io/install.sh | sh - \
-  && echo 'export PNPM_HOME="/root/.local/share/pnpm"' >> /root/.profile \
-  && echo 'export PATH="$PNPM_HOME:$PATH"' >> /root/.profile \
-  && export PNPM_HOME="/root/.local/share/pnpm" \
-  && export PATH="$PNPM_HOME:$PATH" \
-  && pnpm add -g pnpm@${PNPM_VERSION} \
-  && pnpm --version
+RUN npm install -g pnpm@${PNPM_VERSION} && pnpm --version
 
 ENV PNPM_HOME="/root/.local/share/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
