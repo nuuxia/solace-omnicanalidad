@@ -35,10 +35,8 @@ RUN apk update && apk add --no-cache \
   && mkdir -p /var/app \
   && gem install bundler
 
-# ✅ Instalar pnpm con menor riesgo de errores de argumentos largos
-RUN export SHELL="/bin/sh" \
-  && wget -qO- https://get.pnpm.io/install.sh | sh - \
-  && corepack enable \
+# Instala pnpm usando corepack de forma estable, sin dependencias rotas de shell
+RUN corepack enable \
   && corepack prepare pnpm@${PNPM_VERSION} --activate \
   && pnpm --version
 
