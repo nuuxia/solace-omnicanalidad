@@ -145,6 +145,8 @@
       "RESOLVE_CONVERSATION": "Resolver conversación",
       "SEND_WEBHOOK_EVENT": "Send Webhook Event",
       "SEND_ATTACHMENT": "Send Attachment",
+      "OPEN_CONVERSATION": "Abrir conversación",
+      "SEND_ALERT": "Mandar una alerta",
       "SEND_MESSAGE": "Send a Message",
       "CHANGE_PRIORITY": "Cambiar prioridad",
       "ADD_SLA": "Añadir SLA"

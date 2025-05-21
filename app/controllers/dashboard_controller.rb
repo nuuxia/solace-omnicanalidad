@@ -8,6 +8,7 @@ class DashboardController < ActionController::Base
   before_action :ensure_installation_onboarding, only: [:index]
   before_action :render_hc_if_custom_domain, only: [:index]
   before_action :ensure_html_format
+
   layout 'vueapp'
 
   def index; end

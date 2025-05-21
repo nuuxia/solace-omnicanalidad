@@ -65,6 +65,7 @@ export default {
       uiFlags: 'accounts/getUIFlags',
       isFeatureEnabledonAccount: 'accounts/isFeatureEnabledonAccount',
       isOnChatwootCloud: 'globalConfig/isOnChatwootCloud',
+      globalConfig: 'globalConfig/get',
     }),
     showAutoResolutionConfig() {
       return this.isFeatureEnabledonAccount(

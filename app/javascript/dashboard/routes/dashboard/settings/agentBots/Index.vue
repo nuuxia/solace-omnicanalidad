@@ -87,7 +87,6 @@ onMounted(() => {
     <template #header>
       <BaseSettingsHeader
         :title="t('AGENT_BOTS.HEADER')"
-        :description="t('AGENT_BOTS.DESCRIPTION')"
         :link-text="t('AGENT_BOTS.LEARN_MORE')"
         feature-name="agent_bots"
       >

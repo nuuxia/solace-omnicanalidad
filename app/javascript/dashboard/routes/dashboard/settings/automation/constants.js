@@ -544,7 +544,7 @@ export const AUTOMATION_ACTION_TYPES = [
   },
   {
     key: 'open_conversation',
-    label: 'Open conversation',
+    label: 'OPEN_CONVERSATION',
     inputType: null,
   },
   {
@@ -564,7 +564,7 @@ export const AUTOMATION_ACTION_TYPES = [
   },
   {
     key: 'send_alert',
-    label: 'Send an alert',
+    label: 'SEND_ALERT',
     inputType: null,
   },
   {

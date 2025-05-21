@@ -20,14 +20,17 @@ export default {
   },
   emits: ['onChangeFilter'],
   data() {
-    return {
-      activeValue:
-        this.type === 'status'
-          ? Array.isArray(this.selectedValue)
-            ? [...this.selectedValue]
-            : [this.selectedValue]
-          : this.selectedValue,
-    };
+    let activeValue;
+
+    if (this.type === 'status') {
+      activeValue = Array.isArray(this.selectedValue)
+        ? [...this.selectedValue]
+        : [this.selectedValue];
+    } else {
+      activeValue = this.selectedValue;
+    }
+
+    return { activeValue };
   },
   methods: {
     onTabChange() {
@@ -50,11 +53,11 @@ export default {
 </script>
 
 <template>
-  <div class="flex items-center space-x-2">
-    <!-- Multiselect para type === 'status' -->
-    <div v-if="type === 'status'" class="relative">
+  <div class="flex items-center space-x-2 w-full">
+    <!-- Multiselect for type === 'status' -->
+    <div v-if="type === 'status'" class="relative w-full">
       <div
-        class="w-56 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm"
+        class="w-full max-w-56 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm"
       >
         <div class="max-h-48 overflow-y-auto">
           <label
@@ -77,11 +80,11 @@ export default {
       </div>
     </div>
 
-    <!-- Select simple para otros tipos -->
-    <div v-else class="relative">
+    <!-- Simple select for other types -->
+    <div v-else class="relative w-full">
       <select
         v-model="activeValue"
-        class="w-56 h-10 px-3 py-2 text-sm text-slate-800 dark:text-slate-100 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none"
+        class="w-full max-w-56 h-10 px-3 py-2 text-sm text-slate-800 dark:text-slate-100 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none"
         @change="onTabChange"
       >
         <option v-for="value in items" :key="value" :value="value">
@@ -93,7 +96,7 @@ export default {
 </template>
 
 <style scoped>
-/* Estilos para el scroll del multiselect */
+/* Scrollbar styles for multiselect */
 .max-h-48::-webkit-scrollbar {
   width: 6px;
 }
@@ -111,10 +114,23 @@ export default {
   background: #1e293b;
 }
 
-/* Ocultar la flecha nativa del select */
+/* Hide native select arrow */
 select {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .max-w-56 {
+    max-width: 100%; /* Full width on small screens */
+  }
+  .text-sm {
+    font-size: 0.75rem; /* Smaller text on small screens */
+  }
+  .h-10 {
+    height: 2rem; /* Smaller height for select on small screens */
+  }
 }
 </style>

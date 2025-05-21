@@ -1,8 +1,13 @@
 <script>
 import mercadoLibreClient from '../../../../../api/channel/mercadoLibreClient';
+import NextButton from 'dashboard/components-next/button/Button.vue';
+
 export default {
   data() {
     return { isRequestingAuthorization: false };
+  },
+  components :{
+    NextButton,
   },
   methods: {
     async requestAuthorization() {
@@ -31,12 +36,12 @@ export default {
   >
     <div class="login-init h-full text-center">
       <form @submit.prevent="requestAuthorization">
-        <woot-submit-button
-          icon=""
-          button-text="Sign in with Mercado Libre"
-          type="submit"
-          :loading="isRequestingAuthorization"
-        />
+        <NextButton
+        type="submit"
+        :loading="isRequestingAuthorization"
+      >
+        Sign in with Mercado Libre
+      </NextButton>
       </form>
       <p>{{ $t('INBOX_MGMT.ADD.MERCADO_LIBRE_CHANNEL.HELP') }}</p>
     </div>
