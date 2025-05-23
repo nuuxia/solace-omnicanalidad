@@ -1,5 +1,7 @@
+<!-- SidebarGroup.vue -->
 <script setup>
 import { computed, onMounted, nextTick } from 'vue';
+import { RouterLink } from 'vue-router';
 import { useSidebarContext } from './provider';
 import { useRoute, useRouter } from 'vue-router';
 import Policy from 'dashboard/components/policy.vue';
@@ -42,7 +44,7 @@ const hasChildren = computed(
 const accessibleItems = computed(() => {
   if (!hasChildren.value) return [];
   return props.children.filter(child => {
-    // If a item has no link, it means it's just a subgroup header
+    // If an item has no link, it means it's just a subgroup header
     // So we don't need to check for permissions here, because there's nothing to
     // access here anyway
     return child.to && isAllowed(child.to);
@@ -55,6 +57,9 @@ const hasAccessibleChildren = computed(() => {
 
 const isActive = computed(() => {
   if (props.to) {
+    // For external links, we don't check active state since they don't use Vue Router
+    if (props.to.external) return false;
+
     if (route.path === resolvePath(props.to)) return true;
 
     return props.activeOn.includes(route.name);
@@ -68,13 +73,14 @@ const isActive = computed(() => {
 // TODO: Audit the routes and fix the nesting and remove this
 const activeChild = computed(() => {
   const pathSame = navigableChildren.value.find(
-    child => child.to && route.path === resolvePath(child.to)
+    child => child.to && !child.to.external && route.path === resolvePath(child.to)
   );
   if (pathSame) return pathSame;
 
   // Rank the activeOn Prop higher than the path match
-  // There will be cases where the path name is the same but the params are different
-  // So we need to rank them based on the params
+  // There_FLUSH
+  // are cases where the path name is the same but the params are different
+  // So we need to to rank them based on the params
   // For example, contacts segment list in the sidebar effectively has the same name
   // But the params are different
   const activeOnPages = navigableChildren.value.filter(child =>
@@ -83,6 +89,7 @@ const activeChild = computed(() => {
 
   if (activeOnPages.length > 0) {
     const rankedPage = activeOnPages.find(child => {
+      if (child.to.external) return false;
       return Object.keys(child.to.params)
         .map(key => {
           return String(child.to.params[key]) === String(route.params[key]);
@@ -99,7 +106,7 @@ const activeChild = computed(() => {
   }
 
   return navigableChildren.value.find(
-    child => child.to && route.path.startsWith(resolvePath(child.to))
+    child => child.to && !child.to.external && route.path.startsWith(resolvePath(child.to))
   );
 });
 
@@ -115,7 +122,10 @@ const toggleTrigger = () => {
   ) {
     // if not already expanded, navigate to the first child
     const firstItem = accessibleItems.value[0];
-    router.push(firstItem.to);
+    // Skip navigation for external links in toggleTrigger
+    if (!firstItem.to.external) {
+      router.push(firstItem.to);
+    }
   }
   setExpandedItem(props.name);
 };

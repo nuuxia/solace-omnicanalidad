@@ -8,6 +8,7 @@ import wootConstants from 'dashboard/constants/globals';
 import { frontendURL } from 'dashboard/helper/URLHelper';
 import { ACCOUNT_EVENTS } from '../../../helper/AnalyticsHelper/events';
 import { useTrack } from 'dashboard/composables';
+import Policy from 'dashboard/components/policy.vue';
 
 export default {
   components: {
@@ -16,6 +17,7 @@ export default {
     OptionsMenu,
     AgentDetails,
     NotificationBell,
+    Policy,
   },
   props: {
     isACustomBrandedInstance: {
@@ -89,6 +91,19 @@ export default {
         :to="menuItem.toState"
         :is-child-menu-active="menuItem.key === activeMenuItem"
       />
+      <Policy :permissions="['administrator']">
+        <a
+          id="arrows_support"
+          href="https://wa.me/+59896218240?text=Hola,%20necesito%20soporte%20de%20Arrows"
+          target="_blank"
+          rel="noopener noreferrer"
+          v-tooltip.right="'Soporte Arrows'"
+          class="flex items-center justify-center w-10 h-10 my-2 text-slate-700 dark:text-slate-100 hover:bg-slate-25 dark:hover:bg-slate-700 hover:text-slate-600"
+        >
+          <fluent-icon icon="whatsapp" />
+          <span class="sr-only">Soporte Arrows</span>
+        </a>
+      </Policy>
     </div>
     <div class="flex flex-col items-center justify-end pb-6">
       <a

@@ -36,7 +36,13 @@ class SuperAdmin::AccountsController < SuperAdmin::ApplicationController
   def resource_params
     permitted_params = super
     permitted_params[:limits] = permitted_params[:limits].to_h.compact
-    permitted_params[:selected_feature_flags] = params[:enabled_features].keys.map(&:to_sym) if params[:enabled_features].present?
+
+    if params[:enabled_features].present?
+      valid_features = Account.new.methods.grep(/=$/).map { |m| m.to_s.chomp('=') }
+      filtered_features = params[:enabled_features].keys.select { |k| valid_features.include?(k) }
+      permitted_params[:selected_feature_flags] = filtered_features.map(&:to_sym)
+    end
+
     permitted_params
   end
 

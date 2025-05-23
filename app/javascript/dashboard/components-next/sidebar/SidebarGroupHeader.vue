@@ -1,6 +1,7 @@
 <script setup>
 import { useMapGetter } from 'dashboard/composables/store.js';
 import Icon from 'next/icon/Icon.vue';
+import { RouterLink } from 'vue-router';
 
 const props = defineProps({
   to: { type: [Object, String], default: '' },
@@ -20,10 +21,12 @@ const showBadge = useMapGetter(props.getterKeys.badge);
 
 <template>
   <component
-    :is="to ? 'router-link' : 'div'"
+    :is="to?.external ? 'a' : to ? RouterLink : 'div'"
+    :href="to?.external ? to.href : undefined"
+    :to="!to?.external ? to : undefined"
+    :target="to?.external ? '_blank' : undefined"
     class="flex items-center gap-2 px-2 py-1.5 rounded-lg h-8"
     role="button"
-    :to="to"
     :title="label"
     :class="{
       'n-blue-text bg-n-alpha-2 font-medium': isActive && !hasActiveChild,

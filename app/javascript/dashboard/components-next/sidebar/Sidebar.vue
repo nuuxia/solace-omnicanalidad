@@ -380,6 +380,13 @@ const menuItems = computed(() => {
       ],
     },
     {
+      name: 'Arrows Support',
+      label: t('SIDEBAR.ARROWS_SUPPORT'),
+      icon: 'i-lucide-message-square',
+      to: accountScopedRoute('https://wa.me/+59896218240?text=Hola,%20necesito%20soporte%20de%20Arrows'),
+      permissions: ['administrator'],
+    },
+    {
       name: 'Settings',
       label: t('SIDEBAR.SETTINGS'),
       icon: 'i-lucide-bolt',
