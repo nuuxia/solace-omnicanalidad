@@ -1,3 +1,4 @@
+// composables/useAccount.js
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { useMapGetter, useStore } from './store';
@@ -37,7 +38,13 @@ export function useAccount() {
     return isFeatureEnabledonAccount.value(currentAccount.value.id, feature);
   };
 
-  const accountScopedRoute = (name, params, query) => {
+  const accountScopedRoute = (name, params = {}, query = {}) => {
+    // Check if the name is an external URL
+    if (typeof name === 'string' && name.startsWith('http')) {
+      return { href: name, external: true };
+    }
+
+    // Existing logic for internal routes
     return {
       name,
       params: { accountId: accountId.value, ...params },
