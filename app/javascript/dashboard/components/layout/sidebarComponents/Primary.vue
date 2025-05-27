@@ -18,10 +18,10 @@ export default {
     NotificationBell,
   },
   props: {
-    isACustomBrandedInstance: {
+    /* isACustomBrandedInstance: {
       type: Boolean,
       default: false,
-    },
+    }, */
     logoSource: {
       type: String,
       default: '',
@@ -91,7 +91,7 @@ export default {
       />
     </div>
     <div class="flex flex-col items-center justify-end pb-6">
-      <a
+      <!--  <a
         v-if="!isACustomBrandedInstance"
         v-tooltip.right="$t(`SIDEBAR.DOCS`)"
         :href="helpDocsURL"
@@ -101,7 +101,7 @@ export default {
       >
         <fluent-icon icon="book-open-globe" />
         <span class="sr-only">{{ $t(`SIDEBAR.DOCS`) }}</span>
-      </a>
+      </a> -->
       <NotificationBell @open-notification-panel="openNotificationPanel" />
       <AgentDetails @toggle-menu="toggleOptions" />
       <OptionsMenu
