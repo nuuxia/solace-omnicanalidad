@@ -72,7 +72,7 @@ export default {
 
     &.active {
       h3 {
-        @apply text-n-blue-text dark:text-n-blue-text;
+        @apply text-woot-500;
       }
 
       .step {
