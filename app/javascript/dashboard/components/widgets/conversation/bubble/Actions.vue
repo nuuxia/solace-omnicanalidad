@@ -259,7 +259,7 @@ export default {
   .message-text--metadata {
     @apply items-center;
     .time {
-      @apply text-woot-100 dark:text-woot-100;
+      @apply text-white dark:text-white;
     }
 
     .action--icon {

@@ -1,275 +1,301 @@
-#Files in the config/locales directory are used for internationalization
-#and are automatically loaded by Rails. If you want to use locales other
-#than English, add the necessary files in this directory.
-#To use the locales, use `I18n.t`:
-#I18n.t 'hello'
-#In views, this is aliased to just `t`:
-#<%= t('hello') %>
-#To use a different locale, set it with `I18n.locale`:
-#I18n.locale = :es
-#This would use the information in config/locales/es.yml.
-#The following keys must be escaped otherwise they will not be retrieved by
-#the default I18n backend:
-#true, false, on, off, yes, no
-#Instead, surround them with single quotes.
-#en:
-#'true': 'foo'
-#To learn more, please read the Rails Internationalization guide
-#available at https://guides.rubyonrails.org/i18n.html.
 es:
-  hello: "Hola mundo"
+  hello: 'Hola mundo'
   messages:
-    reset_password_success: '¡Genial! La solicitud de restablecimiento de contraseña ha sido exitosa. Revisa tu correo para ver las instrucciones.'
-    reset_password_failure: '¡Uh ho! No hemos podido encontrar ningún usuario con el correo electrónico especificado.'
-    inbox_deletetion_response: Su solicitud de eliminación de la bandeja de entrada será procesada en algún tiempo.
+    reset_password_success: '¡Genial! La solicitud de restablecimiento de contraseña fue exitosa. Revisa tu correo para las instrucciones.'
+    reset_password_failure: '¡Uy! No pudimos encontrar ningún usuario con el correo especificado.'
+    inbox_deletetion_response: 'Tu solicitud de eliminación de bandeja de entrada se procesará en breve.'
+
   errors:
     validations:
-      presence: no debe estar en blanco
+      presence: 'no debe estar en blanco'
     webhook:
-      invalid: Eventos inválidos
+      invalid: 'Eventos inválidos'
     signup:
-      disposable_email: No permitimos correos electrónicos desechables
-      blocked_domain: This domain is not allowed. If you believe this is a mistake, please contact support.
-      invalid_email: Ha introducido un correo electrónico no válido
-      email_already_exists: "Ya te has registrado en una cuenta con %{email}"
-      invalid_params: 'Inválido, por favor comprueba los parámetros de registro e inténtalo de nuevo'
-      failed: Registro fallido
+      disposable_email: 'No permitimos correos desechables'
+      blocked_domain: 'Este dominio no está permitido. Si crees que es un error, contacta al soporte.'
+      invalid_email: 'Has ingresado un email inválido'
+      email_already_exists: 'Ya te has registrado con la cuenta %{email}'
+      invalid_params: 'Inválido, por favor revisa los parámetros de registro y vuelve a intentarlo'
+      failed: 'El registro falló'
     data_import:
       data_type:
-        invalid: Tipo de datos no válido
+        invalid: 'Tipo de dato inválido'
     contacts:
       import:
-        failed: Archivo está en blanco
+        failed: 'El archivo está vacío'
       export:
-        success: Le notificaremos cuando el archivo de exportación de contactos esté listo para ver.
+        success: 'Te notificaremos una vez que el archivo de exportación de contactos esté listo para ver.'
       email:
-        invalid: Email inválido
+        invalid: 'Correo electrónico inválido'
       phone_number:
-        invalid: debe estar en formato e164
+        invalid: 'debe estar en formato e164'
     categories:
       locale:
-        unique: debe ser único en la categoría y el portal
+        unique: 'debe ser único en la categoría y portal'
     dyte:
-      invalid_message_type: "Tipo de mensaje inválido. Acción no permitida"
+      invalid_message_type: 'Tipo de mensaje inválido. Acción no permitida'
     slack:
-      invalid_channel_id: "Canal de slack inválido. Por favor, inténtalo de nuevo"
+      invalid_channel_id: 'Canal de Slack inválido. Por favor intenta de nuevo'
     inboxes:
       imap:
-        socket_error: Verifique la conexión de red, la dirección IMAP y vuelva a intentarlo.
-        no_response_error: Verifique las credenciales de IMAP y vuelva a intentarlo.
-        host_unreachable_error: Host inaccesible. Verifique la dirección IMAP, el puerto IMAP e intente nuevamente.
-        connection_timed_out_error: Se agotó el tiempo de conexión para %{address}:%{port}
-        connection_closed_error: Conexión cerrada.
+        socket_error: 'Por favor revisa la conexión de red, la dirección IMAP y vuelve a intentarlo.'
+        no_response_error: 'Por favor revisa las credenciales IMAP y vuelve a intentarlo.'
+        host_unreachable_error: 'Host inalcanzable, por favor revisa la dirección IMAP, el puerto IMAP y vuelve a intentarlo.'
+        connection_timed_out_error: 'Tiempo de conexión agotado para %{address}:%{port}'
+        connection_closed_error: 'Conexión cerrada.'
       validations:
-        name: no debe comenzar ni terminar con símbolos, y no debe tener caracteres < > / \ @.
+        name: 'no debe empezar ni terminar con símbolos, y no debe contener los caracteres < > / \\ @.'
     custom_filters:
-      number_of_records: Límite alcanzado. El número máximo de filtros personalizados permitidos para un usuario por cuenta es de 50.
-      invalid_attribute: Clave de atributo no válida - [%{key}]. La clave debe ser una de [%{allowed_keys}] o un atributo personalizado definido en la cuenta.
-      invalid_operator: Operador no válido. Los operadores permitidos para %{attribute_name} son [%{allowed_keys}].
-      invalid_value: Valor no válido. Los valores proporcionados para %{attribute_name} no son válidos
+      number_of_records: 'Límite alcanzado. El número máximo de filtros personalizados permitidos por usuario y cuenta es 50.'
+      invalid_attribute: 'Clave de atributo inválida - [%{key}]. La clave debe ser una de [%{allowed_keys}] o un atributo personalizado definido en la cuenta.'
+      invalid_operator: 'Operador inválido. Los operadores permitidos para %{attribute_name} son [%{allowed_keys}].'
+      invalid_query_operator: 'El operador de consulta debe ser "AND" o "OR".'
+      invalid_value: 'Valor inválido. Los valores proporcionados para %{attribute_name} son inválidos'
+    custom_attribute_definition:
+      key_conflict: 'La clave proporcionada no está permitida ya que podría entrar en conflicto con los atributos predeterminados.'
   reports:
-    period: Reportando el periodo desde %{since} hasta %{until}
-    utc_warning: El informe generado está en zona horaria UTC
+    period: 'Período de informe %{since} a %{until}'
+    utc_warning: 'El informe se genera en zona horaria UTC'
     agent_csv:
-      agent_name: Nombre del agente
-      conversations_count: Conversaciones asignadas
-      avg_first_response_time: Promedio de tiempo de la primera respuesta
-      avg_resolution_time: Tiempo promedio de resolución
-      resolution_count: Número de resoluciones
-      avg_customer_waiting_time: Tiempo promedio de espera del cliente
+      agent_name: 'Nombre del agente'
+      conversations_count: 'Conversaciones asignadas'
+      avg_first_response_time: 'Promedio de primer tiempo de respuesta'
+      avg_resolution_time: 'Promedio de tiempo de resolución'
+      resolution_count: 'Cantidad de resoluciones'
+      avg_customer_waiting_time: 'Promedio de tiempo de espera del cliente'
     inbox_csv:
-      inbox_name: Nombre de la bandeja de entrada
-      inbox_type: Tipo de bandeja de entrada
-      conversations_count: Núm. de conversaciones
-      avg_first_response_time: Promedio de tiempo de la primera respuesta
-      avg_resolution_time: Tiempo promedio de resolución
+      inbox_name: 'Nombre de la bandeja'
+      inbox_type: 'Tipo de bandeja'
+      conversations_count: 'N.º de conversaciones'
+      avg_first_response_time: 'Promedio de primer tiempo de respuesta'
+      avg_resolution_time: 'Promedio de tiempo de resolución'
     label_csv:
-      label_title: Etiqueta
-      conversations_count: Núm. de conversaciones
-      avg_first_response_time: Promedio de tiempo de la primera respuesta
-      avg_resolution_time: Tiempo promedio de resolución
+      label_title: 'Etiqueta'
+      conversations_count: 'N.º de conversaciones'
+      avg_first_response_time: 'Promedio de primer tiempo de respuesta'
+      avg_resolution_time: 'Promedio de tiempo de resolución'
     team_csv:
-      team_name: Nombre del equipo
-      conversations_count: Cantidad de conversaciones
-      avg_first_response_time: Promedio de tiempo de la primera respuesta
-      avg_resolution_time: Tiempo promedio de resolución
-      resolution_count: Número de resoluciones
-      avg_customer_waiting_time: Tiempo promedio de espera del cliente
+      team_name: 'Nombre del equipo'
+      conversations_count: 'Cantidad de conversaciones'
+      avg_first_response_time: 'Promedio de primer tiempo de respuesta'
+      avg_resolution_time: 'Promedio de tiempo de resolución'
+      resolution_count: 'Cantidad de resoluciones'
+      avg_customer_waiting_time: 'Promedio de tiempo de espera del cliente'
     conversation_traffic_csv:
-      timezone: Timezone
+      timezone: 'Zona horaria'
     sla_csv:
-      conversation_id: ID de conversación
-      sla_policy_breached: Política de SLA
-      assignee: Cesionario
-      team: Equipo
-      inbox: Bandeja de entrada
-      labels: Etiquetas
-      conversation_link: Enlace a la conversación
-      breached_events: Eventos violados
-    default_group_by: día
+      conversation_id: 'ID de conversación'
+      sla_policy_breached: 'Política SLA'
+      assignee: 'Asignado a'
+      team: 'Equipo'
+      inbox: 'Bandeja'
+      labels: 'Etiquetas'
+      conversation_link: 'Enlace a la conversación'
+      breached_events: 'Eventos incumplidos'
+    default_group_by: 'día'
     csat:
       headers:
-        contact_name: Nombre de Contacto
-        contact_email_address: Correo electrónico de contacto
-        contact_phone_number: Número de teléfono de contacto
-        link_to_the_conversation: Enlace a la conversación
-        agent_name: Nombre del agente
-        rating: Calificación
-        feedback: Comentario de opinión
-        recorded_at: Fecha registrada
+        contact_name: 'Nombre del contacto'
+        contact_email_address: 'Correo electrónico del contacto'
+        contact_phone_number: 'Número de teléfono del contacto'
+        link_to_the_conversation: 'Enlace a la conversación'
+        agent_name: 'Nombre del agente'
+        rating: 'Calificación'
+        feedback: 'Comentario'
+        recorded_at: 'Fecha registrada'
   notifications:
     notification_title:
-      conversation_creation: "Una conversación (#%{display_id}) ha sido creada en %{inbox_name}"
-      conversation_assignment: "Una conversación (#%{display_id}) te ha sido asignada"
-      assigned_conversation_new_message: "Un nuevo mensaje fue creado en la conversación (#%{display_id})"
-      conversation_mention: "Has sido mencionado en la conversación (#%{display_id})"
-      sla_missed_first_response: "Primera respuesta al objetivo de SLA perdida para la conversación (#%{display_id})"
-      sla_missed_next_response: "Falta la siguiente respuesta del SLA para la conversación (#%{display_id})"
-      sla_missed_resolution: "Falta la siguiente respuesta del SLA para la conversación (#%{display_id})"
-    attachment: "Adjunto"
-    no_content: "Sin contenido"
+      conversation_creation: 'Se ha creado una conversación (#%{display_id}) en %{inbox_name}'
+      conversation_assignment: 'Se te ha asignado la conversación (#%{display_id})'
+      assigned_conversation_new_message: 'Se ha creado un nuevo mensaje en la conversación (#%{display_id})'
+      conversation_mention: 'Has sido mencionado en la conversación (#%{display_id})'
+      sla_missed_first_response: 'Meta SLA de primera respuesta incumplida para la conversación (#%{display_id})'
+      sla_missed_next_response: 'Meta SLA de siguiente respuesta incumplida para la conversación (#%{display_id})'
+      sla_missed_resolution: 'Meta SLA de resolución incumplida para la conversación (#%{display_id})'
+    attachment: 'Adjunto'
+    no_content: 'Sin contenido'
   conversations:
+    captain:
+      handoff: 'Transfiriendo a otro agente para más asistencia.'
     messages:
-      instagram_story_content: "%{story_sender} te mencionó en la historia: "
-      instagram_deleted_story_content: Esta historia ya no está disponible.
-      deleted: Este mensaje se ha eliminado
+      instagram_story_content: '%{story_sender} te mencionó en la historia: '
+      instagram_deleted_story_content: 'Esta historia ya no está disponible.'
+      deleted: 'Este mensaje fue eliminado'
       delivery_status:
-        error_code: "Código de error: %{error_code}"
+        error_code: 'Código de error: %{error_code}'
     activity:
+      captain:
+        resolved: 'La conversación fue marcada como resuelta por %{user_name} debido a inactividad'
+        open: 'La conversación fue marcada como abierta por %{user_name}'
       status:
-        resolved: "La conversación fue marcada por %{user_name}"
-        contact_resolved: "Conversación fue resuelta por %{contact_name}"
-        open: "La conversación fue reabierta por %{user_name}"
-        pending: "La conversación fue marcada como pendiente por %{user_name}"
-        snoozed: "La conversación fue pospuesta por %{user_name}"
-        auto_resolved: "La conversación fue marcada por el sistema debido a %{duration} días de inactividad"
-        system_auto_open: El sistema reabrió la conversación debido a un nuevo mensaje entrante.
+        resolved: 'La conversación fue marcada como resuelta por %{user_name}'
+        contact_resolved: 'La conversación fue resuelta por %{contact_name}'
+        open: 'La conversación fue reabierta por %{user_name}'
+        pending: 'La conversación fue marcada como pendiente por %{user_name}'
+        snoozed: 'La conversación fue pospuesta por %{user_name}'
+        auto_resolved_days: 'La conversación fue marcada como resuelta por el sistema debido a %{count} días de inactividad'
+        auto_resolved_hours: 'La conversación fue marcada como resuelta por el sistema debido a %{count} horas de inactividad'
+        auto_resolved_minutes: 'La conversación fue marcada como resuelta por el sistema debido a %{count} minutos de inactividad'
+        system_auto_open: 'El sistema reabrió la conversación debido a un nuevo mensaje entrante.'
       priority:
         added: '%{user_name} estableció la prioridad a %{new_priority}'
         updated: '%{user_name} cambió la prioridad de %{old_priority} a %{new_priority}'
         removed: '%{user_name} eliminó la prioridad'
       assignee:
-        self_assigned: "%{user_name} auto-asignado a esta conversación"
-        assigned: "Asignado a %{assignee_name} por %{user_name}"
-        removed: "Conversación no asignada por %{user_name}"
+        self_assigned: '%{user_name} se asignó esta conversación'
+        assigned: 'Asignado a %{assignee_name} por %{user_name}'
+        removed: 'Conversación sin asignar por %{user_name}'
       team:
-        assigned: "Asignado a %{team_name} por %{user_name}"
-        assigned_with_assignee: "Asignado a %{assignee_name} via %{team_name} por %{user_name}"
-        removed: "Desasignado de %{team_name} por %{user_name}"
+        assigned: 'Asignado a %{team_name} por %{user_name}'
+        assigned_with_assignee: 'Asignado a %{assignee_name} vía %{team_name} por %{user_name}'
+        removed: 'Desasignado de %{team_name} por %{user_name}'
       labels:
-        added: "%{user_name} agregó %{labels}"
-        removed: "%{user_name} eliminó a %{labels}"
+        added: '%{user_name} añadió %{labels}'
+        removed: '%{user_name} eliminó %{labels}'
       sla:
-        added: "%{user_name} agregó la política de SLA %{sla_name}"
-        removed: "%{user_name} eliminó la política de SLA %{sla_name}"
-      muted: "%{user_name} ha silenciado la conversación"
-      unmuted: "%{user_name} ha anulado el silenciado de la conversación"
+        added: '%{user_name} añadió la política SLA %{sla_name}'
+        removed: '%{user_name} eliminó la política SLA %{sla_name}'
+      muted: '%{user_name} ha silenciado la conversación'
+      unmuted: '%{user_name} ha reactivado la conversación'
+      auto_resolution_message: 'Resolviendo la conversación ya que ha estado inactiva por un tiempo. Por favor inicia una nueva conversación si necesitas más ayuda.'
     templates:
-      greeting_message_body: "%{account_name} normalmente responde en unas pocas horas."
-      ways_to_reach_you_message_body: "Dale al equipo una forma de llegar a ti."
-      email_input_box_message_body: "Recibir notificaciones por correo electrónico"
-      csat_input_message_body: "Por favor, valora la conversación"
+      greeting_message_body: '%{account_name} normalmente responde en pocas horas.'
+      ways_to_reach_you_message_body: 'Dale al equipo una forma de contactarte.'
+      email_input_box_message_body: 'Recibir notificaciones por correo electrónico'
+      csat_input_message_body: 'Por favor califica la conversación'
     reply:
       email:
         header:
-          from_with_name: "%{assignee_name} de %{inbox_name} <%{from_email}>"
-          reply_with_name: "%{assignee_name} de %{inbox_name} <reply+%{reply_email}>"
-          friendly_name: "%{sender_name} de %{business_name} <%{from_email}>"
-          professional_name: "%{business_name} <%{from_email}>"
+          from_with_name: '%{assignee_name} de %{inbox_name} <%{from_email}>'
+          reply_with_name: '%{assignee_name} de %{inbox_name} <reply+%{reply_email}>'
+          friendly_name: '%{sender_name} de %{business_name} <%{from_email}>'
+          professional_name: '%{business_name} <%{from_email}>'
       channel_email:
         header:
-          reply_with_name: "%{assignee_name} de %{inbox_name} <%{from_email}>"
-          reply_with_inbox_name: "%{inbox_name} <%{from_email}>"
-      email_subject: "Nuevos mensajes en esta conversación"
-      transcript_subject: "Transcripción de la conversación"
+          reply_with_name: '%{assignee_name} de %{inbox_name} <%{from_email}>'
+          reply_with_inbox_name: '%{inbox_name} <%{from_email}>'
+      email_subject: 'Nuevos mensajes en esta conversación'
+      transcript_subject: 'Transcripción de la conversación'
     survey:
-      response: "Por favor califica esta conversación, %{link}"
+      response: 'Por favor califica esta conversación, %{link}'
   contacts:
     online:
-      delete: "%{contact_name} está conectado, por favor inténtalo más tarde"
+      delete: '%{contact_name} está en línea, por favor prueba más tarde'
   integration_apps:
     dashboard_apps:
-      name: "Panel de aplicaciones"
-      description: "Las aplicaciones de panel te permiten crear e incrustar aplicaciones que muestran información de usuario, pedidos o historial de pagos, proporcionando más contexto a tus agentes de soporte al cliente."
+      name: 'Aplicaciones de panel'
+      description: 'Las aplicaciones de panel te permiten crear e incrustar aplicaciones que muestren información del usuario, pedidos o historial de pagos, proporcionando más contexto a tus agentes de soporte al cliente.'
     dyte:
-      name: "Dyte"
-      description: "Dyte es un producto que integra funcionalidades de audio y video en tu aplicación. Con esta integración, tus agentes pueden iniciar llamadas de video/voz con tus clientes directamente desde Software Arrows."
-      meeting_name: "%{agent_name} ha iniciado una reunión"
+      name: 'Dyte'
+      short_description: 'Inicia llamadas de video/voz con clientes directamente desde Arrows.'
+      description: 'Dyte es un producto que integra funcionalidades de audio y video en tu aplicación. Con esta integración, tus agentes pueden iniciar llamadas de video/voz con tus clientes directamente desde Arrows.'
+      meeting_name: '%{agent_name} ha iniciado una reunión'
     slack:
-      name: "Slack"
-      description: "Integra Software Arrows con Slack para mantener a tu equipo sincronizado. Esta integración te permite recibir notificaciones de nuevas conversaciones y responder directamente desde la interfaz de Slack."
+      name: 'Slack'
+      short_description: 'Recibe notificaciones y responde conversaciones directamente en Slack.'
+      description: 'Integra Arrows con Slack para mantener a tu equipo sincronizado. Esta integración te permite recibir notificaciones de nuevas conversaciones y responderlas directamente dentro de la interfaz de Slack.'
     webhooks:
-      name: "Webhook"
-      description: "Los eventos de webhook proporcionan actualizaciones en tiempo real sobre las actividades en tu cuenta de Software Arrows. Puedes suscribirte a los eventos que prefieras y Software Arrows te enviará llamadas HTTP con las actualizaciones."
+      name: 'Webhooks'
+      description: 'Los eventos de Webhook proporcionan actualizaciones en tiempo real sobre las actividades en tu cuenta de Arrows. Puedes suscribirte a tus eventos preferidos y Arrows enviará devoluciones de llamada HTTP con las actualizaciones.'
     dialogflow:
-      name: "Dialogflow"
-      description: "Construye chatbots con Dialogflow e intégralos fácilmente en tu bandeja de entrada. Estos bots pueden manejar consultas iniciales antes de transferirlas a un agente de servicio al cliente."
+      name: 'Dialogflow'
+      short_description: 'Crea chatbots para manejar consultas iniciales antes de transferir a agentes.'
+      description: 'Crea chatbots con Dialogflow e intégralos fácilmente en tu bandeja. Estos bots pueden manejar consultas iniciales antes de transferirlas a un agente de servicio al cliente.'
     google_translate:
-      name: "Traductor de Google"
-      description: "Integra Google Translate para ayudar a los agentes a traducir fácilmente los mensajes de los clientes. Esta integración detecta automáticamente el idioma y lo convierte al idioma preferido del agente o del administrador."
+      name: 'Google Translate'
+      short_description: 'Traduce automáticamente los mensajes de los clientes para los agentes.'
+      description: 'Integra Google Translate para ayudar a los agentes a traducir fácilmente los mensajes de los clientes. Esta integración detecta automáticamente el idioma y lo convierte al idioma preferido del agente o administrador.'
     openai:
-      name: "OpenAI"
-      description: "Aprovecha el poder de los grandes modelos de lenguaje de OpenAI con funciones como sugerencias de respuestas, resúmenes, reformulación de mensajes, corrección ortográfica y clasificación de etiquetas."
+      name: 'OpenAI'
+      short_description: 'Sugerencias de respuesta impulsadas por IA, resumen y mejora de mensajes.'
+      description: 'Aprovecha el poder de los grandes modelos de lenguaje de OpenAI con funciones como sugerencias de respuesta, resumen, reformulación de mensajes, corrección ortográfica y clasificación de etiquetas.'
     linear:
-      name: "Lineal"
-      description: "Crea problemas en Linear directamente desde tu ventana de conversación. Alternativamente, enlaza problemas existentes en Linear para un proceso de seguimiento de problemas más eficiente y ágil."
-    captain:
-      name: "Capitán"
-      description: "Captain es un asistente nativo de inteligencia artificial diseñado para tu producto y entrenado en la base de conocimientos de tu empresa. Responde como un humano y resuelve eficazmente las consultas de los clientes. Configúralo fácilmente para tus buzones de entrada."
+      name: 'Linear'
+      short_description: 'Crea y vincula issues de Linear directamente desde las conversaciones.'
+      description: 'Crea issues en Linear directamente desde tu ventana de conversación. Alternativamente, vincula issues existentes de Linear para un seguimiento de problemas más eficiente y optimizado.'
+    shopify:
+      name: 'Shopify'
+      short_description: 'Accede a detalles de pedidos y datos de clientes de tu tienda Shopify.'
+      description: 'Conecta tu tienda Shopify para acceder a detalles de pedidos, información del cliente y datos de productos directamente en tus conversaciones y ayuda a tu equipo de soporte a brindar asistencia más rápida y contextual a tus clientes.'
+    leadsquared:
+      name: 'LeadSquared'
+      short_description: 'Sincroniza tus contactos y conversaciones con LeadSquared CRM.'
+      description: 'Sincroniza tus contactos y conversaciones con LeadSquared CRM. Esta integración crea automáticamente leads en LeadSquared cuando se agregan nuevos contactos y registra la actividad de conversación para proporcionar a tu equipo de ventas un contexto completo.'
+  captain:
+    copilot_error: 'Por favor conecta un asistente a esta bandeja para usar Copilot'
+    copilot_limit: 'No tienes créditos de Copilot. Puedes comprar más créditos en la sección de facturación.'
   public_portal:
     search:
-      search_placeholder: Buscar artículo por título o cuerpo...
-      empty_placeholder: No se encontraron resultados.
-      loading_placeholder: Buscando...
-      results_title: Buscar resultados
+      search_placeholder: 'Buscar artículo por título o contenido...'
+      empty_placeholder: 'No se encontraron resultados.'
+      loading_placeholder: 'Buscando...'
+      results_title: 'Resultados de búsqueda'
     toc_header: 'En esta página'
     hero:
-      sub_title: Busque aquí los artículos o busque las categorías de abajo.
+      sub_title: 'Busca los artículos aquí o navega por las categorías abajo.'
     common:
-      home: Inicio
-      last_updated_on: Última actualización el %{last_updated_on}
-      view_all_articles: Ver todo
-      article: artículo
-      articles: artículos
-      author: autor
-      authors: autores
-      other: otro
-      others: otros
-      by: Por
-      no_articles: No hay artículos aquí
+      home: 'Inicio'
+      last_updated_on: 'Última actualización el %{last_updated_on}'
+      view_all_articles: 'Ver todo'
+      article: 'artículo'
+      articles: 'artículos'
+      author: 'autor'
+      authors: 'autores'
+      other: 'otro'
+      others: 'otros'
+      by: 'Por'
+      no_articles: 'No hay artículos aquí'
     footer:
-      made_with: Hecho con
+      made_with: 'Hecho con'
     header:
-      go_to_homepage: Sitio web
+      go_to_homepage: 'Sitio web'
       appearance:
-        system: Sistema
-        light: Claro
-        dark: Oscuro
-      featured_articles: Artículos destacados
-      uncategorized: Sin categoría
+        system: 'Sistema'
+        light: 'Claro'
+        dark: 'Oscuro'
+      featured_articles: 'Artículos destacados'
+      uncategorized: 'Sin categoría'
     404:
-      title: Página no encontrada
-      description: No pudimos encontrar la página que estaba buscando.
-      back_to_home: Ir a la página de inicio
+      title: 'Página no encontrada'
+      description: 'No pudimos encontrar la página que buscabas.'
+      back_to_home: 'Ir a la página de inicio'
   slack_unfurl:
     fields:
-      name: Nombre
-      email: Correo electrónico
-      phone_number: Teléfono
-      company_name: Empresa
-      inbox_name: Bandeja de entrada
-      inbox_type: Tipo de bandeja de entrada
-    button: Abrir conversación
+      name: 'Nombre'
+      email: 'Correo electrónico'
+      phone_number: 'Teléfono'
+      company_name: 'Empresa'
+      inbox_name: 'Bandeja'
+      inbox_type: 'Tipo de bandeja'
+    button: 'Abrir conversación'
   time_units:
     days:
-      one: "%{count} día"
-      other: "%{count} días"
+      one: '%{count} día'
+      other: '%{count} días'
     hours:
-      one: "%{count} hora"
-      other: "%{count} horas"
+      one: '%{count} hora'
+      other: '%{count} horas'
     minutes:
-      one: "%{count} minuto"
-      other: "%{count} minutos"
+      one: '%{count} minuto'
+      other: '%{count} minutos'
     seconds:
-      one: "%{count} segundo"
-      other: "%{count} segundos"
+      one: '%{count} segundo'
+      other: '%{count} segundos'
+  automation:
+    system_name: 'Sistema de Automatización'
+  crm:
+    no_message: 'Sin mensajes en la conversación'
+    attachment: '[Adjunto: %{type}]'
+    no_content: '[Sin contenido]'
+    created_activity: |
+      Nueva conversación iniciada en %{brand_name}
+
+      Canal: %{channel_info}
+      Creada: %{formatted_creation_time}
+      ID de conversación: %{display_id}
+      Ver en %{brand_name}: %{url}
+    transcript_activity: |
+      Transcripción de la conversación de %{brand_name}
+
+      Canal: %{channel_info}
+      ID de conversación

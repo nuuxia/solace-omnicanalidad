@@ -41,7 +41,7 @@ defineProps({
           :checked="active"
           type="radio"
           :name="`hotkey-${title}`"
-          class="shadow cursor-pointer grid place-items-center border-2 border-ash-200 appearance-none rounded-full w-5 h-5 checked:bg-primary-600 before:content-[''] before:bg-primary-600 before:border-4 before:rounded-full before:border-ash-25 checked:before:w-[18px] checked:before:h-[18px] checked:border checked:border-primary-600"
+          class="shadow cursor-pointer grid place-items-center border-2 border-ash-200 appearance-none rounded-full w-5 h-5 checked:bg-woot-600 before:content-[''] before:bg-woot-600 before:border-4 before:rounded-full before:border-ash-25 checked:before:w-[18px] checked:before:h-[18px] checked:border checked:border-woot-600"
         />
       </div>
       <span class="text-ash-900 text-sm line-clamp-2 leading-[1.4] text-start">

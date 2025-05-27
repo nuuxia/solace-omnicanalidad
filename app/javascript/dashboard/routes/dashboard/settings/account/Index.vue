@@ -1,3 +1,4 @@
+<!-- Index.vue -->
 <script>
 import { useVuelidate } from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
@@ -35,7 +36,6 @@ export default {
     const { enabledLanguages } = useConfig();
     const { accountId } = useAccount();
     const v$ = useVuelidate();
-
     return { updateUISettings, v$, enabledLanguages, accountId };
   },
   data() {
@@ -46,18 +46,12 @@ export default {
       domain: '',
       supportEmail: '',
       features: {},
-      autoResolveDuration: null,
-      latestChatwootVersion: null,
       restrict_agents: false,
     };
   },
   validations: {
-    name: {
-      required,
-    },
-    locale: {
-      required,
-    },
+    name: { required },
+    locale: { required },
   },
   computed: {
     ...mapGetters({
@@ -74,9 +68,8 @@ export default {
       );
     },
     languagesSortedByCode() {
-      const enabledLanguages = [...this.enabledLanguages];
-      return enabledLanguages.sort((l1, l2) =>
-        l1.iso_639_1_code.localeCompare(l2.iso_639_1_code)
+      return [...this.enabledLanguages].sort((a, b) =>
+        a.iso_639_1_code.localeCompare(b.iso_639_1_code)
       );
     },
     isUpdating() {
@@ -86,17 +79,10 @@ export default {
       return !!this.features?.inbound_emails;
     },
     featureCustomReplyDomainEnabled() {
-      return (
-        this.featureInboundEmailEnabled && !!this.features.custom_reply_domain
-      );
+      return this.featureInboundEmailEnabled && !!this.features.custom_reply_domain;
     },
     featureCustomReplyEmailEnabled() {
-      return (
-        this.featureInboundEmailEnabled && !!this.features.custom_reply_email
-      );
-    },
-    currentAccount() {
-      return this.getAccount(this.accountId) || {};
+      return this.featureInboundEmailEnabled && !!this.features.custom_reply_email;
     },
   },
   mounted() {
@@ -104,34 +90,26 @@ export default {
   },
   methods: {
     async initializeAccount() {
-      try {
-        const {
-          name,
-          locale,
-          id,
-          domain,
-          support_email,
-          restrict_agents,
-          features,
-          auto_resolve_duration,
-          latest_chatwoot_version: latestChatwootVersion,
-        } = this.getAccount(this.accountId);
-
-        this.$root.$i18n.locale = locale;
-        this.name = name;
-        this.locale = locale;
-        this.id = id;
-        this.domain = domain;
-        this.supportEmail = support_email;
-        this.restrict_agents = restrict_agents;
-        this.features = features;
-        this.autoResolveDuration = auto_resolve_duration;
-        this.latestChatwootVersion = latestChatwootVersion;
-      } catch (error) {
-        // Ignore error
-      }
+      const {
+        name,
+        locale,
+        id,
+        domain,
+        support_email,
+        restrict_agents,
+        features,
+      } = this.getAccount(this.accountId);
+      this.$root.$i18n.locale = locale;
+      Object.assign(this, {
+        name,
+        locale,
+        id,
+        domain,
+        supportEmail: support_email,
+        restrict_agents,
+        features,
+      });
     },
-
     async updateAccount() {
       this.v$.$touch();
       if (this.v$.$invalid) {
@@ -145,22 +123,16 @@ export default {
           domain: this.domain,
           support_email: this.supportEmail,
           restrict_agents: this.restrict_agents,
-          auto_resolve_duration: this.autoResolveDuration,
         });
         this.$root.$i18n.locale = this.locale;
-        this.getAccount(this.id).locale = this.locale;
         this.updateDirectionView(this.locale);
         useAlert(this.$t('GENERAL_SETTINGS.UPDATE.SUCCESS'));
-      } catch (error) {
+      } catch {
         useAlert(this.$t('GENERAL_SETTINGS.UPDATE.ERROR'));
       }
     },
-
     updateDirectionView(locale) {
-      const isRTLSupported = getLanguageDirection(locale);
-      this.updateUISettings({
-        rtl_view: isRTLSupported,
-      });
+      this.updateUISettings({ rtl_view: getLanguageDirection(locale) });
     },
   },
 };
@@ -169,7 +141,8 @@ export default {
 <template>
   <div class="flex flex-col max-w-2xl mx-auto w-full">
     <BaseSettingsHeader :title="$t('GENERAL_SETTINGS.TITLE')" />
-    <div class="flex-grow flex-shrink min-w-0 mt-3">
+
+    <div class="flex-grow min-w-0 mt-3">
       <SectionLayout
         :title="$t('GENERAL_SETTINGS.FORM.GENERAL_SECTION.TITLE')"
         :description="$t('GENERAL_SETTINGS.FORM.GENERAL_SECTION.NOTE')"
@@ -192,6 +165,7 @@ export default {
               @blur="v$.name.$touch"
             />
           </WithLabel>
+
           <WithLabel
             :has-error="v$.locale.$error"
             :label="$t('GENERAL_SETTINGS.FORM.LANGUAGE.LABEL')"
@@ -207,6 +181,7 @@ export default {
               </option>
             </select>
           </WithLabel>
+
           <WithLabel
             v-if="featureCustomReplyDomainEnabled"
             :label="$t('GENERAL_SETTINGS.FORM.DOMAIN.LABEL')"
@@ -222,13 +197,13 @@ export default {
                 featureInboundEmailEnabled &&
                 $t('GENERAL_SETTINGS.FORM.FEATURES.INBOUND_EMAIL_ENABLED')
               }}
-
               {{
                 featureCustomReplyDomainEnabled &&
                 $t('GENERAL_SETTINGS.FORM.FEATURES.CUSTOM_EMAIL_DOMAIN_ENABLED')
               }}
             </template>
           </WithLabel>
+
           <WithLabel
             v-if="featureCustomReplyEmailEnabled"
             :label="$t('GENERAL_SETTINGS.FORM.SUPPORT_EMAIL.LABEL')"
@@ -237,84 +212,41 @@ export default {
               v-model="supportEmail"
               type="text"
               class="w-full"
-              :placeholder="
-                $t('GENERAL_SETTINGS.FORM.SUPPORT_EMAIL.PLACEHOLDER')
-              "
+              :placeholder="$t('GENERAL_SETTINGS.FORM.SUPPORT_EMAIL.PLACEHOLDER')"
             />
           </WithLabel>
-          <div>
-            <NextButton blue :is-loading="isUpdating" type="submit">
+
+          <!-- Botón pequeño alineado a la izquierda -->
+          <div class="justify-self-start">
+            <NextButton
+              blue
+              class="!px-4 !py-2"
+              :is-loading="isUpdating"
+              type="submit"
+            >
               {{ $t('GENERAL_SETTINGS.SUBMIT') }}
             </NextButton>
           </div>
         </form>
       </SectionLayout>
 
-      <div
-        class="flex flex-row p-4 border-slate-25 dark:border-slate-700 text-black-900 dark:text-slate-300"
+      <SectionLayout
+        :title="$t('GENERAL_SETTINGS.FORM.RESTRICT_AGENTS_ENABLED.TITLE')"
+        :description="$t('GENERAL_SETTINGS.FORM.RESTRICT_AGENTS_ENABLED.DESCRIPTION')"
       >
-        <div
-          class="flex-grow-0 flex-shrink-0 flex-[25%] min-w-0 py-4 pr-6 pl-0"
-        >
-          <h4 class="text-lg font-medium text-black-900 dark:text-slate-200">
-            {{ $t('GENERAL_SETTINGS.FORM.ACCOUNT_ID.TITLE') }}
-          </h4>
-          <p>
-            {{ $t('GENERAL_SETTINGS.FORM.ACCOUNT_ID.NOTE') }}
-          </p>
-        </div>
-        <div class="p-4 flex-grow-0 flex-shrink-0 flex-[50%]">
-          <woot-code :script="getAccountId" />
-        </div>
-      </div>
-      <div class="p-4 text-sm text-center">
-        <div>{{ `v${globalConfig.appVersion}` }}</div>
-        <div v-if="hasAnUpdateAvailable && globalConfig.displayManifest">
-          {{
-            $t('GENERAL_SETTINGS.UPDATE_CHATWOOT', {
-              latestChatwootVersion: latestChatwootVersion,
-            })
-          }}
-        </div>
-        <div class="build-id">
-          <div>{{ `Build ${globalConfig.gitSha}` }}</div>
-        </div>
-      </div>
-      <div
-        class="flex flex-row p-4 border-b border-slate-25 dark:border-slate-800"
-      >
-        <div
-          class="flex-grow-0 flex-shrink-0 flex-[25%] min-w-0 py-4 pr-6 pl-0"
-        >
-          <h4 class="text-lg font-medium text-black-900 dark:text-slate-200">
-            {{ $t('GENERAL_SETTINGS.FORM.RESTRICT_AGENTS_ENABLED.TITLE') }}
-          </h4>
-          <p>
-            {{
-              $t('GENERAL_SETTINGS.FORM.RESTRICT_AGENTS_ENABLED.DESCRIPTION')
-            }}
-          </p>
-        </div>
-        <div class="p-4 flex-grow-0 flex-shrink-0 flex-[50%]">
-          <label class="flex items-center">
-            <input v-model="restrict_agents" type="checkbox" class="mr-2" />
-            <span>
-              {{ $t('GENERAL_SETTINGS.FORM.RESTRICT_AGENTS_ENABLED.LABEL') }}
-            </span>
-          </label>
-        </div>
-      </div>
-      <woot-submit-button
-        class="button nice success button--fixed-top"
-        :button-text="$t('GENERAL_SETTINGS.SUBMIT')"
-        :loading="isUpdating"
-      />
-      <woot-loading-state v-if="uiFlags.isFetchingItem" />
-      <AutoResolve v-if="showAutoResolutionConfig" />
+        <label class="inline-flex items-center space-x-2">
+          <input v-model="restrict_agents" type="checkbox" />
+          <span>{{ $t('GENERAL_SETTINGS.FORM.RESTRICT_AGENTS_ENABLED.LABEL') }}</span>
+        </label>
+      </SectionLayout>
+
       <AccountId />
+      <AutoResolve v-if="showAutoResolutionConfig" />
+
       <div v-if="!uiFlags.isFetchingItem && isOnChatwootCloud">
         <AccountDelete />
       </div>
+
       <BuildInfo />
     </div>
   </div>

@@ -5,8 +5,8 @@ import { useStore } from 'dashboard/composables/store';
 import { useAlert, useTrack } from 'dashboard/composables';
 import { CAMPAIGN_TYPES } from 'shared/constants/campaign.js';
 import { CAMPAIGNS_EVENTS } from 'dashboard/helper/AnalyticsHelper/events.js';
-import WhatsAppCampaignForm from './WhatsAppCampaignForm.vue'; // Ajusta la ruta si cambia
-
+import WhatsAppCampaignForm from './WhatsAppCampaignForm.vue';
+import Button from 'dashboard/components-next/button/Button.vue';
 const emit = defineEmits(['close']);
 const store = useStore();
 const { t } = useI18n();
@@ -67,11 +67,11 @@ const handleSyncTemplates = async () => {
       <h3 class="text-base font-medium text-slate-900 dark:text-slate-50">
         {{ t('CAMPAIGN.WHATSAPP.CREATE.TITLE') }}
       </h3>
-      <woot-button
+      <Button
         v-tooltip.right="t('CAMPAIGN.WHATSAPP.CREATE.FORM.SYNC_BUTTON_TOOLTIP')"
-        variant="text"
-        color="slate"
-        icon="arrow-clockwise"
+        class="bg-woot-500"
+        variant="solid"
+        icon="i-lucide-rotate-ccw"
         :disabled="isSyncButtonDisabled"
         @click="handleSyncTemplates"
       />
