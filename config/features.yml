@@ -82,6 +82,7 @@
   display_name: Website Channel
   enabled: true
 - name: channel_mercado_libre
+  display_name: Mercado Libre Integration
   enabled: true
 - name: campaigns
   display_name: Campaigns
