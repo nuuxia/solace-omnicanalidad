@@ -1,31 +1,49 @@
 {
   "INBOX_MGMT": {
-    "HEADER": "Entradas",
-    "DESCRIPTION": "Un canal es el medio de comunicación que tu cliente elige para interactuar contigo. Una bandeja de entrada es donde administras las interacciones para un canal específico. Puede incluir comunicaciones de diversas fuentes como correo electrónico, chat en vivo y redes sociales.",
-    "LEARN_MORE": "Aprende más sobre las entradas",
-    "RECONNECTION_REQUIRED": "Tu bandeja de entrada está desconectada. No recibirás mensajes nuevos hasta que la vuelvas a autorizar.",
-    "CLICK_TO_RECONNECT": "Haz clic aquí para volver a conectar.",
-    "LIST": {
-      "404": "No hay entradas asociadas a esta cuenta."
+  "HEADER": "Entradas",
+  "DESCRIPTION": "A channel is the mode of communication your customer chooses to interact with you. An inbox is where you manage interactions for a specific channel. It can include communications from various sources such as email, live chat, and social media.",
+  "LEARN_MORE": "Learn more about inboxes",
+  "RECONNECTION_REQUIRED": "Tu bandeja de entrada está desconectada. No recibirás mensajes nuevos hasta que lo vuelvas a autorizar.",
+  "CLICK_TO_RECONNECT": "Haga clic aquí para volver a conectar.",
+  "LIST": {
+    "404": "No hay entradas adjuntas a esta cuenta."
+  },
+  "OFFLINE_RESPONSE_LABEL": "El bot asignado responde únicamente en horarios offline.",
+  "MERCADO_LIBRE_OPTIONS_HEADER": "Recepción de Mensajes en la Bandeja de Entrada",
+  "MERCADO_LIBRE_USER_INFO_BUTTON": "Obtener información del usuario de MercadoLibre",
+  "MERCADO_LIBRE_USER_INFO": {
+    "TITLE": "Información de la cuenta de Mercado Libre",
+    "SUB_TEXT": "Mostrá el nombre de usuario y el enlace al perfil de la cuenta conectada.",
+    "LOADING": "Cargando información del usuario...",
+    "NICKNAME": "Nombre de usuario",
+    "PERMALINK": "Enlace permanente",
+    "ERROR": "Ocurrió un error al obtener la información del usuario"
+  },
+  "ENABLE_PRE_SALE_MESSAGES": "Habilitar preguntas pre venta",
+  "ENABLE_POST_SALE_MESSAGES": "Habilitar mensajería post venta",
+  "ENABLE_BOTH_MESSAGES": "Habilitar ambos",
+  "CREATE_FLOW": [
+    {
+      "title": "Elegir canal",
+      "route": "settings_inbox_new",
+      "body": "Elija el proveedor que desea integrar con Software Arrows."
     },
-    "CREATE_FLOW": {
-      "CHANNEL": {
-        "TITLE": "Elegir canal",
-        "BODY": "Elige el proveedor que deseas integrar con Chatwoot."
-      },
-      "INBOX": {
-        "TITLE": "Crear bandeja de entrada",
-        "BODY": "Autentica tu cuenta y crea una bandeja de entrada."
-      },
-      "AGENT": {
-        "TITLE": "Añadir agentes",
-        "BODY": "Añade agentes a la bandeja de entrada creada."
-      },
-      "FINISH": {
-        "TITLE": "¡Voilà!",
-        "BODY": "¡Todo listo!"
-      }
+    {
+      "title": "Crear bandeja de entrada",
+      "route": "settings_inboxes_page_channel",
+      "body": "Autenticar tu cuenta y crear una bandeja de entrada."
     },
+    {
+      "title": "Añadir agentes",
+      "route": "settings_inboxes_add_agents",
+      "body": "Añadir agentes a la bandeja de entrada creada."
+    },
+    {
+      "title": "Voilà!",
+      "route": "settings_inbox_finish",
+      "body": "¡Todo está listo!"
+    }
+  ],
     "ADD": {
       "CHANNEL_NAME": {
         "LABEL": "Nombre de la bandeja de entrada",
@@ -226,9 +244,15 @@
           "WHATSAPP_CLOUD": "WhatsApp Cloud",
           "360_DIALOG": "360 Dialog"
         },
+        "CHOOSE_METHOD": "Elige cómo quieres conectar tu canal de WhatsApp. Puedes hacerlo automáticamente a través de Facebook o configurarlo manualmente.",
+        "LOGIN_WITH_FACEBOOK": {
+          "LABEL": "Iniciar sesión con Facebook"
+        },
+        "AUTOMATED_TITLE": "Canal de WhatsApp Automatizado",
+        "AUTOMATED_DESC": "Conecta tu cuenta de WhatsApp a través de Facebook. Ahora, en lugar de hacerlo manualmente, puedes aprovechar el registro integrado de Meta para automatizar todo el proceso.",
         "INBOX_NAME": {
           "LABEL": "Nombre de la bandeja de entrada",
-          "PLACEHOLDER": "Introduce un nombre de bandeja de entrada",
+          "PLACEHOLDER": "Por favor, introduzca un nombre de bandeja de entrada",
           "ERROR": "Este campo es obligatorio"
         },
         "PHONE_NUMBER": {
@@ -346,6 +370,22 @@
         "API": {
           "ERROR_MESSAGE": "No pudimos guardar el canal Telegram"
         }
+      },
+      "MERCADO_LIBRE_CHANNEL": {
+        "HELP": "Para agregar Mercado Libre como un canal, necesitas autenticar tu cuenta haciendo clic en 'Iniciar sesión con Mercado Libre'.",
+        "ERROR_MESSAGE": "Hubo un error al conectar con Mercado Libre, por favor intenta nuevamente.",
+        "TITLE": "Canal de Mercado Libre",
+        "DESC": "Integra con el canal de Mercado Libre y comienza a atender a tus clientes.",
+        "SUBMIT_BUTTON": "Crear Canal de Mercado Libre",
+        "LOADING_MESSAGE": "Creando el canal, por favor espera..."
+      },
+      "TIK_TOK_CHANNEL": {
+        "HELP": "Para agregar Tik Tok como un canal, necesitas autenticar tu cuenta haciendo clic en 'Iniciar sesión con Tik Tok'.",
+        "ERROR_MESSAGE": "Hubo un error al conectar con Tik Tok, por favor intenta nuevamente.",
+        "TITLE": "Canal de Tik Tok",
+        "DESC": "Integra con el canal de Tik Tok y comienza a atender a tus clientes.",
+        "SUBMIT_BUTTON": "Crear Canal de Tik Tok",
+        "LOADING_MESSAGE": "Creando el canal, por favor espera..."
       },
       "AUTH": {
         "TITLE": "Elige un canal",
@@ -788,6 +828,8 @@
       "EMAIL": "Correo",
       "TELEGRAM": "Telegram",
       "LINE": "LINE",
+      "MERCADO_LIBRE": "Mercado Libre",
+      "TIK_TOK": "Tik Tok",
       "API": "Canal API",
       "INSTAGRAM": "Instagram"
     }

@@ -131,12 +131,7 @@ export default {
       @input="v$.userEmail.$touch"
       @blur="v$.userEmail.$touch"
     />
-    <FormButton
-      type="submit"
-      color-scheme="primary"
-      variant="solid"
-      size="large"
-    >
+    <FormButton type="submit" class="bg-woot-500" variant="solid" size="large">
       {{ $t('PROFILE_SETTINGS.BTN_TEXT') }}
     </FormButton>
   </form>

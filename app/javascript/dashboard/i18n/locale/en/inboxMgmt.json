@@ -5,13 +5,27 @@
     "LEARN_MORE": "Learn more about inboxes",
     "RECONNECTION_REQUIRED": "Your inbox is disconnected. You won't receive new messages until you reauthorize it.",
     "CLICK_TO_RECONNECT": "Click here to reconnect.",
+    "OFFLINE_RESPONSE_LABEL": "The bot will only answer during offline hours.",
+    "MERCADO_LIBRE_OPTIONS_HEADER": "Reception of Messages in the Inbox",
+    "MERCADO_LIBRE_USER_INFO_BUTTON": "Get MercadoLibre user information",
+    "MERCADO_LIBRE_USER_INFO": {
+      "TITLE": "Mercado Libre Account Info",
+      "SUB_TEXT": "Display the username and profile link of the connected Mercado Libre account.",
+      "LOADING": "Loading user information...",
+      "NICKNAME": "Username",
+      "PERMALINK": "Permanent link",
+      "ERROR": "An error occurred while fetching user information"
+    },
+    "ENABLE_PRE_SALE_MESSAGES": "Enable pre-sale questions",
+    "ENABLE_POST_SALE_MESSAGES": "Enable post-sale messaging",
+    "ENABLE_BOTH_MESSAGES": "Enable both",
     "LIST": {
       "404": "There are no inboxes attached to this account."
     },
     "CREATE_FLOW": {
       "CHANNEL": {
         "TITLE": "Choose Channel",
-        "BODY": "Choose the provider you want to integrate with Chatwoot."
+        "BODY": "Choose the provider you want to integrate with Software Arrows."
       },
       "INBOX": {
         "TITLE": "Create Inbox",
@@ -226,6 +240,12 @@
           "WHATSAPP_CLOUD": "WhatsApp Cloud",
           "360_DIALOG": "360Dialog"
         },
+        "CHOOSE_METHOD": "Choose how you want to connect your WhatsApp channel. You can do it automatically through Facebook, or set it up manually.",
+        "LOGIN_WITH_FACEBOOK": {
+          "LABEL": "Login with Facebook"
+        },
+        "AUTOMATED_TITLE": "Automated WhatsApp Chanel ",
+        "AUTOMATED_DESC": "Connect your WhatsApp account through Facebook. Now, instead of doing it manually, you can take advantage of Meta's integrated registration to automate the entire process.",
         "INBOX_NAME": {
           "LABEL": "Inbox Name",
           "PLACEHOLDER": "Please enter an inbox name",
@@ -346,6 +366,22 @@
         "API": {
           "ERROR_MESSAGE": "We were not able to save the telegram channel"
         }
+      },
+      "MERCADO_LIBRE_CHANNEL": {
+        "HELP": "To add Mercado Libre as a channel, you need to authenticate your Account by clicking on 'Sign in with Mercado Libre' ",
+        "ERROR_MESSAGE": "There was an error connecting to Mercado Libre, please try again",
+        "TITLE": "Mercado Libre Channel",
+        "DESC": "Integrate with the Mercado Libre channel and start supporting your customers.",
+        "SUBMIT_BUTTON": "Create Mercado Libre Channel",
+        "LOADING_MESSAGE": "Creating channel, please wait..."
+      },
+      "TIK_TOK_CHANNEL": {
+        "HELP": "To add Tik Tok as a channel, you need to authenticate your Account by clicking on 'Sign in with Tik Tok' ",
+        "ERROR_MESSAGE": "There was an error connecting to Tik Tok, please try again",
+        "TITLE": "Tik Tok Channel",
+        "DESC": "Integrate with the Tik Tok channel and start supporting your customers.",
+        "SUBMIT_BUTTON": "Create Tik Tok Channel",
+        "LOADING_MESSAGE": "Creating channel, please wait..."
       },
       "AUTH": {
         "TITLE": "Choose a channel",
@@ -788,6 +824,8 @@
       "EMAIL": "Email",
       "TELEGRAM": "Telegram",
       "LINE": "Line",
+      "MERCADO_LIBRE": "Mercado Libre",
+      "TIK_TOK": "Tik Tok",
       "API": "API Channel",
       "INSTAGRAM": "Instagram"
     }
