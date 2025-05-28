@@ -106,6 +106,88 @@ export const AUTOMATIONS = {
       },
     ],
   },
+  message_updated: {
+    conditions: [
+      {
+        key: 'message_type',
+        name: 'MESSAGE_TYPE',
+        inputType: 'search_select',
+        filterOperators: OPERATOR_TYPES_1,
+      },
+      {
+        key: 'content',
+        name: 'MESSAGE_CONTAINS',
+        inputType: 'comma_separated_plain_text',
+        filterOperators: OPERATOR_TYPES_2,
+      },
+      {
+        key: 'inbox_id',
+        name: 'INBOX',
+        inputType: 'multi_select',
+        filterOperators: OPERATOR_TYPES_1,
+      },
+    ],
+    actions: [
+      {
+        key: 'assign_agent',
+        name: 'ASSIGN_AGENT',
+      },
+      {
+        key: 'assign_team',
+        name: 'ASSIGN_TEAM',
+      },
+      {
+        key: 'add_label',
+        name: 'ADD_LABEL',
+      },
+      {
+        key: 'remove_label',
+        name: 'REMOVE_LABEL',
+      },
+      {
+        key: 'send_email_to_team',
+        name: 'SEND_EMAIL_TO_TEAM',
+      },
+      {
+        key: 'send_message',
+        name: 'SEND_MESSAGE',
+      },
+      {
+        key: 'send_alert',
+        name: 'Send an alert',
+        attributeI18nKey: 'SEND_ALERT',
+      },
+      {
+        key: 'send_email_transcript',
+        name: 'SEND_EMAIL_TRANSCRIPT',
+      },
+      {
+        key: 'mute_conversation',
+        name: 'MUTE_CONVERSATION',
+      },
+      {
+        key: 'snooze_conversation',
+        name: 'SNOOZE_CONVERSATION',
+      },
+      {
+        key: 'resolve_conversation',
+        name: 'RESOLVE_CONVERSATION',
+      },
+      {
+        key: 'open_conversation',
+        name: 'Open conversation',
+        attributeI18nKey: 'OPEN_CONVERSATION',
+      },
+      {
+        key: 'send_webhook_event',
+        name: 'SEND_WEBHOOK_EVENT',
+      },
+      {
+        key: 'send_attachment',
+        name: 'SEND_ATTACHMENT',
+      },
+    ],
+  },
   conversation_created: {
     conditions: [
       {
@@ -485,6 +567,10 @@ export const AUTOMATION_RULE_EVENTS = [
   {
     key: 'conversation_updated',
     value: 'CONVERSATION_UPDATED',
+  },
+  {
+    key: 'message_updated',
+    value: 'MESSAGE_UPDATED',
   },
   {
     key: 'message_created',
