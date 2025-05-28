@@ -91,19 +91,6 @@ export default {
         :to="menuItem.toState"
         :is-child-menu-active="menuItem.key === activeMenuItem"
       />
-      <Policy :permissions="['administrator']">
-        <a
-          id="arrows_support"
-          href="https://wa.me/+59896218240?text=Hola,%20necesito%20soporte%20de%20Arrows"
-          target="_blank"
-          rel="noopener noreferrer"
-          v-tooltip.right="'Soporte Arrows'"
-          class="flex items-center justify-center w-10 h-10 my-2 text-slate-700 dark:text-slate-100 hover:bg-slate-25 dark:hover:bg-slate-700 hover:text-slate-600"
-        >
-          <fluent-icon icon="whatsapp" />
-          <span class="sr-only">Soporte Arrows</span>
-        </a>
-      </Policy>
     </div>
     <div class="flex flex-col items-center justify-end pb-6">
       <!--  <a
@@ -117,6 +104,19 @@ export default {
         <fluent-icon icon="book-open-globe" />
         <span class="sr-only">{{ $t(`SIDEBAR.DOCS`) }}</span>
       </a> -->
+      <Policy :permissions="['administrator']">
+        <a
+          id="arrows_support"
+          v-tooltip.right="$t('SIDEBAR.ARROWS_SUPPORT')"
+          href="https://wa.me/59896218240?text=Hola,%20necesito%20soporte%20de%20Arrows"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="flex items-center justify-center w-10 h-10 my-2 rounded-lg text-slate-700 dark:text-slate-100 hover:bg-slate-25 dark:hover:bg-slate-700 hover:text-slate-600"
+        >
+          <fluent-icon icon="whatsapp" />
+          <span class="sr-only">{{ $t('SIDEBAR.ARROWS_SUPPORT') }}</span>
+        </a>
+      </Policy>
       <NotificationBell @open-notification-panel="openNotificationPanel" />
       <AgentDetails @toggle-menu="toggleOptions" />
       <OptionsMenu
