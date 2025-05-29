@@ -54,4 +54,7 @@ module Events::Types
   # agent events
   AGENT_ADDED = 'agent.added'
   AGENT_REMOVED = 'agent.removed'
+
+  # csat events
+  CSAT_RESPONSE_CREATED = 'csat_survey_response.created'
 end

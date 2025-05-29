@@ -39,4 +39,19 @@ class CsatSurveyResponse < ApplicationRecord
   scope :filter_by_team_id, ->(team_id) { joins(:conversation).where(conversations: { team_id: team_id }) if team_id.present? }
   # filter by rating value
   scope :filter_by_rating, ->(rating) { where(rating: rating) if rating.present? }
+
+  after_create_commit :notify_csat_creation
+
+  private
+
+  def notify_csat_creation
+    Rails.configuration.dispatcher.dispatch(
+      'csat_response_created',
+      Time.zone.now,
+      csat_survey_response: self,
+      conversation: conversation,
+      account: account,
+      performed_by: Current.executed_by
+    )
+  end
 end
