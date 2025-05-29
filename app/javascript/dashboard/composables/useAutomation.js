@@ -40,7 +40,7 @@ export function useAutomation(startValue = null) {
   } = useAutomationValues();
 
   const automation = ref(startValue);
-  const automationTypes = ref(structuredClone(AUTOMATIONS));
+  const automationTypes = structuredClone(AUTOMATIONS);
   const eventName = computed(() => automation.value?.event_name);
 
   /**
