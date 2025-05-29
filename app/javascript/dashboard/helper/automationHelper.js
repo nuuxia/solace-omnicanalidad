@@ -5,6 +5,7 @@ import {
 } from 'dashboard/routes/dashboard/settings/automation/operators';
 import {
   DEFAULT_MESSAGE_CREATED_CONDITION,
+  DEFAULT_MESSAGE_UPDATED_CONDITION,
   DEFAULT_CONVERSATION_OPENED_CONDITION,
   DEFAULT_OTHER_CONDITION,
   DEFAULT_ACTIONS,
@@ -167,6 +168,9 @@ export const getFileName = (action, files = []) => {
 export const getDefaultConditions = eventName => {
   if (eventName === 'message_created') {
     return DEFAULT_MESSAGE_CREATED_CONDITION;
+  }
+  if (eventName === 'message_updated') {
+    return DEFAULT_MESSAGE_UPDATED_CONDITION;
   }
   if (eventName === 'conversation_opened') {
     return DEFAULT_CONVERSATION_OPENED_CONDITION;
