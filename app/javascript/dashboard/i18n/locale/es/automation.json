@@ -155,6 +155,7 @@
     },
     "ATTRIBUTES": {
       "MESSAGE_TYPE": "Message Type",
+      "RATING": "Puntaje",
       "MESSAGE_CONTAINS": "Message Contains",
       "EMAIL": "E-mail",
       "INBOX": "Bandeja de entrada",

@@ -155,6 +155,7 @@
     },
     "ATTRIBUTES": {
       "MESSAGE_TYPE": "Message Type",
+      "RATING": "Rating",
       "MESSAGE_CONTAINS": "Message Contains",
       "EMAIL": "Email",
       "INBOX": "Inbox",
