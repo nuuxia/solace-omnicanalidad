@@ -46,7 +46,7 @@ class CsatSurveyResponse < ApplicationRecord
 
   def notify_csat_creation
     Rails.configuration.dispatcher.dispatch(
-      'csat_survay_response.created',
+      'csat_response_created',
       Time.zone.now,
       csat_survey_response: self,
       conversation: conversation,

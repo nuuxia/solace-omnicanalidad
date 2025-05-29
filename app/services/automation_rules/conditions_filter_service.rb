@@ -9,7 +9,7 @@ class AutomationRules::ConditionsFilterService < FilterService
     @rule = rule
     @conversation = conversation
     @account = conversation.account
-    @csat_response = options[:csat_response_created]
+    @csat_response = options[:csat_response]
 
     # setup filters from json file
     file = File.read('./lib/filters/filter_keys.yml')

@@ -74,6 +74,7 @@ class AutomationRuleListener < BaseListener
 
     conversation = event.data[:conversation]
     account = conversation.account
+    csat_response = event.data[:csat_response]
     changed_attributes = event.data[:changed_attributes]
 
     return unless rule_present?('csat_response_created', account)
@@ -81,7 +82,15 @@ class AutomationRuleListener < BaseListener
     rules = current_account_rules('csat_response_created', account)
 
     rules.each do |rule|
-      conditions_match = ::AutomationRules::ConditionsFilterService.new(rule, conversation, { changed_attributes: changed_attributes }).perform
+      conditions_match = ::AutomationRules::ConditionsFilterService.new(
+        rule,
+        conversation,
+        {
+          changed_attributes: changed_attributes,
+          csat_response: csat_response
+        }
+      ).perform
+
       ::AutomationRules::ActionService.new(rule, account, conversation).perform if conditions_match.present?
     end
   end
