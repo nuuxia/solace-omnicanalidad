@@ -8,6 +8,16 @@ export const DEFAULT_MESSAGE_CREATED_CONDITION = [
   },
 ];
 
+export const DEFAULT_MESSAGE_UPDATED_CONDITION = [
+  {
+    attribute_key: 'message_type',
+    filter_operator: 'equal_to',
+    values: '',
+    query_operator: 'and',
+    custom_attribute_type: '',
+  },
+];
+
 export const DEFAULT_CONVERSATION_OPENED_CONDITION = [
   {
     attribute_key: 'browser_language',
