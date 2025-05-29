@@ -132,6 +132,7 @@
       "CONVERSATION_UPDATED": "Conversación actualizada",
       "MESSAGE_CREATED": "Mensaje creado",
       "MESSAGE_UPDATED": "Message actualizado",
+      "CSAT_RESPONSE_CREATED": "Csat Creado",
       "CONVERSATION_OPENED": "Conversación Abierta"
     },
     "ACTIONS": {

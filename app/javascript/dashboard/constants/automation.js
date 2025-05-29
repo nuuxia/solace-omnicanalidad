@@ -8,9 +8,9 @@ export const DEFAULT_MESSAGE_CREATED_CONDITION = [
   },
 ];
 
-export const DEFAULT_MESSAGE_UPDATED_CONDITION = [
+export const DEFAULT_CSAT_RESPONSE_CREATED_CONDITION = [
   {
-    attribute_key: 'message_type',
+    attribute_key: 'rating',
     filter_operator: 'equal_to',
     values: '',
     query_operator: 'and',

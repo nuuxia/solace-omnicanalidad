@@ -162,10 +162,10 @@ export function useAutomation(startValue = null) {
 
     [
       'message_created',
-      'message_updated',
       'conversation_created',
       'conversation_updated',
       'conversation_opened',
+      'csat_response_created',
     ].forEach(eventToUpdate => {
       automationTypes[eventToUpdate].conditions = [
         ...automationTypes[eventToUpdate].conditions,

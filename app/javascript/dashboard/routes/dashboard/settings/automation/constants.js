@@ -106,25 +106,13 @@ export const AUTOMATIONS = {
       },
     ],
   },
-  message_updated: {
+  csat_response_created: {
     conditions: [
       {
-        key: 'message_type',
-        name: 'MESSAGE_TYPE',
-        inputType: 'search_select',
-        filterOperators: OPERATOR_TYPES_1,
-      },
-      {
-        key: 'content',
-        name: 'MESSAGE_CONTAINS',
-        inputType: 'comma_separated_plain_text',
+        key: 'rating',
+        name: 'RATING',
+        inputType: 'plain_text',
         filterOperators: OPERATOR_TYPES_2,
-      },
-      {
-        key: 'inbox_id',
-        name: 'INBOX',
-        inputType: 'multi_select',
-        filterOperators: OPERATOR_TYPES_1,
       },
     ],
     actions: [
@@ -569,16 +557,16 @@ export const AUTOMATION_RULE_EVENTS = [
     value: 'CONVERSATION_UPDATED',
   },
   {
-    key: 'message_updated',
-    value: 'MESSAGE_UPDATED',
-  },
-  {
     key: 'message_created',
     value: 'MESSAGE_CREATED',
   },
   {
     key: 'conversation_opened',
     value: 'CONVERSATION_OPENED',
+  },
+  {
+    key: 'csat_response_created',
+    value: 'CSAT_RESPONSE_CREATED',
   },
 ];
 

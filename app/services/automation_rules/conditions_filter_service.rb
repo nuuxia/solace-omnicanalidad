@@ -9,12 +9,14 @@ class AutomationRules::ConditionsFilterService < FilterService
     @rule = rule
     @conversation = conversation
     @account = conversation.account
+    @csat_response = options[:csat_response_created]
 
     # setup filters from json file
     file = File.read('./lib/filters/filter_keys.yml')
     @filters = YAML.safe_load(file)
 
     @conversation_filters = @filters['conversations']
+    @csat_filters = @filters['csat_survey_responses'] || {}
     @contact_filters = @filters['contacts']
     @message_filters = @filters['messages']
 
@@ -64,6 +66,7 @@ class AutomationRules::ConditionsFilterService < FilterService
     conversation_filter = @conversation_filters[query_hash['attribute_key']]
     contact_filter = @contact_filters[query_hash['attribute_key']]
     message_filter = @message_filters[query_hash['attribute_key']]
+    csat_survey_response_filter = @csat_filters[query_hash['attribute_key']]
 
     if conversation_filter
       @query_string += conversation_query_string('conversations', conversation_filter, query_hash.with_indifferent_access, current_index)
@@ -74,6 +77,8 @@ class AutomationRules::ConditionsFilterService < FilterService
     elsif custom_attribute(query_hash['attribute_key'], @account, query_hash['custom_attribute_type'])
       # send table name according to attribute key right now we are supporting contact based custom attribute filter
       @query_string += custom_attribute_query(query_hash.with_indifferent_access, query_hash['custom_attribute_type'], current_index)
+    elsif csat_survey_response_filter
+      @query_string += csat_query_string(csat_survey_response_filter, query_hash.with_indifferent_access, current_index)
     end
   end
 
@@ -158,9 +163,30 @@ class AutomationRules::ConditionsFilterService < FilterService
     end
   end
 
+  def csat_query_string(current_filter, query_hash, current_index)
+    attribute_key = query_hash['attribute_key']
+    query_operator = query_hash['query_operator']
+    filter_operator_value = filter_operation(query_hash, current_index)
+
+    case current_filter['attribute_type']
+    when 'standard'
+      " csat_survey_responses.#{attribute_key} #{filter_operator_value} #{query_operator} "
+    end
+  end
+
   private
 
   def base_relation
+    if @csat_response.present?
+      records = Conversation.where(id: @csat_response.conversation_id).joins(
+        'LEFT OUTER JOIN contacts ON conversations.contact_id = contacts.id'
+      ).joins(
+        'INNER JOIN csat_survey_responses ON csat_survey_responses.conversation_id = conversations.id'
+      )
+      records = records.where(csat_survey_responses: { id: @csat_response.id })
+      return records
+    end
+
     records = Conversation.where(id: @conversation.id).joins(
       'LEFT OUTER JOIN contacts on conversations.contact_id = contacts.id'
     ).joins(

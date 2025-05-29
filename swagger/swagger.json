@@ -5524,7 +5524,7 @@
             "conversation_created",
             "conversation_updated",
             "message_created",
-            "message_updated"
+            "csat_response_created"
           ],
           "example": "message_created"
         },
@@ -6793,7 +6793,7 @@
             "conversation_created",
             "conversation_updated",
             "message_created",
-            "message_updated"
+            "csat_response_created"
           ],
           "example": "message_created",
           "description": "The event when you want to execute the automation actions"
