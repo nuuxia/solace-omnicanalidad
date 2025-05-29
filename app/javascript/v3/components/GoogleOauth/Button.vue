@@ -3,9 +3,11 @@ import SimpleDivider from '../Divider/SimpleDivider.vue';
 
 export default {
   components: {
+    // eslint-disable-next-line vue/no-unused-components
     SimpleDivider,
   },
   props: {
+    // eslint-disable-next-line vue/no-unused-properties
     showSeparator: {
       type: Boolean,
       default: true,
