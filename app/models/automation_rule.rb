@@ -40,9 +40,15 @@ class AutomationRule < ApplicationRecord
 
   scope :active, -> { where(active: true) }
 
+  # Define standard condition attributes for most events
   def conditions_attributes
     %w[content email country_code status message_type browser_language assignee_id team_id referer city company inbox_id
        mail_subject phone_number priority conversation_language]
+  end
+
+  # Define CSAT-specific condition attributes
+  def csat_conditions_attributes
+    %w[rating]
   end
 
   def actions_attributes
@@ -69,30 +75,48 @@ class AutomationRule < ApplicationRecord
   def json_conditions_format
     return if conditions.blank?
 
-    attributes = conditions.map { |obj, _| obj['attribute_key'] }
-    conditions = attributes - conditions_attributes
-    conditions -= account.custom_attribute_definitions.pluck(:attribute_key)
-    errors.add(:conditions, "Automation conditions #{conditions.join(',')} not supported.") if conditions.any?
+    Rails.logger.debug { "Validating conditions for event: #{event_name}, conditions: #{conditions.inspect}" }
+
+    # Determine valid attributes based on event_name
+    valid_attributes = case event_name
+                       when 'csat_response_created'
+                         csat_conditions_attributes
+                       else
+                         conditions_attributes
+                       end
+
+    # Add custom attributes to the valid list
+    valid_attributes += account.custom_attribute_definitions.pluck(:attribute_key)
+
+    # Check for unsupported attributes
+    attributes = conditions.map { |obj| obj['attribute_key'] }
+    unsupported = attributes - valid_attributes
+
+    return unless unsupported.any?
+
+    errors.add(:conditions, "Automation conditions #{unsupported.join(',')} not supported for event #{event_name}.")
   end
 
   def json_actions_format
     return if actions.blank?
 
-    attributes = actions.map { |obj, _| obj['action_name'] }
-    actions = attributes - actions_attributes
+    attributes = actions.map { |obj| obj['action_name'] }
+    unsupported = attributes - actions_attributes
 
-    errors.add(:actions, "Automation actions #{actions.join(',')} not supported.") if actions.any?
+    return unless unsupported.any?
+
+    errors.add(:actions, "Automation actions #{unsupported.join(',')} not supported.")
   end
 
   def query_operator_presence
     return if conditions.blank?
 
-    operators = conditions.select { |obj, _| obj['query_operator'].nil? }
-    errors.add(:conditions, 'Automation conditions should have query operator.') if operators.length > 1
+    operators = conditions.select { |obj| obj['query_operator'].nil? }
+    return unless operators.length > 1
+
+    errors.add(:conditions, 'Automation conditions should have query operator.')
   end
 
-  # This validation ensures logical operators are being used correctly in automation conditions.
-  # And we don't push any unsanitized query operators to the database.
   def query_operator_value
     conditions.each do |obj|
       validate_single_condition(obj)
@@ -102,11 +126,12 @@ class AutomationRule < ApplicationRecord
   def validate_single_condition(condition)
     query_operator = condition['query_operator']
 
-    return if query_operator.nil?
-    return if query_operator.empty?
+    return if query_operator.nil? || query_operator.empty?
 
     operator = query_operator.upcase
-    errors.add(:conditions, 'Query operator must be either "AND" or "OR"') unless %w[AND OR].include?(operator)
+    return if %w[AND OR].include?(operator)
+
+    errors.add(:conditions, 'Query operator must be either "AND" or "OR"')
   end
 end
 

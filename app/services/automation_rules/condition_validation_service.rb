@@ -11,7 +11,7 @@ class AutomationRules::ConditionValidationService
     @conversation_filters = @filters['conversations']
     @contact_filters = @filters['contacts']
     @message_filters = @filters['messages']
-    @csat_filters = @filters['csat_survey_responses']
+    @csat_filters = @filters['csat_survey_responses'] || {}
   end
 
   def perform
