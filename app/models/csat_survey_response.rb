@@ -48,7 +48,7 @@ class CsatSurveyResponse < ApplicationRecord
     Rails.configuration.dispatcher.dispatch(
       'csat_response_created',
       Time.zone.now,
-      csat_survey_response: self,
+      csat_response: self, # <=== este nombre debe coincidir con el que se usa en AutomationRuleListener
       conversation: conversation,
       account: account,
       performed_by: Current.executed_by
