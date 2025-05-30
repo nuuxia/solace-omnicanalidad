@@ -111,7 +111,7 @@ export const AUTOMATIONS = {
       {
         key: 'rating',
         name: 'RATING',
-        inputType: 'plain_text',
+        inputType: 'number',
         filterOperators: OPERATOR_TYPES_2,
       },
     ],
