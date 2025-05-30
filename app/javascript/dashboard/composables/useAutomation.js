@@ -109,9 +109,10 @@ export function useAutomation(startValue = null) {
 
     newConditions[index] = {
       ...newConditions[index],
-      filter_operator: automationTypes[eventName.value].conditions.find(
-        condition => condition.key === currentCondition.attribute_key
-      ).filterOperators[0].value,
+      filter_operator:
+        automationTypes[eventName.value]?.conditions.find(
+          condition => condition.key === currentCondition.attribute_key
+        )?.filterOperators?.[0]?.value || 'equal_to',
       values: '',
     };
 
