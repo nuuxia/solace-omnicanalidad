@@ -11,6 +11,7 @@ class AutomationRules::ConditionValidationService
     @conversation_filters = @filters['conversations']
     @contact_filters = @filters['contacts']
     @message_filters = @filters['messages']
+    @csat_filters = @filters['csat_survey_responses']
   end
 
   def perform
@@ -38,9 +39,10 @@ class AutomationRules::ConditionValidationService
     conversation_filter = @conversation_filters[key]
     contact_filter = @contact_filters[key]
     message_filter = @message_filters[key]
+    csat_filter = @csat_filters[key]
 
-    if conversation_filter || contact_filter || message_filter
-      operation_valid?(condition, conversation_filter || contact_filter || message_filter)
+    if conversation_filter || contact_filter || message_filter || csat_filter
+      operation_valid?(condition, conversation_filter || contact_filter || message_filter || csat_filter)
     else
       custom_attribute_present?(key, condition['custom_attribute_type'])
     end
