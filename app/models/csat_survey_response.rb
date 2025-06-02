@@ -40,17 +40,17 @@ class CsatSurveyResponse < ApplicationRecord
   # filter by rating value
   scope :filter_by_rating, ->(rating) { where(rating: rating) if rating.present? }
 
-  after_create_commit :notify_csat_creation
+  # after_create_commit :notify_csat_creation
 
-  private
+  # private
 
-  def notify_csat_creation
-    Rails.configuration.dispatcher.dispatch(
-      'csat_response_created',
-      Time.zone.now,
-      csat_response: self, # <=== este nombre debe coincidir con el que se usa en AutomationRuleListener
-      conversation: conversation,
-      account: account
-    )
-  end
+  # def notify_csat_creation
+  #   Rails.configuration.dispatcher.dispatch(
+  #     'csat_response_created',
+  #     Time.zone.now,
+  #     csat_response: self, # <=== este nombre debe coincidir con el que se usa en AutomationRuleListener
+  #     conversation: conversation,
+  #     account: account
+  #   )
+  # end
 end
