@@ -80,7 +80,6 @@ class AutomationRuleListener < BaseListener
     return unless rule_present?('csat_response_created', account)
 
     rules = current_account_rules('csat_response_created', account)
-
     rules.each do |rule|
       conditions_match = ::AutomationRules::ConditionsFilterService.new(
         rule,

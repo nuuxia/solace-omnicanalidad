@@ -70,7 +70,6 @@ class AutomationRules::ConditionsFilterService < FilterService
       raise "Automation condition #{query_hash['attribute_key']} not supported for csat_response_created." unless csat_filter
 
       @query_string += csat_query_string(csat_filter, query_hash.with_indifferent_access, current_index)
-
     else
       if conversation_filter
         @query_string += conversation_query_string('conversations', conversation_filter, query_hash.with_indifferent_access, current_index)
