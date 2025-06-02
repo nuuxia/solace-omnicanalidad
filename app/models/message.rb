@@ -303,12 +303,27 @@ class Message < ApplicationRecord
   end
 
   def dispatch_update_event
-    # ref: https://github.com/rails/rails/issues/44500
-    # we want to skip the update event if the message is not updated
     return if previous_changes.blank?
 
-    Rails.configuration.dispatcher.dispatch(MESSAGE_UPDATED, Time.zone.now, message: self, performed_by: Current.executed_by,
-                                                                            previous_changes: previous_changes)
+    Rails.configuration.dispatcher.dispatch(
+      MESSAGE_UPDATED, Time.zone.now,
+      message: self,
+      performed_by: Current.executed_by,
+      previous_changes: previous_changes
+    )
+
+    # NUEVO: Disparar evento de creación de CSAT
+    dispatch_csat_response_created if input_csat? && csat_survey_response.present? && previous_changes.key?('content_attributes')
+  end
+
+  def dispatch_csat_response_created
+    Rails.configuration.dispatcher.dispatch(
+      'csat_response_created',
+      Time.zone.now,
+      csat_response: csat_survey_response,
+      conversation: conversation,
+      account: account
+    )
   end
 
   def send_reply
