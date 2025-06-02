@@ -37,6 +37,7 @@ class AutomationRule < ApplicationRecord
   validates :phone_number, format: { with: /\A\+\d{10,15}\z/, message: 'must be a valid international number' }, allow_nil: true
 
   after_update_commit :reauthorized!, if: -> { saved_change_to_conditions? }
+  before_validation :normalize_rating_value_for_csat, if: -> { event_name == 'csat_response_created' }
 
   scope :active, -> { where(active: true) }
 
@@ -71,6 +72,20 @@ class AutomationRule < ApplicationRecord
   end
 
   private
+
+  def normalize_rating_value_for_csat
+    return if conditions.blank?
+
+    self.conditions = conditions.map do |condition|
+      if condition['attribute_key'] == 'rating' &&
+         condition['values'].is_a?(Array) &&
+         condition['values'].all? { |v| v.is_a?(String) || v.is_a?(Integer) }
+
+        condition['values'] = condition['values'].map(&:to_i)
+      end
+      condition
+    end
+  end
 
   def json_conditions_format
     return if conditions.blank?
