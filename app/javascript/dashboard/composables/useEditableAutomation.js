@@ -41,7 +41,11 @@ export function useEditableAutomation() {
         );
       }
       if (inputType === 'plain_text' || inputType === 'date') {
-        return { ...condition, values: condition.values[0] };
+        let val = condition.values[0];
+        if (condition.attribute_key === 'rating') {
+          val = parseInt(val, 10); // <-- forzamos número
+        }
+        return { ...condition, values: val };
       }
       if (inputType === 'comma_separated_plain_text') {
         return { ...condition, values: condition.values.join(',') };
