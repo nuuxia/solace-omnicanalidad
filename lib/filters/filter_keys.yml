@@ -236,5 +236,5 @@ messages:
 csat_survey_responses:
   rating:
     attribute_type: standard
-    data_type: number
+    data_type: integer
 ### ----- End of CSAT Filters ----- ###
