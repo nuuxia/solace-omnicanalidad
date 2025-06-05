@@ -237,5 +237,26 @@ export default {
         <Spinner color-scheme="primary" size="" />
       </div>
     </section>
+    <!-- Aviso de términos y privacidad (parte inferior) -->
+    <p class="mt-4 text-center text-xs text-white opacity-60">
+      {{ $t('LOGIN.ACCEPT_TERMS_PREFIX') }}
+      <a
+        href="https://softwarearrows.com/terms-and-condition/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="underline hover:text-n-brand focus:outline-none"
+      >
+        {{ $t('LOGIN.TERMS_LINK') }}
+      </a>
+      {{ $t('LOGIN.ACCEPT_TERMS_AND') }}
+      <a
+        href="https://softwarearrows.com/privacy-policy/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="underline hover:text-n-brand focus:outline-none"
+      >
+        {{ $t('LOGIN.PRIVACY_LINK') }}
+      </a>
+    </p>
   </main>
 </template>
