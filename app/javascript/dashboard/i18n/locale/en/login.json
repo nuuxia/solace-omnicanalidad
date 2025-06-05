@@ -22,6 +22,11 @@
     },
     "FORGOT_PASSWORD": "Forgot your password?",
     "CREATE_NEW_ACCOUNT": "Create a new account",
-    "SUBMIT": "Login"
+    "SUBMIT": "Login",
+
+    "ACCEPT_TERMS_PREFIX": "By logging in you accept our",
+    "TERMS_LINK": "Terms & Conditions",
+    "ACCEPT_TERMS_AND": "and our",
+    "PRIVACY_LINK": "Privacy Policy"
   }
 }

@@ -22,6 +22,11 @@
     },
     "FORGOT_PASSWORD": "¿Olvidaste tu contraseña?",
     "CREATE_NEW_ACCOUNT": "Crear nueva cuenta",
-    "SUBMIT": "Iniciar sesión"
+    "SUBMIT": "Iniciar sesión",
+
+    "ACCEPT_TERMS_PREFIX": "Al iniciar sesión aceptas nuestros",
+    "TERMS_LINK": "Términos y Condiciones",
+    "ACCEPT_TERMS_AND": "y nuestra",
+    "PRIVACY_LINK": "Política de Privacidad"
   }
 }
