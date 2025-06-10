@@ -4,6 +4,7 @@ import CampaignsPageRouteView from './pages/CampaignsPageRouteView.vue';
 import LiveChatCampaignsPage from './pages/LiveChatCampaignsPage.vue';
 import SMSCampaignsPage from './pages/SMSCampaignsPage.vue';
 import WhatsappCampaignsPage from './pages/WhatsAppCampaignsPage.vue';
+import WhatsappCSVCampaignsPage from './pages/WhatsAppCSVCampaignsPage.vue';
 import { FEATURE_FLAGS } from 'dashboard/featureFlags';
 
 const meta = {
@@ -58,6 +59,14 @@ const campaignsRoutes = {
             permissions: ['administrator'],
           },
           component: WhatsappCampaignsPage,
+        },
+        {
+          path: 'csv_whatsapp',
+          name: 'campaigns_csv_whatsapp_index',
+          meta: {
+            permissions: ['administrator'],
+          },
+          component: WhatsappCSVCampaignsPage,
         },
       ],
     },

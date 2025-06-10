@@ -330,6 +330,11 @@ const menuItems = computed(() => {
           label: t('SIDEBAR.WHATSAPP'),
           to: accountScopedRoute('campaigns_whatsapp_index'),
         },
+        {
+          name: 'CSVWhatsApp',
+          label: t('SIDEBAR.CSV_WHATSAPP'),
+          to: accountScopedRoute('campaigns_csv_whatsapp_index'),
+        },
       ],
     },
     {

@@ -6,6 +6,7 @@ const campaigns = accountId => ({
     'campaigns_sms_index',
     'campaigns_livechat_index',
     'campaigns_whatsapp_index',
+    'campaigns_csv_whatsapp_index',
   ],
   menuItems: [
     {
@@ -31,6 +32,14 @@ const campaigns = accountId => ({
       hasSubMenu: false,
       toState: frontendURL(`accounts/${accountId}/campaigns/whatsapp`),
       toStateName: 'campaigns_whatsapp_index',
+    },
+    {
+      key: 'whatsappCSVCampaigns',
+      icon: 'whatsapp',
+      label: 'CSV_WHATSAPP',
+      hasSubMenu: false,
+      toState: frontendURL(`accounts/${accountId}/campaigns/csv_whatsapp`),
+      toStateName: 'campaigns_csv_whatsapp_index',
     },
   ],
 });
