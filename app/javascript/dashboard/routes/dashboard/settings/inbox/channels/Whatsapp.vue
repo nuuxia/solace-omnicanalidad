@@ -21,7 +21,20 @@ export default {
     };
   },
   mounted() {
-    const appId = 623812436966102;
+    // ---------------------------------------------------
+    // Meta Embedded Signup – Version 3 (sessionInfo v3)
+    // ---------------------------------------------------
+    //  * Uses Graph API v22.0 and Embedded‑Signup v3
+    //  * Adds featureType: 'whatsapp_business_app_onboarding' so that
+    //    existing WhatsApp Business App numbers can be onboarded
+    //    («coexistence flow»)
+    //  * Listens for the new FINISH_WHATSAPP_BUSINESS_APP_ONBOARDING event
+    //      { type: 'WA_EMBEDDED_SIGNUP',
+    //        event: 'FINISH_WHATSAPP_BUSINESS_APP_ONBOARDING',
+    //        version: 3,
+    //        data: { waba_id: '...', /* phone_number_id?: '...' */ } }
+
+    const appId = 404207692182612; // ✅  YOUR META APP ID
     const graphApiVersion = 'v22.0';
 
     const fbScript = document.createElement('script');
@@ -29,17 +42,22 @@ export default {
     fbScript.defer = true;
     fbScript.crossorigin = 'anonymous';
     fbScript.src = 'https://connect.facebook.net/en_US/sdk.js';
+
     fbScript.onload = () => {
       window.fbAsyncInit = () => {
         FB.init({
           appId,
-          autoLogAppEvents: true,
-          xfbml: true,
+          xfbml: true, // required for Embedded Signup v3
+          cookie: true, // recommended for v3
           version: graphApiVersion,
         });
       };
 
+      // -----------------------------------------------------------------
+      // sessionInfo listener — receives messages *postMessage*‑d by Meta
+      // -----------------------------------------------------------------
       window.addEventListener('message', async event => {
+        // accept only messages coming from Meta domains
         if (
           event.origin !== 'https://www.facebook.com' &&
           event.origin !== 'https://web.facebook.com'
@@ -48,51 +66,65 @@ export default {
           return;
         }
 
+        let eventData;
         try {
-          const data = JSON.parse(event.data);
+          eventData = JSON.parse(event.data);
+        } catch (err) {
+          console.error('Error parsing ES message:', err);
+          return;
+        }
 
-          if (data.type === 'WA_EMBEDDED_SIGNUP') {
-            if (data.event === 'CANCEL') {
-              this.isFacebookLoading = false;
-              return;
-            }
+        // We only care about Embedded Signup payloads
+        if (eventData.type !== 'WA_EMBEDDED_SIGNUP') return;
 
-            const payload = {
-              waba_id: data.data.waba_id,
-              phone_number_id: data.data.phone_number_id,
-            };
+        // Handle cancellation early
+        if (eventData.event === 'CANCEL') {
+          this.isFacebookLoading = false;
+          return;
+        }
 
-            try {
-              this.isFacebookLoading = true;
-              const response = await this.createWhatsappChannel(payload);
-              this.isFacebookLoading = true;
-              if (response?.inbox_id) {
-                await this.navigateToInboxSettings(response.inbox_id);
-              }
-            } catch (error) {
-              console.error(
-                'Error calling endpoint WhatsappChannel.automatedSignup:',
-                error
-              );
-              this.isFacebookLoading = false;
-            }
-          } else {
-            this.isFacebookLoading = false;
+        // Handle the three *finish* events defined in v3 docs
+        const FINISH_EVENTS = [
+          'FINISH',
+          'FINISH_ONLY_WABA',
+          'FINISH_WHATSAPP_BUSINESS_APP_ONBOARDING',
+        ];
+
+        if (!FINISH_EVENTS.includes(eventData.event)) {
+          // Unknown event → reset UI but keep log for debugging
+          console.warn('Unhandled ES event', eventData.event);
+          this.isFacebookLoading = false;
+          return;
+        }
+
+        // Build backend payload
+        const payload = { waba_id: eventData.data.waba_id };
+        if (eventData.data.phone_number_id) {
+          payload.phone_number_id = eventData.data.phone_number_id;
+        }
+
+        try {
+          this.isFacebookLoading = true;
+          const response = await this.createWhatsappChannel(payload);
+          if (response?.inbox_id) {
+            await this.navigateToInboxSettings(response.inbox_id);
           }
-        } catch (e) {
-          console.error('Error processing ES message:', e);
+        } catch (error) {
+          console.error('Error calling WhatsappChannel.automatedSignup:', error);
+        } finally {
+          this.isFacebookLoading = false;
         }
       });
 
       this.fbScriptLoaded = true;
     };
+
     document.body.appendChild(fbScript);
   },
   methods: {
     async createWhatsappChannel(payload) {
       try {
         const response = await WhatsappChannel.automatedSignup(payload);
-
         return response.data;
       } catch (error) {
         console.error('Error creating WhatsApp channel:', error);
@@ -108,51 +140,60 @@ export default {
             inboxId: inboxId.toString(),
           },
         });
-        this.isFacebookLoading = false;
       } catch (error) {
         console.error('Navigation error:', error);
+      } finally {
+        this.isFacebookLoading = false;
       }
     },
-    async launchWhatsAppSignup() {
+    launchWhatsAppSignup() {
       if (typeof FB === 'undefined') {
         console.error('FB SDK is not loaded yet.');
         return;
       }
 
-      const configId = 3902798696627928;
+      const configId = 1710763212991813; // ✅  YOUR FB Login for Business *configuration ID*
 
-      // Calculamos el tamaño de la ventana (máximo 600x700, pero adaptable)
+      // Responsive popup sizing (max 600×700)
       const width = Math.min(600, window.innerWidth - 40);
       const height = Math.min(700, window.innerHeight - 40);
-
       const left = Math.round((window.innerWidth - width) / 2);
       const top = Math.round((window.innerHeight - height) / 2);
 
-      FB.login(response => {}, {
-        config_id: configId,
-        response_type: 'code',
-        override_default_response_type: true,
-        extras: {
-          setup: {},
-          featureType: '',
-          sessionInfoVersion: '3',
+      this.isFacebookLoading = true;
+
+      FB.login(
+        () => {
+          /* No-op: all useful data is sent via postMessage listener */
         },
-        auth_type: 'rerequest',
-        display: 'popup',
-        width,
-        height,
-        window_features: [
-          `width=${width}`,
-          `height=${height}`,
-          `left=${left}`,
-          `top=${top}`,
-          'status=1',
-          'toolbar=0',
-          'menubar=0',
-          'resizable=1',
-          'scrollbars=1',
-        ].join(','),
-      });
+        {
+          config_id: configId,
+          auth_type: 'rerequest', // avoids “user already logged in” errors
+          response_type: 'code',
+          override_default_response_type: true,
+          display: 'popup',
+          // v3‑only extras
+          extras: {
+            setup: {},
+            featureType: 'whatsapp_business_app_onboarding', // 👈 NEW in v3
+            sessionInfoVersion: '3',
+          },
+          // Pass popup window features
+          width,
+          height,
+          window_features: [
+            `width=${width}`,
+            `height=${height}`,
+            `left=${left}`,
+            `top=${top}`,
+            'status=1',
+            'toolbar=0',
+            'menubar=0',
+            'resizable=1',
+            'scrollbars=1',
+          ].join(','),
+        },
+      );
     },
   },
 };
