@@ -22,19 +22,13 @@ export default {
   },
   mounted() {
     // ---------------------------------------------------
-    // Meta Embedded Signup – Version 3 (sessionInfo v3)
+    // Meta Embedded Signup – Version 3 (sessionInfo v3)
     // ---------------------------------------------------
-    //  * Uses Graph API v22.0 and Embedded‑Signup v3
-    //  * Adds featureType: 'whatsapp_business_app_onboarding' so that
-    //    existing WhatsApp Business App numbers can be onboarded
-    //    («coexistence flow»)
-    //  * Listens for the new FINISH_WHATSAPP_BUSINESS_APP_ONBOARDING event
-    //      { type: 'WA_EMBEDDED_SIGNUP',
-    //        event: 'FINISH_WHATSAPP_BUSINESS_APP_ONBOARDING',
-    //        version: 3,
-    //        data: { waba_id: '...', /* phone_number_id?: '...' */ } }
+    //  * Uses Graph API v22.0 and Embedded-Signup v3
+    //  * Credentials supplied by user (appId & configId)
+    //  * Supports onboarding of WA Business App numbers (coexistence)
 
-    const appId = 404207692182612; // ✅  YOUR META APP ID
+    const appId = 623812436966102; // <- provided by user
     const graphApiVersion = 'v22.0';
 
     const fbScript = document.createElement('script');
@@ -47,17 +41,13 @@ export default {
       window.fbAsyncInit = () => {
         FB.init({
           appId,
-          xfbml: true, // required for Embedded Signup v3
-          cookie: true, // recommended for v3
+          xfbml: true,
+          cookie: true,
           version: graphApiVersion,
         });
       };
 
-      // -----------------------------------------------------------------
-      // sessionInfo listener — receives messages *postMessage*‑d by Meta
-      // -----------------------------------------------------------------
       window.addEventListener('message', async event => {
-        // accept only messages coming from Meta domains
         if (
           event.origin !== 'https://www.facebook.com' &&
           event.origin !== 'https://web.facebook.com'
@@ -74,16 +64,13 @@ export default {
           return;
         }
 
-        // We only care about Embedded Signup payloads
         if (eventData.type !== 'WA_EMBEDDED_SIGNUP') return;
 
-        // Handle cancellation early
         if (eventData.event === 'CANCEL') {
           this.isFacebookLoading = false;
           return;
         }
 
-        // Handle the three *finish* events defined in v3 docs
         const FINISH_EVENTS = [
           'FINISH',
           'FINISH_ONLY_WABA',
@@ -91,13 +78,11 @@ export default {
         ];
 
         if (!FINISH_EVENTS.includes(eventData.event)) {
-          // Unknown event → reset UI but keep log for debugging
           console.warn('Unhandled ES event', eventData.event);
           this.isFacebookLoading = false;
           return;
         }
 
-        // Build backend payload
         const payload = { waba_id: eventData.data.waba_id };
         if (eventData.data.phone_number_id) {
           payload.phone_number_id = eventData.data.phone_number_id;
@@ -152,9 +137,8 @@ export default {
         return;
       }
 
-      const configId = 1710763212991813; // ✅  YOUR FB Login for Business *configuration ID*
+      const configId = 3902798696627928; // <- provided by user
 
-      // Responsive popup sizing (max 600×700)
       const width = Math.min(600, window.innerWidth - 40);
       const height = Math.min(700, window.innerHeight - 40);
       const left = Math.round((window.innerWidth - width) / 2);
@@ -163,22 +147,18 @@ export default {
       this.isFacebookLoading = true;
 
       FB.login(
-        () => {
-          /* No-op: all useful data is sent via postMessage listener */
-        },
+        () => {}, // FB returns data via postMessage
         {
           config_id: configId,
-          auth_type: 'rerequest', // avoids “user already logged in” errors
+          auth_type: 'rerequest',
           response_type: 'code',
           override_default_response_type: true,
           display: 'popup',
-          // v3‑only extras
           extras: {
             setup: {},
-            featureType: 'whatsapp_business_app_onboarding', // 👈 NEW in v3
+            featureType: 'whatsapp_business_app_onboarding',
             sessionInfoVersion: '3',
           },
-          // Pass popup window features
           width,
           height,
           window_features: [
