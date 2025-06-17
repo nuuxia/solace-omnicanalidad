@@ -47,12 +47,12 @@ const handleDelete = campaign => {
 
 <template>
   <CampaignLayout
-    :header-title="t('CAMPAIGN.WHATSAPP.HEADER_TITLE')"
-    :button-label="t('CAMPAIGN.WHATSAPP.NEW_CAMPAIGN')"
+    :header-title="t('CAMPAIGN.CSV.WHATSAPP.HEADER_TITLE')"
+    :button-label="t('CAMPAIGN.CSV.WHATSAPP.NEW_CAMPAIGN')"
     @click="openDialog"
   >
     <template #action>
-      <WhatsAppCampaignDialog
+      <WhatsAppCSVCampaignDialog
         v-if="showWhatsAppCampaignDialog"
         @close="closeDialog"
       />
@@ -66,14 +66,14 @@ const handleDelete = campaign => {
       @delete="handleDelete"
     />
 
-    <WhatsAppCampaignEmptyState
+    <WhatsAppCSVCampaignEmptyState
       v-else
       :title="t('CAMPAIGN.WHATSAPP.EMPTY_STATE.TITLE')"
       :subtitle="t('CAMPAIGN.WHATSAPP.EMPTY_STATE.SUBTITLE')"
       class="pt-14"
     />
 
-    <ConfirmDeleteCampaignWhatsappDialog
+    <ConfirmDeleteCampaignWhatsappCSVPDialog
       ref="confirmDeleteCampaignDialogRef"
       :selected-campaign="selectedCampaign"
     />

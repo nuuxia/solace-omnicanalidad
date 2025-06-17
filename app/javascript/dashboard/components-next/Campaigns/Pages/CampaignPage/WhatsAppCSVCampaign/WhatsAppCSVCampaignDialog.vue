@@ -5,79 +5,91 @@ import { useStore } from 'dashboard/composables/store';
 import { useAlert, useTrack } from 'dashboard/composables';
 import { CAMPAIGN_TYPES } from 'shared/constants/campaign.js';
 import { CAMPAIGNS_EVENTS } from 'dashboard/helper/AnalyticsHelper/events.js';
+
 import WhatsAppCSVCampaignForm from './WhatsAppCSVCampaignForm.vue';
 import Button from 'dashboard/components-next/button/Button.vue';
+
 const emit = defineEmits(['close']);
 const store = useStore();
 const { t } = useI18n();
-const isSyncButtonDisabled = ref(false);
 
-// Cierra el diálogo
-const handleClose = () => emit('close');
+const isSyncDisabled = ref(false);
 
-// Despachar al módulo `campaignsWhatsApp/create`
-const addCampaign = async formData => {
+/* ───────── sync templates ───────── */
+const handleSync = async () => {
+  if (isSyncDisabled.value) return;
+  isSyncDisabled.value = true;
+
   try {
-    // Enviamos directamente el FormData al store
-    await store.dispatch('campaignsWhatsApp/create', formData);
-    useTrack(CAMPAIGNS_EVENTS.CREATE_CAMPAIGN, {
-      type: CAMPAIGN_TYPES.ONE_OFF,
-    });
-    useAlert(t('CAMPAIGN.WHATSAPP.CREATE.FORM.API.SUCCESS_MESSAGE'));
-    handleClose();
-  } catch (error) {
-    const errorMessage =
-      error?.response?.message ||
-      t('CAMPAIGN.WHATSAPP.CREATE.FORM.API.ERROR_MESSAGE');
-    useAlert(errorMessage);
+    await store.dispatch('campaignsWhatsApp/syncTemplates');
+    useAlert(t('CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.SYNC.SUCCESS_MESSAGE'));
+  } catch (e) {
+    useAlert(
+      e?.response?.message ??
+        t('CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.SYNC.ERROR_MESSAGE')
+    );
+  } finally {
+    setTimeout(() => (isSyncDisabled.value = false), 2000);
   }
 };
 
-// El formulario emite `submit` con el FormData
-const handleSubmit = campaignFormData => {
-  addCampaign(campaignFormData);
-};
-
-// Para sincronizar plantillas
-const handleSyncTemplates = async () => {
-  if (isSyncButtonDisabled.value) return;
-  isSyncButtonDisabled.value = true;
+/* ───────── create campaign ───────── */
+const createCampaign = async fd => {
   try {
-    await store.dispatch('campaignsWhatsApp/syncTemplates');
-    useAlert(t('CAMPAIGN.WHATSAPP.CREATE.FORM.SYNC.SUCCESS_MESSAGE'));
-  } catch (error) {
-    const errorMessage =
-      error?.response?.message ||
-      t('CAMPAIGN.WHATSAPP.CREATE.FORM.SYNC.ERROR_MESSAGE');
-    useAlert(errorMessage);
-  } finally {
-    setTimeout(() => {
-      isSyncButtonDisabled.value = false;
-    }, 2000);
+    await store.dispatch('campaignsWhatsApp/create', fd);
+    useTrack(CAMPAIGNS_EVENTS.CREATE_CAMPAIGN, {
+      type: CAMPAIGN_TYPES.ONE_OFF,
+    });
+    useAlert(t('CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.API.SUCCESS_MESSAGE'));
+    emit('close');
+  } catch (e) {
+    useAlert(
+      e?.response?.message ??
+        t('CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.API.ERROR_MESSAGE')
+    );
   }
 };
 </script>
 
 <template>
+  <!-- Overlay -->
   <div
-    class="w-[400px] z-50 min-w-0 absolute top-10 ltr:right-0 rtl:left-0 bg-n-alpha-3 backdrop-blur-[100px] p-6 rounded-xl border border-slate-50 dark:border-slate-900 shadow-md flex flex-col gap-6"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+    @click.self="emit('close')"
   >
-    <!-- Encabezado: título y botón de sync -->
-    <div class="flex items-center justify-between">
-      <h3 class="text-base font-medium text-slate-900 dark:text-slate-50">
-        {{ t('CAMPAIGN.WHATSAPP.CREATE.TITLE') }}
-      </h3>
-      <Button
-        v-tooltip.right="t('CAMPAIGN.WHATSAPP.CREATE.FORM.SYNC_BUTTON_TOOLTIP')"
-        class="bg-woot-500"
-        variant="solid"
-        icon="i-lucide-rotate-ccw"
-        :disabled="isSyncButtonDisabled"
-        @click="handleSyncTemplates"
-      />
-    </div>
+    <!-- Diálogo -->
+    <section
+      class="relative w-full max-w-[70rem] max-h-[90vh] bg-n-alpha-3 backdrop-blur-[80px] rounded-2xl border border-n-slate-6 dark:border-slate-800 shadow-xl flex flex-col"
+    >
+      <!-- Header -->
+      <header
+        class="flex items-center justify-between px-6 py-4 border-b border-n-slate-6 dark:border-slate-800"
+      >
+        <h2 class="text-lg font-semibold text-n-slate-12">
+          {{ t('CAMPAIGN.CSV.WHATSAPP.CREATE.TITLE') }}
+        </h2>
 
-    <!-- Formulario principal -->
-    <WhatsAppCSVCampaignForm @submit="handleSubmit" @cancel="handleClose" />
+        <div class="flex gap-2">
+          <Button
+            v-tooltip.right="
+              t('CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.SYNC_BUTTON_TOOLTIP')
+            "
+            variant="solid"
+            icon="i-lucide-rotate-ccw"
+            class="bg-woot-500"
+            :disabled="isSyncDisabled"
+            @click="handleSync"
+          />
+        </div>
+      </header>
+
+      <!-- Body -->
+      <main class="flex-1 overflow-y-auto">
+        <WhatsAppCSVCampaignForm
+          @submit="createCampaign"
+          @cancel="emit('close')"
+        />
+      </main>
+    </section>
   </div>
 </template>
