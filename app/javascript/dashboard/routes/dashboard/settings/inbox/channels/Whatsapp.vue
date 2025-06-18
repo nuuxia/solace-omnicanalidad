@@ -134,7 +134,7 @@ export default {
         override_default_response_type: true,
         extras: {
           setup: {},
-          featureType: '',
+          featureType: 'whatsapp_business_app_onboarding',
           sessionInfoVersion: '3',
         },
         auth_type: 'rerequest',
