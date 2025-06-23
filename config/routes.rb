@@ -102,8 +102,11 @@ Rails.application.routes.draw do
           resources :campaigns, only: [:index, :create, :show, :update, :destroy]
           resources :campaigns_whatsapp, only: [:index, :show, :create, :update, :destroy] do
             collection do
-               post :preview, to: 'campaigns_whatsapp_preview#create'
+              post :preview, to: 'campaigns_whatsapp_preview#create'
             end
+          end
+          resources :campaigns_csv_whatsapp, only: [:index, :show, :create, :update, :destroy] do
+            collection { post :preview, to: 'campaigns_csv_whatsapp_preview#create' }
           end
           resources :dashboard_apps, only: [:index, :show, :create, :update, :destroy]
           namespace :channels do

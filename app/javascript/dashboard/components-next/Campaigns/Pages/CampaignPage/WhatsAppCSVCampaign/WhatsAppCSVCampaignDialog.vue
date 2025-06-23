@@ -22,11 +22,11 @@ const handleSync = async () => {
 
   try {
     await store.dispatch('campaignsWhatsApp/syncTemplates');
-    useAlert(t('CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.SYNC.SUCCESS_MESSAGE'));
+    useAlert(t('CAMPAIGN.WHATSAPP.CREATE.FORM.SYNC.SUCCESS_MESSAGE'));
   } catch (e) {
     useAlert(
       e?.response?.message ??
-        t('CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.SYNC.ERROR_MESSAGE')
+        t('CAMPAIGN.WHATSAPP.CREATE.FORM.SYNC.ERROR_MESSAGE')
     );
   } finally {
     setTimeout(() => (isSyncDisabled.value = false), 2000);
@@ -36,16 +36,16 @@ const handleSync = async () => {
 /* ───────── create campaign ───────── */
 const createCampaign = async fd => {
   try {
-    await store.dispatch('campaignsWhatsApp/create', fd);
+    await store.dispatch('campaignsCSVWhatsApp/create', fd);
     useTrack(CAMPAIGNS_EVENTS.CREATE_CAMPAIGN, {
       type: CAMPAIGN_TYPES.ONE_OFF,
     });
-    useAlert(t('CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.API.SUCCESS_MESSAGE'));
+    useAlert(t('CAMPAIGN.WHATSAPP.CREATE.FORM.API.SUCCESS_MESSAGE'));
     emit('close');
   } catch (e) {
     useAlert(
       e?.response?.message ??
-        t('CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.API.ERROR_MESSAGE')
+        t('CAMPAIGN.WHATSAPP.CREATE.FORM.API.ERROR_MESSAGE')
     );
   }
 };
@@ -66,13 +66,13 @@ const createCampaign = async fd => {
         class="flex items-center justify-between px-6 py-4 border-b border-n-slate-6 dark:border-slate-800"
       >
         <h2 class="text-lg font-semibold text-n-slate-12">
-          {{ t('CAMPAIGN.CSV.WHATSAPP.CREATE.TITLE') }}
+          {{ t('CAMPAIGN.WHATSAPP.CREATE.TITLE') }}
         </h2>
 
         <div class="flex gap-2">
           <Button
             v-tooltip.right="
-              t('CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.SYNC_BUTTON_TOOLTIP')
+              t('CAMPAIGN.WHATSAPP.CREATE.FORM.SYNC_BUTTON_TOOLTIP')
             "
             variant="solid"
             icon="i-lucide-rotate-ccw"
