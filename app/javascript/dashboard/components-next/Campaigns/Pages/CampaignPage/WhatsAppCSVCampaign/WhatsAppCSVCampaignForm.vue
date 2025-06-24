@@ -1,10 +1,12 @@
+<!-- WhatsAppCSVCampaignForm.vue -->
 <script setup>
-/* ─────────────── imports ─────────────── */
+/* ─────────────────── imports ─────────────────── */
 import { reactive, ref, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useVuelidate } from '@vuelidate/core';
-import { required, minLength, helpers } from '@vuelidate/validators';
+import { required, minLength } from '@vuelidate/validators';
 import Papa from 'papaparse';
+import { toRefs } from 'vue';
 
 import Input from 'dashboard/components-next/input/Input.vue';
 import Button from 'dashboard/components-next/button/Button.vue';
@@ -12,26 +14,18 @@ import ComboBox from 'dashboard/components-next/combobox/ComboBox.vue';
 import { useMapGetter } from 'dashboard/composables/store';
 import { useAlert } from 'dashboard/composables';
 
-/* ─────────────── emits / i18n ─────────────── */
+/* ─────────────────── emits / i18n ─────────────────── */
 const emit = defineEmits(['submit', 'cancel', 'preview']);
 const { t } = useI18n();
+const K = 'CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.'; // prefijo i18n
 
-/* ─────────────── global store refs ─────────────── */
+/* ─────────────────── store refs ─────────────────── */
 const formState = {
   uiFlags: useMapGetter('campaignsWhatsApp/getUIFlags'),
   inboxes: useMapGetter('inboxes/getWhatsAppInboxes'),
 };
 
-const safeUIFlags = computed(
-  () =>
-    formState.uiFlags?.value ?? {
-      isCreating: false,
-      isPreviewing: false,
-      previewError: null,
-    }
-);
-
-/* ─────────────── local state ─────────────── */
+/* ─────────────────── local state ─────────────────── */
 const initialState = {
   title: '',
   inboxId: null,
@@ -49,49 +43,45 @@ const files = reactive({
 });
 
 const csvColumns = ref([]);
-const bodyVariables = reactive([]);
-const buttonVariables = reactive([]);
+const bodyVariables = reactive([]); // [{sourceType,value}]
+const buttonVariables = reactive([]); // [{type,dynamic,value,preview}]
 
-/* flags UI */
-const isCreating = computed(() => safeUIFlags.value.isCreating);
-const isPreviewing = computed(() => safeUIFlags.value.isPreviewing);
+/* ─────────────────── flags UI ─────────────────── */
+const isCreating = computed(() => formState.uiFlags.value.isCreating);
+const isPreviewing = computed(() => formState.uiFlags.value.isPreviewing);
 
-/* ─────────────── validation ─────────────── */
-const startsWithPlus = helpers.withMessage(
-  t('CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.PREVIEW_SECTION.ERROR_PLUS'),
-  v => !v || /^\+\d{6,15}$/.test(v)
+/* ─────────────────── validations ─────────────────── */
+const isPhoneValid = computed(() =>
+  /^\+\d{6,15}$/.test(state.phoneNumber.trim())
 );
-
 const rules = {
   title: { required, minLength: minLength(1) },
   inboxId: { required },
   selectedWhatsAppTemplate: { required },
   contactsFile: { required },
   scheduledAt: { required },
-  phoneNumber: { startsWithPlus },
 };
-
 const v$ = useVuelidate(rules, {
-  ...state,
+  ...toRefs(state), // ← mantiene la reactividad
   contactsFile: computed(() => files.contactsFile),
 });
 
-/* ─────────────── helpers computados ─────────────── */
+/* ─────────────────── helpers dependientes de inbox/template ─────────────────── */
 const selectedInbox = computed(() =>
   formState.inboxes.value.find(inb => inb.id === state.inboxId)
 );
 
-const hasNamedPlaceholders = tpl =>
-  tpl?.components?.some(comp =>
-    comp.text
+const hasNamedPH = tpl =>
+  tpl?.components?.some(c =>
+    c?.text
       ?.match(/{{(.*?)}}/g)
-      ?.some(ph => !/^\d+$/.test(ph.replace(/\{|}/g, '')))
+      ?.some(ph => !/^\d+$/.test(ph.replace(/[{}]/g, '')))
   );
 
 const whatsappTemplateOptions = computed(
   () =>
     selectedInbox.value?.message_templates
-      ?.filter(tpl => !hasNamedPlaceholders(tpl))
+      ?.filter(tpl => !hasNamedPH(tpl))
       .map(tpl => ({ value: tpl.id, label: tpl.name })) ?? []
 );
 
@@ -101,24 +91,30 @@ const selectedTemplate = computed(() =>
   )
 );
 
-/* Preview vacío o con HEADER/BODY/FOOTER concatenados */
+/* preview concatenado (HEADER + BODY) */
 const templatePreview = computed(() => {
   if (!selectedTemplate.value) return '';
   return selectedTemplate.value.components
-    .filter(c => ['HEADER', 'BODY', 'FOOTER'].includes(c.type) && c.text)
-    .map(c => c.text)
+    .filter(comp => ['HEADER', 'BODY'].includes(comp.type) && comp.text)
+    .map(comp => comp.text)
     .join('\n');
 });
 
+/* footer plain text */
+const footerText = computed(
+  () =>
+    selectedTemplate.value?.components?.find(c => c.type === 'FOOTER')?.text ||
+    ''
+);
+
+/* header helpers */
 const selectedHeader = computed(
   () =>
     selectedTemplate.value?.components?.find(c => c.type === 'HEADER') ?? null
 );
-
 const showMediaHeader = computed(() =>
   ['IMAGE', 'VIDEO', 'DOCUMENT'].includes(selectedHeader.value?.format || '')
 );
-
 const headerAcceptMime = fmt =>
   ({
     IMAGE: 'image/jpeg,image/png',
@@ -126,6 +122,7 @@ const headerAcceptMime = fmt =>
     DOCUMENT: 'application/pdf',
   })[fmt] || '*/*';
 
+/* placeholders completos? */
 const areBodyVarsFilled = computed(() =>
   bodyVariables.every(v => v.sourceType !== 'text' || v.value.trim())
 );
@@ -133,19 +130,23 @@ const areButtonVarsFilled = computed(() =>
   buttonVariables.every(b => !b.dynamic || b.value.trim())
 );
 
+/* ─────────────────── disable flags ─────────────────── */
 const isCreateDisabled = computed(
   () =>
-    v$.value.$invalid ||
+    v$.value.title.$invalid ||
+    v$.value.inboxId.$invalid ||
+    v$.value.selectedWhatsAppTemplate.$invalid ||
+    v$.value.contactsFile.$invalid ||
+    v$.value.scheduledAt.$invalid ||
     !areBodyVarsFilled.value ||
     !areButtonVarsFilled.value ||
     !files.contactsFile ||
     (showMediaHeader.value && !files.headerMediaFile)
 );
-
 const isPreviewDisabled = computed(
   () =>
-    v$.value.phoneNumber.$invalid ||
     !state.phoneNumber ||
+    !isPhoneValid.value ||
     !state.inboxId ||
     !state.selectedWhatsAppTemplate ||
     !areBodyVarsFilled.value ||
@@ -153,27 +154,11 @@ const isPreviewDisabled = computed(
     (showMediaHeader.value && !files.headerMediaFile)
 );
 
-/* ─────────────── CSV helpers ─────────────── */
+/* ─────────────────── CSV helpers ─────────────────── */
 const validateHeaders = headers => {
   const lower = headers.map(h => h.trim().toLowerCase());
   const missing = ['phone_number', 'status'].filter(r => !lower.includes(r));
   return { valid: !missing.length, missing };
-};
-
-const processHeaders = headers => {
-  const { valid, missing } = validateHeaders(headers);
-  if (!valid) {
-    useAlert(
-      t('CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.MISSING_COLUMNS', {
-        cols: missing.join(', '),
-      })
-    );
-    files.contactsFile = null;
-    files.contactsFileName = '';
-    csvColumns.value = [];
-    return;
-  }
-  csvColumns.value = headers.filter(Boolean).map(h => h.trim());
 };
 
 function handleContactsChange(e) {
@@ -185,7 +170,7 @@ function handleContactsChange(e) {
     return;
   }
   if (!file.name.toLowerCase().endsWith('.csv')) {
-    useAlert(t('CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.FILE.INVALID_FORMAT'));
+    useAlert(t(`${K}FILE.INVALID_FORMAT`));
     return;
   }
 
@@ -193,80 +178,114 @@ function handleContactsChange(e) {
   files.contactsFileName = file.name;
 
   const reader = new FileReader();
-  reader.onload = evt => {
-    const res = Papa.parse(evt.target.result, { header: true, preview: 1 });
-    processHeaders(res.meta.fields || []);
+  reader.onload = ev => {
+    const parsed = Papa.parse(ev.target.result, { header: true, preview: 1 });
+    const { valid, missing } = validateHeaders(parsed.meta.fields || []);
+    if (!valid) {
+      useAlert(t(`${K}MISSING_COLUMNS`, { cols: missing.join(', ') }));
+      files.contactsFile = null;
+      files.contactsFileName = '';
+      csvColumns.value = [];
+      return;
+    }
+    csvColumns.value = parsed.meta.fields.filter(Boolean).map(h => h.trim());
   };
   reader.readAsText(file);
 }
 
-/* HEADER media */
+/* ─────────────────── header media file ─────────────────── */
 function handleHeaderChange(e) {
   const f = e.target.files[0];
-  files.headerMediaFile = f ?? null;
-
-  if (!f) {
+  if (f) {
+    files.headerMediaFile = f;
+    files.headerMediaName =
+      f.name.length > 30 ? `${f.name.slice(0, 30)}…` : f.name;
+  } else {
+    files.headerMediaFile = null;
     files.headerMediaName = '';
-    return;
   }
-
-  const maxLen = 30;
-  files.headerMediaName =
-    f.name.length > maxLen ? `${f.name.slice(0, maxLen)}…` : f.name;
 }
 
-/* ─────────────── template placeholder parser ─────────────── */
-function parseTemplateVars() {
+/* ─────────────────── parse placeholders ─────────────────── */
+function parseTemplateVariables() {
   bodyVariables.splice(0);
   buttonVariables.splice(0);
 
   if (!selectedTemplate.value) return;
 
+  /* BODY variables */
   const body = selectedTemplate.value.components.find(c => c.type === 'BODY');
   body?.text
-    ?.match(/{{(.*?)}}/g)
+    ?.match(/{{\d+}}/g)
     ?.forEach(() => bodyVariables.push({ sourceType: 'text', value: '' }));
 
+  /* BUTTON variables + preview */
   const btnComp = selectedTemplate.value.components.find(
     c => c.type === 'BUTTONS'
   );
   btnComp?.buttons?.forEach(btn => {
-    if (btn.type === 'COPY_CODE')
-      buttonVariables.push({ type: 'COPY_CODE', dynamic: true, value: '' });
-    else if (btn.type === 'URL' && /{{(.*?)}}/.test(btn.url))
-      buttonVariables.push({ type: 'URL', dynamic: true, value: '' });
-    else if (btn.type === 'PHONE_NUMBER' && /{{(.*?)}}/.test(btn.phone_number))
-      buttonVariables.push({ type: 'PHONE_NUMBER', dynamic: true, value: '' });
+    const hasPH = /{{\d+}}/.test(btn.url ?? btn.phone_number ?? '');
+    if (btn.type === 'COPY_CODE') {
+      buttonVariables.push({
+        type: 'COPY_CODE',
+        dynamic: true,
+        value: '',
+        preview: btn.text || 'Copy Code',
+      });
+    } else if (btn.type === 'URL' && hasPH) {
+      buttonVariables.push({
+        type: 'URL',
+        dynamic: true,
+        value: '',
+        preview: btn.url,
+      });
+    } else if (btn.type === 'PHONE_NUMBER' && hasPH) {
+      buttonVariables.push({
+        type: 'PHONE_NUMBER',
+        dynamic: true,
+        value: '',
+        preview: btn.phone_number,
+      });
+    }
   });
 }
-watch(() => state.selectedWhatsAppTemplate, parseTemplateVars, {
-  immediate: true,
-});
 
-/* ─────────────── util helpers ─────────────── */
-const uploadMediaI18nKey = computed(() => {
-  switch (selectedHeader.value?.format) {
-    case 'IMAGE':
-      return 'CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.TEMPLATE.MEDIA.UPLOAD_IMAGE';
-    case 'VIDEO':
-      return 'CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.TEMPLATE.MEDIA.UPLOAD_VIDEO';
-    case 'DOCUMENT':
-      return 'CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.TEMPLATE.MEDIA.UPLOAD_DOCUMENT';
-    default:
-      return 'CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.TEMPLATE.MEDIA.HEADER_SECTION';
-  }
-});
+/* watchers */
+watch(
+  [
+    () => state.selectedWhatsAppTemplate,
+    () => state.inboxId,
+    () => formState.inboxes.value,
+  ],
+  parseTemplateVariables,
+  { immediate: true }
+);
 
-const toUTC = local => (local ? new Date(local).toISOString() : null);
+watch(
+  () => ({
+    ...state,
+    contactsFile: files.contactsFile,
+    headerMediaFile: files.headerMediaFile,
+    bodyVars: bodyVariables.map(v => `${v.sourceType}:${v.value}`),
+    buttonVars: buttonVariables.map(b => b.value),
+  }),
+  () => v$.value.$touch(),
+  { deep: true }
+);
 
-/* ─────────────── reset & submit ─────────────── */
+/* helper para renderizar texto de preview sin usar regex en template */
+function renderButtonPreview(raw) {
+  if (!raw) return '';
+  return raw.replace(/\{\{\d+\}\}/, '…');
+}
+
+/* helpers */
+const toUTC = l => (l ? new Date(l).toISOString() : null);
+
+/* reset & submit */
 function resetForm() {
   Object.assign(state, initialState);
-
-  Object.keys(files).forEach(key => {
-    files[key] = key.includes('Name') ? '' : null;
-  });
-
+  Object.keys(files).forEach(k => (files[k] = k.includes('Name') ? '' : null));
   csvColumns.value = [];
   bodyVariables.splice(0);
   buttonVariables.splice(0);
@@ -274,17 +293,10 @@ function resetForm() {
 
 async function handleSubmit() {
   if (!(await v$.value.$validate())) return;
-
-  if (!areBodyVarsFilled.value) {
-    useAlert(
-      t('CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.TEMPLATE.BODY.ERROR_PLACEHOLDERS')
-    );
-    return;
-  }
-  if (!areButtonVarsFilled.value) {
-    useAlert(t('CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.BUTTONS.ERROR_EMPTY_URL'));
-    return;
-  }
+  if (!areBodyVarsFilled.value)
+    return useAlert(t(`${K}TEMPLATE.BODY.ERROR_PLACEHOLDERS`));
+  if (!areButtonVarsFilled.value)
+    return useAlert(t(`${K}TEMPLATE.BUTTONS.ERROR_EMPTY_URL`));
 
   const fd = new FormData();
   fd.append('title', state.title);
@@ -302,38 +314,35 @@ async function handleSubmit() {
 }
 
 const handleCancel = () => emit('cancel');
+const debugDisabled = computed(() => ({
+  title: v$.value.title.$invalid,
+  inbox: v$.value.inboxId.$invalid,
+  template: v$.value.selectedWhatsAppTemplate.$invalid,
+  contacts: v$.value.contactsFile.$invalid,
+  scheduledAt: v$.value.scheduledAt.$invalid,
+  bodyVars: !areBodyVarsFilled.value,
+  buttonVars: !areButtonVarsFilled.value,
+  csvMissing: !files.contactsFile,
+  headerMiss: showMediaHeader.value && !files.headerMediaFile,
+}));
+
+watch(debugDisabled, val => console.table(val), { immediate: true });
 </script>
 
 <template>
   <div class="overflow-y-auto max-h-[80vh] p-6 space-y-6">
-    <!-- Archivo CSV -->
+    <!-- 1. Archivo CSV -->
     <div class="space-y-1">
       <label class="block text-sm font-medium text-n-slate-12">
-        {{ t('CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.FILE.LABEL') }}
+        {{ t(`${K}FILE.LABEL`) }}
       </label>
 
       <label
         for="contacts-upload"
         class="flex items-center justify-center gap-2 px-4 py-2 bg-n-alpha-3 border border-dashed border-n-slate-7 rounded-md text-sm cursor-pointer hover:bg-n-alpha-4"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-4 w-4"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M12 12V4m0 0l-4 4m4-4l4 4"
-          />
-        </svg>
-        <span>{{
-          files.contactsFileName ||
-          t('CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.FILE.CHOOSE')
-        }}</span>
+        <i class="i-lucide-upload w-4 h-4" />
+        <span>{{ files.contactsFileName || t(`${K}FILE.CHOOSE`) }}</span>
       </label>
 
       <input
@@ -343,58 +352,47 @@ const handleCancel = () => emit('cancel');
         class="sr-only"
         @change="handleContactsChange"
       />
-
       <p v-if="v$.contactsFile.$error" class="text-xs text-red-500 mt-1">
-        {{ t('CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.FILE.ERROR') }}
+        {{ t(`${K}FILE.ERROR`) }}
       </p>
     </div>
 
-    <!-- GRID de 2 columnas -->
+    <!-- 2. Grid -->
     <div class="grid gap-6 md:grid-cols-2">
-      <!-- COL A -->
+      <!-- ─────────── IZQUIERDA ─────────── -->
       <div class="space-y-6">
         <!-- Título -->
         <Input
           v-model="state.title"
-          :label="t('CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.TITLE.LABEL')"
-          :placeholder="
-            t('CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.TITLE.PLACEHOLDER')
-          "
-          :message="
-            v$.title.$error
-              ? t('CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.TITLE.ERROR')
-              : ''
-          "
+          :label="t(`${K}TITLE.LABEL`)"
+          :placeholder="t(`${K}TITLE.PLACEHOLDER`)"
+          :message="v$.title.$error ? t(`${K}TITLE.ERROR`) : ''"
           :message-type="v$.title.$error ? 'error' : 'info'"
         />
 
-        <!-- Template selector -->
+        <!-- Plantilla -->
         <div>
           <label class="block mb-1 text-sm font-medium text-n-slate-12">
-            {{ t('CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.WHATSAPP_TEMPLATE.LABEL') }}
+            {{ t(`${K}WHATSAPP_TEMPLATE.LABEL`) }}
           </label>
           <ComboBox
             v-model="state.selectedWhatsAppTemplate"
             :options="whatsappTemplateOptions"
-            :placeholder="
-              t(
-                'CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.WHATSAPP_TEMPLATE.PLACEHOLDER'
-              )
-            "
+            :placeholder="t(`${K}WHATSAPP_TEMPLATE.PLACEHOLDER`)"
             :has-error="v$.selectedWhatsAppTemplate.$error"
             :message="
               v$.selectedWhatsAppTemplate.$error
-                ? t('CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.WHATSAPP_TEMPLATE.ERROR')
+                ? t(`${K}WHATSAPP_TEMPLATE.ERROR`)
                 : ''
             "
             :disabled="!state.inboxId"
           />
         </div>
 
-        <!-- Preview texto plantilla -->
+        <!-- Preview HEADER+BODY -->
         <div v-if="templatePreview">
           <p class="mb-1 text-sm font-medium text-n-slate-12">
-            {{ t('CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.TEMPLATE.PREVIEW_TITLE') }}
+            {{ t(`${K}TEMPLATE.PREVIEW_TITLE`) }}
           </p>
           <pre
             class="whitespace-pre-line rounded-lg border border-n-slate-7 p-3 text-sm text-n-slate-11 overflow-x-auto"
@@ -402,21 +400,31 @@ const handleCancel = () => emit('cancel');
           >
         </div>
 
-        <!-- Variables -->
+        <!-- Preview FOOTER -->
+        <div
+          v-if="footerText"
+          class="rounded-lg border border-n-slate-7 p-3 bg-n-alpha-2"
+        >
+          <h4 class="text-sm font-semibold text-n-slate-12 mb-2">
+            {{ t(`${K}TEMPLATE.FOOTER.HEADER_SECTION`) }}
+          </h4>
+          <div class="flex items-start gap-2">
+            <p class="whitespace-pre-line text-sm text-n-slate-11">
+              {{ footerText }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Variables BODY -->
         <div v-if="bodyVariables.length" class="space-y-3">
           <h4 class="text-sm font-semibold text-n-slate-12">
-            {{
-              t(
-                'CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.TEMPLATE.BODY.HEADER_SECTION'
-              )
-            }}
+            {{ t(`${K}TEMPLATE.BODY.HEADER_SECTION`) }}
           </h4>
 
           <div v-for="(v, idx) in bodyVariables" :key="idx">
             <div
               class="flex items-center gap-2 bg-n-alpha-3 border border-n-slate-8 rounded-md p-3"
             >
-              <!-- Número centrado -->
               <span
                 class="w-6 h-6 flex items-center justify-center rounded-full text-xs font-semibold text-n-slate-11 bg-n-solid-3"
               >
@@ -425,22 +433,18 @@ const handleCancel = () => emit('cancel');
 
               <ComboBox
                 v-model="v.sourceType"
+                class="md:w-1/3 flex-shrink-0"
                 :options="[
                   { value: 'text', label: 'Text' },
-                  ...csvColumns.map(col => ({ value: col, label: col })),
+                  ...csvColumns.map(c => ({ value: c, label: c })),
                 ]"
-                class="md:w-1/3 flex-shrink-0"
               />
 
               <input
                 v-if="v.sourceType === 'text'"
                 v-model="v.value"
                 class="flex-1 text-sm border border-n-slate-7 rounded px-2 py-1 bg-transparent placeholder-n-slate-11 focus:outline-none"
-                :placeholder="
-                  t(
-                    'CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.TEMPLATE.BODY.VARIABLE_PLACE_HOLDER'
-                  )
-                "
+                :placeholder="t(`${K}TEMPLATE.BODY.VARIABLE_PLACE_HOLDER`)"
               />
             </div>
           </div>
@@ -449,79 +453,60 @@ const handleCancel = () => emit('cancel');
         <!-- Teléfono para preview -->
         <Input
           v-model="state.phoneNumber"
-          :label="
-            t('CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.PREVIEW_SECTION.PHONE_LABEL')
-          "
-          :placeholder="
-            t('CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.PREVIEW_SECTION.PLACEHOLDER')
-          "
+          :label="t(`${K}PREVIEW_SECTION.PHONE_LABEL`)"
+          :placeholder="t(`${K}PREVIEW_SECTION.PLACEHOLDER`)"
           :message="
-            v$.phoneNumber.$error
-              ? t(
-                  'CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.PREVIEW_SECTION.ERROR_PLUS'
-                )
+            state.phoneNumber && !isPhoneValid
+              ? t(`${K}PREVIEW_SECTION.ERROR_PLUS`)
               : ''
           "
-          :message-type="v$.phoneNumber.$error ? 'error' : 'info'"
+          :message-type="state.phoneNumber && !isPhoneValid ? 'error' : 'info'"
         />
       </div>
 
-      <!-- COL B -->
+      <!-- ─────────── DERECHA ─────────── -->
       <div class="space-y-6">
         <!-- Inbox -->
         <div>
           <label class="block mb-1 text-sm font-medium text-n-slate-12">
-            {{ t('CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.INBOX.LABEL') }}
+            {{ t(`${K}INBOX.LABEL`) }}
           </label>
           <ComboBox
             v-model="state.inboxId"
             :options="
-              formState.inboxes.value?.map(inb => ({
-                value: inb.id,
-                label: inb.name,
+              formState.inboxes.value?.map(i => ({
+                value: i.id,
+                label: i.name,
               })) ?? []
             "
-            :placeholder="
-              t('CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.INBOX.PLACEHOLDER')
-            "
+            :placeholder="t(`${K}INBOX.PLACEHOLDER`)"
             :has-error="v$.inboxId.$error"
-            :message="
-              v$.inboxId.$error
-                ? t('CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.INBOX.ERROR')
-                : ''
-            "
+            :message="v$.inboxId.$error ? t(`${K}INBOX.ERROR`) : ''"
           />
         </div>
 
         <!-- Header media -->
         <div v-if="showMediaHeader" class="space-y-2">
           <h4 class="text-sm font-semibold text-n-slate-12">
-            {{
-              t(
-                'CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.TEMPLATE.MEDIA.HEADER_SECTION'
-              )
-            }}
+            {{ t(`${K}TEMPLATE.MEDIA.HEADER_SECTION`) }}
           </h4>
-
           <label
             for="header-upload"
             class="flex items-center justify-center gap-2 px-4 py-2 bg-n-alpha-3 border border-dashed border-n-slate-7 rounded-md text-sm cursor-pointer hover:bg-n-alpha-4"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-4 w-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M12 12V4m0 0l-4 4m4-4l4 4"
-              />
-            </svg>
-            <span>{{ files.headerMediaName || t(uploadMediaI18nKey) }}</span>
+            <i class="i-lucide-upload w-4 h-4" />
+            <span>
+              {{
+                files.headerMediaName ||
+                t(
+                  {
+                    IMAGE: `${K}TEMPLATE.MEDIA.UPLOAD_IMAGE`,
+                    VIDEO: `${K}TEMPLATE.MEDIA.UPLOAD_VIDEO`,
+                    DOCUMENT: `${K}TEMPLATE.MEDIA.UPLOAD_DOCUMENT`,
+                  }[selectedHeader.format]
+                )
+              }}
+            </span>
           </label>
           <input
             id="header-upload"
@@ -532,7 +517,7 @@ const handleCancel = () => emit('cancel');
           />
         </div>
 
-        <!-- Fecha / hora -->
+        <!-- Programación -->
         <Input
           v-model="state.scheduledAt"
           type="datetime-local"
@@ -541,31 +526,57 @@ const handleCancel = () => emit('cancel');
               .toISOString()
               .slice(0, 16)
           "
-          :label="t('CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.SCHEDULED_AT.LABEL')"
+          :label="t(`${K}SCHEDULED_AT.LABEL`)"
         />
+
+        <!-- Variables BOTONES -->
+        <div v-if="buttonVariables.length" class="space-y-3">
+          <h4 class="text-sm font-semibold text-n-slate-12">
+            {{ t(`${K}TEMPLATE.BUTTONS.HEADER_SECTION`) }}
+          </h4>
+
+          <div
+            v-for="(btn, idx) in buttonVariables"
+            :key="idx"
+            class="flex flex-col gap-2 bg-n-alpha-3 border border-n-slate-8 rounded-md p-3"
+          >
+            <!-- preview del botón -->
+            <p class="text-xs text-n-slate-11">
+              {{ t(`${K}TEMPLATE.BUTTONS.PREVIEW_LABEL`) }} {{ idx + 1 }}:
+              <span class="font-medium">{{
+                renderButtonPreview(btn.preview)
+              }}</span>
+            </p>
+
+            <!-- input de variable -->
+            <input
+              v-model="btn.value"
+              class="border border-n-slate-7 rounded px-2 py-1 text-sm"
+              :placeholder="t(`${K}TEMPLATE.BUTTONS.VARIABLE_PLACE_HOLDER`)"
+            />
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Botones -->
+    <!-- 3. Botones principales -->
     <div class="flex items-center justify-between pt-4">
       <Button
         variant="faded"
         color="slate"
-        :label="t('CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.BUTTONS.CANCEL')"
+        :label="t('CAMPAIGN.CSV.WHATSAPP.CREATE.CANCEL_BUTTON_TEXT')"
         @click="handleCancel"
       />
 
       <div class="flex gap-2">
         <Button
-          :label="
-            t('CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.PREVIEW_SECTION.BUTTON_LABEL')
-          "
+          :label="t(`${K}PREVIEW_SECTION.BUTTON_LABEL`)"
           :disabled="isPreviewing || isPreviewDisabled"
           :is-loading="isPreviewing"
           @click="$emit('preview', {})"
         />
         <Button
-          :label="t('CAMPAIGN.CSV.WHATSAPP.CREATE.FORM.BUTTONS.CREATE')"
+          :label="t(`${K}BUTTONS.CREATE`)"
           :disabled="isCreating || isCreateDisabled"
           :is-loading="isCreating"
           @click="handleSubmit"

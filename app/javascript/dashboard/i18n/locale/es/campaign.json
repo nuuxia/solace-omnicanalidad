@@ -268,133 +268,122 @@
         }
       }
     },
+"CSV": {
+    "WHATSAPP": {
+      "HEADER_TITLE": "Campañas de WhatsApp CSV",
+      "NEW_CAMPAIGN": "Crear campaña",
+      "CARD": {
+        "STATUS": {
+          "ENABLED": "Habilitado",
+          "DISABLED": "Deshabilitado"
+        },
+        "CAMPAIGN_DETAILS": {
+          "SENT_BY": "Enviado por",
+          "BOT": "Bot",
+          "FROM": "de",
+          "ON": "en",
+          "SENT_FROM": "Enviado desde",
+          "URL": "URL:"
+        }
+      },
+      "EMPTY_STATE": {
+        "TITLE": "No hay campañas de WhatsApp CSV disponibles",
+        "SUBTITLE": "Crea campañas de WhatsApp subiendo un archivo CSV con tus contactos. Haz clic en «Crear campaña» para comenzar."
+      },
 
-    "CSV": {
-      "WHATSAPP": {
-        "HEADER_TITLE": "Campañas de WhatsApp CSV",
-        "NEW_CAMPAIGN": "Crear campaña",
-        "CARD": {
-          "STATUS": {
-            "ENABLED": "Habilitado",
-            "DISABLED": "Deshabilitado"
+      "CREATE": {
+        "TITLE": "Crear campaña de WhatsApp CSV",
+        "CANCEL_BUTTON_TEXT": "Cancelar",
+        "CREATE_BUTTON_TEXT": "Crear",
+
+        "FORM": {
+          "TITLE": {
+            "LABEL": "Título",
+            "PLACEHOLDER": "Ingrese el título de la campaña",
+            "ERROR": "El título es obligatorio"
           },
-          "CAMPAIGN_DETAILS": {
-            "SENT_BY": "Enviado por",
-            "BOT": "Bot",
-            "FROM": "de",
-            "ON": "en",
-            "SENT_FROM": "Enviado desde",
-            "URL": "URL:"
-          }
-        },
-        "EMPTY_STATE": {
-          "TITLE": "No hay campañas de WhatsApp CSV disponibles",
-          "SUBTITLE": "Crea campañas de WhatsApp subiendo un archivo CSV con tus contactos. Haz clic en 'Crear campaña' para comenzar."
-        },
-        "CREATE": {
-          "TITLE": "Crear campaña de WhatsApp CSV",
-          "CANCEL_BUTTON_TEXT": "Cancelar",
-          "CREATE_BUTTON_TEXT": "Crear",
-          "FORM": {
-            "TITLE": {
-              "LABEL": "Título",
-              "PLACEHOLDER": "Por favor, ingrese el título de la campaña",
-              "ERROR": "El título es obligatorio"
+          "INBOX": {
+            "LABEL": "Seleccionar buzón",
+            "PLACEHOLDER": "Seleccionar buzón",
+            "ERROR": "El buzón es obligatorio"
+          },
+          "WHATSAPP_TEMPLATE": {
+            "LABEL": "Seleccionar una plantilla de WhatsApp",
+            "PLACEHOLDER": "Seleccionar plantilla",
+            "ERROR": "Se requiere una plantilla de WhatsApp"
+          },
+          "FILE": {
+            "LABEL": "Archivo CSV",
+            "CHOOSE": "Seleccionar archivo",
+            "ERROR": "Se requiere un archivo CSV",
+            "INVALID_FORMAT": "Formato no válido. Solo .csv"
+          },
+          "MISSING_COLUMNS": "Faltan las siguientes columnas requeridas: {cols}",
+          "SCHEDULED_AT": {
+            "LABEL": "Hora programada",
+            "PLACEHOLDER": "Seleccione la fecha y hora",
+            "ERROR": "La hora programada es obligatoria"
+          },
+          "PREVIEW_SECTION": {
+            "TITLE": "Enviar vista previa de WhatsApp",
+            "PHONE_LABEL": "Número para recibir la vista previa",
+            "PLACEHOLDER": "+598...",
+            "ERROR_PLUS": "Introduzca un número válido con «+» sin espacios",
+            "BUTTON_LABEL": "Enviar vista previa",
+            "LOADING_LABEL": "Enviando…",
+            "SUCCESS_MESSAGE": "Vista previa enviada con éxito",
+            "ERROR_MESSAGE": "Error al enviar la vista previa",
+            "TOOL_TIP": "Seleccione un buzón y plantilla antes de enviar"
+          },
+          "TEMPLATE": {
+            "FOOTER": {
+              "HEADER_SECTION": "Pie de página"
             },
-            "INBOX": {
-              "LABEL": "Seleccionar buzón",
-              "PLACEHOLDER": "Seleccionar buzón",
-              "ERROR": "El buzón es obligatorio"
+            "HEADER": {
+              "HEADER_SECTION": "Encabezado"
             },
-            "WHATSAPP_TEMPLATE": {
-              "LABEL": "Seleccionar una plantilla de WhatsApp",
-              "PLACEHOLDER": "Seleccionar una plantilla de WhatsApp",
-              "ERROR": "Se requiere una plantilla de WhatsApp"
+            "PREVIEW_TITLE": "Vista previa de la plantilla:",
+            "MEDIA": {
+              "HEADER_SECTION": "Seleccionar medio para la cabecera",
+              "UPLOAD_DOCUMENT": "Subir documento .pdf",
+              "UPLOAD_IMAGE": "Subir imagen .jpg o .png",
+              "UPLOAD_VIDEO": "Subir video .mp4"
             },
-            "FILE": {
-              "LABEL": "Archivo CSV",
-              "CHOOSE": "Seleccionar archivo", 
-              "ERROR": "Se requiere un archivo CSV",
-              "INVALID_FORMAT": "Formato de archivo no válido. Debe ser .csv"
-            },
-            "MISSING_COLUMNS": "Faltan las siguientes columnas requeridas: {cols}",
-            "SCHEDULED_AT": {
-              "LABEL": "Hora programada",
-              "PLACEHOLDER": "Por favor, seleccione la hora",
-              "ERROR": "La hora programada es obligatoria"
-            },
-            "PREVIEW_SECTION": {
-              "TITLE": "Enviar vista previa de WhatsApp",
-              "PHONE_LABEL": "Ingrese un número de teléfono para recibir la vista previa",
-              "PLACEHOLDER": "Ingrese el número de teléfono",
-              "ERROR_PLUS": "Por favor, proporcione un número de teléfono válido comenzando con un signo `+`. No se permiten espacios",
-              "BUTTON_LABEL": "Enviar vista previa de la plantilla",
-              "LOADING_LABEL": "Enviando...",
-              "SUCCESS_MESSAGE": "Vista previa enviada con éxito",
-              "ERROR_MESSAGE": "Error al enviar la vista previa",
-              "TOOL_TIP": "Debes seleccionar un buzón y una plantilla para enviar una vista previa"
-            },
-            "TEMPLATE": {
-              "PREVIEW_TITLE": "Vista previa de la plantilla:",
-              "MEDIA": {
-                "HEADER_SECTION": "Seleccionar medio para la cabecera de la plantilla",
-                "UPLOAD_DOCUMENT": "Subir un documento .PDF",
-                "UPLOAD_IMAGE": "Subir una imagen .jpg o .png",
-                "UPLOAD_VIDEO": "Subir un video .mp4"
-              },
-              "BODY": {
-                "HEADER_SECTION": "Insertar variables del cuerpo de la plantilla",
-                "VARIABLE_TITLE": "Variable",
-                "VARIABLE_PLACE_HOLDER": "Inserte su variable aquí",
-                "CONTACT_NAME": "Nombre de contacto",
-                "FREE_TEXT": "Texto",
-                "ERROR_PLACEHOLDERS": "Por favor, complete todas las variables del cuerpo antes de continuar"
-              },
-              "BUTTONS": {
-                "HEADER_SECTION": "Insertar variables de botones de la plantilla",
-                "VARIABLE_TITLE": "Variable",
-                "VARIABLE_PLACE_HOLDER": "Inserte su variable aquí",
-                "ERROR_EMPTY_URL": "Los botones dinámicos no pueden quedar vacíos"
-              }
+            "BODY": {
+              "HEADER_SECTION": "Variables del cuerpo",
+              "VARIABLE_TITLE": "Variable",
+              "VARIABLE_PLACE_HOLDER": "Inserte su variable aquí",
+              "CONTACT_NAME": "Nombre de contacto",
+              "FREE_TEXT": "Texto",
+              "ERROR_PLACEHOLDERS": "Complete todas las variables del cuerpo"
             },
             "BUTTONS": {
-              "CREATE": "Crear",
-              "CANCEL": "Cancelar",
-              "ERROR_EMPTY_URL": "Los botones dinámicos no pueden quedar vacíos"
-            },
-            "API": {
-              "SUCCESS_MESSAGE": "Campaña de WhatsApp CSV creada con éxito",
-              "ERROR_MESSAGE": "Hubo un error. Por favor, inténtalo de nuevo."
-            },
-            "SYNC": {
-              "SUCCESS_MESSAGE": "Plantillas sincronizadas con éxito",
-              "ERROR_MESSAGE": "Error al sincronizar las plantillas. Por favor, inténtalo de nuevo."
-            },
-            "SYNC_BUTTON_LABEL": "Sincronizar",
-            "SYNC_BUTTON_TOOLTIP": "Sincronizar plantillas"
-          }
-        },
-        "CONFIRM_DELETE": {
-          "TITLE": "Eliminar campaña de WhatsApp",
-          "DESCRIPTION": "¿Estás seguro de que deseas eliminar esta campaña? Esta acción no se puede deshacer.",
-          "CONFIRM": "Eliminar",
-          "API": {
-            "SUCCESS_MESSAGE": "Campaña de WhatsApp eliminada con éxito",
-            "ERROR_MESSAGE": "No se pudo eliminar la campaña. Por favor, inténtalo de nuevo."
-          }
-        },
-        "EDIT": {
-          "TITLE": "Editar campaña de WhatsApp",
-          "FORM": {
-            "API": {
-              "SUCCESS_MESSAGE": "Campaña de WhatsApp actualizada con éxito",
-              "ERROR_MESSAGE": "Hubo un error. Por favor, inténtalo de nuevo."
+              "HEADER_SECTION": "Variables de botones",
+              "VARIABLE_TITLE": "Variable",
+              "VARIABLE_PLACE_HOLDER": "Inserte su variable aquí",
+              "ERROR_EMPTY_URL": "Los botones dinámicos no pueden quedar vacíos",
+              "PREVIEW_LABEL": "Preview botón"
             }
-          }
-        }
+          },
+          "BUTTONS": {
+            "CREATE": "Crear",
+            "CANCEL": "Cancelar",
+            "ERROR_EMPTY_URL": "Los botones dinámicos no pueden quedar vacíos"
+          },
+          "API": {
+            "SUCCESS_MESSAGE": "Campaña creada con éxito",
+            "ERROR_MESSAGE": "Hubo un error. Inténtalo nuevamente."
+          },
+          "SYNC": {
+            "SUCCESS_MESSAGE": "Plantillas sincronizadas con éxito",
+            "ERROR_MESSAGE": "Error al sincronizar las plantillas"
+          },
+          "SYNC_BUTTON_LABEL": "Sincronizar",
+          "SYNC_BUTTON_TOOLTIP": "Sincronizar plantillas"
+        } 
       }
-    },
-
+    }
+  },
     "CONFIRM_DELETE": {
       "TITLE": "¿Está seguro de eliminar?",
       "DESCRIPTION": "La acción de eliminar es permanente y no se puede deshacer.",
