@@ -16,7 +16,7 @@ class Api::V1::Accounts::CampaignsWhatsappController < Api::V1::Accounts::BaseCo
   end
 
   def create
-    Rails.logger.info "📝 Creating new WhatsApp campaign..."
+    Rails.logger.info '📝 Creating new WhatsApp campaign...'
     # 1) Parametros base
     campaign_base = params.permit(
       :title,
@@ -34,41 +34,49 @@ class Api::V1::Accounts::CampaignsWhatsappController < Api::V1::Accounts::BaseCo
     raw_button_vars = params[:button_variables]
 
     body_vars = if raw_body_vars.is_a?(String)
-                  JSON.parse(raw_body_vars) rescue []
+                  begin
+                    JSON.parse(raw_body_vars)
+                  rescue StandardError
+                    []
+                  end
                 else
                   raw_body_vars || []
                 end
 
     button_vars = if raw_button_vars.is_a?(String)
-                    JSON.parse(raw_button_vars) rescue []
+                    begin
+                      JSON.parse(raw_button_vars)
+                    rescue StandardError
+                      []
+                    end
                   else
                     raw_button_vars || []
                   end
 
     # 3) Guardar template en formato JSON
-    raw_template = campaign_base["template"]
+    raw_template = campaign_base['template']
     parsed_template = raw_template.present? ? JSON.parse(raw_template) : {}
 
     # 4) Subir headerMediaFile a S3 y guardar la URL en template["header_media_url"] (igual que en preview)
     if params[:headerMediaFile].present?
       begin
-        Rails.logger.info "📂 Received headerMediaFile; uploading to S3..."
+        Rails.logger.info '📂 Received headerMediaFile; uploading to S3...'
         header_url = Whatsapp::CampaignWhatsappFileUploadService.new(params[:headerMediaFile]).perform
-        parsed_template["header_media_url"] = header_url
+        parsed_template['header_media_url'] = header_url
         Rails.logger.info "✅ Header media URL saved in template: #{header_url}"
-      rescue => e
+      rescue StandardError => e
         Rails.logger.error "❌ Error uploading headerMediaFile: #{e.message}"
       end
     end
 
     # 5) Reemplazar en campaign_base
-    campaign_base["template"] = parsed_template
-    campaign_base["body_variables"] = body_vars
-    campaign_base["button_variables"] = button_vars
+    campaign_base['template'] = parsed_template
+    campaign_base['body_variables'] = body_vars
+    campaign_base['button_variables'] = button_vars
 
     # 6) Procesar audiencia
     raw_audience = params.fetch(:audience, {})
-    campaign_base["audience"] = parse_audience(raw_audience)
+    campaign_base['audience'] = parse_audience(raw_audience)
 
     @campaign = Current.account.campaigns_whatsapp.new(campaign_base)
 
@@ -83,7 +91,7 @@ class Api::V1::Accounts::CampaignsWhatsappController < Api::V1::Accounts::BaseCo
   rescue ActionController::ParameterMissing => e
     Rails.logger.error "❌ Parameter missing error: #{e.message}"
     render json: { errors: [e.message] }, status: :bad_request
-  rescue => e
+  rescue StandardError => e
     Rails.logger.error "❌ Unexpected error during campaign creation: #{e.message}\n#{e.backtrace.join("\n")}"
     render json: { errors: ["An unexpected error occurred: #{e.message}"] }, status: :internal_server_error
   end
@@ -102,10 +110,10 @@ class Api::V1::Accounts::CampaignsWhatsappController < Api::V1::Accounts::BaseCo
     ).to_h
 
     raw_audience = params.require(:campaigns_whatsapp).fetch(:audience, {})
-    campaign_params["audience"] = parse_audience(raw_audience)
+    campaign_params['audience'] = parse_audience(raw_audience)
 
     if @campaign.update(campaign_params)
-      Rails.logger.info "✅ Campaign updated successfully"
+      Rails.logger.info '✅ Campaign updated successfully'
       schedule_campaign if schedule_changed?(campaign_params)
       render json: @campaign.as_json(include: :inbox)
     else
@@ -115,7 +123,7 @@ class Api::V1::Accounts::CampaignsWhatsappController < Api::V1::Accounts::BaseCo
   rescue ActionController::ParameterMissing => e
     Rails.logger.error "❌ Parameter missing error during update: #{e.message}"
     render json: { errors: [e.message] }, status: :bad_request
-  rescue => e
+  rescue StandardError => e
     Rails.logger.error "❌ Unexpected error during campaign update: #{e.message}\n#{e.backtrace.join("\n")}"
     render json: { errors: ["An unexpected error occurred: #{e.message}"] }, status: :internal_server_error
   end
@@ -124,13 +132,13 @@ class Api::V1::Accounts::CampaignsWhatsappController < Api::V1::Accounts::BaseCo
     Rails.logger.info "🗑️ [CampaignsWhatsappController#destroy] Deleting campaign ID=#{@campaign.id}"
     cleanup_scheduled_jobs
     if @campaign.destroy
-      Rails.logger.info "✅ Campaign and associated jobs deleted successfully"
+      Rails.logger.info '✅ Campaign and associated jobs deleted successfully'
       head :ok
     else
       Rails.logger.error "❌ Failed to delete campaign: #{@campaign.errors.full_messages}"
       render json: { errors: @campaign.errors.full_messages }, status: :unprocessable_entity
     end
-  rescue => e
+  rescue StandardError => e
     Rails.logger.error "❌ Unexpected error during campaign deletion: #{e.message}\n#{e.backtrace.join("\n")}"
     render json: { errors: ["An unexpected error occurred: #{e.message}"] }, status: :internal_server_error
   end
@@ -142,11 +150,11 @@ class Api::V1::Accounts::CampaignsWhatsappController < Api::V1::Accounts::BaseCo
     @campaign = Current.account.campaigns_whatsapp.find(params[:id])
   rescue ActiveRecord::RecordNotFound
     Rails.logger.error "❌ Campaign with ID=#{params[:id]} not found for account #{Current.account.id}"
-    render json: { errors: ["Campaign not found"] }, status: :not_found
+    render json: { errors: ['Campaign not found'] }, status: :not_found
   end
 
   def parse_audience(aud_param)
-    Rails.logger.debug "👀 [parse_audience] Starting parsing. Received aud_param: #{aud_param.inspect} (Class: #{aud_param.class})"
+    Rails.logger.debug { "👀 [parse_audience] Starting parsing. Received aud_param: #{aud_param.inspect} (Class: #{aud_param.class})" }
     return [] if aud_param.blank?
 
     items_to_process =
@@ -167,7 +175,7 @@ class Api::V1::Accounts::CampaignsWhatsappController < Api::V1::Accounts::BaseCo
       permitted_item.to_h
     end.compact
 
-    Rails.logger.debug "✅ [parse_audience] Final parsed result: #{result.inspect}"
+    Rails.logger.debug { "✅ [parse_audience] Final parsed result: #{result.inspect}" }
     result
   end
 
@@ -186,6 +194,7 @@ class Api::V1::Accounts::CampaignsWhatsappController < Api::V1::Accounts::BaseCo
 
   def cleanup_scheduled_jobs
     return unless @campaign&.id
+
     Rails.logger.info "🧹 Cleaning up scheduled jobs for campaign #{@campaign.id}"
     cleaned_count = 0
     scheduled_set = Sidekiq::ScheduledSet.new
@@ -202,11 +211,11 @@ class Api::V1::Accounts::CampaignsWhatsappController < Api::V1::Accounts::BaseCo
     end
     retry_set = Sidekiq::RetrySet.new
     retry_set.each do |job|
-      if (job.klass == 'WhatsappCampaignJob' || job.klass == 'WhatsappMessageJob') && job.args.first == @campaign.id
-        Rails.logger.info "🗑️ Removing retry job #{job.jid} (klass: #{job.klass})"
-        job.delete
-        cleaned_count += 1
-      end
+      next unless (job.klass == 'WhatsappCampaignJob' || job.klass == 'WhatsappMessageJob') && job.args.first == @campaign.id
+
+      Rails.logger.info "🗑️ Removing retry job #{job.jid} (klass: #{job.klass})"
+      job.delete
+      cleaned_count += 1
     end
     Rails.logger.info "✅ Cleaned up #{cleaned_count} jobs from scheduled/retry sets for campaign #{@campaign.id}"
   end
@@ -215,9 +224,9 @@ class Api::V1::Accounts::CampaignsWhatsappController < Api::V1::Accounts::BaseCo
     current_scheduled_at = @campaign.scheduled_at
     current_status = @campaign.campaign_status
     current_enabled = @campaign.enabled
-    new_scheduled_at = new_params["scheduled_at"]
-    new_status = new_params["campaign_status"]
-    new_enabled = new_params.key?("enabled") ? new_params["enabled"] : current_enabled
+    new_scheduled_at = new_params['scheduled_at']
+    new_status = new_params['campaign_status']
+    new_enabled = new_params.key?('enabled') ? new_params['enabled'] : current_enabled
 
     changed = false
     if new_scheduled_at.present? && current_scheduled_at.present?
@@ -227,7 +236,9 @@ class Api::V1::Accounts::CampaignsWhatsappController < Api::V1::Accounts::BaseCo
     end
     changed ||= new_status != current_status
     changed ||= new_enabled != current_enabled
-    Rails.logger.debug "[schedule_changed?] Current(#{current_scheduled_at}, #{current_status}, #{current_enabled}) vs New(#{new_scheduled_at}, #{new_status}, #{new_enabled}) => Changed: #{changed}"
+    Rails.logger.debug do
+      "[schedule_changed?] Current(#{current_scheduled_at}, #{current_status}, #{current_enabled}) vs New(#{new_scheduled_at}, #{new_status}, #{new_enabled}) => Changed: #{changed}"
+    end
     changed
   end
 end

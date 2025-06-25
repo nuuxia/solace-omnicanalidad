@@ -251,6 +251,7 @@ ActiveRecord::Schema[7.0].define(version: 202506201021076) do
   create_table "campaigns_csv_whatsapp", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.bigint "inbox_id", null: false
+    t.bigint "sender_id"
     t.string "title", null: false
     t.jsonb "template", default: {}
     t.jsonb "body_variables", default: []
@@ -262,12 +263,21 @@ ActiveRecord::Schema[7.0].define(version: 202506201021076) do
     t.integer "messages_total", default: 0
     t.integer "messages_sent", default: 0
     t.integer "messages_failed", default: 0
+    t.string "original_csv_filename"
+    t.string "processed_csv_filename"
+    t.text "csv_original_url"
+    t.text "csv_sent_url"
+    t.text "csv_errors_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_campaigns_csv_whatsapp_on_account_id"
+    t.index ["body_variables"], name: "index_campaigns_csv_whatsapp_on_body_variables", using: :gin
+    t.index ["button_variables"], name: "index_campaigns_csv_whatsapp_on_button_variables", using: :gin
     t.index ["campaign_status"], name: "index_campaigns_csv_whatsapp_on_campaign_status"
     t.index ["inbox_id"], name: "index_campaigns_csv_whatsapp_on_inbox_id"
     t.index ["scheduled_at"], name: "index_campaigns_csv_whatsapp_on_scheduled_at"
+    t.index ["sender_id"], name: "index_campaigns_csv_whatsapp_on_sender_id"
+    t.index ["template"], name: "index_campaigns_csv_whatsapp_on_template", using: :gin
   end
 
   create_table "campaigns_whatsapp", force: :cascade do |t|
@@ -1194,6 +1204,7 @@ ActiveRecord::Schema[7.0].define(version: 202506201021076) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "campaigns_csv_whatsapp", "accounts"
   add_foreign_key "campaigns_csv_whatsapp", "inboxes"
+  add_foreign_key "campaigns_csv_whatsapp", "users", column: "sender_id"
   add_foreign_key "campaigns_whatsapp", "accounts"
   add_foreign_key "campaigns_whatsapp", "inboxes"
   add_foreign_key "channel_mercado_libres", "accounts"

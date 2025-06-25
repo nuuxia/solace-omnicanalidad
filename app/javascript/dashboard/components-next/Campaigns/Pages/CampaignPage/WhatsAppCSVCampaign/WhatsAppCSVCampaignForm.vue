@@ -303,7 +303,8 @@ async function handleSubmit() {
   fd.append('inbox_id', state.inboxId);
   fd.append('template', JSON.stringify(selectedTemplate.value));
   fd.append('scheduled_at', toUTC(state.scheduledAt));
-  fd.append('contacts_file', files.contactsFile);
+  fd.append('csv_file', files.contactsFile);
+  fd.append('original_csv_filename', files.contactsFileName);
   fd.append('body_variables', JSON.stringify(bodyVariables));
   fd.append('button_variables', JSON.stringify(buttonVariables));
   if (files.headerMediaFile)
