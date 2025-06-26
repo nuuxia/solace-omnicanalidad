@@ -5,6 +5,7 @@ import { useMessageFormatter } from 'shared/composables/useMessageFormatter';
 import { getInboxIconByType } from 'dashboard/helper/inbox';
 
 // IMPORTS DE COMPONENTES
+import Tag         from 'dashboard/components-next/tag/Tag.vue';
 import CardLayout from 'dashboard/components-next/CardLayout.vue';
 import Button from 'dashboard/components-next/button/Button.vue';
 import LiveChatCampaignDetails from './LiveChatCampaignDetails.vue';
@@ -49,10 +50,11 @@ const props = defineProps({
     type: Number,
     default: 0,
   },
+  showStats: { type: Boolean, default: false },
 });
 
 // EMITS
-const emit = defineEmits(['edit', 'delete']);
+const emit = defineEmits(['edit', 'delete', 'stats']);
 
 // CONSTANTES
 const { t } = useI18n();
@@ -207,6 +209,14 @@ const displayContent = computed(() => {
         color="slate"
         icon="i-lucide-sliders-vertical"
         @click="emit('edit')"
+      />
+      <Button
+        v-if="showStats"
+        variant="faded"
+        size="sm"
+        color="slate"
+        icon="i-lucide-bar-chart-2"
+        @click="emit('stats')"
       />
       <Button
         variant="faded"

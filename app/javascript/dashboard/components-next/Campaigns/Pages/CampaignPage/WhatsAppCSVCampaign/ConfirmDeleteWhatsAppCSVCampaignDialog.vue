@@ -16,7 +16,7 @@ const dialogRef = ref(null);
 const deleteWhatsAppCampaign = async id => {
   if (!id) return;
   try {
-    await store.dispatch('campaignsWhatsApp/delete', id);
+    await store.dispatch('campaignsCSVWhatsApp/delete', id);
     useAlert(t('CAMPAIGN.WHATSAPP.CONFIRM_DELETE.API.SUCCESS_MESSAGE'));
   } catch (error) {
     useAlert(t('CAMPAIGN.WHATSAPP.CONFIRM_DELETE.API.ERROR_MESSAGE'));

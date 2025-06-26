@@ -1,4 +1,4 @@
-// store/modules/campaignsWhatsapp.js
+// store/modules/campaignsCSVWhatsapp.js
 import WhatsAppCSVCampaignsAPI from '../../api/campaignsCSVWhatsApp';
 import types from '../mutation-types';
 
@@ -16,76 +16,57 @@ export const state = {
   },
 };
 
-const processCampaignData = campaign => {
+const parseTemplate = campaign => {
   if (!campaign) return null;
   try {
     if (campaign.template && typeof campaign.template === 'string') {
       campaign.template = JSON.parse(campaign.template);
     }
-    return campaign;
-  } catch (error) {
-    return campaign;
+  } catch (_) {
+    /* ignore */
   }
+  return campaign;
 };
 
 export const getters = {
-  getUIFlags: _state => _state.uiFlags,
-  getAllCampaigns: _state => {
-    return _state.records.map(campaign => processCampaignData(campaign));
-  },
-  getCampaignsByType: _state => type => {
-    return _state.records
-      .filter(record => record.campaign_type === type)
-      .map(campaign => processCampaignData(campaign));
-  },
-  isSyncing: _state => _state.uiFlags.isSyncing,
-  isPreviewing: _state => _state.uiFlags.isPreviewing,
-  previewError: _state => _state.uiFlags.previewError,
-  syncError: _state => _state.uiFlags.syncError, // Opcional
+  getUIFlags: s => s.uiFlags,
+  isSyncing: s => s.uiFlags.isSyncing,
+  isPreviewing: s => s.uiFlags.isPreviewing,
+  previewError: s => s.uiFlags.previewError,
+  syncError: s => s.uiFlags.syncError,
+  getAllCampaigns: s => s.records.map(parseTemplate),
+  getCampaignsByType: s => type =>
+    s.records.filter(r => r.campaign_type === type).map(parseTemplate),
 };
 
 export const actions = {
+  // ─────────── CRUD ───────────
   async get({ commit }) {
     commit(types.SET_WHATSAPP_CAMPAIGN_UI_FLAG, { isFetching: true });
     try {
-      const response = await WhatsAppCSVCampaignsAPI.get();
-      const processedCampaigns = response.data.map(campaign =>
-        processCampaignData(campaign)
-      );
-      commit(types.SET_WHATSAPP_CAMPAIGNS, processedCampaigns);
-    } catch (error) {
-      // Manejo de errores si es necesario
+      const { data } = await WhatsAppCSVCampaignsAPI.get();
+      commit(types.SET_WHATSAPP_CAMPAIGNS, data.map(parseTemplate));
     } finally {
       commit(types.SET_WHATSAPP_CAMPAIGN_UI_FLAG, { isFetching: false });
     }
   },
 
-  // AQUÍ EL CAMBIO IMPORTANTE:
   async create({ commit }, formData) {
     commit(types.SET_WHATSAPP_CAMPAIGN_UI_FLAG, { isCreating: true });
     try {
-      // Enviamos directamente el FormData
-      const response = await WhatsAppCSVCampaignsAPI.create(formData);
-      const processedCampaign = processCampaignData(response.data);
-      commit(types.ADD_WHATSAPP_CAMPAIGN, processedCampaign);
-      return processedCampaign;
-    } catch (error) {
-      throw new Error(error);
+      const { data } = await WhatsAppCSVCampaignsAPI.create(formData);
+      commit(types.ADD_WHATSAPP_CAMPAIGN, parseTemplate(data));
+      return data;
     } finally {
       commit(types.SET_WHATSAPP_CAMPAIGN_UI_FLAG, { isCreating: false });
     }
   },
 
-  async update({ commit }, { id, ...updateObj }) {
+  async update({ commit }, { id, ...payload }) {
     commit(types.SET_WHATSAPP_CAMPAIGN_UI_FLAG, { isUpdating: true });
     try {
-      const response = await WhatsAppCSVCampaignsAPI.update(id, {
-        campaigns_whatsapp: updateObj,
-      });
-      const processedCampaign = processCampaignData(response.data);
-      commit(types.EDIT_WHATSAPP_CAMPAIGN, processedCampaign);
-    } catch (error) {
-      throw new Error(error);
+      const { data } = await WhatsAppCSVCampaignsAPI.update(id, payload);
+      commit(types.EDIT_WHATSAPP_CAMPAIGN, parseTemplate(data));
     } finally {
       commit(types.SET_WHATSAPP_CAMPAIGN_UI_FLAG, { isUpdating: false });
     }
@@ -96,46 +77,41 @@ export const actions = {
     try {
       await WhatsAppCSVCampaignsAPI.delete(id);
       commit(types.DELETE_WHATSAPP_CAMPAIGN, id);
-    } catch (error) {
-      throw new Error(error);
     } finally {
       commit(types.SET_WHATSAPP_CAMPAIGN_UI_FLAG, { isDeleting: false });
     }
   },
+
+  // ─────────── NUEVO: stats / retry / download ───────────
+  stats(_, id) {
+    return WhatsAppCSVCampaignsAPI.stats(id).then(r => r.data);
+  },
+  retry(_, id) {
+    return WhatsAppCSVCampaignsAPI.retry(id);
+  },
+  download(_, { id, type }) {
+    // redirigimos para forzar la descarga
+    window.location = WhatsAppCSVCampaignsAPI.downloadUrl(id, type);
+  },
 };
 
 export const mutations = {
-  [types.SET_WHATSAPP_CAMPAIGN_UI_FLAG](_state, data) {
-    _state.uiFlags = {
-      ..._state.uiFlags,
-      ...data,
-    };
+  [types.SET_WHATSAPP_CAMPAIGN_UI_FLAG](s, data) {
+    s.uiFlags = { ...s.uiFlags, ...data };
   },
-  [types.SET_WHATSAPP_CAMPAIGNS](_state, data) {
-    _state.records = data;
+  [types.SET_WHATSAPP_CAMPAIGNS](s, data) {
+    s.records = data;
   },
-  [types.ADD_WHATSAPP_CAMPAIGN](_state, data) {
-    _state.records = [..._state.records, data];
+  [types.ADD_WHATSAPP_CAMPAIGN](s, data) {
+    s.records = [...s.records, data];
   },
-  [types.EDIT_WHATSAPP_CAMPAIGN](_state, data) {
-    const index = _state.records.findIndex(record => record.id === data.id);
-    if (index > -1) {
-      _state.records = [
-        ..._state.records.slice(0, index),
-        data,
-        ..._state.records.slice(index + 1),
-      ];
-    }
+  [types.EDIT_WHATSAPP_CAMPAIGN](s, data) {
+    const i = s.records.findIndex(r => r.id === data.id);
+    if (i > -1) s.records.splice(i, 1, data);
   },
-  [types.DELETE_WHATSAPP_CAMPAIGN](_state, id) {
-    _state.records = _state.records.filter(record => record.id !== id);
+  [types.DELETE_WHATSAPP_CAMPAIGN](s, id) {
+    s.records = s.records.filter(r => r.id !== id);
   },
 };
 
-export default {
-  namespaced: true,
-  state,
-  getters,
-  actions,
-  mutations,
-};
+export default { namespaced: true, state, getters, actions, mutations };

@@ -107,6 +107,11 @@ Rails.application.routes.draw do
           end
           resources :campaigns_csv_whatsapp, only: [:index, :show, :create, :update, :destroy] do
             collection { post :preview, to: 'campaigns_csv_whatsapp_preview#create' }
+            member do
+              get  :stats     # /campaigns_csv_whatsapp/:id/stats
+              post :retry     # /campaigns_csv_whatsapp/:id/retry
+              get  :download  # /campaigns_csv_whatsapp/:id/download?type=sent|errors|all
+            end
           end
           resources :dashboard_apps, only: [:index, :show, :create, :update, :destroy]
           namespace :channels do

@@ -157,7 +157,9 @@ const isPreviewDisabled = computed(
 /* ─────────────────── CSV helpers ─────────────────── */
 const validateHeaders = headers => {
   const lower = headers.map(h => h.trim().toLowerCase());
-  const missing = ['phone_number', 'status'].filter(r => !lower.includes(r));
+  const missing = ['phone_number', 'status', 'error'].filter(
+    r => !lower.includes(r)
+  );
   return { valid: !missing.length, missing };
 };
 

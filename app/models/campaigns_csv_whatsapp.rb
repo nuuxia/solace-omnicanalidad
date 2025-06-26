@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-# == Schema Information
-#
-# table name: campaigns_csv_whatsapp …  (ver schema.rb)
-#
 class CampaignsCsvWhatsapp < ApplicationRecord
   self.table_name = 'campaigns_csv_whatsapp'
 
@@ -12,8 +8,7 @@ class CampaignsCsvWhatsapp < ApplicationRecord
   belongs_to :inbox
   belongs_to :sender, class_name: 'User', optional: true
 
-  # (mantén las siguientes líneas SOLO si sigues usando ActiveStorage
-  #  para estos archivos; de lo contrario elimínalas)
+  # (bórralas si dejaste de usar ActiveStorage)
   has_one_attached :original_csv
   has_one_attached :processed_csv
 
@@ -26,30 +21,34 @@ class CampaignsCsvWhatsapp < ApplicationRecord
   validate  :csv_source_presence
 
   # ─────────── Callbacks ───────────
-  #
-  # - Si la campaña NO está programada o la fecha ya pasó ⇒ se encola ahora.
-  # - Si tiene `scheduled_at` en el futuro ⇒ la encola el controller.
-  #
   after_commit :kickoff_async, on: :create
 
-  # ─────────── Helpers ───────────
+  # ─────────── Public helpers ───────────
+  #
+  def progress_data
+    {
+      total: messages_total,
+      sent: messages_sent,
+      failed: messages_failed,
+      pending: messages_total - messages_sent - messages_failed,
+      percent_complete: messages_total.zero? ? 0 : ((messages_sent + messages_failed) * 100.0 / messages_total).round(1)
+    }
+  end
+
   def processed?
-    csv_sent_url.present? ||
-      csv_errors_url.present? ||
-      processed_csv.attached?
+    csv_sent_url.present? || csv_errors_url.present? || processed_csv.attached?
   end
 
   private
 
-  # --- Validación de “hay CSV” --------------------------------------------
   def csv_source_presence
     return if csv_original_url.present?
-    return if original_csv.attached? # si mantienes ActiveStorage
+    return if original_csv.attached?
 
     errors.add(:base, I18n.t('errors.csv_missing'))
   end
 
-  # --- Encola solo si la fecha es inmediata/pasada ------------------------
+  # Encola sólo si NO es futura
   def kickoff_async
     return if scheduled_at.present? && scheduled_at.future?
 

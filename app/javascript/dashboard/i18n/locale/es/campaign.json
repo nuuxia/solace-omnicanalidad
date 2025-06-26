@@ -268,10 +268,22 @@
         }
       }
     },
-"CSV": {
+    "CSV": {
     "WHATSAPP": {
       "HEADER_TITLE": "Campañas de WhatsApp CSV",
       "NEW_CAMPAIGN": "Crear campaña",
+      "STATS": {
+        "TITLE"        : "Estadísticas de la campaña",
+        "SENT"         : "Enviados",
+        "PENDING"      : "Pendientes",
+        "FAILED"       : "Fallidos",
+        "RETRY_BUTTON" : "Reintentar fallidos",
+        "DOWNLOAD_ORIGINAL": "Descargar CSV original",
+        "DOWNLOAD_SENT"    : "Descargar CSV enviados",
+        "DOWNLOAD_ERRORS"  : "Descargar CSV errores",
+        "DOWNLOAD_STATUS": "Descargar estado CSV",
+        "STATUS": "Estado"
+      },
       "CARD": {
         "STATUS": {
           "ENABLED": "Habilitado",
@@ -290,7 +302,6 @@
         "TITLE": "No hay campañas de WhatsApp CSV disponibles",
         "SUBTITLE": "Crea campañas de WhatsApp subiendo un archivo CSV con tus contactos. Haz clic en «Crear campaña» para comenzar."
       },
-
       "CREATE": {
         "TITLE": "Crear campaña de WhatsApp CSV",
         "CANCEL_BUTTON_TEXT": "Cancelar",

@@ -2,7 +2,7 @@
 
 class Api::V1::Accounts::CampaignsCsvWhatsappController < Api::V1::Accounts::BaseController
   before_action :check_authorization
-  before_action :set_campaign, only: %i[show destroy]
+  before_action :set_campaign, only: %i[show destroy stats retry download]
 
   # ------------------------------------------------------------------
   # GET /api/v1/accounts/:account_id/campaigns_csv_whatsapp
@@ -125,6 +125,17 @@ class Api::V1::Accounts::CampaignsCsvWhatsappController < Api::V1::Accounts::Bas
       set
         .select { |j| %w[WhatsappCsvCampaignJob WhatsappCsvMessageJob].include?(j.klass) && j.args.first == campaign_id }
         .each(&:delete)
+    end
+    def download
+      url =
+        case params[:type]
+        when 'sent'   then @campaign.csv_sent_url
+        when 'errors' then @campaign.csv_errors_url
+        else               @campaign.csv_original_url
+        end
+      return head :not_found if url.blank?
+
+      redirect_to url
     end
   end
 end

@@ -35,7 +35,7 @@ const campaigns = accountId => ({
     },
     {
       key: 'whatsappCSVCampaigns',
-      icon: 'whatsapp',
+      icon: 'archive',
       label: 'CSV_WHATSAPP',
       hasSubMenu: false,
       toState: frontendURL(`accounts/${accountId}/campaigns/csv_whatsapp`),

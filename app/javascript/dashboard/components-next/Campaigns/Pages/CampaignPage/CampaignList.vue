@@ -1,21 +1,26 @@
 <script setup>
+/**
+ * Lista de campañas (Live-chat, SMS, WhatsApp-CSV…).
+ * Propaga los eventos:
+ *   • edit(campaign)
+ *   • delete(campaign)
+ *   • stats(campaign)   ← NUEVO
+ */
+
 import CampaignCard from 'dashboard/components-next/Campaigns/CampaignCard/CampaignCard.vue';
 
-defineProps({
-  campaigns: {
-    type: Array,
-    required: true,
-  },
-  isLiveChatType: {
-    type: Boolean,
-    default: false,
-  },
+const props = defineProps({
+  campaigns:      { type: Array,  required: true },
+  isLiveChatType: { type: Boolean, default: false },
+  enableStats:    { type: Boolean, default: false },
 });
 
-const emit = defineEmits(['edit', 'delete']);
+const emit = defineEmits(['edit', 'delete', 'stats'])
 
-const handleEdit = campaign => emit('edit', campaign);
-const handleDelete = campaign => emit('delete', campaign);
+/* helpers ------------------------------------------------------- */
+const handleEdit   = c => emit('edit',   c);
+const handleDelete = c => emit('delete', c);
+const handleStats  = c => emit('stats',  c);   // ← NUEVO
 </script>
 
 <template>
@@ -32,8 +37,10 @@ const handleDelete = campaign => emit('delete', campaign);
       :inbox="campaign.inbox"
       :scheduled-at="campaign.scheduled_at"
       :is-live-chat-type="isLiveChatType"
-      @edit="handleEdit(campaign)"
-      @delete="handleDelete(campaign)"
+      :show-stats="enableStats"
+      @edit="() => handleEdit(campaign)"
+      @delete="() => handleDelete(campaign)"
+      @stats="() => handleStats(campaign)"
     />
   </div>
 </template>
