@@ -1,67 +1,77 @@
-# app/services/whatsapp/campaign_csv_whatsapp_service.rb
 # frozen_string_literal: true
 
 require 'csv'
 require 'open-uri'
 
 module Whatsapp
-  # Servicio responsable de:
-  #   • Bajar el CSV de la campaña (original o previamente procesado)
-  #   • Mantenerlo en memoria como CSV::Table para poder editar filas
-  #   • Volcar los cambios en un nuevo CSV y exponer la ruta para que
-  #     el *job* lo suba a S3 (o Active-Storage)
   class CampaignCsvWhatsappService
-    attr_reader :campaign, :rows, :processed_path
+    attr_reader :campaign, :csv_path
 
-    # ------------------------------------------------------------------
-    # INIT
-    # ------------------------------------------------------------------
+    STATUS_HEADERS = %i[status error].freeze
+    RES_KEY_PREFIX = 'csv_row_status'
+
+    # --------------------------------------------------------------
     def initialize(campaign)
       @campaign = campaign
-      @csv_path = download_csv                        # tmp/…csv
-      @rows     = CSV.table(@csv_path, headers: true) # ⇒ CSV::Table
-      ensure_status_columns!
-      Rails.logger.info "📑 Loaded #{@rows.size} CSV rows for campaign #{campaign.id}"
+      @csv_path = download_csv # tmp/…csv
     end
 
-    # ------------------------------------------------------------------
-    # Enviar el template expandido a una fila (wrapper)
-    # ------------------------------------------------------------------
-    def send_row(row, expanded_template)
-      Whatsapp::SendTemplateService.new(
-        phone_number_id: campaign.inbox.phone_number_id,
-        version: ENV.fetch('VITE_FB_GRAPH_API_VERSION', 'v19.0'),
-        to: row[:phone_number],
-        template: expanded_template,
-        token: campaign.inbox.whatsapp_api_key
-      ).perform
+    # --------------------------------------------------------------
+    # Devuelve un array de hashes con los datos necesarios + índice
+    # y omite las filas cuyo status ya es 'sent'; de esta forma, al
+    # reenviar una campaña reutilizando el CSV procesado, sólo
+    # reintentas las que fallaron / las nuevas.
+    # --------------------------------------------------------------
+    def pending_rows
+      out = []
+      CSV.foreach(csv_path, headers: true).with_index do |row, idx|
+        next if row['status'].to_s.downcase == 'sent'
+
+        out << {
+          idx: idx,
+          phone_number: row['phone_number'],
+          first_name: row['first_name'],
+          last_name: row['last_name'],
+          email: row['email']
+        }
+      end
+      out
     end
 
-    # ------------------------------------------------------------------
-    # Volcar el CSV actualizado a disco para que el worker lo suba
-    # – Devuelve la ruta del archivo generado.
-    # ------------------------------------------------------------------
+    # --------------------------------------------------------------
+    # Genera el CSV final mezclando el original + los resultados
+    # salvados en Redis por los workers.
+    # --------------------------------------------------------------
     def flush_csv!
+      redis_key = "#{RES_KEY_PREFIX}:#{campaign.id}"
+      results   = Sidekiq.redis { |r| r.hgetall(redis_key) }
+                         .transform_values { |v| JSON.parse(v) }
+
       tmp = Tempfile.new(["processed_#{campaign.id}_", '.csv'])
       CSV.open(tmp.path, 'w') do |csv|
-        csv << rows.headers
-        rows.each { |r| csv << r }
+        orig = CSV.read(csv_path, headers: true)
+
+        # asegúrate de que existan las columnas EXTRA
+        STATUS_HEADERS.each { |h| orig << CSV::HeaderConverters[h] unless orig.headers.include?(h.to_s) }
+
+        orig.each_with_index do |row, idx|
+          if res = results[idx.to_s]
+            row['status'] = res['status']
+            row['error']  = res['error']
+          end
+          csv << row
+        end
       end
 
-      @processed_path = tmp.path # ← queda disponible para el job
-      attach_to_campaign!(tmp)
+      attach_to_campaign!(tmp) # ActiveStorage / S3
       tmp.path
     ensure
       tmp&.close
     end
 
-    # ------------------------------------------------------------------
+    # --------------------------------------------------------------
     private
 
-    # ------------------------------------------------------------------
-
-    # Baja el CSV original/procesado a un archivo temporal y
-    # devuelve la ruta absoluta.
     def download_csv
       io =
         if campaign.processed_csv.attached?
@@ -81,17 +91,6 @@ module Whatsapp
       io&.close
     end
 
-    def ensure_status_columns!
-      %i[status error].each do |col|
-        next if @rows.headers.include?(col)
-
-        @rows.each { |r| r[col] = nil }
-        @rows.headers << col
-      end
-    end
-
-    # Adjunta el nuevo CSV procesado a la campaña (ActiveStorage)
-    # y guarda el nombre para mostrárselo al usuario.
     def attach_to_campaign!(io)
       campaign.processed_csv.purge if campaign.processed_csv.attached?
 
@@ -100,7 +99,6 @@ module Whatsapp
         filename: File.basename(io.path),
         content_type: 'text/csv'
       )
-
       campaign.update!(processed_csv_filename: File.basename(io.path))
     end
   end
