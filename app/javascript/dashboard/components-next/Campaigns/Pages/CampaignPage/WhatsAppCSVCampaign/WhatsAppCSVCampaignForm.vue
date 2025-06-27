@@ -277,8 +277,8 @@ watch(
 
 /* helper para renderizar texto de preview sin usar regex en template */
 function renderButtonPreview(raw) {
-  if (!raw) return '';
-  return raw.replace(/\{\{\d+\}\}/, '…');
+  // Mostramos el texto tal cual, conservando placeholders ({{1}}, etc.)
+  return raw || '';
 }
 
 /* helpers */
@@ -403,18 +403,19 @@ watch(debugDisabled, val => console.table(val), { immediate: true });
           >
         </div>
 
-        <!-- Preview FOOTER -->
-        <div
-          v-if="footerText"
-          class="rounded-lg border border-n-slate-7 p-3 bg-n-alpha-2"
-        >
+        <!-- Preview FOOTER (título fuera del recuadro) -->
+        <div v-if="footerText">
           <h4 class="text-sm font-semibold text-n-slate-12 mb-2">
             {{ t(`${K}TEMPLATE.FOOTER.HEADER_SECTION`) }}
           </h4>
-          <div class="flex items-start gap-2">
-            <p class="whitespace-pre-line text-sm text-n-slate-11">
-              {{ footerText }}
-            </p>
+          <div
+            class="rounded-lg border border-n-slate-7 p-3 bg-n-alpha-2"
+          >
+            <div class="flex items-start gap-2">
+              <p class="whitespace-pre-line text-sm text-n-slate-11">
+                {{ footerText }}
+              </p>
+            </div>
           </div>
         </div>
 
@@ -545,7 +546,7 @@ watch(debugDisabled, val => console.table(val), { immediate: true });
           >
             <!-- preview del botón -->
             <p class="text-xs text-n-slate-11">
-              {{ t(`${K}TEMPLATE.BUTTONS.PREVIEW_LABEL`) }} {{ idx + 1 }}:
+              {{ `Botón ${btn.type}` }}:
               <span class="font-medium">{{
                 renderButtonPreview(btn.preview)
               }}</span>

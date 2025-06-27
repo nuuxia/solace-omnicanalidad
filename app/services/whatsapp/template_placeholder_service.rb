@@ -7,7 +7,6 @@ module Whatsapp
     attr_reader :template, :body_variables, :button_variables,
                 :contact, :row
 
-    # • row es opcional: solo lo pasan las campañas CSV
     def initialize(template:, body_variables: [], button_variables: [],
                    contact: nil, header_media_url: nil, row: nil)
       @template         = template.deep_dup || {}
@@ -18,6 +17,10 @@ module Whatsapp
       @row              = row || {}
     end
 
+    # ----------------------------------------------------------------
+    # Reemplaza placeholders, adjunta media y sanea estructuras.
+    # Devuelve el hash listo para enviar al Graph API.
+    # ----------------------------------------------------------------
     def perform
       process_placeholders
       attach_header_media if @header_media_url.present?
@@ -26,16 +29,13 @@ module Whatsapp
 
     private
 
-    # ------------------------------------------------------------------
-    # 1) BODY placeholders
-    # ------------------------------------------------------------------
+    # ----------------------------------------------------------------
+    # 1) BODY + BUTTON placeholders
+    # ----------------------------------------------------------------
     def process_placeholders
       body_component = template_components.find { |c| c['type'] == 'BODY' }
       handle_body_placeholders(body_component) if body_component&.dig('text')
 
-      # ----------------------------------------------------------------
-      # 2) BUTTONS placeholders (sin cambios respecto al original)
-      # ----------------------------------------------------------------
       buttons_component = template_components.find { |c| c['type'] == 'BUTTONS' }
       return unless buttons_component && buttons_component['buttons'].present?
 
@@ -48,11 +48,11 @@ module Whatsapp
       end
     end
 
-    # ---------- BODY helpers ---------------------------------------------------
+    # ---------- BODY helpers ----------------------------------------
     def handle_body_placeholders(body_component)
-      placeholders     = body_component['text'].scan(/{{(.*?)}}/)
-      replaced_values  = []
-      var_enum         = body_variables.each
+      placeholders    = body_component['text'].scan(/{{(.*?)}}/)
+      replaced_values = []
+      var_enum        = body_variables.each
 
       placeholders.each do
         var_info = begin
@@ -61,22 +61,18 @@ module Whatsapp
           nil
         end
 
-        # 1. Sin variable -> espacio
         if var_info.nil?
           replaced_values << ' '
           next
         end
 
-        # 2. contact_name especial
         if var_info['sourceType'] == 'contact_name' && contact
           replaced_values << (contact.name.presence || contact.phone_number)
           next
         end
 
-        # 3. valor explícito
         value = var_info['value'].presence
 
-        # 4. Si value vacío, intenta leer columna CSV (solo campañas CSV)
         if value.blank? && row.present? && var_info['sourceType'].present?
           key   = var_info['sourceType']
           value = row[key.to_sym] || row[key.to_s]
@@ -85,43 +81,45 @@ module Whatsapp
         replaced_values << (value.presence || ' ')
       end
 
-      # Sustituir en el texto final
       i = 0
       body_component['text'] = body_component['text'].gsub(/{{(.*?)}}/) do
         replaced_values[i].to_s.tap { i += 1 }
       end
 
-      # Cloud API – params para el cuerpo
       template['_cloudapi_body_params'] = replaced_values
     end
 
-    # ---------- BUTTONS helpers ------------------------------------------------
+    # ---------- BUTTON helpers --------------------------------------
+    # Para URL dinámicas **no** modificamos el campo `url` de la plantilla;
+    # sólo enviamos el parámetro (slug) requerido por la Cloud API.
+    # ----------------------------------------------------------------
     def build_dynamic_button(btn, url_vars, phone_vars, copy_code_vars)
       new_btn = btn.dup
       case new_btn['type']
       when 'URL'
-        if /{{(.*?)}}/.match?(new_btn['url'].to_s)
+        if /{{\d+}}/.match?(new_btn['url'].to_s)
           new_btn['dynamic'] = true
-          var_info = url_vars.shift
-          if var_info&.dig('value').present?
-            new_btn['url']     = new_btn['url'].gsub(/{{(.*?)}}/, var_info['value'])
-            new_btn['example'] = [new_btn['url']]
-          else
-            new_btn['example'] = ['Default URL']
-          end
+          raw_value  = url_vars.shift&.dig('value').to_s
+          slug       = sanitize_slug(raw_value)
+
+          # 👉 El parámetro que envía el worker a la Graph API es "example.first"
+          #    — debe contener **solo** el slug, sin dominio.
+          new_btn['example'] = [slug.presence || 'path']
+          # `url` permanece con el placeholder intacto.
         else
           new_btn['dynamic'] = false
         end
+
       when 'PHONE_NUMBER'
-        if /{{(.*?)}}/.match?(new_btn['phone_number'].to_s)
-          new_btn['dynamic'] = true
-          var_info = phone_vars.shift
-          replacement = var_info&.dig('value').presence || ''
-          new_btn['phone_number'] = new_btn['phone_number'].gsub(/{{(.*?)}}/, replacement)
-          new_btn['example']      = [new_btn['phone_number']] if new_btn['dynamic']
+        if /{{\d+}}/.match?(new_btn['phone_number'].to_s)
+          new_btn['dynamic']   = true
+          replacement          = phone_vars.shift&.dig('value').to_s.presence || ''
+          new_btn['phone_number'] = new_btn['phone_number'].sub(/{{\d+}}/, replacement)
+          new_btn['example']      = [new_btn['phone_number']]
         else
           new_btn['dynamic'] = false
         end
+
       when 'COPY_CODE'
         if new_btn['example'].present?
           new_btn['dynamic'] = true
@@ -132,7 +130,17 @@ module Whatsapp
       new_btn
     end
 
-    # ---------- HEADER helpers -------------------------------------------------
+    # ---------- URL helpers -----------------------------------------
+    def sanitize_slug(val)
+      v = val.to_s.strip.delete_prefix('"').delete_suffix('"')
+      # Si llega una URL completa, quita protocolo + dominio
+      v.sub!(%r{\Ahttps?://[^/]+}i, '')
+      v.squeeze!('/')
+      v.sub!(%r{\A/+}, '')
+      v
+    end
+
+    # ---------- HEADER helpers --------------------------------------
     def attach_header_media
       header_comp = template_components.find { |c| c['type'] == 'HEADER' }
       return unless header_comp
