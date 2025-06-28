@@ -2,6 +2,7 @@
 
 require 'csv'
 require 'open-uri'
+require 'tempfile'
 
 module Whatsapp
   class CampaignCsvWhatsappService
@@ -40,7 +41,8 @@ module Whatsapp
 
     # --------------------------------------------------------------
     # Genera el CSV final mezclando el original + los resultados
-    # salvados en Redis por los workers.
+    # salvados en Redis por los workers, **manteniendo la fila de
+    # encabezados** y añadiendo columnas status/error si no existen.
     # --------------------------------------------------------------
     def flush_csv!
       redis_key = "#{RES_KEY_PREFIX}:#{campaign.id}"
@@ -48,18 +50,26 @@ module Whatsapp
                          .transform_values { |v| JSON.parse(v) }
 
       tmp = Tempfile.new(["processed_#{campaign.id}_", '.csv'])
-      CSV.open(tmp.path, 'w') do |csv|
-        orig = CSV.read(csv_path, headers: true)
 
-        # asegúrate de que existan las columnas EXTRA
-        STATUS_HEADERS.each { |h| orig << CSV::HeaderConverters[h] unless orig.headers.include?(h.to_s) }
+      # Leemos el CSV original con headers
+      orig = CSV.read(csv_path, headers: true)
+
+      # 1️⃣ Encabezados originales + columnas extra
+      headers = orig.headers.map(&:to_s)
+      STATUS_HEADERS.each { |h| headers << h.to_s unless headers.include?(h.to_s) }
+
+      CSV.open(tmp.path, 'w') do |csv|
+        csv << headers # ← fila de encabezados
 
         orig.each_with_index do |row, idx|
-          if res = results[idx.to_s]
-            row['status'] = res['status']
-            row['error']  = res['error']
+          row_hash = row.to_hash
+
+          if (res = results[idx.to_s])
+            row_hash['status'] = res['status']
+            row_hash['error']  = res['error']
           end
-          csv << row
+
+          csv << headers.map { |h| row_hash[h] }
         end
       end
 
