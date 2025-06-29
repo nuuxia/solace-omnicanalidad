@@ -1,4 +1,3 @@
-<!-- WhatsAppCSVCampaignForm.vue -->
 <script setup>
 /* ─────────────────── imports ─────────────────── */
 import { reactive, ref, computed, watch } from 'vue';
@@ -54,6 +53,13 @@ const isPreviewing = computed(() => formState.uiFlags.value.isPreviewing);
 const isPhoneValid = computed(() =>
   /^\+\d{6,15}$/.test(state.phoneNumber.trim())
 );
+
+// Custom validator for no spaces in URL
+const noSpacesInUrl = value => {
+  if (typeof value !== 'string') return true; // Allows non-string values, or handles cases where value might be empty
+  return !/\s/.test(value);
+};
+
 const rules = {
   title: { required, minLength: minLength(1) },
   inboxId: { required },
@@ -127,8 +133,28 @@ const areBodyVarsFilled = computed(() =>
   bodyVariables.every(v => v.sourceType !== 'text' || v.value.trim())
 );
 const areButtonVarsFilled = computed(() =>
-  buttonVariables.every(b => !b.dynamic || b.value.trim())
+  buttonVariables.every(b => {
+    // If it's dynamic and a URL, check for spaces and if it's filled
+    if (b.type === 'URL' && b.dynamic) {
+      return b.value.trim() !== '' && noSpacesInUrl(b.value);
+    }
+    // For other dynamic types, just check if it's filled
+    if (b.dynamic) {
+      return b.value.trim() !== '';
+    }
+    // If not dynamic, it's considered filled
+    return true;
+  })
 );
+
+/* Validation for header media file (if required) */
+const isHeaderMediaFileValid = computed(() => {
+  if (showMediaHeader.value) {
+    return files.headerMediaFile !== null;
+  }
+  return true;
+});
+
 
 /* ─────────────────── disable flags ─────────────────── */
 const isCreateDisabled = computed(
@@ -139,9 +165,9 @@ const isCreateDisabled = computed(
     v$.value.contactsFile.$invalid ||
     v$.value.scheduledAt.$invalid ||
     !areBodyVarsFilled.value ||
-    !areButtonVarsFilled.value ||
+    !areButtonVarsFilled.value || // This now includes the no-spaces check for URL buttons
     !files.contactsFile ||
-    (showMediaHeader.value && !files.headerMediaFile)
+    !isHeaderMediaFileValid.value // Added validation for header media file
 );
 const isPreviewDisabled = computed(
   () =>
@@ -150,8 +176,8 @@ const isPreviewDisabled = computed(
     !state.inboxId ||
     !state.selectedWhatsAppTemplate ||
     !areBodyVarsFilled.value ||
-    !areButtonVarsFilled.value ||
-    (showMediaHeader.value && !files.headerMediaFile)
+    !areButtonVarsFilled.value || // This now includes the no-spaces check for URL buttons
+    !isHeaderMediaFileValid.value // Added validation for header media file
 );
 
 /* ─────────────────── CSV helpers ─────────────────── */
@@ -169,10 +195,15 @@ function handleContactsChange(e) {
     files.contactsFile = null;
     files.contactsFileName = '';
     csvColumns.value = [];
+    v$.value.contactsFile.$touch(); // Trigger validation for contactsFile
     return;
   }
   if (!file.name.toLowerCase().endsWith('.csv')) {
     useAlert(t(`${K}FILE.INVALID_FORMAT`));
+    files.contactsFile = null; // Invalidate the file
+    files.contactsFileName = '';
+    csvColumns.value = [];
+    v$.value.contactsFile.$touch(); // Trigger validation for contactsFile
     return;
   }
 
@@ -188,11 +219,50 @@ function handleContactsChange(e) {
       files.contactsFile = null;
       files.contactsFileName = '';
       csvColumns.value = [];
+      v$.value.contactsFile.$touch(); // Trigger validation for contactsFile
       return;
     }
     csvColumns.value = parsed.meta.fields.filter(Boolean).map(h => h.trim());
+    v$.value.contactsFile.$touch(); // Trigger validation for contactsFile
   };
   reader.readAsText(file);
+}
+/** ----- PREVIEW: armar datos y emitir ----- */
+function handleSendPreview() {
+  // Teléfono
+  if (!isPhoneValid.value) {
+    useAlert(t(`${K}PREVIEW_SECTION.ERROR_PLUS`));
+    return;
+  }
+
+  // Placeholders
+  if (!areBodyVarsFilled.value) {
+    useAlert(t(`${K}TEMPLATE.BODY.ERROR_PLACEHOLDERS`));
+    return;
+  }
+  if (!areButtonVarsFilled.value) {
+    useAlert(t(`${K}TEMPLATE.BUTTONS.ERROR_EMPTY_URL`));
+    return;
+  }
+
+  // Archivo de header (si corresponde)
+  if (showMediaHeader.value && !files.headerMediaFile) {
+    useAlert(t(`${K}TEMPLATE.MEDIA.ERROR_FILE_REQUIRED`));
+    return;
+  }
+
+  /* ---------- datos que necesita el back-end ---------- */
+  const previewData = {
+    inboxId: state.inboxId,
+    phoneNumber: state.phoneNumber.trim(),
+    template:   selectedTemplate.value,
+    headerMediaFile: files.headerMediaFile,
+    bodyVariables,
+    buttonVariables,
+  };
+
+  /* ---------- emitimos al contenedor ---------- */
+  emit('preview', previewData);
 }
 
 /* ─────────────────── header media file ─────────────────── */
@@ -291,14 +361,24 @@ function resetForm() {
   csvColumns.value = [];
   bodyVariables.splice(0);
   buttonVariables.splice(0);
+  v$.value.$reset(); // Reset Vuelidate validation state
 }
 
 async function handleSubmit() {
-  if (!(await v$.value.$validate())) return;
-  if (!areBodyVarsFilled.value)
+  const result = await v$.value.$validate();
+  if (!result) return;
+
+  if (!areBodyVarsFilled.value) {
     return useAlert(t(`${K}TEMPLATE.BODY.ERROR_PLACEHOLDERS`));
-  if (!areButtonVarsFilled.value)
+  }
+
+  if (!areButtonVarsFilled.value) {
     return useAlert(t(`${K}TEMPLATE.BUTTONS.ERROR_EMPTY_URL`));
+  }
+
+  if (showMediaHeader.value && !files.headerMediaFile) {
+    return useAlert(t(`${K}TEMPLATE.MEDIA.ERROR_FILE_REQUIRED`));
+  }
 
   const fd = new FormData();
   fd.append('title', state.title);
@@ -326,15 +406,13 @@ const debugDisabled = computed(() => ({
   bodyVars: !areBodyVarsFilled.value,
   buttonVars: !areButtonVarsFilled.value,
   csvMissing: !files.contactsFile,
-  headerMiss: showMediaHeader.value && !files.headerMediaFile,
+  headerMiss: !isHeaderMediaFileValid.value,
 }));
 
 watch(debugDisabled, val => console.table(val), { immediate: true });
 </script>
-
 <template>
   <div class="overflow-y-auto max-h-[80vh] p-6 space-y-6">
-    <!-- 1. Archivo CSV -->
     <div class="space-y-1">
       <label class="block text-sm font-medium text-n-slate-12">
         {{ t(`${K}FILE.LABEL`) }}
@@ -342,7 +420,8 @@ watch(debugDisabled, val => console.table(val), { immediate: true });
 
       <label
         for="contacts-upload"
-        class="flex items-center justify-center gap-2 px-4 py-2 bg-n-alpha-3 border border-dashed border-n-slate-7 rounded-md text-sm cursor-pointer hover:bg-n-alpha-4"
+        class="flex items-center justify-center gap-2 px-4 py-2 bg-n-alpha-3 border border-dashed rounded-md text-sm cursor-pointer hover:bg-n-alpha-4"
+        :class="v$.contactsFile.$error ? 'border-red-500' : 'border-n-slate-7'"
       >
         <i class="i-lucide-upload w-4 h-4" />
         <span>{{ files.contactsFileName || t(`${K}FILE.CHOOSE`) }}</span>
@@ -360,11 +439,8 @@ watch(debugDisabled, val => console.table(val), { immediate: true });
       </p>
     </div>
 
-    <!-- 2. Grid -->
     <div class="grid gap-6 md:grid-cols-2">
-      <!-- ─────────── IZQUIERDA ─────────── -->
       <div class="space-y-6">
-        <!-- Título -->
         <Input
           v-model="state.title"
           :label="t(`${K}TITLE.LABEL`)"
@@ -373,7 +449,6 @@ watch(debugDisabled, val => console.table(val), { immediate: true });
           :message-type="v$.title.$error ? 'error' : 'info'"
         />
 
-        <!-- Plantilla -->
         <div>
           <label class="block mb-1 text-sm font-medium text-n-slate-12">
             {{ t(`${K}WHATSAPP_TEMPLATE.LABEL`) }}
@@ -388,11 +463,11 @@ watch(debugDisabled, val => console.table(val), { immediate: true });
                 ? t(`${K}WHATSAPP_TEMPLATE.ERROR`)
                 : ''
             "
+            :message-type="v$.selectedWhatsAppTemplate.$error ? 'error' : 'info'"
             :disabled="!state.inboxId"
           />
         </div>
 
-        <!-- Preview HEADER+BODY -->
         <div v-if="templatePreview">
           <p class="mb-1 text-sm font-medium text-n-slate-12">
             {{ t(`${K}TEMPLATE.PREVIEW_TITLE`) }}
@@ -403,7 +478,6 @@ watch(debugDisabled, val => console.table(val), { immediate: true });
           >
         </div>
 
-        <!-- Preview FOOTER (título fuera del recuadro) -->
         <div v-if="footerText">
           <h4 class="text-sm font-semibold text-n-slate-12 mb-2">
             {{ t(`${K}TEMPLATE.FOOTER.HEADER_SECTION`) }}
@@ -419,7 +493,6 @@ watch(debugDisabled, val => console.table(val), { immediate: true });
           </div>
         </div>
 
-        <!-- Variables BODY -->
         <div v-if="bodyVariables.length" class="space-y-3">
           <h4 class="text-sm font-semibold text-n-slate-12">
             {{ t(`${K}TEMPLATE.BODY.HEADER_SECTION`) }}
@@ -427,7 +500,8 @@ watch(debugDisabled, val => console.table(val), { immediate: true });
 
           <div v-for="(v, idx) in bodyVariables" :key="idx">
             <div
-              class="flex items-center gap-2 bg-n-alpha-3 border border-n-slate-8 rounded-md p-3"
+              class="flex items-center gap-2 bg-n-alpha-3 border rounded-md p-3"
+              :class="v.sourceType === 'text' && !v.value.trim() ? 'border-red-500' : 'border-n-slate-8'"
             >
               <span
                 class="w-6 h-6 flex items-center justify-center rounded-full text-xs font-semibold text-n-slate-11 bg-n-solid-3"
@@ -447,14 +521,17 @@ watch(debugDisabled, val => console.table(val), { immediate: true });
               <input
                 v-if="v.sourceType === 'text'"
                 v-model="v.value"
-                class="flex-1 text-sm border border-n-slate-7 rounded px-2 py-1 bg-transparent placeholder-n-slate-11 focus:outline-none"
+                class="flex-1 text-sm border rounded px-2 py-1 bg-transparent placeholder-n-slate-11 focus:outline-none"
+                :class="!v.value.trim() ? 'border-red-500' : 'border-n-slate-7'"
                 :placeholder="t(`${K}TEMPLATE.BODY.VARIABLE_PLACE_HOLDER`)"
               />
             </div>
+             <p v-if="v.sourceType === 'text' && !v.value.trim()" class="text-xs text-red-500 mt-1">
+                {{ t(`${K}TEMPLATE.BODY.ERROR_PLACEHOLDERS_REQUIRED`) }}
+              </p>
           </div>
         </div>
 
-        <!-- Teléfono para preview -->
         <Input
           v-model="state.phoneNumber"
           :label="t(`${K}PREVIEW_SECTION.PHONE_LABEL`)"
@@ -468,9 +545,7 @@ watch(debugDisabled, val => console.table(val), { immediate: true });
         />
       </div>
 
-      <!-- ─────────── DERECHA ─────────── -->
       <div class="space-y-6">
-        <!-- Inbox -->
         <div>
           <label class="block mb-1 text-sm font-medium text-n-slate-12">
             {{ t(`${K}INBOX.LABEL`) }}
@@ -486,17 +561,18 @@ watch(debugDisabled, val => console.table(val), { immediate: true });
             :placeholder="t(`${K}INBOX.PLACEHOLDER`)"
             :has-error="v$.inboxId.$error"
             :message="v$.inboxId.$error ? t(`${K}INBOX.ERROR`) : ''"
+            :message-type="v$.inboxId.$error ? 'error' : 'info'"
           />
         </div>
 
-        <!-- Header media -->
         <div v-if="showMediaHeader" class="space-y-2">
           <h4 class="text-sm font-semibold text-n-slate-12">
             {{ t(`${K}TEMPLATE.MEDIA.HEADER_SECTION`) }}
           </h4>
           <label
             for="header-upload"
-            class="flex items-center justify-center gap-2 px-4 py-2 bg-n-alpha-3 border border-dashed border-n-slate-7 rounded-md text-sm cursor-pointer hover:bg-n-alpha-4"
+            class="flex items-center justify-center gap-2 px-4 py-2 bg-n-alpha-3 border border-dashed rounded-md text-sm cursor-pointer hover:bg-n-alpha-4"
+            :class="!isHeaderMediaFileValid ? 'border-red-500' : 'border-n-slate-7'"
           >
             <i class="i-lucide-upload w-4 h-4" />
             <span>
@@ -519,9 +595,11 @@ watch(debugDisabled, val => console.table(val), { immediate: true });
             :accept="headerAcceptMime(selectedHeader.format)"
             @change="handleHeaderChange"
           />
+          <p v-if="!isHeaderMediaFileValid" class="text-xs text-red-500 mt-1">
+            {{ t(`${K}TEMPLATE.MEDIA.ERROR_FILE_REQUIRED`) }}
+          </p>
         </div>
 
-        <!-- Programación -->
         <Input
           v-model="state.scheduledAt"
           type="datetime-local"
@@ -531,9 +609,10 @@ watch(debugDisabled, val => console.table(val), { immediate: true });
               .slice(0, 16)
           "
           :label="t(`${K}SCHEDULED_AT.LABEL`)"
+          :message="v$.scheduledAt.$error ? t(`${K}SCHEDULED_AT.ERROR`) : ''"
+          :message-type="v$.scheduledAt.$error ? 'error' : 'info'"
         />
 
-        <!-- Variables BOTONES -->
         <div v-if="buttonVariables.length" class="space-y-3">
           <h4 class="text-sm font-semibold text-n-slate-12">
             {{ t(`${K}TEMPLATE.BUTTONS.HEADER_SECTION`) }}
@@ -542,9 +621,9 @@ watch(debugDisabled, val => console.table(val), { immediate: true });
           <div
             v-for="(btn, idx) in buttonVariables"
             :key="idx"
-            class="flex flex-col gap-2 bg-n-alpha-3 border border-n-slate-8 rounded-md p-3"
+            class="flex flex-col gap-2 bg-n-alpha-3 border rounded-md p-3"
+            :class="(btn.dynamic && !btn.value.trim()) || (btn.type === 'URL' && btn.dynamic && !noSpacesInUrl(btn.value)) ? 'border-red-500' : 'border-n-slate-8'"
           >
-            <!-- preview del botón -->
             <p class="text-xs text-n-slate-11">
               {{ `Botón ${btn.type}` }}:
               <span class="font-medium">{{
@@ -552,32 +631,49 @@ watch(debugDisabled, val => console.table(val), { immediate: true });
               }}</span>
             </p>
 
-            <!-- input de variable -->
             <input
               v-model="btn.value"
-              class="border border-n-slate-7 rounded px-2 py-1 text-sm"
+              class="border rounded px-2 py-1 text-sm"
+              :class="(btn.dynamic && !btn.value.trim()) || (btn.type === 'URL' && btn.dynamic && !noSpacesInUrl(btn.value)) ? 'border-red-500' : 'border-n-slate-7'"
               :placeholder="t(`${K}TEMPLATE.BUTTONS.VARIABLE_PLACE_HOLDER`)"
             />
+            <p v-if="btn.dynamic && !btn.value.trim()" class="text-xs text-red-500 mt-1">
+              {{ t(`${K}TEMPLATE.BUTTONS.ERROR_EMPTY_VARIABLE`) }}
+            </p>
+            <p v-if="btn.type === 'URL' && btn.dynamic && !noSpacesInUrl(btn.value)" class="text-xs text-red-500 mt-1">
+              {{ t(`${K}TEMPLATE.BUTTONS.ERROR_URL_NO_SPACES`) }}
+              <span class="font-bold">{{ t(`${K}TEMPLATE.BUTTONS.ERROR_URL_EXAMPLE`) }}</span>
+            </p>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 3. Botones principales -->
     <div class="flex items-center justify-between pt-4">
-      <Button
-        variant="faded"
-        color="slate"
-        :label="t('CAMPAIGN.CSV.WHATSAPP.CREATE.CANCEL_BUTTON_TEXT')"
-        @click="handleCancel"
-      />
+      <div class="flex items-center gap-4">
+        <Button
+          variant="faded"
+          color="slate"
+          :label="t('CAMPAIGN.CSV.WHATSAPP.CREATE.CANCEL_BUTTON_TEXT')"
+          @click="handleCancel"
+        />
+        <a
+          href="/downloads/csv-campaigns-sample.csv"
+          target="_blank"
+          rel="noopener noreferrer"
+          download="csv-campaigns-sample.csv"
+          class="text-woot-300 text-sm underline"
+        >
+          {{ t('CAMPAIGN.CSV.WHATSAPP.CREATE.DOWNLOAD_SAMPLE_CSV') }}
+        </a>
+      </div>
 
       <div class="flex gap-2">
         <Button
           :label="t(`${K}PREVIEW_SECTION.BUTTON_LABEL`)"
           :disabled="isPreviewing || isPreviewDisabled"
           :is-loading="isPreviewing"
-          @click="$emit('preview', {})"
+          @click="handleSendPreview"
         />
         <Button
           :label="t(`${K}BUTTONS.CREATE`)"

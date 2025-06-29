@@ -1,10 +1,10 @@
-<!-- WhatsAppCSVCampaignStatsDialog.vue -->
 <script setup>
 /* ────────────────── imports ────────────────── */
 import { ref, onMounted, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
 import { messageStamp } from 'shared/helpers/timeHelper';
+import { useAlert } from 'dashboard/composables'; // Import useAlert
 
 import Dialog      from 'dashboard/components-next/dialog/Dialog.vue';
 import ProgressBar from 'dashboard/components-next/progress/ProgressBar.vue';
@@ -73,7 +73,7 @@ const templateName  = computed(() => parsedTemplate.value?.name || '');
 const inboxName     = computed(() => props.campaign.inbox?.name || '');
 const scheduledAt   = computed(() =>
   props.campaign.scheduled_at
-    ? messageStamp(props.campaign.scheduled_at, 'MMM d, yyyy h:mm a')
+    ? messageStamp(props.campaign.scheduled_at, 'MMM d, h:mm a')
     : ''
 );
 
@@ -82,14 +82,34 @@ const statusClasses = computed(() =>
   pending.value ? 'text-orange-700 bg-orange-50' : 'text-green-700 bg-green-50'
 );
 
+/* ─────────── Debounce logic for retry button ─────────── */
+const isRetryButtonDisabled = ref(false);
+let retryTimeout = null;
+
 /* ─────────── lifecycle ─────────── */
 onMounted(() => dialogRef.value?.open());
 
 /* ─────────── acciones ─────────── */
 const retryFailed = async () => {
-  if (!failed.value) return;
-  await store.dispatch('campaignsCSVWhatsApp/retryFailed', props.campaign.id);
-  emit('close');
+  if (!failed.value || isRetryButtonDisabled.value) {
+    return;
+  }
+
+  isRetryButtonDisabled.value = true; // Disable the button immediately
+
+  try {
+    await store.dispatch('campaignsCSVWhatsApp/retry', props.campaign.id);
+    useAlert(t('CAMPAIGN.CSV.WHATSAPP.STATS.RETRY_SUCCESS')); // Success alert
+    emit('close'); // Close the dialog on success
+  } catch (error) {
+    console.error('Failed to retry campaign:', error);
+    useAlert(t('CAMPAIGN.CSV.WHATSAPP.STATS.RETRY_ERROR'), 'error'); // Error alert
+  } finally {
+    // Re-enable the button after 3 seconds
+    retryTimeout = setTimeout(() => {
+      isRetryButtonDisabled.value = false;
+    }, 3000);
+  }
 };
 </script>
 
@@ -99,9 +119,7 @@ const retryFailed = async () => {
     :title="t('CAMPAIGN.CSV.WHATSAPP.STATS.TITLE')"
     @close="emit('close')"
   >
-    <!-- contenido -->
     <div class="space-y-6 pt-1">
-      <!-- info básica -->
       <div class="grid gap-1 text-sm text-slate-700">
         <div>
           <span class="font-semibold text-slate-900">
@@ -129,7 +147,6 @@ const retryFailed = async () => {
         </div>
       </div>
 
-      <!-- preview HEADER + BODY -->
       <div v-if="templatePreview" class="space-y-2">
         <p class="text-xs font-semibold text-slate-900">
           {{ t('CAMPAIGN.CSV.WHATSAPP.STATS.PREVIEW') }}
@@ -139,7 +156,6 @@ const retryFailed = async () => {
         >{{ templatePreview }}</pre>
       </div>
 
-      <!-- preview FOOTER -->
       <div v-if="footerText" class="space-y-1">
         <p class="text-xs font-semibold text-slate-900">
           {{ t('CAMPAIGN.CSV.WHATSAPP.STATS.FOOTER') }}
@@ -147,7 +163,6 @@ const retryFailed = async () => {
         <p class="whitespace-pre-line text-sm text-slate-700">{{ footerText }}</p>
       </div>
 
-      <!-- success-rate -->
       <div class="space-y-1">
         <p class="text-xs font-semibold text-slate-900">
           {{ t('CAMPAIGN.CSV.WHATSAPP.STATS.SUCCESS_RATE') }}
@@ -160,21 +175,14 @@ const retryFailed = async () => {
         </div>
       </div>
 
-      <!-- métricas -->
-      <div class="grid grid-cols-3 text-center">
-        <div>
+      <div class="flex justify-center gap-4">
+        <div class="text-center">
           <p class="text-xs text-slate-500">
             {{ t('CAMPAIGN.CSV.WHATSAPP.STATS.SENT') }}
           </p>
           <p class="font-semibold text-slate-800">{{ sent }}</p>
         </div>
-        <div>
-          <p class="text-xs text-slate-500">
-            {{ t('CAMPAIGN.CSV.WHATSAPP.STATS.PENDING') }}
-          </p>
-          <p class="font-semibold text-slate-800">{{ pending }}</p>
-        </div>
-        <div>
+        <div class="text-center">
           <p class="text-xs text-slate-500">
             {{ t('CAMPAIGN.CSV.WHATSAPP.STATS.FAILED') }}
           </p>
@@ -182,7 +190,6 @@ const retryFailed = async () => {
         </div>
       </div>
 
-      <!-- estado -->
       <div class="flex justify-center gap-2 text-sm">
         <span class="font-semibold text-slate-900">
           {{ t('CAMPAIGN.CSV.WHATSAPP.STATS.STATUS') }}:
@@ -200,64 +207,65 @@ const retryFailed = async () => {
       </div>
     </div>
 
-    <!-- footer -->
     <template #footer>
-      <div class="flex flex-wrap gap-2 w-full">
-        <!-- CSV original -->
-        <Button
-          v-if="csvOriginalURL"
-          variant="faded"
-          size="sm"
-          icon="i-lucide-download"
-          @click="downloadCSV(csvOriginalURL)"
-        >
-          {{ t('CAMPAIGN.CSV.WHATSAPP.STATS.DOWNLOAD_ORIGINAL') }}
-        </Button>
+      <div class="flex w-full flex-col gap-4">
+        <div class="flex justify-center gap-2">
+          <Button
+            v-if="csvOriginalURL"
+            variant="faded"
+            size="sm"
+            icon="i-lucide-download"
+            @click="downloadCSV(csvOriginalURL)"
+          >
+            {{ t('CAMPAIGN.CSV.WHATSAPP.STATS.DOWNLOAD_ORIGINAL') }}
+          </Button>
 
-        <!-- CSV enviados -->
-        <Button
-          v-if="csvSentURL"
-          variant="faded"
-          size="sm"
-          icon="i-lucide-download"
-          @click="downloadCSV(csvSentURL)"
-        >
-          {{ t('CAMPAIGN.CSV.WHATSAPP.STATS.DOWNLOAD_SENT') }}
-        </Button>
+          <Button
+            v-if="csvSentURL"
+            variant="faded"
+            size="sm"
+            icon="i-lucide-download"
+            @click="downloadCSV(csvSentURL)"
+          >
+            {{ t('CAMPAIGN.CSV.WHATSAPP.STATS.DOWNLOAD_SENT') }}
+          </Button>
 
-        <!-- CSV errores -->
-        <Button
-          v-if="csvErrorsURL"
-          variant="faded"
-          size="sm"
-          icon="i-lucide-download"
-          @click="downloadCSV(csvErrorsURL)"
-        >
-          {{ t('CAMPAIGN.CSV.WHATSAPP.STATS.DOWNLOAD_ERRORS') }}
-        </Button>
+          <Button
+            v-if="csvErrorsURL"
+            variant="faded"
+            size="sm"
+            icon="i-lucide-download"
+            @click="downloadCSV(csvErrorsURL)"
+          >
+            {{ t('CAMPAIGN.CSV.WHATSAPP.STATS.DOWNLOAD_ERRORS') }}
+          </Button>
+        </div>
 
-        <!-- Reintentar fallidos -->
-        <Button
-          v-if="failed"
-          color="teal"
-          variant="solid"
-          size="sm"
-          icon="i-lucide-repeat"
-          class="ml-auto"
-          @click="retryFailed"
-        >
-          {{ t('CAMPAIGN.CSV.WHATSAPP.STATS.RETRY_BUTTON') }}
-        </Button>
+        <div class="flex w-full justify-between">
+          <div>
+            <Button
+              v-if="failed"
+              color="teal"
+              variant="solid"
+              size="sm"
+              icon="i-lucide-repeat"
+              @click="retryFailed"
+              :disabled="isRetryButtonDisabled" >
+              {{ t('CAMPAIGN.CSV.WHATSAPP.STATS.RETRY_BUTTON') }}
+            </Button>
+          </div>
 
-        <!-- Cerrar -->
-        <Button
-          variant="faded"
-          size="sm"
-          color="slate"
-          @click="emit('close')"
-        >
-          {{ t('CAMPAIGN.CSV.WHATSAPP.CREATE.CANCEL_BUTTON_TEXT') }}
-        </Button>
+          <div>
+            <Button
+              variant="faded"
+              size="sm"
+              color="slate"
+              @click="emit('close')"
+            >
+              {{ t('CAMPAIGN.CSV.WHATSAPP.CREATE.CANCEL_BUTTON_TEXT') }}
+            </Button>
+          </div>
+        </div>
       </div>
     </template>
   </Dialog>

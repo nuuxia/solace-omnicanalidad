@@ -1,5 +1,5 @@
+<!-- WhatsAppCSVCampaignDialog.vue -->
 <script setup>
-import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'dashboard/composables/store';
 import { useAlert, useTrack } from 'dashboard/composables';
@@ -7,33 +7,12 @@ import { CAMPAIGN_TYPES } from 'shared/constants/campaign.js';
 import { CAMPAIGNS_EVENTS } from 'dashboard/helper/AnalyticsHelper/events.js';
 
 import WhatsAppCSVCampaignForm from './WhatsAppCSVCampaignForm.vue';
-import Button from 'dashboard/components-next/button/Button.vue';
 
-const emit = defineEmits(['close']);
+const emit  = defineEmits(['close']);
 const store = useStore();
 const { t } = useI18n();
 
-const isSyncDisabled = ref(false);
-
-/* ───────── sync templates ───────── */
-const handleSync = async () => {
-  if (isSyncDisabled.value) return;
-  isSyncDisabled.value = true;
-
-  try {
-    await store.dispatch('campaignsWhatsApp/syncTemplates');
-    useAlert(t('CAMPAIGN.WHATSAPP.CREATE.FORM.SYNC.SUCCESS_MESSAGE'));
-  } catch (e) {
-    useAlert(
-      e?.response?.message ??
-        t('CAMPAIGN.WHATSAPP.CREATE.FORM.SYNC.ERROR_MESSAGE')
-    );
-  } finally {
-    setTimeout(() => (isSyncDisabled.value = false), 2000);
-  }
-};
-
-/* ───────── create campaign ───────── */
+/* ───────── crear campaña ───────── */
 const createCampaign = async fd => {
   try {
     await store.dispatch('campaignsCSVWhatsApp/create', fd);
@@ -49,6 +28,21 @@ const createCampaign = async fd => {
     );
   }
 };
+
+const handlePreview = async previewData => {
+  try {
+    await store.dispatch('campaignsWhatsApp/preview', previewData);
+    useAlert(
+      t('CAMPAIGN.WHATSAPP.CREATE.FORM.PREVIEW_SECTION.SUCCESS_MESSAGE')
+    );
+  } catch (e) {
+    useAlert(
+      e?.message ||
+        t('CAMPAIGN.WHATSAPP.CREATE.FORM.PREVIEW_SECTION.ERROR_MESSAGE')
+    );
+  }
+};
+
 </script>
 
 <template>
@@ -68,19 +62,7 @@ const createCampaign = async fd => {
         <h2 class="text-lg font-semibold text-n-slate-12">
           {{ t('CAMPAIGN.WHATSAPP.CREATE.TITLE') }}
         </h2>
-
-        <div class="flex gap-2">
-          <Button
-            v-tooltip.right="
-              t('CAMPAIGN.WHATSAPP.CREATE.FORM.SYNC_BUTTON_TOOLTIP')
-            "
-            variant="solid"
-            icon="i-lucide-rotate-ccw"
-            class="bg-woot-500"
-            :disabled="isSyncDisabled"
-            @click="handleSync"
-          />
-        </div>
+        <!-- (ya no hay botón Sync aquí) -->
       </header>
 
       <!-- Body -->
@@ -88,6 +70,7 @@ const createCampaign = async fd => {
         <WhatsAppCSVCampaignForm
           @submit="createCampaign"
           @cancel="emit('close')"
+          @preview="handlePreview"
         />
       </main>
     </section>
