@@ -272,6 +272,7 @@
         "WHATSAPP": {
           "HEADER_TITLE": "Campañas de WhatsApp CSV",
           "NEW_CAMPAIGN": "Crear campaña",
+          "META_TEMPLATES_HINT": "Crea tus propias plantillas de WhatsApp personalizadas para tus campañas",
           "STATS": {
             "TITLE": "Estadísticas de la campaña",
             "TITLE_CAMPAIGN": "Título",
@@ -322,6 +323,7 @@
             "CREATE_BUTTON_TEXT": "Crear",
             "DOWNLOAD_SAMPLE_CSV": "Descargar CSV de ejemplo",
             "FORM": {
+              "MISSING_COLUMNS": "phone_number, status y error son columnas obligatorias en el archivo CSV",
               "TITLE": {
                 "LABEL": "Título",
                 "PLACEHOLDER": "Ingrese el título de la campaña",

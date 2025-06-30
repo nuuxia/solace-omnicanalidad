@@ -1,4 +1,3 @@
-<!-- WhatsAppCSVCampaignsPage.vue -->
 <script setup>
 /**
  * Página principal donde se listan, crean y gestionan campañas CSV-WhatsApp.
@@ -7,9 +6,10 @@ import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
 import { useAlert } from 'dashboard/composables';
+import metaIcon from '../../../../../../../public/assets/images/meta/meta_icon.webp';
 
 import CampaignLayout from 'dashboard/components-next/Campaigns/CampaignLayout.vue';
-import CampaignList   from 'dashboard/components-next/Campaigns/Pages/CampaignPage/CampaignList.vue';
+import CampaignList from 'dashboard/components-next/Campaigns/Pages/CampaignPage/CampaignList.vue';
 
 import WhatsAppCSVCampaignDialog from 'dashboard/components-next/Campaigns/Pages/CampaignPage/WhatsAppCSVCampaign/WhatsAppCSVCampaignDialog.vue';
 
@@ -25,11 +25,11 @@ const store = useStore();
 const { t } = useI18n();
 
 /* dialogs & selection */
-const showWhatsAppCampaignDialog   = ref(false);
-const showStatsDialog              = ref(false);
+const showWhatsAppCampaignDialog = ref(false);
+const showStatsDialog = ref(false);
 const confirmDeleteCampaignDialogRef = ref(null);
-const selectedCampaignToDelete     = ref(null);
-const selectedCampaignForStats     = ref(null);
+const selectedCampaignToDelete = ref(null);
+const selectedCampaignForStats = ref(null);
 
 /* initial fetch */
 store.dispatch('campaignsCSVWhatsApp/get');
@@ -60,7 +60,7 @@ const handleSync = async () => {
 };
 
 /* dialog helpers */
-const openNewDialog  = () => (showWhatsAppCampaignDialog.value = true);
+const openNewDialog = () => (showWhatsAppCampaignDialog.value = true);
 const closeNewDialog = () => (showWhatsAppCampaignDialog.value = false);
 
 /* delete / stats */
@@ -73,7 +73,7 @@ const handleStats = campaign => {
   showStatsDialog.value = true;
 };
 const closeStatsDialog = () => {
-  showStatsDialog.value        = false;
+  showStatsDialog.value = false;
   selectedCampaignForStats.value = null;
   store.dispatch('campaignsCSVWhatsApp/get');
 };
@@ -85,27 +85,32 @@ const closeStatsDialog = () => {
     :button-label="t('CAMPAIGN.CSV.WHATSAPP.NEW_CAMPAIGN')"
     @click="openNewDialog"
   >
-    <!-- ────────────── Acción extra (botón Sync) ────────────── -->
+    <!-- BOTONES ADICIONALES A LA DERECHA DEL BOTÓN PRINCIPAL -->
     <template #action>
-      <Button
-        variant="solid"
-        size="sm"
-        icon="i-lucide-rotate-ccw"
-        class="bg-woot-500 ml-4 flex-none"
-        :disabled="isSyncDisabled"
-        @click="handleSync"
-      >
-        {{ t('CAMPAIGN.CSV.WHATSAPP.SYNC.LABEL') }}
-      </Button>
-
-      <!-- diálogo “Nueva campaña” (se renderiza aquí para compartir slot) -->
-      <WhatsAppCSVCampaignDialog
-        v-if="showWhatsAppCampaignDialog"
-        @close="closeNewDialog"
-      />
+      <div class="flex items-center">
+        <Button
+          variant="solid"
+          size="sm"
+          icon="i-lucide-rotate-ccw"
+          class="bg-woot-500 mr-2 flex-none"
+          :disabled="isSyncDisabled"
+          @click="handleSync"
+        >
+          {{ t('CAMPAIGN.CSV.WHATSAPP.SYNC.LABEL') }}
+        </Button>
+        <a
+          href="https://business.facebook.com/latest/whatsapp_manager/message_templates"
+          target="_blank"
+          rel="noopener noreferrer"
+          :title="t('CAMPAIGN.CSV.WHATSAPP.META_TEMPLATES_HINT')"
+          class="flex items-center ml-2"
+        >
+          <img :src="metaIcon" alt="Meta Icon" class="h-6 w-6" />
+        </a>
+      </div>
     </template>
 
-    <!-- contenido -->
+    <!-- CONTENIDO PRINCIPAL DE TU PÁGINA -->
     <div v-if="isFetching" class="flex items-center justify-center py-10" />
 
     <CampaignList
@@ -123,13 +128,16 @@ const closeStatsDialog = () => {
       class="pt-14"
     />
 
-    <!-- confirmación de borrado -->
     <ConfirmDeleteCampaignWhatsappCSVPDialog
       ref="confirmDeleteCampaignDialogRef"
       :selected-campaign="selectedCampaignToDelete"
     />
 
-    <!-- estadísticas / re-intento / descargas -->
+    <WhatsAppCSVCampaignDialog
+      v-if="showWhatsAppCampaignDialog"
+      @close="closeNewDialog"
+    />
+
     <WhatsAppCSVCampaignStatsDialog
       v-if="showStatsDialog && selectedCampaignForStats"
       :campaign="selectedCampaignForStats"

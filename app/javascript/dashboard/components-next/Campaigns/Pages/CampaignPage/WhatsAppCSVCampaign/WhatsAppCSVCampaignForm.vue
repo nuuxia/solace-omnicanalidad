@@ -155,7 +155,6 @@ const isHeaderMediaFileValid = computed(() => {
   return true;
 });
 
-
 /* ─────────────────── disable flags ─────────────────── */
 const isCreateDisabled = computed(
   () =>
@@ -255,7 +254,7 @@ function handleSendPreview() {
   const previewData = {
     inboxId: state.inboxId,
     phoneNumber: state.phoneNumber.trim(),
-    template:   selectedTemplate.value,
+    template: selectedTemplate.value,
     headerMediaFile: files.headerMediaFile,
     bodyVariables,
     buttonVariables,
@@ -411,6 +410,7 @@ const debugDisabled = computed(() => ({
 
 watch(debugDisabled, val => console.table(val), { immediate: true });
 </script>
+
 <template>
   <div class="overflow-y-auto max-h-[80vh] p-6 space-y-6">
     <div class="space-y-1">
@@ -463,7 +463,9 @@ watch(debugDisabled, val => console.table(val), { immediate: true });
                 ? t(`${K}WHATSAPP_TEMPLATE.ERROR`)
                 : ''
             "
-            :message-type="v$.selectedWhatsAppTemplate.$error ? 'error' : 'info'"
+            :message-type="
+              v$.selectedWhatsAppTemplate.$error ? 'error' : 'info'
+            "
             :disabled="!state.inboxId"
           />
         </div>
@@ -482,9 +484,7 @@ watch(debugDisabled, val => console.table(val), { immediate: true });
           <h4 class="text-sm font-semibold text-n-slate-12 mb-2">
             {{ t(`${K}TEMPLATE.FOOTER.HEADER_SECTION`) }}
           </h4>
-          <div
-            class="rounded-lg border border-n-slate-7 p-3 bg-n-alpha-2"
-          >
+          <div class="rounded-lg border border-n-slate-7 p-3 bg-n-alpha-2">
             <div class="flex items-start gap-2">
               <p class="whitespace-pre-line text-sm text-n-slate-11">
                 {{ footerText }}
@@ -501,7 +501,11 @@ watch(debugDisabled, val => console.table(val), { immediate: true });
           <div v-for="(v, idx) in bodyVariables" :key="idx">
             <div
               class="flex items-center gap-2 bg-n-alpha-3 border rounded-md p-3"
-              :class="v.sourceType === 'text' && !v.value.trim() ? 'border-red-500' : 'border-n-slate-8'"
+              :class="
+                v.sourceType === 'text' && !v.value.trim()
+                  ? 'border-red-500'
+                  : 'border-n-slate-8'
+              "
             >
               <span
                 class="w-6 h-6 flex items-center justify-center rounded-full text-xs font-semibold text-n-slate-11 bg-n-solid-3"
@@ -526,9 +530,12 @@ watch(debugDisabled, val => console.table(val), { immediate: true });
                 :placeholder="t(`${K}TEMPLATE.BODY.VARIABLE_PLACE_HOLDER`)"
               />
             </div>
-             <p v-if="v.sourceType === 'text' && !v.value.trim()" class="text-xs text-red-500 mt-1">
-                {{ t(`${K}TEMPLATE.BODY.ERROR_PLACEHOLDERS_REQUIRED`) }}
-              </p>
+            <p
+              v-if="v.sourceType === 'text' && !v.value.trim()"
+              class="text-xs text-red-500 mt-1"
+            >
+              {{ t(`${K}TEMPLATE.BODY.ERROR_PLACEHOLDERS_REQUIRED`) }}
+            </p>
           </div>
         </div>
 
@@ -572,7 +579,9 @@ watch(debugDisabled, val => console.table(val), { immediate: true });
           <label
             for="header-upload"
             class="flex items-center justify-center gap-2 px-4 py-2 bg-n-alpha-3 border border-dashed rounded-md text-sm cursor-pointer hover:bg-n-alpha-4"
-            :class="!isHeaderMediaFileValid ? 'border-red-500' : 'border-n-slate-7'"
+            :class="
+              !isHeaderMediaFileValid ? 'border-red-500' : 'border-n-slate-7'
+            "
           >
             <i class="i-lucide-upload w-4 h-4" />
             <span>
@@ -622,7 +631,12 @@ watch(debugDisabled, val => console.table(val), { immediate: true });
             v-for="(btn, idx) in buttonVariables"
             :key="idx"
             class="flex flex-col gap-2 bg-n-alpha-3 border rounded-md p-3"
-            :class="(btn.dynamic && !btn.value.trim()) || (btn.type === 'URL' && btn.dynamic && !noSpacesInUrl(btn.value)) ? 'border-red-500' : 'border-n-slate-8'"
+            :class="
+              (btn.dynamic && !btn.value.trim()) ||
+              (btn.type === 'URL' && btn.dynamic && !noSpacesInUrl(btn.value))
+                ? 'border-red-500'
+                : 'border-n-slate-8'
+            "
           >
             <p class="text-xs text-n-slate-11">
               {{ `Botón ${btn.type}` }}:
@@ -634,15 +648,30 @@ watch(debugDisabled, val => console.table(val), { immediate: true });
             <input
               v-model="btn.value"
               class="border rounded px-2 py-1 text-sm"
-              :class="(btn.dynamic && !btn.value.trim()) || (btn.type === 'URL' && btn.dynamic && !noSpacesInUrl(btn.value)) ? 'border-red-500' : 'border-n-slate-7'"
+              :class="
+                (btn.dynamic && !btn.value.trim()) ||
+                (btn.type === 'URL' && btn.dynamic && !noSpacesInUrl(btn.value))
+                  ? 'border-red-500'
+                  : 'border-n-slate-7'
+              "
               :placeholder="t(`${K}TEMPLATE.BUTTONS.VARIABLE_PLACE_HOLDER`)"
             />
-            <p v-if="btn.dynamic && !btn.value.trim()" class="text-xs text-red-500 mt-1">
+            <p
+              v-if="btn.dynamic && !btn.value.trim()"
+              class="text-xs text-red-500 mt-1"
+            >
               {{ t(`${K}TEMPLATE.BUTTONS.ERROR_EMPTY_VARIABLE`) }}
             </p>
-            <p v-if="btn.type === 'URL' && btn.dynamic && !noSpacesInUrl(btn.value)" class="text-xs text-red-500 mt-1">
+            <p
+              v-if="
+                btn.type === 'URL' && btn.dynamic && !noSpacesInUrl(btn.value)
+              "
+              class="text-xs text-red-500 mt-1"
+            >
               {{ t(`${K}TEMPLATE.BUTTONS.ERROR_URL_NO_SPACES`) }}
-              <span class="font-bold">{{ t(`${K}TEMPLATE.BUTTONS.ERROR_URL_EXAMPLE`) }}</span>
+              <span class="font-bold">{{
+                t(`${K}TEMPLATE.BUTTONS.ERROR_URL_EXAMPLE`)
+              }}</span>
             </p>
           </div>
         </div>

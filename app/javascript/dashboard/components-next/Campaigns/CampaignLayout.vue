@@ -29,7 +29,7 @@ const handleButtonClick = () => {
           </span>
           <div
             v-on-clickaway="() => emit('close')"
-            class="relative group/campaign-button"
+            class="flex items-center gap-2 group/campaign-button"
           >
             <Button
               :label="buttonLabel"

@@ -5,7 +5,7 @@ import { useMessageFormatter } from 'shared/composables/useMessageFormatter';
 import { getInboxIconByType } from 'dashboard/helper/inbox';
 
 // IMPORTS DE COMPONENTES
-import Tag         from 'dashboard/components-next/tag/Tag.vue';
+import { getCampaignStatusLabel } from 'dashboard/helper/campaignStatus.js';
 import CardLayout from 'dashboard/components-next/CardLayout.vue';
 import Button from 'dashboard/components-next/button/Button.vue';
 import LiveChatCampaignDetails from './LiveChatCampaignDetails.vue';
@@ -60,6 +60,9 @@ const emit = defineEmits(['edit', 'delete', 'stats']);
 const { t } = useI18n();
 const STATUS_COMPLETED = 'completed';
 const { formatMessage } = useMessageFormatter();
+const campaignStatusLabel = computed(() =>
+  getCampaignStatusLabel(props, t)
+);
 
 // COMPUTED O UTILIDADES
 const isActive = computed(() =>
@@ -163,7 +166,7 @@ const displayContent = computed(() => {
           class="text-xs font-medium inline-flex items-center h-6 px-2 py-0.5 rounded-md bg-n-alpha-2"
           :class="statusTextColor"
         >
-          {{ campaignStatus }}
+        {{ campaignStatusLabel }}
         </span>
       </div>
 
