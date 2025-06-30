@@ -102,7 +102,15 @@ Rails.application.routes.draw do
           resources :campaigns, only: [:index, :create, :show, :update, :destroy]
           resources :campaigns_whatsapp, only: [:index, :show, :create, :update, :destroy] do
             collection do
-               post :preview, to: 'campaigns_whatsapp_preview#create'
+              post :preview, to: 'campaigns_whatsapp_preview#create'
+            end
+          end
+          resources :campaigns_csv_whatsapp, only: [:index, :show, :create, :update, :destroy] do
+            collection { post :preview, to: 'campaigns_csv_whatsapp_preview#create' }
+            member do
+              get  :stats     # /campaigns_csv_whatsapp/:id/stats
+              post :retry     # /campaigns_csv_whatsapp/:id/retry
+              get  :download  # /campaigns_csv_whatsapp/:id/download?type=sent|errors|all
             end
           end
           resources :dashboard_apps, only: [:index, :show, :create, :update, :destroy]

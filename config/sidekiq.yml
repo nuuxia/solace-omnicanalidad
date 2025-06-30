@@ -19,6 +19,8 @@
   - high
   - whatsapp_messages
   - whatsapp_campaigns
+  - whatsapp_csv_messages
+  - whatsapp_csv_campaigns
   - medium
   - default
   - mailers

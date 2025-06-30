@@ -53,7 +53,7 @@ class CampaignsWhatsapp < ApplicationRecord
   # body_variables y button_variables se almacenan como JSON (añadidas por la migración)
 
   def send_messages
-    raise "Invalid Campaign" unless inbox&.inbox_type == 'Whatsapp'
+    raise 'Invalid Campaign' unless inbox&.inbox_type == 'Whatsapp'
 
     if scheduled_at&.future?
       WhatsappCampaignJob.perform_in(scheduled_at - Time.current, id)

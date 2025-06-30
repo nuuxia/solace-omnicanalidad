@@ -10,11 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_05_20_190444) do
+ActiveRecord::Schema[7.0].define(version: 202506201021076) do
   # These extensions should be enabled to support this database
-  enable_extension "pg_stat_statements"
-  enable_extension "pg_trgm"
-  enable_extension "pgcrypto"
   enable_extension "plpgsql"
   enable_extension "vector"
 
@@ -249,6 +246,38 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_20_190444) do
     t.index ["campaign_type"], name: "index_campaigns_on_campaign_type"
     t.index ["inbox_id"], name: "index_campaigns_on_inbox_id"
     t.index ["scheduled_at"], name: "index_campaigns_on_scheduled_at"
+  end
+
+  create_table "campaigns_csv_whatsapp", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.bigint "inbox_id", null: false
+    t.bigint "sender_id"
+    t.string "title", null: false
+    t.jsonb "template", default: {}
+    t.jsonb "body_variables", default: []
+    t.jsonb "button_variables", default: []
+    t.jsonb "audience", default: []
+    t.boolean "enabled", default: true
+    t.datetime "scheduled_at"
+    t.integer "campaign_status", default: 0
+    t.integer "messages_total", default: 0
+    t.integer "messages_sent", default: 0
+    t.integer "messages_failed", default: 0
+    t.string "original_csv_filename"
+    t.string "processed_csv_filename"
+    t.text "csv_original_url"
+    t.text "csv_sent_url"
+    t.text "csv_errors_url"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_campaigns_csv_whatsapp_on_account_id"
+    t.index ["body_variables"], name: "index_campaigns_csv_whatsapp_on_body_variables", using: :gin
+    t.index ["button_variables"], name: "index_campaigns_csv_whatsapp_on_button_variables", using: :gin
+    t.index ["campaign_status"], name: "index_campaigns_csv_whatsapp_on_campaign_status"
+    t.index ["inbox_id"], name: "index_campaigns_csv_whatsapp_on_inbox_id"
+    t.index ["scheduled_at"], name: "index_campaigns_csv_whatsapp_on_scheduled_at"
+    t.index ["sender_id"], name: "index_campaigns_csv_whatsapp_on_sender_id"
+    t.index ["template"], name: "index_campaigns_csv_whatsapp_on_template", using: :gin
   end
 
   create_table "campaigns_whatsapp", force: :cascade do |t|
@@ -532,15 +561,6 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_20_190444) do
     t.index ["phone_number"], name: "index_channel_whatsapp_on_phone_number", unique: true
   end
 
-  create_table "companies", force: :cascade do |t|
-    t.string "name", null: false
-    t.bigint "account_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["account_id", "name"], name: "index_companies_on_account_id_and_name", unique: true
-    t.index ["account_id"], name: "index_companies_on_account_id"
-  end
-
   create_table "contact_inboxes", force: :cascade do |t|
     t.bigint "contact_id"
     t.bigint "inbox_id"
@@ -561,8 +581,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_20_190444) do
     t.string "email"
     t.string "phone_number"
     t.integer "account_id", null: false
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "created_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.jsonb "additional_attributes", default: {}
     t.string "identifier"
     t.jsonb "custom_attributes", default: {}
@@ -573,17 +593,17 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_20_190444) do
     t.string "location", default: ""
     t.string "country_code", default: ""
     t.boolean "blocked", default: false, null: false
-    t.bigint "company_id"
+    t.string "name;email;identifier;phone_number;account_id", limit: 128
+    t.string "name;email;phone_number;account_id", limit: 128
+    t.string "name;email;phone_number;account_id;created_at", limit: 128
     t.index "lower((email)::text), account_id", name: "index_contacts_on_lower_email_account_id"
     t.index ["account_id", "email", "phone_number", "identifier"], name: "index_contacts_on_nonempty_fields", where: "(((email)::text <> ''::text) OR ((phone_number)::text <> ''::text) OR ((identifier)::text <> ''::text))"
     t.index ["account_id", "last_activity_at"], name: "index_contacts_on_account_id_and_last_activity_at", order: { last_activity_at: "DESC NULLS LAST" }
     t.index ["account_id"], name: "index_contacts_on_account_id"
     t.index ["account_id"], name: "index_resolved_contact_account_id", where: "(((email)::text <> ''::text) OR ((phone_number)::text <> ''::text) OR ((identifier)::text <> ''::text))"
     t.index ["blocked"], name: "index_contacts_on_blocked"
-    t.index ["company_id"], name: "index_contacts_on_company_id"
     t.index ["email", "account_id"], name: "uniq_email_per_account_contact", unique: true
     t.index ["identifier", "account_id"], name: "uniq_identifier_per_account_contact", unique: true
-    t.index ["name", "email", "phone_number", "identifier"], name: "index_contacts_on_name_email_phone_number_identifier", opclass: :gin_trgm_ops, using: :gin
     t.index ["phone_number", "account_id"], name: "index_contacts_on_phone_number_and_account_id"
   end
 
@@ -597,6 +617,15 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_20_190444) do
     t.index ["conversation_id"], name: "index_conversation_participants_on_conversation_id"
     t.index ["user_id", "conversation_id"], name: "index_conversation_participants_on_user_id_and_conversation_id", unique: true
     t.index ["user_id"], name: "index_conversation_participants_on_user_id"
+  end
+
+  create_table "conversation_thread_records", force: :cascade do |t|
+    t.bigint "conversation_id", null: false
+    t.string "thread_id"
+    t.string "assistant_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["conversation_id"], name: "index_conversation_thread_records_on_conversation_id"
   end
 
   create_table "conversations", id: :serial, force: :cascade do |t|
@@ -797,6 +826,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_20_190444) do
     t.bigint "portal_id"
     t.integer "sender_name_type", default: 0, null: false
     t.string "business_name"
+    t.string "assistantid"
     t.boolean "offline_response", default: false, null: false
     t.boolean "mercado_libre_pre_sale_questions", default: true, null: false
     t.boolean "mercado_libre_post_sale_messages", default: true, null: false
@@ -889,7 +919,6 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_20_190444) do
     t.index ["account_id", "created_at", "message_type"], name: "index_messages_on_account_created_type"
     t.index ["account_id", "inbox_id"], name: "index_messages_on_account_id_and_inbox_id"
     t.index ["account_id"], name: "index_messages_on_account_id"
-    t.index ["content"], name: "index_messages_on_content", opclass: :gin_trgm_ops, using: :gin
     t.index ["conversation_id", "account_id", "message_type", "created_at"], name: "index_messages_on_conversation_account_type_created"
     t.index ["conversation_id"], name: "index_messages_on_conversation_id"
     t.index ["created_at"], name: "index_messages_on_created_at"
@@ -1078,7 +1107,6 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_20_190444) do
   create_table "tags", id: :serial, force: :cascade do |t|
     t.string "name"
     t.integer "taggings_count", default: 0
-    t.index "lower((name)::text) gin_trgm_ops", name: "tags_name_trgm_idx", using: :gin
     t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
@@ -1174,12 +1202,14 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_20_190444) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "campaigns_csv_whatsapp", "accounts"
+  add_foreign_key "campaigns_csv_whatsapp", "inboxes"
+  add_foreign_key "campaigns_csv_whatsapp", "users", column: "sender_id"
   add_foreign_key "campaigns_whatsapp", "accounts"
   add_foreign_key "campaigns_whatsapp", "inboxes"
   add_foreign_key "channel_mercado_libres", "accounts"
   add_foreign_key "channel_tik_tok", "accounts"
-  add_foreign_key "companies", "accounts"
-  add_foreign_key "contacts", "companies"
+  add_foreign_key "conversation_thread_records", "conversations"
   add_foreign_key "inboxes", "portals"
   create_trigger("accounts_after_insert_row_tr", :generated => true, :compatibility => 1).
       on("accounts").

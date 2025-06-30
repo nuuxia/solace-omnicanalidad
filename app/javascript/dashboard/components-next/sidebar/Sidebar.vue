@@ -330,6 +330,11 @@ const menuItems = computed(() => {
           label: t('SIDEBAR.WHATSAPP'),
           to: accountScopedRoute('campaigns_whatsapp_index'),
         },
+        {
+          name: 'CSVWhatsApp',
+          label: t('SIDEBAR.CSV_WHATSAPP'),
+          to: accountScopedRoute('campaigns_csv_whatsapp_index'),
+        },
       ],
     },
     {
@@ -383,7 +388,9 @@ const menuItems = computed(() => {
       name: 'Arrows Support',
       label: t('SIDEBAR.ARROWS_SUPPORT'),
       icon: 'i-lucide-message-square',
-      to: accountScopedRoute('https://wa.me/+59896218240?text=Hola,%20necesito%20soporte%20de%20Arrows'),
+      to: accountScopedRoute(
+        'https://wa.me/+59896218240?text=Hola,%20necesito%20soporte%20de%20Arrows'
+      ),
       permissions: ['administrator'],
     },
     {

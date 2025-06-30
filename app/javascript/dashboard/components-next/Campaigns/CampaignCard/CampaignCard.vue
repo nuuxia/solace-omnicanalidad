@@ -5,6 +5,7 @@ import { useMessageFormatter } from 'shared/composables/useMessageFormatter';
 import { getInboxIconByType } from 'dashboard/helper/inbox';
 
 // IMPORTS DE COMPONENTES
+import { getCampaignStatusLabel } from 'dashboard/helper/campaignStatus.js';
 import CardLayout from 'dashboard/components-next/CardLayout.vue';
 import Button from 'dashboard/components-next/button/Button.vue';
 import LiveChatCampaignDetails from './LiveChatCampaignDetails.vue';
@@ -49,15 +50,19 @@ const props = defineProps({
     type: Number,
     default: 0,
   },
+  showStats: { type: Boolean, default: false },
 });
 
 // EMITS
-const emit = defineEmits(['edit', 'delete']);
+const emit = defineEmits(['edit', 'delete', 'stats']);
 
 // CONSTANTES
 const { t } = useI18n();
 const STATUS_COMPLETED = 'completed';
 const { formatMessage } = useMessageFormatter();
+const campaignStatusLabel = computed(() =>
+  getCampaignStatusLabel(props, t)
+);
 
 // COMPUTED O UTILIDADES
 const isActive = computed(() =>
@@ -161,7 +166,7 @@ const displayContent = computed(() => {
           class="text-xs font-medium inline-flex items-center h-6 px-2 py-0.5 rounded-md bg-n-alpha-2"
           :class="statusTextColor"
         >
-          {{ campaignStatus }}
+        {{ campaignStatusLabel }}
         </span>
       </div>
 
@@ -207,6 +212,14 @@ const displayContent = computed(() => {
         color="slate"
         icon="i-lucide-sliders-vertical"
         @click="emit('edit')"
+      />
+      <Button
+        v-if="showStats"
+        variant="faded"
+        size="sm"
+        color="slate"
+        icon="i-lucide-bar-chart-2"
+        @click="emit('stats')"
       />
       <Button
         variant="faded"

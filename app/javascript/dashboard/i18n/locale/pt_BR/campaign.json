@@ -79,6 +79,7 @@
         }
       }
     },
+
     "WHATSAPP": {
       "HEADER_TITLE": "Campanhas do WhatsApp",
       "NEW_CAMPAIGN": "Criar campanha",
@@ -157,7 +158,7 @@
           "TEMPLATE": {
             "FILE": "Arquivo: ",
             "MEDIA": {
-              "HEADER_SECTION": "Selecionar meio para o cabeçalho do modelo",
+              "HEADER_SECTION": "Selecionar mídia para o cabeçalho do modelo",
               "UPLOAD_DOCUMENT": "Enviar um documento .PDF",
               "UPLOAD_IMAGE": "Enviar uma imagem .jpg ou .png",
               "UPLOAD_VIDEO": "Enviar um vídeo .mp4"
@@ -176,7 +177,7 @@
             }
           },
           "": {
-            "HEADER_SECTION": "Selecionar meio para o modelo",
+            "HEADER_SECTION": "Selecionar mídia para o modelo",
             "UPLOAD_DOCUMENT": "Enviar um documento .PDF",
             "UPLOAD_IMAGE": "Enviar uma imagem .jpg ou .png",
             "UPLOAD_VIDEO": "Enviar um vídeo .mp4"
@@ -208,6 +209,7 @@
         }
       }
     },
+
     "SMS": {
       "HEADER_TITLE": "Campanhas de SMS",
       "NEW_CAMPAIGN": "Criar campanha",
@@ -217,7 +219,7 @@
       },
       "CARD": {
         "STATUS": {
-          "COMPLETED": "Concluído",
+          "COMPLETED": "Concluída",
           "SCHEDULED": "Agendada"
         },
         "CAMPAIGN_DETAILS": {
@@ -247,12 +249,12 @@
           },
           "AUDIENCE": {
             "LABEL": "Público",
-            "PLACEHOLDER": "Selecione os marcadores dos clientes",
+            "PLACEHOLDER": "Selecione as etiquetas personalizadas",
             "ERROR": "Público é obrigatório"
           },
           "SCHEDULED_AT": {
             "LABEL": "Horário agendado",
-            "PLACEHOLDER": "Por favor, insira o horário",
+            "PLACEHOLDER": "Por favor, selecione o horário",
             "ERROR": "Horário agendado é obrigatório"
           },
           "BUTTONS": {
@@ -266,9 +268,159 @@
         }
       }
     },
+
+    "CSV": {
+      "WHATSAPP": {
+        "HEADER_TITLE": "Campanhas CSV do WhatsApp",
+        "NEW_CAMPAIGN": "Criar campanha",
+        "META_TEMPLATES_HINT": "Crie seus próprios modelos personalizados do WhatsApp para suas campanhas.",
+        "STATS": {
+          "TITLE": "Estatísticas da campanha",
+          "TITLE_CAMPAIGN": "Título",
+          "SENT": "Enviados",
+          "PENDING": "Pendentes",
+          "FAILED": "Falhou",
+          "RETRY_BUTTON": "Tentar novamente os falhados",
+          "DOWNLOAD_ORIGINAL": "Baixar CSV original",
+          "DOWNLOAD_SENT": "Baixar CSV enviados",
+          "DOWNLOAD_ERRORS": "Baixar CSV de erros",
+          "DOWNLOAD_STATUS": "Baixar CSV de status",
+          "STATUS": "Status",
+          "PREVIEW": "Pré-visualização do modelo",
+          "FOOTER": "Rodapé",
+          "TEMPLATE_NAME": "Nome do modelo",
+          "INBOX": "Caixa de entrada",
+          "SCHEDULED_AT": "Data de envio",
+          "SUCCESS_RATE": "Taxa de sucesso",
+          "RETRY_SUCCESS": "Reinício da campanha realizado com sucesso",
+          "RETRY_ERROR": "Erro ao reiniciar a campanha. Tente novamente"
+        },
+        "SYNC": {
+          "LABEL": "Sincronizar Modelos META",
+          "SUCCESS": "Modelos sincronizados com sucesso",
+          "ERROR": "Não foi possível sincronizar os modelos"
+        },
+        "CARD": {
+          "STATUS": {
+            "ENABLED": "Habilitado",
+            "DISABLED": "Desabilitado"
+          },
+          "CAMPAIGN_DETAILS": {
+            "SENT_BY": "Enviado por",
+            "BOT": "Bot",
+            "FROM": "de",
+            "ON": "em",
+            "SENT_FROM": "Enviado de",
+            "URL": "URL:"
+          }
+        },
+        "EMPTY_STATE": {
+          "TITLE": "Nenhuma campanha CSV do WhatsApp disponível",
+          "SUBTITLE": "Crie campanhas do WhatsApp enviando um arquivo CSV com seus contatos. Clique em 'Criar campanha' para começar."
+        },
+        "CREATE": {
+          "TITLE": "Criar campanha CSV do WhatsApp",
+          "CANCEL_BUTTON_TEXT": "Cancelar",
+          "CREATE_BUTTON_TEXT": "Criar",
+          "DOWNLOAD_SAMPLE_CSV": "Download a CSV example",
+          "FORM": {
+            "MISSING_COLUMNS": "phone_number, status e error são colunas obrigatórias no arquivo CSV",
+            "TITLE": {
+              "LABEL": "Título",
+              "PLACEHOLDER": "Insira o título da campanha",
+              "ERROR": "Título é obrigatório",
+              "DOWNLOAD_SAMPLE_CSV": "Baixar um exemplo de CSV"
+            },
+            "INBOX": {
+              "LABEL": "Selecionar caixa de entrada",
+              "PLACEHOLDER": "Selecionar caixa de entrada",
+              "ERROR": "Caixa de entrada obrigatória"
+            },
+            "WHATSAPP_TEMPLATE": {
+              "LABEL": "Selecione um modelo do WhatsApp",
+              "PLACEHOLDER": "Selecionar modelo",
+              "ERROR": "Um modelo do WhatsApp é obrigatório"
+            },
+            "FILE": {
+              "LABEL": "Arquivo CSV",
+              "CHOOSE": "Selecionar arquivo",
+              "ERROR": "Um arquivo CSV é obrigatório.",
+              "INVALID_FORMAT": "Formato inválido. Apenas .csv",
+              "MISSING_COLUMNS": "As seguintes colunas obrigatórias estão faltando: {cols}"
+            },
+            "SCHEDULED_AT": {
+              "LABEL": "Horário programado",
+              "PLACEHOLDER": "Selecione a data e hora",
+              "ERROR": "Horário programado é obrigatório."
+            },
+            "PREVIEW_SECTION": {
+              "TITLE": "Enviar pré-visualização do WhatsApp",
+              "PHONE_LABEL": "Número para receber pré-visualização",
+              "PLACEHOLDER": "+55...",
+              "ERROR_PLUS": "Digite um número válido com '+', sem espaços",
+              "BUTTON_LABEL": "Enviar pré-visualização",
+              "LOADING_LABEL": "Enviando…",
+              "SUCCESS_MESSAGE": "Pré-visualização enviada com sucesso",
+              "ERROR_MESSAGE": "Erro ao enviar a pré-visualização",
+              "TOOL_TIP": "Selecione uma caixa de entrada e um modelo antes de enviar"
+            },
+            "TEMPLATE": {
+              "FOOTER": {
+                "HEADER_SECTION": "Rodapé"
+              },
+              "HEADER": {
+                "HEADER_SECTION": "Cabeçalho"
+              },
+              "PREVIEW_TITLE": "Pré-visualização do modelo:",
+              "MEDIA": {
+                "HEADER_SECTION": "Selecionar mídia do cabeçalho",
+                "UPLOAD_DOCUMENT": "Enviar documento .pdf",
+                "UPLOAD_IMAGE": "Enviar imagem .jpg ou .png",
+                "UPLOAD_VIDEO": "Enviar vídeo .mp4",
+                "ERROR_FILE_REQUIRED": "Um arquivo de mídia para o cabeçalho é obrigatório."
+              },
+              "BODY": {
+                "HEADER_SECTION": "Variáveis do corpo",
+                "VARIABLE_TITLE": "Variável",
+                "VARIABLE_PLACE_HOLDER": "Insira sua variável aqui",
+                "CONTACT_NAME": "Nome do contato",
+                "FREE_TEXT": "Texto",
+                "ERROR_PLACEHOLDERS": "Preencha todas as variáveis do corpo.",
+                "ERROR_PLACEHOLDERS_REQUIRED": "Esta variável do corpo é obrigatória."
+              },
+              "BUTTONS": {
+                "HEADER_SECTION": "Variáveis dos botões",
+                "VARIABLE_TITLE": "Variável",
+                "VARIABLE_PLACE_HOLDER": "Insira sua variável aqui",
+                "ERROR_EMPTY_URL": "Os botões dinâmicos não podem ficar vazios.",
+                "ERROR_EMPTY_VARIABLE": "Esta variável é obrigatória.",
+                "ERROR_URL_NO_SPACES": "A URL não pode conter espaços.",
+                "ERROR_URL_EXAMPLE": "Ex: https://exemplo.com/pagina",
+                "PREVIEW_LABEL": "Pré-visualização do botão"
+              }
+            },
+            "BUTTONS": {
+              "CREATE": "Criar",
+              "CANCEL": "Cancelar"
+            },
+            "API": {
+              "SUCCESS_MESSAGE": "Campanha criada com sucesso",
+              "ERROR_MESSAGE": "Ocorreu um erro. Tente novamente."
+            },
+            "SYNC": {
+              "SUCCESS_MESSAGE": "Modelos sincronizados com sucesso",
+              "ERROR_MESSAGE": "Erro ao sincronizar os modelos"
+            },
+            "SYNC_BUTTON_LABEL": "Sincronizar",
+            "SYNC_BUTTON_TOOLTIP": "Sincronizar modelos"
+          }
+        }
+      }
+    },
+
     "CONFIRM_DELETE": {
       "TITLE": "Você tem certeza que deseja excluir?",
-      "DESCRIPTION": "A ação de excluir é permanente e não pode ser desfeita.",
+      "DESCRIPTION": "A ação de exclusão é permanente e não pode ser desfeita.",
       "CONFIRM": "Excluir",
       "API": {
         "SUCCESS_MESSAGE": "Campanha excluída com sucesso",

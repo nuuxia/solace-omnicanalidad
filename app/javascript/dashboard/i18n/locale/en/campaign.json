@@ -26,12 +26,12 @@
         "FORM": {
           "TITLE": {
             "LABEL": "Title",
-            "PLACEHOLDER": "Please enter the title of campaign",
+            "PLACEHOLDER": "Please enter a title for the campaign",
             "ERROR": "Title is required"
           },
           "MESSAGE": {
             "LABEL": "Message",
-            "PLACEHOLDER": "Please enter the message of campaign",
+            "PLACEHOLDER": "Please enter the message for the campaign",
             "ERROR": "Message is required"
           },
           "INBOX": {
@@ -41,7 +41,7 @@
           },
           "SENT_BY": {
             "LABEL": "Sent by",
-            "PLACEHOLDER": "Please select sender",
+            "PLACEHOLDER": "Please select the sender",
             "ERROR": "Sender is required"
           },
           "END_POINT": {
@@ -50,7 +50,7 @@
             "ERROR": "Please enter a valid URL"
           },
           "TIME_ON_PAGE": {
-            "LABEL": "Time on page(Seconds)",
+            "LABEL": "Time on page (seconds)",
             "PLACEHOLDER": "Please enter the time",
             "ERROR": "Time on page is required"
           },
@@ -79,6 +79,7 @@
         }
       }
     },
+
     "WHATSAPP": {
       "HEADER_TITLE": "WhatsApp campaigns",
       "NEW_CAMPAIGN": "Create campaign",
@@ -117,7 +118,7 @@
           },
           "MESSAGE": {
             "LABEL": "Message",
-            "PLACEHOLDER": "Please enter the message of campaign",
+            "PLACEHOLDER": "Please enter the message for the campaign",
             "ERROR": "Message is required"
           },
           "INBOX": {
@@ -139,7 +140,7 @@
             "TITLE": "Send WhatsApp Preview",
             "PHONE_LABEL": "Enter a phone number to receive the preview",
             "PLACEHOLDER": "Enter phone number",
-            "ERROR": "Please provide a valid phone number starting with\na `+` sign. No spaces allowed",
+            "ERROR": "Please provide a valid phone number starting with a `+` sign. No spaces allowed",
             "BUTTON_LABEL": "Send template preview",
             "LOADING_LABEL": "Sending...",
             "SUCCESS_MESSAGE": "Preview sent successfully",
@@ -159,7 +160,7 @@
             "MEDIA": {
               "HEADER_SECTION": "Select header template media",
               "UPLOAD_DOCUMENT": "Upload a document .PDF",
-              "UPLOAD_IMAGE": "Upload a image .jpg or .png",
+              "UPLOAD_IMAGE": "Upload an image .jpg or .png",
               "UPLOAD_VIDEO": "Upload a video .mp4"
             },
             "BODY": {
@@ -178,7 +179,7 @@
           "": {
             "HEADER_SECTION": "Select media template",
             "UPLOAD_DOCUMENT": "Upload a document .PDF",
-            "UPLOAD_IMAGE": "Upload a image .jpg or .png",
+            "UPLOAD_IMAGE": "Upload an image .jpg or .png",
             "UPLOAD_VIDEO": "Upload a video .mp4"
           },
           "SYNC": {
@@ -208,6 +209,7 @@
         }
       }
     },
+
     "SMS": {
       "HEADER_TITLE": "SMS campaigns",
       "NEW_CAMPAIGN": "Create campaign",
@@ -232,12 +234,12 @@
         "FORM": {
           "TITLE": {
             "LABEL": "Title",
-            "PLACEHOLDER": "Please enter the title of campaign",
+            "PLACEHOLDER": "Please enter a title for the campaign",
             "ERROR": "Title is required"
           },
           "MESSAGE": {
             "LABEL": "Message",
-            "PLACEHOLDER": "Please enter the message of campaign",
+            "PLACEHOLDER": "Please enter the message for the campaign",
             "ERROR": "Message is required"
           },
           "INBOX": {
@@ -247,7 +249,7 @@
           },
           "AUDIENCE": {
             "LABEL": "Audience",
-            "PLACEHOLDER": "Select the customer labels",
+            "PLACEHOLDER": "Select custom labels",
             "ERROR": "Audience is required"
           },
           "SCHEDULED_AT": {
@@ -266,6 +268,155 @@
         }
       }
     },
+
+    "CSV": {
+      "WHATSAPP": {
+        "HEADER_TITLE": "WhatsApp CSV campaigns",
+        "NEW_CAMPAIGN": "Create campaign",
+        "META_TEMPLATES_HINT": "Create your own WhatsApp templates to personalize your campaigns",
+        "STATS": {
+          "TITLE": "Campaign statistics",
+          "TITLE_CAMPAIGN": "Title",
+          "SENT": "Sent",
+          "PENDING": "Pending",
+          "FAILED": "Failed",
+          "RETRY_BUTTON": "Retry failed",
+          "DOWNLOAD_ORIGINAL": "Download original CSV",
+          "DOWNLOAD_SENT": "Download sent CSV",
+          "DOWNLOAD_ERRORS": "Download errors CSV",
+          "DOWNLOAD_STATUS": "Download status CSV",
+          "STATUS": "Status",
+          "PREVIEW": "Template preview",
+          "FOOTER": "Footer",
+          "TEMPLATE_NAME": "Template name",
+          "INBOX": "Inbox",
+          "SCHEDULED_AT": "Send date",
+          "SUCCESS_RATE": "Success rate",
+          "RETRY_SUCCESS": "Campaign retry started successfully",
+          "RETRY_ERROR": "Error retrying the campaign. Please try again."
+        },
+        "SYNC": {
+          "LABEL": "Sync META Templates",
+          "SUCCESS": "Templates synchronized successfully",
+          "ERROR": "Could not synchronize templates"
+        },
+        "CARD": {
+          "STATUS": {
+            "ENABLED": "Enabled",
+            "DISABLED": "Disabled"
+          },
+          "CAMPAIGN_DETAILS": {
+            "SENT_BY": "Sent by",
+            "BOT": "Bot",
+            "FROM": "from",
+            "ON": "on",
+            "SENT_FROM": "Sent from",
+            "URL": "URL:"
+          }
+        },
+        "EMPTY_STATE": {
+          "TITLE": "No WhatsApp CSV campaigns available",
+          "SUBTITLE": "Create WhatsApp campaigns by uploading a CSV file with your contacts. Click 'Create campaign' to get started."
+        },
+        "CREATE": {
+          "TITLE": "Create WhatsApp CSV campaign",
+          "CANCEL_BUTTON_TEXT": "Cancel",
+          "CREATE_BUTTON_TEXT": "Create",
+          "DOWNLOAD_SAMPLE_CSV": "Download a CSV example",
+          "FORM": {
+            "MISSING_COLUMNS": "phone_number, status and error are required columns in CSV File",
+            "TITLE": {
+              "LABEL": "Title",
+              "PLACEHOLDER": "Enter campaign title",
+              "ERROR": "Title is required"
+            },
+            "INBOX": {
+              "LABEL": "Select Inbox",
+              "PLACEHOLDER": "Select Inbox",
+              "ERROR": "Inbox is required"
+            },
+            "WHATSAPP_TEMPLATE": {
+              "LABEL": "Select a WhatsApp Template",
+              "PLACEHOLDER": "Select template",
+              "ERROR": "A WhatsApp template is required"
+            },
+            "FILE": {
+              "LABEL": "CSV file",
+              "CHOOSE": "Select file",
+              "ERROR": "A CSV file is required.",
+              "INVALID_FORMAT": "Invalid format. Only .csv",
+              "MISSING_COLUMNS": "The following required columns are missing: {cols}"
+            },
+            "SCHEDULED_AT": {
+              "LABEL": "Scheduled time",
+              "PLACEHOLDER": "Select date and time",
+              "ERROR": "Scheduled time is required."
+            },
+            "PREVIEW_SECTION": {
+              "TITLE": "Send WhatsApp Preview",
+              "PHONE_LABEL": "Number to receive preview",
+              "PLACEHOLDER": "+598...",
+              "ERROR_PLUS": "Enter a valid number with '+', no spaces",
+              "BUTTON_LABEL": "Send preview",
+              "LOADING_LABEL": "Sending…",
+              "SUCCESS_MESSAGE": "Preview sent successfully",
+              "ERROR_MESSAGE": "Error sending preview",
+              "TOOL_TIP": "Select an inbox and template before sending"
+            },
+            "TEMPLATE": {
+              "FOOTER": {
+                "HEADER_SECTION": "Footer"
+              },
+              "HEADER": {
+                "HEADER_SECTION": "Header"
+              },
+              "PREVIEW_TITLE": "Template preview:",
+              "MEDIA": {
+                "HEADER_SECTION": "Select header media",
+                "UPLOAD_DOCUMENT": "Upload .pdf document",
+                "UPLOAD_IMAGE": "Upload .jpg or .png image",
+                "UPLOAD_VIDEO": "Upload .mp4 video",
+                "ERROR_FILE_REQUIRED": "A media file for the header is required."
+              },
+              "BODY": {
+                "HEADER_SECTION": "Body variables",
+                "VARIABLE_TITLE": "Variable",
+                "VARIABLE_PLACE_HOLDER": "Insert your variable here",
+                "CONTACT_NAME": "Contact name",
+                "FREE_TEXT": "Text",
+                "ERROR_PLACEHOLDERS": "Complete all body variables.",
+                "ERROR_PLACEHOLDERS_REQUIRED": "This body variable is required."
+              },
+              "BUTTONS": {
+                "HEADER_SECTION": "Button variables",
+                "VARIABLE_TITLE": "Variable",
+                "VARIABLE_PLACE_HOLDER": "Insert your variable here",
+                "ERROR_EMPTY_URL": "Dynamic buttons cannot be empty.",
+                "ERROR_EMPTY_VARIABLE": "This variable is required.",
+                "ERROR_URL_NO_SPACES": "URL cannot contain spaces.",
+                "ERROR_URL_EXAMPLE": "E.g.: https://example.com/page",
+                "PREVIEW_LABEL": "Button preview"
+              }
+            },
+            "BUTTONS": {
+              "CREATE": "Create",
+              "CANCEL": "Cancel"
+            },
+            "API": {
+              "SUCCESS_MESSAGE": "Campaign created successfully",
+              "ERROR_MESSAGE": "There was an error. Please try again."
+            },
+            "SYNC": {
+              "SUCCESS_MESSAGE": "Templates synchronized successfully",
+              "ERROR_MESSAGE": "Error synchronizing templates"
+            },
+            "SYNC_BUTTON_LABEL": "Sync",
+            "SYNC_BUTTON_TOOLTIP": "Synchronize templates"
+          }
+        }
+      }
+    },
+
     "CONFIRM_DELETE": {
       "TITLE": "Are you sure to delete?",
       "DESCRIPTION": "The delete action is permanent and cannot be reversed.",
