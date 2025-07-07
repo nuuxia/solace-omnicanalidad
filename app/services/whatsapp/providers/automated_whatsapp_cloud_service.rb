@@ -5,16 +5,16 @@ module Whatsapp
         @account_id = account_id
         @waba_id = waba_id
         @phone_number_id = phone_number_id
-        @version = ENV['VITE_FB_GRAPH_API_VERSION']
-        @access_token = ENV['SYSTEM_USER_ACCESS_TOKEN']
-        @pin = ENV['VITE_FB_CONFIG_PIN']
+        @version = ENV.fetch('VITE_FB_GRAPH_API_VERSION', nil)
+        @access_token = ENV.fetch('SYSTEM_USER_ACCESS_TOKEN', nil)
+        @pin = ENV.fetch('VITE_FB_CONFIG_PIN', nil)
       end
 
       def call
         Rails.logger.info "in service: #{@waba_id} y phone_number_id: #{@phone_number_id}"
 
         unless valid_environment_variables?
-          Rails.logger.error "❌ Error: Necessary environment variables are missing"
+          Rails.logger.error '❌ Error: Necessary environment variables are missing'
           return nil
         end
 
@@ -49,7 +49,7 @@ module Whatsapp
           }.to_json
         end
 
-        handle_response(response, "Registro del número de teléfono")
+        handle_response(response, 'Registro del número de teléfono')
       end
 
       def subscribe_app_to_waba
@@ -61,7 +61,7 @@ module Whatsapp
           req.body = {}.to_json
         end
 
-        handle_response(response, "Suscripción de la aplicación al WABA")
+        handle_response(response, 'Suscripción de la aplicación al WABA')
       end
 
       def fetch_and_log_phone_number_details
@@ -115,29 +115,25 @@ module Whatsapp
       end
 
       def create_inbox(details)
-        begin
-          channel = Channel::Whatsapp.create!(
-            account_id: @account_id,
-            phone_number: details[:phone_number],
-            provider: 'whatsapp_cloud',
-            provider_config: {
-              api_key: details[:api_key],
-              phone_number_id: details[:phone_number_id],
-              business_account_id: details[:business_account_id],
-            }
-          )
+        channel = Channel::Whatsapp.create!(
+          account_id: @account_id,
+          phone_number: details[:phone_number],
+          provider: 'whatsapp_cloud',
+          provider_config: {
+            api_key: details[:api_key],
+            phone_number_id: details[:phone_number_id],
+            business_account_id: details[:business_account_id]
+          }
+        )
 
-          inbox = Inbox.create!(
-            account_id: @account_id,
-            name: details[:inbox_name],
-            channel: channel
-          )
-
-          inbox
-        rescue StandardError => e
-          Rails.logger.error "⛔️ Error creating the inbox: #{e.message}"
-          raise e
-        end
+        Inbox.create!(
+          account_id: @account_id,
+          name: details[:inbox_name],
+          channel: channel
+        )
+      rescue StandardError => e
+        Rails.logger.error "⛔️ Error creating the inbox: #{e.message}"
+        raise e
       end
 
       def handle_response(response, action_name)
