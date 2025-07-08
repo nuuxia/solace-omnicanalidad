@@ -18,6 +18,7 @@ export default {
       provider: 'whatsapp_cloud',
       fbScriptLoaded: false,
       isFacebookLoading: false,
+      flowType: null, // 'cloud' | 'coexistence'
     };
   },
   mounted() {
@@ -29,6 +30,7 @@ export default {
     fbScript.defer = true;
     fbScript.crossorigin = 'anonymous';
     fbScript.src = 'https://connect.facebook.net/en_US/sdk.js';
+
     fbScript.onload = () => {
       window.fbAsyncInit = () => {
         FB.init({
@@ -37,6 +39,7 @@ export default {
           xfbml: true,
           version: graphApiVersion,
         });
+        this.fbScriptLoaded = true;
       };
 
       window.addEventListener('message', async event => {
@@ -44,60 +47,54 @@ export default {
           event.origin !== 'https://www.facebook.com' &&
           event.origin !== 'https://web.facebook.com'
         ) {
-          this.isFacebookLoading = false;
           return;
         }
 
         try {
           const data = JSON.parse(event.data);
 
-          if (data.type === 'WA_EMBEDDED_SIGNUP') {
-            if (data.event === 'CANCEL') {
-              this.isFacebookLoading = false;
-              return;
-            }
+          if (data.type !== 'WA_EMBEDDED_SIGNUP') return;
 
-            const payload = {
-              waba_id: data.data.waba_id,
-              phone_number_id: data.data.phone_number_id,
-            };
+          if (data.event === 'CANCEL') {
+            this.isFacebookLoading = false;
+            return;
+          }
 
-            try {
-              this.isFacebookLoading = true;
-              const response = await this.createWhatsappChannel(payload);
-              this.isFacebookLoading = true;
-              if (response?.inbox_id) {
-                await this.navigateToInboxSettings(response.inbox_id);
-              }
-            } catch (error) {
-              console.error(
-                'Error calling endpoint WhatsappChannel.automatedSignup:',
-                error
-              );
+          const isCoexistence =
+            data.event === 'FINISH_WHATSAPP_BUSINESS_APP_ONBOARDING';
+          this.flowType = isCoexistence ? 'coexistence' : 'cloud';
+
+          const payload = isCoexistence
+            ? { waba_id: data.data.waba_id }
+            : {
+                waba_id: data.data.waba_id,
+                phone_number_id: data.data.phone_number_id,
+              };
+
+          try {
+            this.isFacebookLoading = true;
+            const response = await this.createWhatsappChannel(payload);
+
+            if (response?.inbox_id) {
+              await this.navigateToInboxSettings(response.inbox_id);
+            } else {
               this.isFacebookLoading = false;
             }
-          } else {
+          } catch {
             this.isFacebookLoading = false;
           }
-        } catch (e) {
-          console.error('Error processing ES message:', e);
+        } catch {
+          // ignore malformed postMessage payloads
         }
       });
-
-      this.fbScriptLoaded = true;
     };
+
     document.body.appendChild(fbScript);
   },
   methods: {
     async createWhatsappChannel(payload) {
-      try {
-        const response = await WhatsappChannel.automatedSignup(payload);
-
-        return response.data;
-      } catch (error) {
-        console.error('Error creating WhatsApp channel:', error);
-        throw error;
-      }
+      const response = await WhatsappChannel.automatedSignup(payload);
+      return response.data;
     },
     async navigateToInboxSettings(inboxId) {
       try {
@@ -108,27 +105,22 @@ export default {
             inboxId: inboxId.toString(),
           },
         });
+      } finally {
         this.isFacebookLoading = false;
-      } catch (error) {
-        console.error('Navigation error:', error);
       }
     },
     async launchWhatsAppSignup() {
-      if (typeof FB === 'undefined') {
-        console.error('FB SDK is not loaded yet.');
-        return;
-      }
+      if (typeof FB === 'undefined') return;
 
-      const configId = 1710763212991813;
+      this.isFacebookLoading = true;
 
-      // Calculamos el tamaño de la ventana (máximo 600x700, pero adaptable)
+      const configId = '1710763212991813';
       const width = Math.min(600, window.innerWidth - 40);
       const height = Math.min(700, window.innerHeight - 40);
-
       const left = Math.round((window.innerWidth - width) / 2);
       const top = Math.round((window.innerHeight - height) / 2);
 
-      FB.login(response => {}, {
+      const loginOptions = {
         config_id: configId,
         response_type: 'code',
         override_default_response_type: true,
@@ -152,7 +144,16 @@ export default {
           'resizable=1',
           'scrollbars=1',
         ].join(','),
-      });
+      };
+
+      FB.login(
+        response => {
+          if (!response.authResponse) {
+            this.isFacebookLoading = false;
+          }
+        },
+        loginOptions
+      );
     },
   },
 };
@@ -232,25 +233,6 @@ export default {
 }
 
 .facebook-login-button:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-.test-button {
-  background-color: #4caf50;
-  border: 0;
-  border-radius: 4px;
-  color: #fff;
-  cursor: pointer;
-  font-family: Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  font-weight: bold;
-  height: 40px;
-  padding: 0 24px;
-  min-width: 140px;
-}
-
-.test-button:disabled {
   opacity: 0.7;
   cursor: not-allowed;
 }
