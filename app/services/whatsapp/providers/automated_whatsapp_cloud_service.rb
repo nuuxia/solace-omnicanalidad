@@ -104,11 +104,6 @@ module Whatsapp
         end
       end
 
-      # Este método elimina todos los caracteres que no son dígitos
-      # y luego agrega un "+" al comienzo.
-      # Ejemplo:
-      #  "+598 99 529707" => "+59899529707"
-      #  "598-99-529707"  => "+59899529707"
       def clean_phone_number(phone_number)
         digits = phone_number.gsub(/\D/, '')
         "+#{digits}"
