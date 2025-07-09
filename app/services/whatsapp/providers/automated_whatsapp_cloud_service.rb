@@ -1,26 +1,23 @@
+# app/services/whatsapp/providers/automated_whatsapp_cloud_service.rb
 module Whatsapp
   module Providers
     class AutomatedWhatsappCloudService
-      def initialize(account_id:, waba_id:, phone_number_id:)
-        @account_id = account_id
-        @waba_id = waba_id
-        @phone_number_id = phone_number_id
-        @version = ENV.fetch('VITE_FB_GRAPH_API_VERSION', nil)
-        @access_token = ENV.fetch('SYSTEM_USER_ACCESS_TOKEN', nil)
-        @pin = ENV.fetch('VITE_FB_CONFIG_PIN', nil)
+      def initialize(account_id:, waba_id:, phone_number_id:, business_id: nil)
+        @account_id       = account_id
+        @waba_id          = waba_id
+        @phone_number_id  = phone_number_id
+        @business_id      = business_id
+        @version          = ENV.fetch('VITE_FB_GRAPH_API_VERSION', nil)
+        @access_token     = ENV.fetch('SYSTEM_USER_ACCESS_TOKEN', nil)
+        @pin              = ENV.fetch('VITE_FB_CONFIG_PIN', nil)
       end
 
       def call
-        Rails.logger.info "in service: #{@waba_id} y phone_number_id: #{@phone_number_id}"
-
-        unless valid_environment_variables?
-          Rails.logger.error '❌ Error: Necessary environment variables are missing'
-          return nil
-        end
+        return nil unless valid_environment_variables?
 
         if register_phone_number && subscribe_app_to_waba
           details = fetch_and_log_phone_number_details
-          inbox = create_inbox(details) if details
+          inbox   = create_inbox(details) if details
           return {
             inbox_id: inbox&.id,
             waba_id: @waba_id,
@@ -42,7 +39,7 @@ module Whatsapp
 
         response = Faraday.post(url) do |req|
           req.headers['Authorization'] = "Bearer #{@access_token}"
-          req.headers['Content-Type'] = 'application/json'
+          req.headers['Content-Type']  = 'application/json'
           req.body = {
             messaging_product: 'whatsapp',
             pin: @pin
@@ -57,7 +54,7 @@ module Whatsapp
 
         response = Faraday.post(url) do |req|
           req.headers['Authorization'] = "Bearer #{@access_token}"
-          req.headers['Content-Type'] = 'application/json'
+          req.headers['Content-Type']  = 'application/json'
           req.body = {}.to_json
         end
 
@@ -74,39 +71,37 @@ module Whatsapp
         if response.success?
           process_phone_number_response(response.body)
         else
-          Rails.logger.error "⛔️ Error in Request for phone number details. Code: #{response.status}, Response: #{response.body}"
+          Rails.logger.error "⛔️ Error obteniendo detalles del número. Código: #{response.status}, Respuesta: #{response.body}"
           nil
         end
       rescue StandardError => e
-        Rails.logger.error "⚠️ Exception during Request for telephone number details: #{e.message}"
+        Rails.logger.error "⚠️ Excepción al obtener detalles del número: #{e.message}"
         nil
       end
 
       def process_phone_number_response(response_body)
         data = JSON.parse(response_body)['data']
+        matching = data.find { |phone| phone['id'] == @phone_number_id }
 
-        matching_phone_number = data.find { |phone| phone['id'] == @phone_number_id }
-
-        if matching_phone_number
-          display_phone_number = clean_phone_number(matching_phone_number['display_phone_number'])
-          verified_name = matching_phone_number['verified_name']
+        if matching
+          display = clean_phone_number(matching['display_phone_number'])
+          name    = matching['verified_name']
 
           {
-            inbox_name: verified_name,
-            phone_number: display_phone_number,
+            inbox_name: name,
+            phone_number: display,
             phone_number_id: @phone_number_id,
             business_account_id: @waba_id,
             api_key: @access_token
           }
         else
-          Rails.logger.warn "⚠️ No matching phone number found for phone_number_id #{@phone_number_id}"
+          Rails.logger.warn "⚠️ No se encontró phone_number_id #{@phone_number_id} en la respuesta."
           nil
         end
       end
 
-      def clean_phone_number(phone_number)
-        digits = phone_number.gsub(/\D/, '')
-        "+#{digits}"
+      def clean_phone_number(number)
+        "+#{number.gsub(/\D/, '')}"
       end
 
       def create_inbox(details)
@@ -127,19 +122,19 @@ module Whatsapp
           channel: channel
         )
       rescue StandardError => e
-        Rails.logger.error "⛔️ Error creating the inbox: #{e.message}"
-        raise e
+        Rails.logger.error "⛔️ Error creando el inbox: #{e.message}"
+        raise
       end
 
       def handle_response(response, action_name)
         if response.success?
           true
         else
-          Rails.logger.error "⛔️ Error in #{action_name}. Code: #{response.status}, Response: #{response.body}"
+          Rails.logger.error "⛔️ Error en #{action_name}. Código: #{response.status}, Respuesta: #{response.body}"
           false
         end
       rescue StandardError => e
-        Rails.logger.error "⚠️ Exception in #{action_name}: #{e.message}"
+        Rails.logger.error "⚠️ Excepción en #{action_name}: #{e.message}"
         false
       end
     end
