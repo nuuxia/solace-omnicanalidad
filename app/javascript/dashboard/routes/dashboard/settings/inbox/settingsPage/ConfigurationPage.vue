@@ -6,14 +6,14 @@ import ImapSettings from '../ImapSettings.vue';
 import SmtpSettings from '../SmtpSettings.vue';
 import { useVuelidate } from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
-import NextButton from 'dashboard/components-next/button/Button.vue';
+/* import NextButton from 'dashboard/components-next/button/Button.vue'; */
 
 export default {
   components: {
     SettingsSection,
     ImapSettings,
     SmtpSettings,
-    NextButton,
+    /*    NextButton, */
   },
   mixins: [inboxMixin],
   props: {
@@ -208,7 +208,7 @@ export default {
       >
         <woot-code :script="inbox.provider_config.api_key" />
       </SettingsSection> -->
-      <SettingsSection
+      <!--  <SettingsSection
         :title="$t('INBOX_MGMT.SETTINGS_POPUP.WHATSAPP_SECTION_UPDATE_TITLE')"
         :sub-title="
           $t('INBOX_MGMT.SETTINGS_POPUP.WHATSAPP_SECTION_UPDATE_SUBHEADER')
@@ -234,7 +234,7 @@ export default {
             {{ $t('INBOX_MGMT.SETTINGS_POPUP.WHATSAPP_SECTION_UPDATE_BUTTON') }}
           </NextButton>
         </div>
-      </SettingsSection>
+      </SettingsSection> -->
     </div>
   </div>
 </template>
