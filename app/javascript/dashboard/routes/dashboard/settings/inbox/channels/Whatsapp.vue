@@ -25,73 +25,100 @@ export default {
     const appId = 404207692182612;
     const graphApiVersion = 'v20.0';
 
-    const fbScript = document.createElement('script');
-    fbScript.async = true;
-    fbScript.defer = true;
-    fbScript.crossorigin = 'anonymous';
-    fbScript.src = 'https://connect.facebook.net/en_US/sdk.js';
+    // --- Extraemos la inicialización del SDK a una función reutilizable ------------
+    const initFacebookSdk = () => {
+      if (this.fbScriptLoaded) return;
+      if (typeof FB === 'undefined') return;
 
-    fbScript.onload = () => {
-      window.fbAsyncInit = () => {
+      try {
         FB.init({
           appId,
           autoLogAppEvents: true,
           xfbml: true,
           version: graphApiVersion,
         });
-        this.fbScriptLoaded = true;
-      };
+      } catch (_) {
+        // FB.init puede lanzar si ya fue inicializado; lo ignoramos
+      }
 
-      window.addEventListener('message', async event => {
-        if (
-          event.origin !== 'https://www.facebook.com' &&
-          event.origin !== 'https://web.facebook.com'
-        ) {
+      this.fbScriptLoaded = true;
+    };
+
+    // ------------------------------------------------------------------------------    
+    // 1. Si el SDK YA está cargado (ej.: regreso por router-back), lo iniciamos.
+    if (typeof FB !== 'undefined') {
+      initFacebookSdk();
+    } else {
+      // 2. Si no, lo añadimos como antes y lo iniciamos cuando termine de cargar.
+      const fbScript = document.createElement('script');
+      fbScript.async = true;
+      fbScript.defer = true;
+      fbScript.crossOrigin = 'anonymous';
+      fbScript.src = 'https://connect.facebook.net/en_US/sdk.js';
+      fbScript.onload = initFacebookSdk;
+      document.body.appendChild(fbScript);
+    }
+
+    // ------------------------------------------------------------------------------    
+    // Listener de postMessage (exactamente el mismo de antes, pero definido una sola vez)
+    window.addEventListener('message', this.handleFbMessage);
+  },
+  beforeUnmount() {
+    // Limpieza para evitar listeners duplicados al navegar varias veces
+    window.removeEventListener('message', this.handleFbMessage);
+  },
+  methods: {
+    // --------------------------------------------------------------------------    
+    //  LÓGICA DEL LISTENER
+    // --------------------------------------------------------------------------    
+    async handleFbMessage(event) {
+      if (
+        event.origin !== 'https://www.facebook.com' &&
+        event.origin !== 'https://web.facebook.com'
+      ) {
+        return;
+      }
+
+      try {
+        const data = JSON.parse(event.data);
+        if (data.type !== 'WA_EMBEDDED_SIGNUP') return;
+
+        if (data.event === 'CANCEL') {
+          this.isFacebookLoading = false;
           return;
         }
 
+        const isCoexistence =
+          data.event === 'FINISH_WHATSAPP_BUSINESS_APP_ONBOARDING';
+        this.flowType = isCoexistence ? 'coexistence' : 'cloud';
+
+        const payload = isCoexistence
+          ? { waba_id: data.data.waba_id }
+          : {
+              waba_id: data.data.waba_id,
+              phone_number_id: data.data.phone_number_id,
+            };
+
         try {
-          const data = JSON.parse(event.data);
+          this.isFacebookLoading = true;
+          const response = await this.createWhatsappChannel(payload);
 
-          if (data.type !== 'WA_EMBEDDED_SIGNUP') return;
-
-          if (data.event === 'CANCEL') {
-            this.isFacebookLoading = false;
-            return;
-          }
-
-          const isCoexistence =
-            data.event === 'FINISH_WHATSAPP_BUSINESS_APP_ONBOARDING';
-          this.flowType = isCoexistence ? 'coexistence' : 'cloud';
-
-          const payload = isCoexistence
-            ? { waba_id: data.data.waba_id }
-            : {
-                waba_id: data.data.waba_id,
-                phone_number_id: data.data.phone_number_id,
-              };
-
-          try {
-            this.isFacebookLoading = true;
-            const response = await this.createWhatsappChannel(payload);
-
-            if (response?.inbox_id) {
-              await this.navigateToInboxSettings(response.inbox_id);
-            } else {
-              this.isFacebookLoading = false;
-            }
-          } catch {
+          if (response?.inbox_id) {
+            await this.navigateToInboxSettings(response.inbox_id);
+          } else {
             this.isFacebookLoading = false;
           }
         } catch {
-          // ignore malformed postMessage payloads
+          this.isFacebookLoading = false;
         }
-      });
-    };
+      } catch {
+        // ignorar payloads malformados
+      }
+    },
 
-    document.body.appendChild(fbScript);
-  },
-  methods: {
+    // --------------------------------------------------------------------------    
+    //  API / HELPERS
+    // --------------------------------------------------------------------------    
     async createWhatsappChannel(payload) {
       const response = await WhatsappChannel.automatedSignup(payload);
       return response.data;
@@ -109,6 +136,10 @@ export default {
         this.isFacebookLoading = false;
       }
     },
+
+    // --------------------------------------------------------------------------    
+    //  LANZAR SIGN-UP
+    // --------------------------------------------------------------------------    
     async launchWhatsAppSignup() {
       if (typeof FB === 'undefined') return;
 
