@@ -65,6 +65,43 @@
         "ERROR_MESSAGE": "Der Bot konnte nicht aktualisiert werden, bitte versuche es später erneut."
       }
     },
+    "ACCESS_TOKEN": {
+      "TITLE": "Zugangstoken",
+      "DESCRIPTION": "Copy the access token and save it securely",
+      "COPY_SUCCESSFUL": "Access token copied to clipboard",
+      "RESET_SUCCESS": "Access token regenerated successfully",
+      "RESET_ERROR": "Unable to regenerate access token. Please try again"
+    },
+    "FORM": {
+      "AVATAR": {
+        "LABEL": "Bot avatar"
+      },
+      "NAME": {
+        "LABEL": "Bot Name",
+        "PLACEHOLDER": "Enter bot name",
+        "REQUIRED": "Bot Name ist erforderlich"
+      },
+      "DESCRIPTION": {
+        "LABEL": "Beschreibung",
+        "PLACEHOLDER": "Was macht dieser Bot?"
+      },
+      "WEBHOOK_URL": {
+        "LABEL": "Webhook-URL",
+        "PLACEHOLDER": "https://example.com/webhook",
+        "REQUIRED": "Webhook URL is required"
+      },
+      "ERRORS": {
+        "NAME": "Bot Name ist erforderlich",
+        "URL": "Webhook URL is required",
+        "VALID_URL": "Please enter a valid URL starting with http:// or https://"
+      },
+      "CANCEL": "Stornieren",
+      "CREATE": "Create Bot",
+      "UPDATE": "Update Bot"
+    },
+    "WEBHOOK": {
+      "DESCRIPTION": "Configure a webhook bot to integrate with your custom services. The bot will receive and process events from conversations and can respond to them."
+    },
     "TYPES": {
       "WEBHOOK": "Webhook Bot",
       "CSML": "CSML Bot"

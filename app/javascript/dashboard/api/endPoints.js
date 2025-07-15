@@ -50,6 +50,10 @@ const endPoints = {
   resendConfirmation: {
     url: '/api/v1/profile/resend_confirmation',
   },
+
+  resetAccessToken: {
+    url: '/api/v1/profile/reset_access_token',
+  },
   automatedWhatsappSignup: {
     url(accountId) {
       return `api/v1/accounts/${accountId}/channels/automated_whatsapp_embedded_signup`;

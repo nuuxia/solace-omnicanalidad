@@ -127,6 +127,7 @@ const validateSingleAction = action => {
     'resolve_conversation',
     'open_conversation',
     'remove_assigned_team',
+    'open_conversation',
   ];
 
   if (

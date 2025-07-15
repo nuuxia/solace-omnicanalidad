@@ -64,7 +64,10 @@
       "REMOVE": "{agentName} a retiré {user} de la boîte de réception (#{team_id})"
     },
     "ACCOUNT": {
-      "EDIT": "{agentName} a mis à jour la configuration du compte (#{id})"
+      "EDIT": "{agentName} updated the account configuration (#{id})"
+    },
+    "CONVERSATION": {
+      "DELETE": "{agentName} deleted conversation #{id}"
     }
   }
 }

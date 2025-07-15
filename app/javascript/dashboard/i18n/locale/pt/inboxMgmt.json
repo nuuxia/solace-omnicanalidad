@@ -47,7 +47,17 @@
         "INBOX_NAME": "Nome da caixa de entrada",
         "ADD_NAME": "Adicione um nome à sua caixa de entrada",
         "PICK_NAME": "Selecione um nome para a sua caixa de entrada",
-        "PICK_A_VALUE": "Escolha um valor"
+        "PICK_A_VALUE": "Escolha um valor",
+        "CREATE_INBOX": "Criar caixa de entrada"
+      },
+      "INSTAGRAM": {
+        "CONTINUE_WITH_INSTAGRAM": "Continuar com o Instagram",
+        "CONNECT_YOUR_INSTAGRAM_PROFILE": "Ligue o seu perfil do Instagram",
+        "HELP": "Para adicionar o seu perfil do Instagram como canal, precisa autenticar o seu perfil clicando em 'Continuar com o Instagram' ",
+        "ERROR_MESSAGE": "Ocorreu um erro ao ligar ao Instagram, por favor tente novamente",
+        "ERROR_AUTH": "Ocorreu um erro ao ligar ao Instagram, por favor tente novamente",
+        "NEW_INBOX_SUGGESTION": "Esta conta do Instagram estava anteriormente ligada a uma caixa de entrada diferente e foi agora migrada para aqui. Todas as novas mensagens aparecerão aqui. A caixa de entrada antiga já não poderá enviar ou receber mensagens para esta conta.",
+        "DUPLICATE_INBOX_BANNER": "Esta conta do Instagram foi migrada para a nova caixa de entrada do canal Instagram. Já não poderá enviar/receber mensagens do Instagram a partir desta caixa de entrada."
       },
       "TWITTER": {
         "HELP": "Para adicionar o seu perfil do Twitter como um canal, precisa de autenticar o seu perfil do Twitter clicando em 'Entrar com o Twitter' ",
@@ -260,6 +270,46 @@
         "SUBMIT_BUTTON": "Criar Canal do WhatsApp",
         "API": {
           "ERROR_MESSAGE": "Não foi possível gravar o canal do WhatsApp"
+        }
+      },
+      "VOICE": {
+        "TITLE": "Canal de Voz",
+        "DESC": "Integre o Twilio e comece a oferecer suporte aos seus clientes via chamadas telefónicas.",
+        "PHONE_NUMBER": {
+          "LABEL": "Número de telefone",
+          "PLACEHOLDER": "Escreva o seu número de telefone (por exemplo, +1234567890)",
+          "ERROR": "Por favor, forneça um número de telefone válido no formato +E.164 (por exemplo, +1234567890)"
+        },
+        "TWILIO": {
+          "ACCOUNT_SID": {
+            "LABEL": "SID da conta",
+            "PLACEHOLDER": "Insira o SID da sua Conta Twilio",
+            "REQUIRED": "O SID da conta é obrigatório"
+          },
+          "AUTH_TOKEN": {
+            "LABEL": "Token de autenticação",
+            "PLACEHOLDER": "Escreva o seu Token de Autenticação Twilio",
+            "REQUIRED": "O Token de Autenticação é obrigatório"
+          },
+          "API_KEY_SID": {
+            "LABEL": "Chave da API SID",
+            "PLACEHOLDER": "Insira a chave SID da API Twilio",
+            "REQUIRED": "A chave SID da API é obrigatória"
+          },
+          "API_KEY_SECRET": {
+            "LABEL": "Chave secreta da API",
+            "PLACEHOLDER": "Insira a chave secreta da API Twilio",
+            "REQUIRED": "A chave secreta da API é obrigatória"
+          },
+          "TWIML_APP_SID": {
+            "LABEL": "TwiML App SID",
+            "PLACEHOLDER": "Insira a sua Twilio TwiML App SID (começa por AP)",
+            "REQUIRED": "TwiML App SID é obrigatória"
+          }
+        },
+        "SUBMIT_BUTTON": "Criar canal de Voz",
+        "API": {
+          "ERROR_MESSAGE": "Não foi possível criar o canal de voz"
         }
       },
       "API_CHANNEL": {
@@ -475,7 +525,8 @@
       "PRE_CHAT_FORM": "Formulário pré-chat",
       "BUSINESS_HOURS": "Horário comercial",
       "WIDGET_BUILDER": "Construtor de widgets",
-      "BOT_CONFIGURATION": "Configuração do bot"
+      "BOT_CONFIGURATION": "Configuração do bot",
+      "CSAT": "CSAT"
     },
     "SETTINGS": "Configurações",
     "FEATURES": {
@@ -496,9 +547,7 @@
       "ENABLE_EMAIL_COLLECT_BOX": "Ativar caixa de receção de e-mail",
       "ENABLE_EMAIL_COLLECT_BOX_SUB_TEXT": "Ativar ou desativar caixa de receção de e-mails para as novas conversas",
       "AUTO_ASSIGNMENT": "Ativar atribuição automática",
-      "ENABLE_CSAT": "Ativar CSAT",
       "SENDER_NAME_SECTION": "Adicionar o nome do agente ao e-mail",
-      "ENABLE_CSAT_SUB_TEXT": "Ativar/Desativar envio do questionário CSAT (satisfação do cliente) depois de resolver uma conversa",
       "SENDER_NAME_SECTION_TEXT": "Ativar/Desativar exibição do nome do agente no e-mail. Se estiver desativado, exibirá o nome da empresa",
       "ENABLE_CONTINUITY_VIA_EMAIL": "Ativar continuidade das conversas por e-mail",
       "ENABLE_CONTINUITY_VIA_EMAIL_SUB_TEXT": "As conversas irão continuar por e-mail se o endereço de e-mail do contacto estiver disponível.",
@@ -570,6 +619,32 @@
       },
       "REQUIRE_EMAIL": {
         "LABEL": "Os visitantes devem digitar o seu nome e e-mail antes de iniciarem uma conversa"
+      }
+    },
+    "CSAT": {
+      "TITLE": "Ativar CSAT",
+      "SUBTITLE": "Acione automaticamente inquéritos CSAT no final das conversas para perceber como os clientes se sentem sobre o apoio recebido. Acompanhe tendências de satisfação e identifique áreas de melhoria ao longo do tempo.",
+      "DISPLAY_TYPE": {
+        "LABEL": "Tipo de visualização"
+      },
+      "MESSAGE": {
+        "LABEL": "Messagem",
+        "PLACEHOLDER": "Por favor, insira uma mensagem para mostrar aos utilizadores com o formulário"
+      },
+      "SURVEY_RULE": {
+        "LABEL": "Regra do inquérito",
+        "DESCRIPTION_PREFIX": "Enviar o inquérito se a conversa",
+        "DESCRIPTION_SUFFIX": "qualquer uma das etiquetas",
+        "OPERATOR": {
+          "CONTAINS": "contém",
+          "DOES_NOT_CONTAINS": "não contém"
+        },
+        "SELECT_PLACEHOLDER": "selecionar etiquetas"
+      },
+      "NOTE": "Nota: Os inquéritos CSAT são enviados apenas uma vez por conversa",
+      "API": {
+        "SUCCESS_MESSAGE": "Definições de CSAT atualizadas com sucesso",
+        "ERROR_MESSAGE": "Não foi possível atualizar as definições de CSAT. Por favor, tente novamente mais tarde."
       }
     },
     "BUSINESS_HOURS": {
@@ -757,7 +832,9 @@
       "EMAIL": "E-mail",
       "TELEGRAM": "Telegram",
       "LINE": "Line",
-      "API": "Canal da API"
+      "API": "Canal da API",
+      "INSTAGRAM": "Instagram",
+      "VOICE": "Voz"
     }
   }
 }

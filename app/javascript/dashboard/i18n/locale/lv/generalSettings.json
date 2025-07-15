@@ -1,5 +1,11 @@
 {
   "GENERAL_SETTINGS": {
+    "LIMIT_MESSAGES": {
+      "CONVERSATION": "Jūs esat pārsniedzis sarunu ierobežojumu. Hacker plāns pieļauj tikai 500 sarunas.",
+      "INBOXES": "Jūs esat pārsniedzis iesūtnes ierobežojumu. Hacker plāns atbalsta tikai vietnes tiešraides tērzēšanu. Papildu iesūtnēm, piemēram, e-pastam, WhatsApp utt., ir nepieciešams maksas plāns.",
+      "AGENTS": "You have exceeded the agent limit. Your plan only allows {allowedAgents} agents.",
+      "NON_ADMIN": "Lūdzu, sazinieties ar savu administratoru, lai modernizētu plānu un turpinātu izmantot visas funkcijas."
+    },
     "TITLE": "Konta iestatījumi",
     "SUBMIT": "Atjaunināt iestatījumus",
     "BACK": "Atpakaļ",
@@ -17,6 +23,34 @@
       "ACCOUNT_ID": {
         "TITLE": "Konta ID",
         "NOTE": "Šis ID ir nepieciešams, ja veidojat uz API balstītu integrāciju"
+      },
+      "AUTO_RESOLVE": {
+        "TITLE": "Auto-resolve conversations",
+        "NOTE": "This configuration would allow you to automatically resolve the conversation after a certain period of inactivity.",
+        "DURATION": {
+          "LABEL": "Inactivity duration",
+          "HELP": "Time period of inactivity after which conversation is auto-resolved",
+          "PLACEHOLDER": "30",
+          "ERROR": "Auto resolve duration should be between 10 minutes and 999 days",
+          "API": {
+            "SUCCESS": "Auto resolve settings updated successfully",
+            "ERROR": "Failed to update auto resolve settings"
+          }
+        },
+        "MESSAGE": {
+          "LABEL": "Custom auto-resolution message",
+          "PLACEHOLDER": "Conversation was marked resolved by system due to 15 days of inactivity",
+          "HELP": "Message sent to the customer after conversation is auto-resolved"
+        },
+        "PREFERENCES": "Preferences",
+        "LABEL": {
+          "LABEL": "Add label after auto-resolution",
+          "PLACEHOLDER": "Select a label"
+        },
+        "IGNORE_WAITING": {
+          "LABEL": "Skip conversations waiting for agent’s reply"
+        },
+        "UPDATE_BUTTON": "Save Changes"
       },
       "NAME": {
         "LABEL": "Konta nosaukums",
@@ -38,6 +72,18 @@
         "PLACEHOLDER": "Jūsu uzņēmuma atbalsta e-pasts",
         "ERROR": ""
       },
+      "AUTO_RESOLVE_IGNORE_WAITING": {
+        "LABEL": "Exclude unattended conversations",
+        "HELP": "When enabled, the system will skip resolving conversations that are still waiting for an agent's reply."
+      },
+      "AUDIO_TRANSCRIPTION": {
+        "TITLE": "Transcribe Audio Messages",
+        "NOTE": "Automatically transcribe audio messages in conversations. Generate a text transcript whenever an audio message is sent or received, and display it alongside the message.",
+        "API": {
+          "SUCCESS": "Audio transcription setting updated successfully",
+          "ERROR": "Failed to update audio transcription setting"
+        }
+      },
       "AUTO_RESOLVE_DURATION": {
         "LABEL": "Dienu skaits pēc kā biļetei ir automātiski jāatrisinās, ja nenotiek nekādas darbības",
         "PLACEHOLDER": "30",
@@ -58,6 +104,7 @@
     "MULTISELECT": {
       "ENTER_TO_SELECT": "Nospiediet enter, lai izvēlētos",
       "ENTER_TO_REMOVE": "Nospiediet enter, lai noņemtu",
+      "NO_OPTIONS": "List is empty",
       "SELECT_ONE": "Izvēlieties vienu",
       "SELECT": "Izvēlieties"
     }

@@ -61,9 +61,46 @@
       "TITLE": "Edit bot",
       "CANCEL_BUTTON_TEXT": "キャンセル",
       "API": {
-        "SUCCESS_MESSAGE": "Bot updated successfully.",
-        "ERROR_MESSAGE": "Could not update bot. Please try again."
+        "SUCCESS_MESSAGE": "ボットが正常に更新されました。",
+        "ERROR_MESSAGE": "ボットを更新できませんでした。再試行してください。"
       }
+    },
+    "ACCESS_TOKEN": {
+      "TITLE": "アクセストークン",
+      "DESCRIPTION": "Copy the access token and save it securely",
+      "COPY_SUCCESSFUL": "Access token copied to clipboard",
+      "RESET_SUCCESS": "Access token regenerated successfully",
+      "RESET_ERROR": "Unable to regenerate access token. Please try again"
+    },
+    "FORM": {
+      "AVATAR": {
+        "LABEL": "Bot avatar"
+      },
+      "NAME": {
+        "LABEL": "ボット名",
+        "PLACEHOLDER": "Enter bot name",
+        "REQUIRED": "Bot name is required"
+      },
+      "DESCRIPTION": {
+        "LABEL": "説明",
+        "PLACEHOLDER": "このボットは何をしますか？"
+      },
+      "WEBHOOK_URL": {
+        "LABEL": "Webhook URL",
+        "PLACEHOLDER": "https://example.com/webhook",
+        "REQUIRED": "Webhook URL is required"
+      },
+      "ERRORS": {
+        "NAME": "Bot name is required",
+        "URL": "Webhook URL is required",
+        "VALID_URL": "Please enter a valid URL starting with http:// or https://"
+      },
+      "CANCEL": "キャンセル",
+      "CREATE": "Create Bot",
+      "UPDATE": "Update Bot"
+    },
+    "WEBHOOK": {
+      "DESCRIPTION": "Configure a webhook bot to integrate with your custom services. The bot will receive and process events from conversations and can respond to them."
     },
     "TYPES": {
       "WEBHOOK": "Webhook bot",

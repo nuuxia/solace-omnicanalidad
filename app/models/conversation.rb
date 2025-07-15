@@ -124,6 +124,7 @@ class Conversation < ApplicationRecord
   has_many :notifications, as: :primary_actor, dependent: :destroy_async
   has_many :attachments, through: :messages
   has_many :conversation_thread_records, dependent: :destroy
+  has_many :reporting_events, dependent: :destroy_async
 
   before_save :ensure_snooze_until_reset
   before_create :determine_conversation_status
@@ -143,6 +144,12 @@ class Conversation < ApplicationRecord
     additional_attributes&.dig('conversation_language')
   end
 
+  # Be aware: The precision of created_at and last_activity_at may differ from Ruby's Time precision.
+  # Our DB column (see schema) stores timestamps with second-level precision (no microseconds), so
+  # if you assign a Ruby Time with microseconds, the DB will truncate it. This may cause subtle differences
+  # if you compare or copy these values in Ruby, also in our specs
+  # So in specs rely on to be_with(1.second) instead of to eq()
+  # TODO: Migrate to use a timestamp with microsecond precision
   def last_activity_at
     self[:last_activity_at] || created_at
   end
@@ -207,9 +214,19 @@ class Conversation < ApplicationRecord
   private
 
   def execute_after_update_commit_callbacks
+    handle_resolved_status_change
     notify_status_change
     create_activity
     notify_conversation_updation
+  end
+
+  def handle_resolved_status_change
+    # When conversation is resolved, clear waiting_since using update_column to avoid callbacks
+    return unless saved_change_to_status? && status == 'resolved'
+
+    # rubocop:disable Rails/SkipsModelValidations
+    update_column(:waiting_since, nil)
+    # rubocop:enable Rails/SkipsModelValidations
   end
 
   def ensure_snooze_until_reset
@@ -314,5 +331,6 @@ class Conversation < ApplicationRecord
   end
 end
 
+Conversation.include_mod_with('Audit::Conversation')
 Conversation.include_mod_with('Concerns::Conversation')
 Conversation.prepend_mod_with('Conversation')

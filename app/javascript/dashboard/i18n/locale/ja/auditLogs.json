@@ -64,7 +64,10 @@
       "REMOVE": "{agentName} removed {user} from the team(#{team_id})"
     },
     "ACCOUNT": {
-      "EDIT": "{agentName} updated the account configuration (#{id})"
+      "EDIT": "{agentName} がアカウント設定 (#{id}) を更新しました"
+    },
+    "CONVERSATION": {
+      "DELETE": "{agentName} deleted conversation #{id}"
     }
   }
 }

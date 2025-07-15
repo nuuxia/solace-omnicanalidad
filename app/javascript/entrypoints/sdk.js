@@ -70,7 +70,14 @@ const runSDK = ({ baseUrl, websiteToken }) => {
     showPopoutButton: arrowsSettings.showPopoutButton || false,
     widgetStyle: getWidgetStyle(arrowsSettings.widgetStyle) || 'standard',
     resetTriggered: false,
-    darkMode: getDarkMode(arrowsSettings.darkMode),
+    darkMode: getDarkMode(chatwootSettings.darkMode),
+    welcomeTitle: chatwootSettings.welcomeTitle || '',
+    welcomeDescription: chatwootSettings.welcomeDescription || '',
+    availableMessage: chatwootSettings.availableMessage || '',
+    unavailableMessage: chatwootSettings.unavailableMessage || '',
+    enableFileUpload: chatwootSettings.enableFileUpload ?? true,
+    enableEmojiPicker: chatwootSettings.enableEmojiPicker ?? true,
+    enableEndConversation: chatwootSettings.enableEndConversation ?? true,
 
     toggle(state) {
       IFrameHelper.events.toggleBubble(state);

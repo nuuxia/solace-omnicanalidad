@@ -65,6 +65,43 @@
         "ERROR_MESSAGE": "Não foi possível atualizar o robô. Por favor, tente novamente mais tarde."
       }
     },
+    "ACCESS_TOKEN": {
+      "TITLE": "Token de acesso",
+      "DESCRIPTION": "Copie o token de acesso e salve-o de forma segura",
+      "COPY_SUCCESSFUL": "Token de acesso copiado para área de transferência",
+      "RESET_SUCCESS": "Token de acesso gerado novamente com sucesso",
+      "RESET_ERROR": "Não foi possível regerar o token de acesso. Por favor, tente novamente"
+    },
+    "FORM": {
+      "AVATAR": {
+        "LABEL": "Avatar do robô"
+      },
+      "NAME": {
+        "LABEL": "Nome do Robô",
+        "PLACEHOLDER": "Insira o nome do robô",
+        "REQUIRED": "O nome do Robô é obrigatório"
+      },
+      "DESCRIPTION": {
+        "LABEL": "Descrição",
+        "PLACEHOLDER": "O que esse robô faz?"
+      },
+      "WEBHOOK_URL": {
+        "LABEL": "URL do Webhook",
+        "PLACEHOLDER": "https://exemplo.com.br/webhook",
+        "REQUIRED": "URL Webhook é necessária"
+      },
+      "ERRORS": {
+        "NAME": "O nome do Robô é obrigatório",
+        "URL": "URL Webhook é necessária",
+        "VALID_URL": "Digite uma URL válida começando com http:// ou https://"
+      },
+      "CANCEL": "Cancelar",
+      "CREATE": "Criar um Robô",
+      "UPDATE": "Atualizar o Robô"
+    },
+    "WEBHOOK": {
+      "DESCRIPTION": "Configure um robô de Webhook para integrar com seus serviços personalizados. O robô receberá e processará eventos de conversas e pode respondê-los."
+    },
     "TYPES": {
       "WEBHOOK": "Webhook robô",
       "CSML": "CSML robô"

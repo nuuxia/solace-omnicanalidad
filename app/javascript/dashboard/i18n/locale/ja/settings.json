@@ -57,8 +57,13 @@
       },
       "ACCESS_TOKEN": {
         "TITLE": "アクセストークン",
-        "NOTE": "このトークンは、API 連携を構築する場合に利用します。",
-        "COPY": "コピー"
+        "NOTE": "このトークンは、API連携を構築する場合に利用します。",
+        "COPY": "コピー",
+        "RESET": "リセット",
+        "CONFIRM_RESET": "Are you sure?",
+        "CONFIRM_HINT": "Click again to confirm",
+        "RESET_SUCCESS": "Access token regenerated successfully",
+        "RESET_ERROR": "Unable to regenerate access token. Please try again"
       },
       "AUDIO_NOTIFICATIONS_SECTION": {
         "TITLE": "Audio Notifications",
@@ -145,9 +150,14 @@
       },
       "AVAILABILITY": {
         "LABEL": "利用可能期間",
-        "STATUSES_LIST": ["オンライン", "取り込み中", "オフライン"],
-        "SET_AVAILABILITY_SUCCESS": "Availability has been set successfully",
-        "SET_AVAILABILITY_ERROR": "Couldn't set availability, please try again"
+        "STATUS": {
+          "ONLINE": "オンライン",
+          "BUSY": "取り込み中",
+          "OFFLINE": "オフライン"
+        },
+        "SET_AVAILABILITY_SUCCESS": "利用可能ステータスが正常に設定されました",
+        "SET_AVAILABILITY_ERROR": "利用可能ステータスを設定できませんでした。もう一度お試しください",
+        "IMPERSONATING_ERROR": "Cannot change availability while impersonating a user"
       },
       "EMAIL": {
         "LABEL": "あなたのメールアドレス",
@@ -234,8 +244,12 @@
     "UNATTENDED_CONVERSATIONS": "Unattended",
     "REPORTS": "レポート",
     "SETTINGS": "設定",
-    "CONTACTS": "Contacts",
-    "CAPTAIN": "Captain",
+    "CONTACTS": "連絡先",
+    "ACTIVE": "有効",
+    "CAPTAIN": "キャプテン",
+    "CAPTAIN_ASSISTANTS": "アシスタント",
+    "CAPTAIN_DOCUMENTS": "ドキュメント",
+    "CAPTAIN_RESPONSES": "FAQ",
     "HOME": "ホーム",
     "AGENTS": "担当者",
     "AGENT_BOTS": "Bots",

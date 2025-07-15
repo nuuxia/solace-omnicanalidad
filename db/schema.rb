@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 202506201021076) do
+ActiveRecord::Schema[7.1].define(version: 202506201021076) do
   # These extensions should be enabled to support this database
   enable_extension "plpgsql"
   enable_extension "vector"
@@ -368,6 +368,22 @@ ActiveRecord::Schema[7.0].define(version: 202506201021076) do
     t.index ["inbox_id"], name: "index_captain_inboxes_on_inbox_id"
   end
 
+  create_table "captain_scenarios", force: :cascade do |t|
+    t.string "title"
+    t.text "description"
+    t.text "instruction"
+    t.jsonb "tools", default: []
+    t.boolean "enabled", default: true, null: false
+    t.bigint "assistant_id", null: false
+    t.bigint "account_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_captain_scenarios_on_account_id"
+    t.index ["assistant_id", "enabled"], name: "index_captain_scenarios_on_assistant_id_and_enabled"
+    t.index ["assistant_id"], name: "index_captain_scenarios_on_assistant_id"
+    t.index ["enabled"], name: "index_captain_scenarios_on_enabled"
+  end
+
   create_table "categories", force: :cascade do |t|
     t.integer "account_id", null: false
     t.integer "portal_id", null: false
@@ -529,6 +545,18 @@ ActiveRecord::Schema[7.0].define(version: 202506201021076) do
     t.index ["account_id", "profile_id"], name: "index_channel_twitter_profiles_on_account_id_and_profile_id", unique: true
   end
 
+  create_table "channel_voice", force: :cascade do |t|
+    t.string "phone_number", null: false
+    t.string "provider", default: "twilio", null: false
+    t.jsonb "provider_config", null: false
+    t.integer "account_id", null: false
+    t.jsonb "additional_attributes", default: {}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_channel_voice_on_account_id"
+    t.index ["phone_number"], name: "index_channel_voice_on_phone_number", unique: true
+  end
+
   create_table "channel_web_widgets", id: :serial, force: :cascade do |t|
     t.string "website_url"
     t.integer "account_id"
@@ -674,27 +702,25 @@ ActiveRecord::Schema[7.0].define(version: 202506201021076) do
 
   create_table "copilot_messages", force: :cascade do |t|
     t.bigint "copilot_thread_id", null: false
-    t.bigint "user_id", null: false
     t.bigint "account_id", null: false
-    t.string "message_type", null: false
     t.jsonb "message", default: {}, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "message_type", default: 0
     t.index ["account_id"], name: "index_copilot_messages_on_account_id"
     t.index ["copilot_thread_id"], name: "index_copilot_messages_on_copilot_thread_id"
-    t.index ["user_id"], name: "index_copilot_messages_on_user_id"
   end
 
   create_table "copilot_threads", force: :cascade do |t|
     t.string "title", null: false
     t.bigint "user_id", null: false
     t.bigint "account_id", null: false
-    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "assistant_id"
     t.index ["account_id"], name: "index_copilot_threads_on_account_id"
+    t.index ["assistant_id"], name: "index_copilot_threads_on_assistant_id"
     t.index ["user_id"], name: "index_copilot_threads_on_user_id"
-    t.index ["uuid"], name: "index_copilot_threads_on_uuid", unique: true
   end
 
   create_table "csat_survey_responses", force: :cascade do |t|
@@ -916,6 +942,7 @@ ActiveRecord::Schema[7.0].define(version: 202506201021076) do
     t.text "processed_message_content"
     t.jsonb "sentiment", default: {}
     t.index "((additional_attributes -> 'campaign_id'::text))", name: "index_messages_on_additional_attributes_campaign_id", using: :gin
+    t.index ["account_id", "content_type", "created_at"], name: "idx_messages_account_content_created"
     t.index ["account_id", "created_at", "message_type"], name: "index_messages_on_account_created_type"
     t.index ["account_id", "inbox_id"], name: "index_messages_on_account_id_and_inbox_id"
     t.index ["account_id"], name: "index_messages_on_account_id"
@@ -1009,7 +1036,7 @@ ActiveRecord::Schema[7.0].define(version: 202506201021076) do
     t.text "header_text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.jsonb "config", default: {"allowed_locales"=>["en"]}
+    t.jsonb "config", default: {"allowed_locales" => ["en"]}
     t.boolean "archived", default: false
     t.bigint "channel_web_widget_id"
     t.index ["channel_web_widget_id"], name: "index_portals_on_channel_web_widget_id"

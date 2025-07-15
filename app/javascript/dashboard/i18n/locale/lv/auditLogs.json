@@ -64,7 +64,10 @@
       "REMOVE": "{agentName} noņēma {user} no komandas(#{team_id})"
     },
     "ACCOUNT": {
-      "EDIT": "{agentName} atjaunināja (#{id}) konta konfigurāciju "
+      "EDIT": "{agentName} atjaunināja konta konfigurāciju (#{id})"
+    },
+    "CONVERSATION": {
+      "DELETE": "{agentName} deleted conversation #{id}"
     }
   }
 }

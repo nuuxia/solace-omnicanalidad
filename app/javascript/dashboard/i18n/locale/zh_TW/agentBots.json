@@ -65,6 +65,43 @@
         "ERROR_MESSAGE": "無法更新機器人，請稍後再試"
       }
     },
+    "ACCESS_TOKEN": {
+      "TITLE": "訪問 token",
+      "DESCRIPTION": "Copy the access token and save it securely",
+      "COPY_SUCCESSFUL": "Access token copied to clipboard",
+      "RESET_SUCCESS": "Access token regenerated successfully",
+      "RESET_ERROR": "Unable to regenerate access token. Please try again"
+    },
+    "FORM": {
+      "AVATAR": {
+        "LABEL": "Bot avatar"
+      },
+      "NAME": {
+        "LABEL": "機器人名稱",
+        "PLACEHOLDER": "Enter bot name",
+        "REQUIRED": "機器人名稱為必填"
+      },
+      "DESCRIPTION": {
+        "LABEL": "描述資訊",
+        "PLACEHOLDER": "這個機器人的作用是什麼"
+      },
+      "WEBHOOK_URL": {
+        "LABEL": "Webhook 網址",
+        "PLACEHOLDER": "https://example.com/webhook",
+        "REQUIRED": "Webhook URL is required"
+      },
+      "ERRORS": {
+        "NAME": "機器人名稱為必填",
+        "URL": "Webhook URL is required",
+        "VALID_URL": "Please enter a valid URL starting with http:// or https://"
+      },
+      "CANCEL": "取消",
+      "CREATE": "Create Bot",
+      "UPDATE": "Update Bot"
+    },
+    "WEBHOOK": {
+      "DESCRIPTION": "Configure a webhook bot to integrate with your custom services. The bot will receive and process events from conversations and can respond to them."
+    },
     "TYPES": {
       "WEBHOOK": "Webhook 機器人",
       "CSML": "CSML 機器人"

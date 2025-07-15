@@ -64,7 +64,10 @@
       "REMOVE": "{agentName} видалив {user} з команди (#{team_id})"
     },
     "ACCOUNT": {
-      "EDIT": "{agentName} оновив налаштування облікового запису (#{id})"
+      "EDIT": "{agentName} updated the account configuration (#{id})"
+    },
+    "CONVERSATION": {
+      "DELETE": "{agentName} deleted conversation #{id}"
     }
   }
 }

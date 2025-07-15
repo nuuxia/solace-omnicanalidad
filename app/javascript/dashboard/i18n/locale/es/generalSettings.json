@@ -51,7 +51,31 @@
       },
       "AUTO_RESOLVE": {
         "TITLE": "Resolver conversaciones automáticamente",
-        "NOTE": "Esta configuración permite resolver automáticamente la conversación tras un determinado periodo. Establece la duración y personaliza el mensaje al usuario a continuación."
+        "NOTE": "Esta configuración te permitiría resolver automáticamente la conversación después de un cierto período de inactividad.",
+        "DURATION": {
+          "LABEL": "Duración de inactividad",
+          "HELP": "Periodo de inactividad después del cual la conversación se resuelve automáticamente",
+          "PLACEHOLDER": "30",
+          "ERROR": "La duración de auto-resolución debe estar entre 10 minutos y 999 días",
+          "API": {
+            "SUCCESS": "Configuración de auto-resolución actualizada correctamente",
+            "ERROR": "Error al actualizar los ajustes de auto-resolución"
+          }
+        },
+        "MESSAGE": {
+          "LABEL": "Mensaje personalizado de auto-resolución",
+          "PLACEHOLDER": "La conversación fue marcada como resuelta por el sistema debido a 15 días de inactividad",
+          "HELP": "Mensaje enviado al cliente después de que la conversación se resuelve automáticamente"
+        },
+        "PREFERENCES": "Preferencias",
+        "LABEL": {
+          "LABEL": "Añadir etiqueta tras la auto-resolución",
+          "PLACEHOLDER": "Selecciona una etiqueta"
+        },
+        "IGNORE_WAITING": {
+          "LABEL": "Omitir conversaciones que esperan la respuesta de un agente"
+        },
+        "UPDATE_BUTTON": "Guardar cambios"
       },
       "NAME": {
         "LABEL": "Nombre de cuenta",
@@ -74,8 +98,16 @@
         "ERROR": ""
       },
       "AUTO_RESOLVE_IGNORE_WAITING": {
-        "LABEL": "Excluir conversaciones sin atender",
-        "HELP": "Cuando está habilitado, el sistema omitirá la resolución de las conversaciones que aún esperan la respuesta de un agente."
+        "LABEL": "Excluir conversaciones desatendidas",
+        "HELP": "Cuando está habilitado, el sistema omitirá resolver conversaciones que aún esperan la respuesta de un agente."
+      },
+      "AUDIO_TRANSCRIPTION": {
+        "TITLE": "Transcribir mensajes de audio",
+        "NOTE": "Transcribe automáticamente los mensajes de audio en las conversaciones. Genera una transcripción de texto cada vez que se envía o recibe un mensaje de audio y muéstrala junto al mensaje.",
+        "API": {
+          "SUCCESS": "Configuración de transcripción de audio actualizada correctamente",
+          "ERROR": "Error al actualizar la configuración de transcripción de audio"
+        }
       },
       "AUTO_RESOLVE_DURATION": {
         "LABEL": "Duración de inactividad para resolución",
@@ -105,9 +137,10 @@
   },
   "FORMS": {
     "MULTISELECT": {
-      "ENTER_TO_SELECT": "Pulsa Enter para seleccionar",
-      "ENTER_TO_REMOVE": "Pulsa Enter para eliminar",
-      "SELECT_ONE": "Selecciona uno",
+      "ENTER_TO_SELECT": "Pulse Enter para seleccionar",
+      "ENTER_TO_REMOVE": "Presione Enter para eliminar",
+      "NO_OPTIONS": "La lista está vacía",
+      "SELECT_ONE": "Seleccione uno",
       "SELECT": "Seleccionar"
     }
   },

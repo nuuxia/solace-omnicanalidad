@@ -17,7 +17,8 @@ RSpec.describe AgentNotifications::ConversationNotificationsMailer do
     let(:mail) { described_class.with(account: account).conversation_creation(conversation, agent, nil).deliver_now }
 
     it 'renders the subject' do
-      expect(mail.subject).to eq("¡Hola, #{agent.available_name}! Tienes un nuevo contacto [ID - #{conversation.display_id}] en #{conversation.inbox&.name} que está esperando tu respuesta.")
+      expect(mail.subject).to eq("#{agent.available_name}, A new conversation [ID - #{conversation
+        .display_id}] has been created in #{conversation.inbox&.sanitized_name}.")
     end
 
     it 'renders the receiver email' do

@@ -65,6 +65,43 @@
         "ERROR_MESSAGE": "Не вдалося оновити бота. Будь ласка, спробуйте ще раз."
       }
     },
+    "ACCESS_TOKEN": {
+      "TITLE": "Ключ доступу",
+      "DESCRIPTION": "Copy the access token and save it securely",
+      "COPY_SUCCESSFUL": "Access token copied to clipboard",
+      "RESET_SUCCESS": "Access token regenerated successfully",
+      "RESET_ERROR": "Unable to regenerate access token. Please try again"
+    },
+    "FORM": {
+      "AVATAR": {
+        "LABEL": "Bot avatar"
+      },
+      "NAME": {
+        "LABEL": "Ім'я бота",
+        "PLACEHOLDER": "Enter bot name",
+        "REQUIRED": "Ім'я бота обов'язкове"
+      },
+      "DESCRIPTION": {
+        "LABEL": "Опис",
+        "PLACEHOLDER": "Що робить цей бот?"
+      },
+      "WEBHOOK_URL": {
+        "LABEL": "URL вебхука",
+        "PLACEHOLDER": "https://example.com/webhook",
+        "REQUIRED": "Webhook URL is required"
+      },
+      "ERRORS": {
+        "NAME": "Ім'я бота обов'язкове",
+        "URL": "Webhook URL is required",
+        "VALID_URL": "Please enter a valid URL starting with http:// or https://"
+      },
+      "CANCEL": "Скасувати",
+      "CREATE": "Create Bot",
+      "UPDATE": "Update Bot"
+    },
+    "WEBHOOK": {
+      "DESCRIPTION": "Configure a webhook bot to integrate with your custom services. The bot will receive and process events from conversations and can respond to them."
+    },
     "TYPES": {
       "WEBHOOK": "Webhook Бот",
       "CSML": "CSML Бот"

@@ -294,6 +294,372 @@
         "TITLE": "Desvincular",
         "SUCCESS": "Issue desvinculada com sucesso",
         "ERROR": "Houve um erro ao desvincular o atributo, por favor, tente novamente"
+      },
+      "NO_LINKED_ISSUES": "Nenhuma tarefa vinculada foi encontrada",
+      "DELETE": {
+        "TITLE": "Tem certeza que deseja excluir esta integração?",
+        "MESSAGE": "Tem certeza que deseja excluir esta integração?",
+        "CONFIRM": "Sim, excluir",
+        "CANCEL": "Cancelar"
+      },
+      "CTA": {
+        "TITLE": "Conectar ao Linear",
+        "AGENT_DESCRIPTION": "O espaço de trabalho do Linear não está conectado. Solicite ao seu administrador para conectar um espaço de trabalho para usar essa integração.",
+        "DESCRIPTION": "O espaço de trabalho do Linear não está conectado. Clique no botão abaixo para conectar seu espaço de trabalho para usar essa integração.",
+        "BUTTON_TEXT": "Conectar espaço de trabalho do Linear"
+      }
+    },
+    "NOTION": {
+      "DELETE": {
+        "TITLE": "Are you sure you want to delete the Notion integration?",
+        "MESSAGE": "Deleting this integration will remove access to your Notion workspace and stop all related functionality.",
+        "CONFIRM": "Sim, excluir",
+        "CANCEL": "Cancelar"
+      }
+    }
+  },
+  "CAPTAIN": {
+    "NAME": "Capitão",
+    "HEADER_KNOW_MORE": "Know more",
+    "COPILOT": {
+      "TITLE": "Copiloto",
+      "TRY_THESE_PROMPTS": "Experimente estes comandos",
+      "PANEL_TITLE": "Comece a usar o Copiloto",
+      "KICK_OFF_MESSAGE": "Precisa de um resumo rápido, quer verificar conversas passadas ou redigir uma resposta melhor? O Copiloto está aqui para acelerar as coisas.",
+      "SEND_MESSAGE": "Enviar mensagem...",
+      "EMPTY_MESSAGE": "Houve um erro ao gerar a resposta. Por favor, tente novamente.",
+      "LOADER": "Capitão está pensando",
+      "YOU": "Você",
+      "USE": "Use isto",
+      "RESET": "Reiniciar",
+      "SHOW_STEPS": "Mostrar etapas",
+      "SELECT_ASSISTANT": "Selecione o Assistente",
+      "PROMPTS": {
+        "SUMMARIZE": {
+          "LABEL": "Resumir esta conversa",
+          "CONTENT": "Resuma os pontos-chave discutidos entre o cliente e o agente de suporte, incluindo as preocupações do cliente, as questões e as soluções ou respostas dadas pelo agente de suporte"
+        },
+        "SUGGEST": {
+          "LABEL": "Sugerir uma resposta",
+          "CONTENT": "Analise a pergunta do cliente e elabore uma resposta que responda efetivamente às suas preocupações ou perguntas. Certifique-se de que a resposta seja clara, concisa e forneça informações úteis."
+        },
+        "RATE": {
+          "LABEL": "Avaliar esta conversa",
+          "CONTENT": "Revise a conversa para ver o quanto ela atende às necessidades do cliente. Compartilhe uma classificação de 0 a 5 com base em tom, clareza e eficácia."
+        },
+        "HIGH_PRIORITY": {
+          "LABEL": "Conversas de alta prioridade",
+          "CONTENT": "Dê um resumo de todas as conversas abertas com prioridade alta. Incluir o ID da conversa, nome do cliente (se disponível), o conteúdo da última mensagem e o agente atribuído. O grupo por status, se relevante."
+        },
+        "LIST_CONTACTS": {
+          "LABEL": "Listar contatos",
+          "CONTENT": "Mostre-me a lista dos 10 contatos mais frequentes. Inclua nome, e-mail ou número de telefone (se disponível), visto por última vez, etiquetas (se houver)."
+        }
+      }
+    },
+    "PLAYGROUND": {
+      "USER": "Você",
+      "ASSISTANT": "Assistente",
+      "MESSAGE_PLACEHOLDER": "Digite sua mensagem...",
+      "HEADER": "Playground",
+      "DESCRIPTION": "Use este playground para enviar mensagens para seu assistente e verificar se ele responde com precisão, rápido e no tom que você espera.",
+      "CREDIT_NOTE": "As mensagens enviadas aqui usam os créditos do seu Capitão."
+    },
+    "PAYWALL": {
+      "TITLE": "Atualize para usar o Capitão IA",
+      "AVAILABLE_ON": "O Capitão não está disponível no plano gratuito.",
+      "UPGRADE_PROMPT": "Atualize seu plano para ter acesso aos nossos assistentes, copilotos e muito mais.",
+      "UPGRADE_NOW": "Atualizar agora",
+      "CANCEL_ANYTIME": "Você pode alterar ou cancelar seu plano a qualquer momento"
+    },
+    "ENTERPRISE_PAYWALL": {
+      "UPGRADE_PROMPT": "Atualize seu plano para ter acesso aos nossos assistentes, copilotos e muito mais.",
+      "ASK_ADMIN": "Entre em contato com seu administrador para fazer a atualização."
+    },
+    "BANNER": {
+      "RESPONSES": "Você usou mais de 80% do seu limite de respostas. Para continuar usando o Capitão AI, faça o upgrade.",
+      "DOCUMENTS": "Limite de documentos atingido. Atualize para continuar usando o Capitão AI."
+    },
+    "FORM": {
+      "CANCEL": "Cancelar",
+      "CREATE": "Criar",
+      "EDIT": "Atualizar"
+    },
+    "ASSISTANTS": {
+      "HEADER": "Assistentes",
+      "NO_ASSISTANTS_AVAILABLE": "Não há assistentes disponíveis em sua conta.",
+      "ADD_NEW": "Criar um novo assistente",
+      "DELETE": {
+        "TITLE": "Tem certeza que deseja excluir o assistente?",
+        "DESCRIPTION": "Esta ação é permanente. Excluir este assistente irá removê-lo de todas as caixas de entrada conectadas e apagará permanentemente todo o conhecimento gerado.",
+        "CONFIRM": "Sim, excluir",
+        "SUCCESS_MESSAGE": "O assistente foi excluído com sucesso",
+        "ERROR_MESSAGE": "Ocorreu um erro ao excluir o assistente, por favor tente novamente."
+      },
+      "FORM_DESCRIPTION": "Preencha os detalhes abaixo para nomear seu assistente, descrever sua finalidade e especificar o produto que ele oferecerá suporte.",
+      "CREATE": {
+        "TITLE": "Criar um assistente",
+        "SUCCESS_MESSAGE": "O assistente foi criado com sucesso",
+        "ERROR_MESSAGE": "Ocorreu um erro ao criar o assistente, por favor tente novamente."
+      },
+      "FORM": {
+        "UPDATE": "Atualizar",
+        "SECTIONS": {
+          "BASIC_INFO": "Informações Básicas",
+          "SYSTEM_MESSAGES": "Mensagens do Sistema",
+          "INSTRUCTIONS": "Instruções",
+          "FEATURES": "Funcionalidades",
+          "TOOLS": "Ferramentas "
+        },
+        "NAME": {
+          "LABEL": "Nome",
+          "PLACEHOLDER": "Digite o nome do assistente",
+          "ERROR": "O nome é obrigatório"
+        },
+        "TEMPERATURE": {
+          "LABEL": "Temperatura da resposta",
+          "DESCRIPTION": "Ajuste o quão criativo ou restritivo as respostas do assistente devem ser. Valores mais baixos produzem respostas mais focadas e deterministas, enquanto valores mais altos permitem resultados mais criativos e variados."
+        },
+        "DESCRIPTION": {
+          "LABEL": "Descrição",
+          "PLACEHOLDER": "Digite a descrição do assistente",
+          "ERROR": "A descrição é obrigatória"
+        },
+        "PRODUCT_NAME": {
+          "LABEL": "Nome do Produto",
+          "PLACEHOLDER": "Digite o nome do produto",
+          "ERROR": "O nome do produto é obrigatório"
+        },
+        "WELCOME_MESSAGE": {
+          "LABEL": "Mensagem de boas-vindas",
+          "PLACEHOLDER": "Digite a mensagem de boas-vindas"
+        },
+        "HANDOFF_MESSAGE": {
+          "LABEL": "Mensagem de transferência",
+          "PLACEHOLDER": "Digite a mensagem de transferência"
+        },
+        "RESOLUTION_MESSAGE": {
+          "LABEL": "Mensagem de resolução",
+          "PLACEHOLDER": "Digite a mensagem de resolução"
+        },
+        "INSTRUCTIONS": {
+          "LABEL": "Instruções",
+          "PLACEHOLDER": "Digite as instruções para o assistente"
+        },
+        "FEATURES": {
+          "TITLE": "Funcionalidades",
+          "ALLOW_CONVERSATION_FAQS": "Gerar perguntas frequentes a partir de conversas resolvidas",
+          "ALLOW_MEMORIES": "Capture os principais detalhes como memórias de interações do cliente."
+        }
+      },
+      "EDIT": {
+        "TITLE": "Atualizar o assistente",
+        "SUCCESS_MESSAGE": "O assistente foi criado com sucesso",
+        "ERROR_MESSAGE": "Ocorreu um erro ao criar o assistente, por favor tente novamente.",
+        "NOT_FOUND": "Não foi possível encontrar o assistente. Tente novamente."
+      },
+      "SETTINGS": {
+        "BREADCRUMB": {
+          "ASSISTANT": "Assistente"
+        },
+        "BASIC_SETTINGS": {
+          "TITLE": "Basic settings",
+          "DESCRIPTION": "Customize what the assistant says when ending a conversation or transferring to a human."
+        },
+        "SYSTEM_SETTINGS": {
+          "TITLE": "System settings",
+          "DESCRIPTION": "Customize what the assistant says when ending a conversation or transferring to a human."
+        },
+        "CONTROL_ITEMS": {
+          "TITLE": "The Fun Stuff",
+          "DESCRIPTION": "Add more control to the assistant. (a bit more visual like a story : Query guardrail → scenarios → output) Nudges user to actually utilise these.",
+          "OPTIONS": {
+            "GUARDRAILS": {
+              "TITLE": "Guardrails",
+              "DESCRIPTION": "Keeps things on track—only the kinds of questions you want your assistant to answer, nothing off-limits or off-topic."
+            },
+            "SCENARIOS": {
+              "TITLE": "Scenarios",
+              "DESCRIPTION": "Give your assistant some context—like “what to do when a user is stuck,” or “how to act during a refund request.”"
+            },
+            "RESPONSE_GUIDELINES": {
+              "TITLE": "Response guidelines",
+              "DESCRIPTION": "The vibe and structure of your assistant’s replies—clear and friendly? Short and snappy? Detailed and formal?"
+            }
+          }
+        }
+      },
+      "OPTIONS": {
+        "EDIT_ASSISTANT": "Editar Assistente",
+        "DELETE_ASSISTANT": "Excluir Assistente",
+        "VIEW_CONNECTED_INBOXES": "Ver caixas de entrada conectadas"
+      },
+      "EMPTY_STATE": {
+        "TITLE": "Não há assistentes disponíveis",
+        "SUBTITLE": "Crie um assistente para fornecer respostas rápidas e precisas aos seus usuários. Ele pode aprender com seus artigos de ajuda e conversas passadas.",
+        "FEATURE_SPOTLIGHT": {
+          "TITLE": "Captain Assistant",
+          "NOTE": "Captain Assistant engages directly with customers, learns from your help docs and past conversations, and delivers instant, accurate responses. It handles the initial queries, providing quick resolutions before  transferring to an agent when needed."
+        }
+      }
+    },
+    "DOCUMENTS": {
+      "HEADER": "Documentos",
+      "ADD_NEW": "Criar um novo documento",
+      "RELATED_RESPONSES": {
+        "TITLE": "FAQs Relacionadas",
+        "DESCRIPTION": "Estes FAQs são gerados diretamente a partir do documento."
+      },
+      "FORM_DESCRIPTION": "Digite o URL do documento para adicioná-lo como fonte de conhecimento e escolha o assistente para associá-lo.",
+      "CREATE": {
+        "TITLE": "Adicionar um documento",
+        "SUCCESS_MESSAGE": "O documento foi criado com sucesso",
+        "ERROR_MESSAGE": "Ocorreu um erro ao criar o documento, por favor, tente novamente."
+      },
+      "FORM": {
+        "URL": {
+          "LABEL": "URL:",
+          "PLACEHOLDER": "Insira a URL do documento",
+          "ERROR": "Por favor forneça uma URL válida para o documento"
+        },
+        "ASSISTANT": {
+          "LABEL": "Assistente",
+          "PLACEHOLDER": "Selecione o assistente",
+          "ERROR": "O campo Assistente é obrigatório"
+        }
+      },
+      "DELETE": {
+        "TITLE": "Tem certeza de que deseja excluir este documento?",
+        "DESCRIPTION": "Esta ação é permanente. Eliminar este documento irá apagar permanentemente todo o conhecimento gerado.",
+        "CONFIRM": "Sim, excluir",
+        "SUCCESS_MESSAGE": "O documento foi excluído com sucesso",
+        "ERROR_MESSAGE": "Ocorreu um erro ao excluir o documento, por favor, tente novamente."
+      },
+      "OPTIONS": {
+        "VIEW_RELATED_RESPONSES": "Visualizar Respostas relacionadas",
+        "DELETE_DOCUMENT": "Excluir Documento"
+      },
+      "EMPTY_STATE": {
+        "TITLE": "Nenhum documento disponível",
+        "SUBTITLE": "Os documentos são usados pelo seu assistente para gerar perguntas frequentes. Pode importar documentos para fornecer um contexto para seu assistente.",
+        "FEATURE_SPOTLIGHT": {
+          "TITLE": "Captain Document",
+          "NOTE": "A document in Captain serves as a knowledge resource for the assistant. By connecting your help center or guides, Captain can analyze the content and provide accurate responses for customer inquiries."
+        }
+      }
+    },
+    "RESPONSES": {
+      "HEADER": "FAQs",
+      "ADD_NEW": "Criar nova FAQ",
+      "DOCUMENTABLE": {
+        "CONVERSATION": "Conversação #{id}"
+      },
+      "SELECTED": "{count} selecionado",
+      "SELECT_ALL": "Selecionar todos ({count})",
+      "UNSELECT_ALL": "Desmarcar todos ({count})",
+      "BULK_APPROVE_BUTTON": "Aprovar",
+      "BULK_DELETE_BUTTON": "Excluir",
+      "BULK_APPROVE": {
+        "SUCCESS_MESSAGE": "Perguntas Frequentes aprovadas com sucesso",
+        "ERROR_MESSAGE": "Ocorreu um erro ao aprovar as Perguntas Frequentes. Tente novamente."
+      },
+      "BULK_DELETE": {
+        "TITLE": "Excluir as Perguntas Frequentes?",
+        "DESCRIPTION": "Tem certeza que deseja excluir as Perguntas Frequentes selecionadas? Esta ação não pode ser desfeita.",
+        "CONFIRM": "Sim, excluir todas",
+        "SUCCESS_MESSAGE": "Perguntas Frequentes excluídas com sucesso/",
+        "ERROR_MESSAGE": "Ocorreu um erro ao excluir as Perguntas Frequentes, por favor tente novamente."
+      },
+      "DELETE": {
+        "TITLE": "Tem certeza que deseja excluir o FAQ?",
+        "DESCRIPTION": "",
+        "CONFIRM": "Sim, excluir",
+        "SUCCESS_MESSAGE": "FAQ excluída com sucesso",
+        "ERROR_MESSAGE": "Ocorreu um erro ao excluir a FAQ, por favor tente novamente."
+      },
+      "FILTER": {
+        "ASSISTANT": "Assistente: {selected}",
+        "STATUS": "Status: {selected}",
+        "ALL_ASSISTANTS": "Todos"
+      },
+      "STATUS": {
+        "TITLE": "Status",
+        "PENDING": "Pendentes",
+        "APPROVED": "Aceito",
+        "ALL": "Todos"
+      },
+      "FORM_DESCRIPTION": "Adicione uma pergunta e sua resposta correspondente à base de conhecimento e selecione o assistente ao qual deve estar associado.",
+      "CREATE": {
+        "TITLE": "Adicionar uma FAQ",
+        "SUCCESS_MESSAGE": "A resposta foi adicionada com sucesso.",
+        "ERROR_MESSAGE": "Ocorreu um erro ao adicionar a resposta. Por favor, tente novamente."
+      },
+      "FORM": {
+        "QUESTION": {
+          "LABEL": "Pergunta",
+          "PLACEHOLDER": "Digite a pergunta aqui",
+          "ERROR": "Por favor, forneça uma pergunta válida."
+        },
+        "ANSWER": {
+          "LABEL": "Responder",
+          "PLACEHOLDER": "Digite a resposta aqui",
+          "ERROR": "Por favor, forneça uma resposta válida."
+        },
+        "ASSISTANT": {
+          "LABEL": "Assistente",
+          "PLACEHOLDER": "Selecione um assistente",
+          "ERROR": "Por favor, selecione um assistente."
+        }
+      },
+      "EDIT": {
+        "TITLE": "Atualizar as Perguntas Frequentes",
+        "SUCCESS_MESSAGE": "As Perguntas Frequentes foram atualizadas com sucesso",
+        "ERROR_MESSAGE": "Ocorreu um erro ao atualizar as Perguntas Frequentes, por favor tente novamente",
+        "APPROVE_SUCCESS_MESSAGE": "As Perguntas Frequentes foram marcadas como aprovadas"
+      },
+      "OPTIONS": {
+        "APPROVE": "Marcar como aprovado",
+        "EDIT_RESPONSE": "Editar Perguntas Frequentes",
+        "DELETE_RESPONSE": "Excluir FAQ"
+      },
+      "EMPTY_STATE": {
+        "TITLE": "Nenhuma FAQ encontrada",
+        "SUBTITLE": "Perguntas Frequentes ajudam seu assistente a fornecer respostas rápidas e precisas para perguntas de seus clientes. Eles podem ser gerados automaticamente a partir do seu conteúdo ou podem ser adicionados manualmente.",
+        "FEATURE_SPOTLIGHT": {
+          "TITLE": "Captain FAQ",
+          "NOTE": "Captain FAQs detects common customer questions—whether missing from your knowledge base or frequently asked—and generates relevant FAQs to improve support. You can review each suggestion and decide whether to approve or reject it."
+        }
+      }
+    },
+    "INBOXES": {
+      "HEADER": "Caixas de entrada conectadas",
+      "ADD_NEW": "Conectar uma nova caixa de entrada",
+      "OPTIONS": {
+        "DISCONNECT": "Desconectar"
+      },
+      "DELETE": {
+        "TITLE": "Tem certeza que deseja desconectar a caixa de entrada?",
+        "DESCRIPTION": "",
+        "CONFIRM": "Sim, excluir",
+        "SUCCESS_MESSAGE": "A caixa de entrada foi desconectada com sucesso.",
+        "ERROR_MESSAGE": "Ocorreu um erro ao desconectar a caixa de entrada, por favor, tente novamente."
+      },
+      "FORM_DESCRIPTION": "Escolha uma caixa de entrada para conectar com o assistente.",
+      "CREATE": {
+        "TITLE": "Conecte uma caixa de entrada",
+        "SUCCESS_MESSAGE": "A caixa de entrada foi conectada com sucesso.",
+        "ERROR_MESSAGE": "Ocorreu um erro ao conectar à caixa de entrada. Por favor, tente novamente."
+      },
+      "FORM": {
+        "INBOX": {
+          "LABEL": "Caixa de Entrada",
+          "PLACEHOLDER": "Selecione a caixa de entrada para implantar o assistente.",
+          "ERROR": "É obrigatório selecionar uma caixa de entrada."
+        }
+      },
+      "EMPTY_STATE": {
+        "TITLE": "Caixa de entrada não conectada",
+        "SUBTITLE": "Conectar uma caixa de entrada permite ao assistente lidar com perguntas iniciais de seus clientes antes de transferi-las para você."
       }
     }
   }

@@ -262,6 +262,46 @@
           "ERROR_MESSAGE": "Kami tidak dapat menyimpan saluran WhatsApp"
         }
       },
+      "VOICE": {
+        "TITLE": "Voice Channel",
+        "DESC": "Integrate Twilio Voice and start supporting your customers via phone calls.",
+        "PHONE_NUMBER": {
+          "LABEL": "Nomor Telepon",
+          "PLACEHOLDER": "Enter your phone number (e.g. +1234567890)",
+          "ERROR": "Please provide a valid phone number in E.164 format (e.g. +1234567890)"
+        },
+        "TWILIO": {
+          "ACCOUNT_SID": {
+            "LABEL": "Account SID",
+            "PLACEHOLDER": "Enter your Twilio Account SID",
+            "REQUIRED": "Account SID is required"
+          },
+          "AUTH_TOKEN": {
+            "LABEL": "Token Auth",
+            "PLACEHOLDER": "Enter your Twilio Auth Token",
+            "REQUIRED": "Auth Token is required"
+          },
+          "API_KEY_SID": {
+            "LABEL": "API Key SID",
+            "PLACEHOLDER": "Enter your Twilio API Key SID",
+            "REQUIRED": "API Key SID is required"
+          },
+          "API_KEY_SECRET": {
+            "LABEL": "API Key Secret",
+            "PLACEHOLDER": "Enter your Twilio API Key Secret",
+            "REQUIRED": "API Key Secret is required"
+          },
+          "TWIML_APP_SID": {
+            "LABEL": "TwiML App SID",
+            "PLACEHOLDER": "Enter your Twilio TwiML App SID (starts with AP)",
+            "REQUIRED": "TwiML App SID is required"
+          }
+        },
+        "SUBMIT_BUTTON": "Create Voice Channel",
+        "API": {
+          "ERROR_MESSAGE": "We were not able to create the voice channel"
+        }
+      },
       "API_CHANNEL": {
         "TITLE": "API Channel",
         "DESC": "Integrasikan dengan saluran API dan mulai dukung pelanggan Anda.",
@@ -475,7 +515,8 @@
       "PRE_CHAT_FORM": "Formulir Pra Obrolan",
       "BUSINESS_HOURS": "Jam Kerja",
       "WIDGET_BUILDER": "Pembuat Widget",
-      "BOT_CONFIGURATION": "Konfigurasi Bot"
+      "BOT_CONFIGURATION": "Konfigurasi Bot",
+      "CSAT": "CSAT"
     },
     "SETTINGS": "Pengaturan",
     "FEATURES": {
@@ -496,9 +537,7 @@
       "ENABLE_EMAIL_COLLECT_BOX": "Aktifkan kotak pengumpulan email",
       "ENABLE_EMAIL_COLLECT_BOX_SUB_TEXT": "Aktifkan atau nonaktifkan kotak pengumpulan email pada percakpaan baru",
       "AUTO_ASSIGNMENT": "Aktifkan penugasan otomatis",
-      "ENABLE_CSAT": "Aktifkan CSAT",
       "SENDER_NAME_SECTION": "Enable Agent Name in Email",
-      "ENABLE_CSAT_SUB_TEXT": "Aktifkan/Nonaktifkan survey CSAT (Kepuasan pelanggan) setelah penyelesaian percakapan",
       "SENDER_NAME_SECTION_TEXT": "Enable/Disable showing Agent's name in email, if disabled it will show business name",
       "ENABLE_CONTINUITY_VIA_EMAIL": "Aktifkan kontinuitas percakapan melalui email",
       "ENABLE_CONTINUITY_VIA_EMAIL_SUB_TEXT": "Percakapan akan berlanjut melalui email jika alamat email kontak tersedia.",
@@ -570,6 +609,32 @@
       },
       "REQUIRE_EMAIL": {
         "LABEL": "Pengunjung harus memberikan nama dan alamat email mereka sebelum memulai obrolan"
+      }
+    },
+    "CSAT": {
+      "TITLE": "Aktifkan CSAT",
+      "SUBTITLE": "Automatically trigger CSAT surveys at the end of conversations to understand how customers feel about their support experience. Track satisfaction trends and identify areas for improvement over time.",
+      "DISPLAY_TYPE": {
+        "LABEL": "Display type"
+      },
+      "MESSAGE": {
+        "LABEL": "Pesan",
+        "PLACEHOLDER": "Please enter a message to show users with the form"
+      },
+      "SURVEY_RULE": {
+        "LABEL": "Survey rule",
+        "DESCRIPTION_PREFIX": "Send the survey if the conversation",
+        "DESCRIPTION_SUFFIX": "any of the labels",
+        "OPERATOR": {
+          "CONTAINS": "berisi",
+          "DOES_NOT_CONTAINS": "tidak berisi"
+        },
+        "SELECT_PLACEHOLDER": "select labels"
+      },
+      "NOTE": "Note: CSAT surveys are sent only once per conversation",
+      "API": {
+        "SUCCESS_MESSAGE": "CSAT settings updated successfully",
+        "ERROR_MESSAGE": "We couldn't update CSAT settings. Please try again later."
       }
     },
     "BUSINESS_HOURS": {
@@ -757,7 +822,9 @@
       "EMAIL": "Email",
       "TELEGRAM": "Telegram",
       "LINE": "Line",
-      "API": "API Channel"
+      "API": "API Channel",
+      "INSTAGRAM": "Instagram",
+      "VOICE": "Voice"
     }
   }
 }

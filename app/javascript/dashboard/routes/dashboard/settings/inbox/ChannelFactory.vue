@@ -12,6 +12,7 @@ import MercadoLibre from './channels/MercadoLibre.vue';
 // import TikTok from './channels/TikTok.vue';
 import Telegram from './channels/Telegram.vue';
 import Instagram from './channels/Instagram.vue';
+import Voice from './channels/Voice.vue';
 
 const channelViewList = {
   facebook: Facebook,
@@ -24,6 +25,7 @@ const channelViewList = {
   line: Line,
   telegram: Telegram,
   instagram: Instagram,
+  voice: Voice,
   mercado_libre: MercadoLibre,
   // tik_tok: TikTok,
 };

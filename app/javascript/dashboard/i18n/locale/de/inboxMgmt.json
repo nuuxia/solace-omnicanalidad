@@ -262,6 +262,46 @@
           "ERROR_MESSAGE": "Wir konnten den WhatsApp-Kanal nicht speichern"
         }
       },
+      "VOICE": {
+        "TITLE": "Voice Channel",
+        "DESC": "Integrate Twilio Voice and start supporting your customers via phone calls.",
+        "PHONE_NUMBER": {
+          "LABEL": "Telefonnummer",
+          "PLACEHOLDER": "Enter your phone number (e.g. +1234567890)",
+          "ERROR": "Please provide a valid phone number in E.164 format (e.g. +1234567890)"
+        },
+        "TWILIO": {
+          "ACCOUNT_SID": {
+            "LABEL": "Account SID",
+            "PLACEHOLDER": "Enter your Twilio Account SID",
+            "REQUIRED": "Account SID is required"
+          },
+          "AUTH_TOKEN": {
+            "LABEL": "Auth-Token",
+            "PLACEHOLDER": "Enter your Twilio Auth Token",
+            "REQUIRED": "Auth Token is required"
+          },
+          "API_KEY_SID": {
+            "LABEL": "API-Schlüssel SID",
+            "PLACEHOLDER": "Enter your Twilio API Key SID",
+            "REQUIRED": "API Key SID is required"
+          },
+          "API_KEY_SECRET": {
+            "LABEL": "API-Schlüssel-Geheimnis",
+            "PLACEHOLDER": "Enter your Twilio API Key Secret",
+            "REQUIRED": "API Key Secret is required"
+          },
+          "TWIML_APP_SID": {
+            "LABEL": "TwiML App SID",
+            "PLACEHOLDER": "Enter your Twilio TwiML App SID (starts with AP)",
+            "REQUIRED": "TwiML App SID is required"
+          }
+        },
+        "SUBMIT_BUTTON": "Create Voice Channel",
+        "API": {
+          "ERROR_MESSAGE": "We were not able to create the voice channel"
+        }
+      },
       "API_CHANNEL": {
         "TITLE": "API-Kanal",
         "DESC": "Integrieren Sie einen API-Kanal und starten Sie mit der Unterstützung Ihrer Kunden.",
@@ -475,7 +515,8 @@
       "PRE_CHAT_FORM": "Pre-Chat-Formular",
       "BUSINESS_HOURS": "Öffnungszeiten",
       "WIDGET_BUILDER": "Widget-Generator",
-      "BOT_CONFIGURATION": "Bot-Konfiguration"
+      "BOT_CONFIGURATION": "Bot-Konfiguration",
+      "CSAT": "CSAT"
     },
     "SETTINGS": "Einstellungen",
     "FEATURES": {
@@ -496,9 +537,7 @@
       "ENABLE_EMAIL_COLLECT_BOX": "E-Mail-Sammelbox aktivieren",
       "ENABLE_EMAIL_COLLECT_BOX_SUB_TEXT": "E-Mail-Sammelbox für neue Konversation aktivieren oder deaktivieren",
       "AUTO_ASSIGNMENT": "Aktivieren Sie die automatische Zuweisung",
-      "ENABLE_CSAT": "CSAT aktivieren",
       "SENDER_NAME_SECTION": "Aktivieren Sie den Agentennamen in der E-Mail",
-      "ENABLE_CSAT_SUB_TEXT": "CSAT(Kundenzufriedenheit) Umfrage aktivieren/deaktivieren nach Abschluss eines Gesprächs",
       "SENDER_NAME_SECTION_TEXT": "Aktivieren/Deaktivieren Sie die Anzeige des Agentennamens in der E-Mail. Wenn deaktiviert, wird der Firmenname angezeigt",
       "ENABLE_CONTINUITY_VIA_EMAIL": "Konversationskontinuität per E-Mail aktivieren",
       "ENABLE_CONTINUITY_VIA_EMAIL_SUB_TEXT": "Konversationen werden per E-Mail fortgesetzt, wenn die Kontakt-E-Mail-Adresse verfügbar ist.",
@@ -570,6 +609,32 @@
       },
       "REQUIRE_EMAIL": {
         "LABEL": "Besucher sollten ihren Namen und ihre E-Mail-Adresse angeben, bevor sie den Chat starten"
+      }
+    },
+    "CSAT": {
+      "TITLE": "CSAT aktivieren",
+      "SUBTITLE": "Automatically trigger CSAT surveys at the end of conversations to understand how customers feel about their support experience. Track satisfaction trends and identify areas for improvement over time.",
+      "DISPLAY_TYPE": {
+        "LABEL": "Display type"
+      },
+      "MESSAGE": {
+        "LABEL": "Nachricht",
+        "PLACEHOLDER": "Please enter a message to show users with the form"
+      },
+      "SURVEY_RULE": {
+        "LABEL": "Survey rule",
+        "DESCRIPTION_PREFIX": "Send the survey if the conversation",
+        "DESCRIPTION_SUFFIX": "any of the labels",
+        "OPERATOR": {
+          "CONTAINS": "enthält",
+          "DOES_NOT_CONTAINS": "beinhaltet nicht"
+        },
+        "SELECT_PLACEHOLDER": "select labels"
+      },
+      "NOTE": "Note: CSAT surveys are sent only once per conversation",
+      "API": {
+        "SUCCESS_MESSAGE": "CSAT settings updated successfully",
+        "ERROR_MESSAGE": "We couldn't update CSAT settings. Please try again later."
       }
     },
     "BUSINESS_HOURS": {
@@ -757,7 +822,9 @@
       "EMAIL": "E-Mail",
       "TELEGRAM": "Telegram",
       "LINE": "Line",
-      "API": "API-Kanal"
+      "API": "API-Kanal",
+      "INSTAGRAM": "Instagram",
+      "VOICE": "Voice"
     }
   }
 }

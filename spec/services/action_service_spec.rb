@@ -15,11 +15,11 @@ describe ActionService do
   end
 
   describe '#open_conversation' do
-    let(:conversation) { create(:conversation, status: 'pending') }
+    let(:conversation) { create(:conversation, status: :resolved) }
     let(:action_service) { described_class.new(conversation) }
 
     it 'opens the conversation' do
-      expect(conversation.status).to eq('pending')
+      expect(conversation.status).to eq('resolved')
       action_service.open_conversation(nil)
       expect(conversation.reload.status).to eq('open')
     end

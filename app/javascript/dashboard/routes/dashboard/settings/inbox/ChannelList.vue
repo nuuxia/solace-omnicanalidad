@@ -38,6 +38,7 @@ export default {
         // { key: 'tik_tok', name: 'Tik Tok' },
         { key: 'line', name: 'Line' },
         { key: 'instagram', name: 'Instagram' },
+        { key: 'voice', name: 'Voice' },
       ];
     },
     ...mapGetters({

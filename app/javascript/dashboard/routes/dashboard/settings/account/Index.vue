@@ -17,6 +17,7 @@ import AccountId from './components/AccountId.vue';
 import BuildInfo from './components/BuildInfo.vue';
 import AccountDelete from './components/AccountDelete.vue';
 import AutoResolve from './components/AutoResolve.vue';
+import AudioTranscription from './components/AudioTranscription.vue';
 import SectionLayout from './components/SectionLayout.vue';
 
 export default {
@@ -27,6 +28,7 @@ export default {
     BuildInfo,
     AccountDelete,
     AutoResolve,
+    AudioTranscription,
     SectionLayout,
     WithLabel,
     NextInput,
@@ -65,6 +67,12 @@ export default {
       return this.isFeatureEnabledonAccount(
         this.accountId,
         FEATURE_FLAGS.AUTO_RESOLVE_CONVERSATIONS
+      );
+    },
+    showAudioTranscriptionConfig() {
+      return this.isFeatureEnabledonAccount(
+        this.accountId,
+        FEATURE_FLAGS.CAPTAIN
       );
     },
     languagesSortedByCode() {
@@ -242,6 +250,7 @@ export default {
 
       <AccountId />
       <AutoResolve v-if="showAutoResolutionConfig" />
+    <AudioTranscription v-if="showAudioTranscriptionConfig" />
 
       <div v-if="!uiFlags.isFetchingItem && isOnChatwootCloud">
         <AccountDelete />

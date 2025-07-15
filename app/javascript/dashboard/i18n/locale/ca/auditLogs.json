@@ -64,7 +64,10 @@
       "REMOVE": "{agentName} ha eliminat {user} de l'equip (#{team_id})"
     },
     "ACCOUNT": {
-      "EDIT": "{agentName} ha actualitzat la configuració del compte (#{id})"
+      "EDIT": "{agentName} updated the account configuration (#{id})"
+    },
+    "CONVERSATION": {
+      "DELETE": "{agentName} deleted conversation #{id}"
     }
   }
 }

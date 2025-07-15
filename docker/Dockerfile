@@ -1,5 +1,6 @@
-# Pre-build stage
-FROM ruby:3.3.3-alpine3.19 AS pre-builder
+# pre-build stage
+FROM node:23-alpine as node
+FROM ruby:3.4.4-alpine3.21 AS pre-builder
 
 ARG NODE_VERSION="20.15.1"
 ARG PNPM_VERSION="10.2.0"
@@ -64,8 +65,8 @@ RUN rm -rf /gems/ruby/3.3.0/cache/*.gem \
   && find /gems/ruby/3.3.0/gems/ \( -name "*.c" -o -name "*.o" \) -delete \
   && rm -rf .git .gitignore
 
-# Final stage
-FROM ruby:3.3.3-alpine3.19
+# final build stage
+FROM ruby:3.4.4-alpine3.21
 
 ARG NODE_VERSION="20.15.1"
 ARG PNPM_VERSION="10.2.0"

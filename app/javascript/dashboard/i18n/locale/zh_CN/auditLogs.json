@@ -64,7 +64,10 @@
       "REMOVE": "{agentName} 将 {user} 从团队 (#{team_id}) 中移除"
     },
     "ACCOUNT": {
-      "EDIT": "{agentName} 更新了账户配置 (#{id})"
+      "EDIT": "{agentName} 更新了账户配置 (##{id})"
+    },
+    "CONVERSATION": {
+      "DELETE": "{agentName} 删除了对话 #{id}"
     }
   }
 }

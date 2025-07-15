@@ -65,6 +65,9 @@
     },
     "ACCOUNT": {
       "EDIT": "{agentName} قام بتحديث إعدادات الحساب (#{id})"
+    },
+    "CONVERSATION": {
+      "DELETE": "{agentName} deleted conversation #{id}"
     }
   }
 }

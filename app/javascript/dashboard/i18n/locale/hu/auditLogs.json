@@ -64,7 +64,10 @@
       "REMOVE": "{agentName} eltávolítva {user} a csapatból {team_id}"
     },
     "ACCOUNT": {
-      "EDIT": "{agentName} frissítette a fiók konfigurációját {id}"
+      "EDIT": "{agentName} updated the account configuration (#{id})"
+    },
+    "CONVERSATION": {
+      "DELETE": "{agentName} deleted conversation #{id}"
     }
   }
 }

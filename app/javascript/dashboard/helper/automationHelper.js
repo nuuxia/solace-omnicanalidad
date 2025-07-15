@@ -9,8 +9,6 @@ import {
   DEFAULT_CONVERSATION_OPENED_CONDITION,
   DEFAULT_OTHER_CONDITION,
   DEFAULT_ACTIONS,
-  MESSAGE_CONDITION_VALUES,
-  PRIORITY_CONDITION_VALUES,
 } from 'dashboard/constants/automation';
 import filterQueryGenerator from './filterQueryGenerator';
 import actionQueryGenerator from './actionQueryGenerator';
@@ -104,6 +102,7 @@ export const getActionOptions = ({
   slaPolicies,
   type,
   addNoneToListFn,
+  priorityOptions,
 }) => {
   const actionsMap = {
     assign_agent: addNoneToListFn ? addNoneToListFn(agents) : agents,
@@ -111,7 +110,7 @@ export const getActionOptions = ({
     send_email_to_team: teams,
     add_label: generateConditionOptions(labels, 'title'),
     remove_label: generateConditionOptions(labels, 'title'),
-    change_priority: PRIORITY_CONDITION_VALUES,
+    change_priority: priorityOptions,
     add_sla: slaPolicies,
   };
   return actionsMap[type];
@@ -129,6 +128,8 @@ export const getConditionOptions = ({
   statusFilterOptions,
   teams,
   type,
+  priorityOptions,
+  messageTypeOptions,
 }) => {
   if (isCustomAttributeCheckbox(customAttributes, type)) {
     return booleanFilterOptions;
@@ -148,8 +149,8 @@ export const getConditionOptions = ({
     browser_language: languages,
     conversation_language: languages,
     country_code: countries,
-    message_type: MESSAGE_CONDITION_VALUES,
-    priority: PRIORITY_CONDITION_VALUES,
+    message_type: messageTypeOptions,
+    priority: priorityOptions,
   };
 
   return conditionFilterMaps[type];

@@ -17,6 +17,7 @@ class Twilio::IncomingMessageService
       source_id: params[:SmsSid]
     )
     attach_files
+    attach_location if location_message?
     @message.save!
   end
 
@@ -137,17 +138,35 @@ class Twilio::IncomingMessageService
   end
 
   def download_with_auth(media_url)
-    Down.download(
-      media_url,
-      http_basic_authentication: [twilio_channel.account_sid, twilio_channel.auth_token || twilio_channel.api_key_sid]
-    )
+    auth_credentials = if twilio_channel.api_key_sid.present?
+                         # When using api_key_sid, the auth token should be the api_secret_key
+                         [twilio_channel.api_key_sid, twilio_channel.auth_token]
+                       else
+                         # When using account_sid, the auth token is the account's auth token
+                         [twilio_channel.account_sid, twilio_channel.auth_token]
+                       end
+
+    Down.download(media_url, http_basic_authentication: auth_credentials)
   end
 
   def handle_download_attachment_error(error, media_url)
-    Rails.logger.info "Error downloading attachment from Twilio: #{error.message}: Retrying"
+    Rails.logger.info "Error downloading attachment from Twilio: #{error.message}: Retrying without auth"
     Down.download(media_url)
   rescue StandardError => e
     Rails.logger.info "Error downloading attachment from Twilio: #{e.message}: Skipping"
     nil
+  end
+
+  def location_message?
+    params[:MessageType] == 'location' && params[:Latitude].present? && params[:Longitude].present?
+  end
+
+  def attach_location
+    @message.attachments.new(
+      account_id: @message.account_id,
+      file_type: :location,
+      coordinates_lat: params[:Latitude].to_f,
+      coordinates_long: params[:Longitude].to_f
+    )
   end
 end
