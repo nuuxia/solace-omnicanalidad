@@ -1,5 +1,3 @@
-version: '3.7'
-
 services:
   arrows:
     build:
@@ -19,6 +17,7 @@ services:
       - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379/0
     command: >
       sh -c "
+      # Migrate database and start Rails server
       bundle exec rails db:migrate &&
       bundle exec rails s -b 0.0.0.0 -p 3000
       "
@@ -40,6 +39,7 @@ services:
       - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379/0
     command: >
       sh -c "
+      # Start Sidekiq worker
       bundle exec sidekiq -C config/sidekiq.yml
       "
     restart: always
@@ -49,5 +49,9 @@ services:
     container_name: redis_production
     env_file:
       - .env
-    command: sh -c "redis-server --requirepass \"$REDIS_PASSWORD\""
+    command: >
+      sh -c "
+      # Run Redis with password protection
+      redis-server --requirepass \"$REDIS_PASSWORD\"
+      "
     restart: unless-stopped
