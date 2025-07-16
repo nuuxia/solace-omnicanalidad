@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    # Permitir que el job dure hasta 45 minutos
+    # Allow this job to run up to 45 minutes
     timeout-minutes: 45
     runs-on: ubuntu-latest
 
@@ -21,7 +21,7 @@ jobs:
           chmod 600 key.pem
           ssh -o StrictHostKeyChecking=no -i key.pem \
             ${{ secrets.STG_USER }}@${{ secrets.STG_HOST }} \
-            "echo 'Conexión SSH exitosa'"
+            "echo 'SSH connection successful'"
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v0.1.8
@@ -29,13 +29,15 @@ jobs:
           host: ${{ secrets.STG_HOST }}
           username: arrows
           key: ${{ secrets.STG_SSH_KEY }}
-          # Timeout de la acción SSH en segundos (45 min = 2700 s)
-          timeout: 2700
+          # Allow SSH action up to 45 minutes
+          timeout: 45m
+          # Allow remote commands up to 45 minutes
+          command_timeout: 45m
           script: |
-            # Navegar al proyecto
+            # Navigate to project directory
             cd /home/arrows/SoftwareArrows
 
-            # Clonar o actualizar repo
+            # Clone repository if missing, otherwise reset to 'stg'
             if [ ! -d ".git" ]; then
               git clone git@github.com:SoftwareArrows/SoftwareArrows.git .
             else
@@ -43,6 +45,6 @@ jobs:
               git reset --hard origin/stg
             fi
 
-            # Levantar contenedores
+            # Export Redis password and rebuild containers
             export REDIS_PASSWORD=${{ secrets.STG_REDIS_PASSWORD }}
             docker compose up -d --build

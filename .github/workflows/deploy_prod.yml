@@ -30,13 +30,15 @@ jobs:
           username: arrows            # use 'arrows' user instead of root
           key: ${{ secrets.PROD_SSH_KEY }}
           password: ${{ secrets.PROD_SSH_PASSWORD }}
-          # SSH action timeout in seconds (45 min = 2700 s)
-          timeout: 2700
+          # Allow SSH action up to 45 minutes
+          timeout: 45m
+          # Allow remote commands up to 45 minutes
+          command_timeout: 45m
           script: |
             # Navigate to project directory
             cd /home/arrows/SoftwareArrows
 
-            # Clone or update repository
+            # Clone repository if missing, otherwise reset to 'prod'
             if [ ! -d ".git" ]; then
               git clone git@github.com:SoftwareArrows/SoftwareArrows.git .
             else
