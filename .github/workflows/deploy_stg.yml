@@ -7,8 +7,8 @@ on:
 
 jobs:
   deploy:
-    # Allow this job to run up to 45 minutes
-    timeout-minutes: 45
+    # Allow this job to run up to 5 hours (300 minutes)
+    timeout-minutes: 300
     runs-on: ubuntu-latest
 
     steps:
@@ -29,10 +29,10 @@ jobs:
           host: ${{ secrets.STG_HOST }}
           username: arrows
           key: ${{ secrets.STG_SSH_KEY }}
-          # Allow SSH action up to 45 minutes
-          timeout: 45m
-          # Allow remote commands up to 45 minutes
-          command_timeout: 45m
+          # Allow SSH action up to 5 hours
+          timeout: 5h
+          # Allow remote commands up to 5 hours
+          command_timeout: 5h
           script: |
             # Navigate to project directory
             cd /home/arrows/SoftwareArrows
