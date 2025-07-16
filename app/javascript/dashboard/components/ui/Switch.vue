@@ -29,11 +29,11 @@ export default {
 
 <style lang="scss" scoped>
 .toggle-button {
-  @apply bg-slate-200 dark:bg-slate-600;
-  --toggle-button-box-shadow:
-    rgb(255, 255, 255) 0px 0px 0px 0px, rgba(59, 130, 246, 0.5) 0px 0px 0px 0px,
-    rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
-  border-radius: var(--border-radius-large);
+  @apply bg-n-slate-5;
+  --toggle-button-box-shadow: rgb(255, 255, 255) 0px 0px 0px 0px,
+    rgba(59, 130, 246, 0.5) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
+    rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+  border-radius: 0.5625rem;
   border: 2px solid transparent;
   cursor: pointer;
   display: flex;
@@ -46,7 +46,7 @@ export default {
   width: 2.125rem;
 
   &.active {
-    @apply bg-woot-600 dark:bg-woot-600;
+    @apply bg-n-brand;
   }
 
   &.small {

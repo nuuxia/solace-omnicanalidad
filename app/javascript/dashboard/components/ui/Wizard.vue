@@ -69,7 +69,7 @@ export default {
 
     &.active {
       h3 {
-        @apply text-woot-500;
+        @apply text-n-brand;
       }
 
       .step {

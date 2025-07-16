@@ -102,11 +102,11 @@ const STYLE_CONFIG = {
       solid:
         'bg-n-brand text-white hover:enabled:brightness-110 focus-visible:brightness-110 outline-transparent',
       faded:
-        'bg-n-brand/10 text-woot-300 hover:enabled:bg-n-brand/20 focus-visible:bg-n-brand/20 outline-transparent',
-      outline: 'text-woot-300 outline-n-brand',
+        'bg-n-brand/10 text-n-brand hover:enabled:bg-n-brand/20 focus-visible:bg-n-brand/20 outline-transparent',
+      outline: 'text-n-brand outline-n-brand',
       ghost:
-        'text-woot-300 hover:enabled:bg-n-alpha-2 focus-visible:bg-n-alpha-2 outline-transparent',
-      link: 'text-woot-300 hover:enabled:underline focus-visible:underline outline-transparent',
+        'text-n-brand hover:enabled:bg-n-alpha-2 focus-visible:bg-n-alpha-2 outline-transparent',
+      link: 'text-n-brand hover:enabled:underline focus-visible:underline outline-transparent',
     },
     ruby: {
       solid:

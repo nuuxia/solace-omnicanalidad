@@ -9,59 +9,17 @@
     <h1 class="text-base font-medium leading-6 text-n-slate-12" id="page-title">
       <%= content_for(:title) %>
     </h1>
-    <p class="text-sm font-normal leading-5 text-slate-500 m-0">Update your instance settings, access billing portal</p>
   </div>
 </header>
 <section class="main-content__body px-8">
-  <% if Redis::Alfred.get(Redis::Alfred::CHATWOOT_INSTALLATION_CONFIG_RESET_WARNING) %>
-    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-5" role="alert">
-    <strong class="font-bold">Alert!</strong>
-<<<<<<< HEAD
-    <span class="block sm:inline">Unauthorized premium changes detected in Chatwoot. To keep using them, please upgrade your plan.
-      Contact for help :</span><span class="inline rounded-full bg-red-200 px-2  text-white  ml-2">sales@chatwoot.com</span>
-=======
-    <span class="block sm:inline">Unauthorized premium changes detected in Arrows. To keep using them, please upgrade your plan.
-      Contact for help :</span><span class="inline rounded-full bg-red-200 px-2  text-white  ml-2">sales@softwarearrows.com</span>
->>>>>>> origin/stg_copy
-    </div>
-  <% end %>
+
 
   <div class="bg-white py-2 px-4 xl:px-0">
     <%= javascript_include_tag "secretField" %>
     <div class="flex items-center mb-6">
-      <h4 class="text-sm font-medium leading-5 h-5 text-n-slate-12 mr-4">Installation Identifier</h4>
-      <div data-secret-text="<%= ChatwootHub.installation_identifier %>" class="cell-data__secret-field text-sm leading-5 h-5 text-n-slate-11">
-        <span data-secret-masked="true" class="select-none"></span>
-        <button type="button" onclick="toggleSecretField(event)" data-secret-toggler class="inline-flex items-center justify-center h-5 w-5 p-0 rounded text-n-slate-11 hover:text-n-slate-12 transition-colors focus:outline-none">
-          <svg width="20" height="20" class="w-5 h-5 fill-current">
-            <use xlink:href="#eye-show" />
-          </svg>
-        </button>
-        <button type="button" onclick="copySecretField(event)" data-secret-copier class="inline-flex items-center justify-center h-5 w-5 p-0 rounded text-n-slate-11 hover:text-n-slate-12 transition-colors focus:outline-none">
-          <svg width="20" height="20" class="w-5 h-5 fill-current">
-            <use xlink:href="#icon-copy" />
-          </svg>
-        </button>
-      </div>
+      
     </div>
-    <div class="flex p-4 outline outline-1 outline-n-container rounded-lg items-start md:items-center shadow-sm flex-col md:flex-row">
-      <div class="flex flex-col flex-grow gap-1">
-        <div class="flex items-center gap-2">
-          <h2 class="h-5 leading-5 text-n-slate-12 text-sm font-medium">Current plan</h2>
-          <a href="<%= refresh_super_admin_settings_url %>" class="inline-flex gap-1 text-xs font-medium items-center text-woot-500 hover:text-woot-700">
-            <svg width="16" height="16"><use xlink:href="#icon-refresh-line" /></svg>
-            <span>Refresh</span>
-          </a>
-        </div>
-        <p class="text-n-slate-11 m-0 text-sm"><%= SuperAdmin::FeaturesHelper.plan_details.html_safe %></p>
-      </div>
-      <a href="<%= ChatwootHub.billing_url %>" target="_blank" rel="noopener noreferrer">
-        <button class="mt-4 md:mt-0 flex gap-1 items-center bg-transparent shadow-sm h-9 hover:text-n-slate-12 hover:bg-slate-50 outline outline-1 outline-n-container rounded text-n-slate-11 font-medium p-2 focus:outline-none">
-          <svg width="16" height="16"><use xlink:href="#icon-settings-2-line" /></svg>
-          <span class="px-1">Manage</span>
-        </button>
-      </a>
-    </div>
+ 
 
     <% if ChatwootHub.pricing_plan != 'community' &&  User.count > ChatwootHub.pricing_plan_quantity %>
     <div role="alert">
@@ -96,10 +54,10 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-2 gap-y-3">
       <% SuperAdmin::FeaturesHelper.available_features.each do |feature, attrs| %>
         <div class="group outline outline-1 outline-n-container p-4 rounded-lg relative shadow-sm">
-          <span class="<%= attrs[:enabled] ? 'bg-green-400 text-white': 'bg-slate-300 text-slate-800' %> absolute rounded-full p-1 inline-flex right-4 top-5">
+          <span class="<%= attrs[:enabled] ? 'bg-green-400 text-white': 'bg-slate-300 text-n-brand' %> absolute rounded-full p-1 inline-flex right-4 top-5">
             <svg width="14" height="14"><use xlink:href="<%= attrs[:enabled] ? '#icon-tick-line': '#icon-lock-line' %>" /></svg>
           </span>
-          <div class="visible <% if !attrs[:enabled] %> group-hover:invisible <% end %> flex items-center justify-center w-10 h-10 mb-2 border border-slate-100 border-solid text-slate-800 rounded-full">
+          <div class="visible <% if !attrs[:enabled] %> group-hover:invisible <% end %> flex items-center justify-center w-10 h-10 mb-2 border border-slate-100 border-solid text-n-brand rounded-full">
             <svg width="20" height="20"><use xlink:href="#<%= attrs[:icon] %>" /></svg>
           </div>
           <% if !attrs[:enabled] %>
@@ -112,7 +70,7 @@
           <% end %>
           <div class="flex items-center justify-between mb-1.5 mt-4">
             <div class="flex items-center gap-2">
-              <h3 class="text-slate-900 font-medium"><%= attrs[:name] %></h3>
+              <h3 class="text-n-slate-12 font-medium"><%= attrs[:name] %></h3>
               <% if attrs[:enterprise] %>
                 <span class="px-2 h-4 leading-4 rounded-xl text-green-800 font-medium bg-green-100/70 text-xxs">EE</span>
               <% end %>

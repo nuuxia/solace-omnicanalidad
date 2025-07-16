@@ -70,7 +70,7 @@ const handleSyncTemplates = async () => {
       </h3>
       <Button
         v-tooltip.right="t('CAMPAIGN.WHATSAPP.CREATE.FORM.SYNC_BUTTON_TOOLTIP')"
-        class="bg-woot-500"
+        class="bg-n-brand"
         variant="solid"
         icon="i-lucide-rotate-ccw"
         :disabled="isSyncButtonDisabled"

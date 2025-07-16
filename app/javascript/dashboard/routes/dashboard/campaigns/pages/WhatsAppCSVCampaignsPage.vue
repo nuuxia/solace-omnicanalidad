@@ -92,7 +92,7 @@ const closeStatsDialog = () => {
           variant="solid"
           size="sm"
           icon="i-lucide-rotate-ccw"
-          class="bg-woot-500 mr-2 flex-none"
+          class="bg-n-brand mr-2 flex-none"
           :disabled="isSyncDisabled"
           @click="handleSync"
         >

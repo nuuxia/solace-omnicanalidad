@@ -22,7 +22,7 @@ const sendMessage = () => {
       @keyup.enter="sendMessage"
     />
     <button
-      class="absolute ltr:right-1 rtl:left-1 top-1/2 -translate-y-1/2 h-9 w-10 flex items-center justify-center text-n-slate-11 hover:text-n-blue-11"
+      class="absolute ltr:right-1 rtl:left-1 top-1/2 -translate-y-1/2 h-9 w-10 flex items-center justify-center text-n-slate-11 hover:text-n-brand-11"
       type="submit"
     >
       <i class="i-ph-arrow-up" />

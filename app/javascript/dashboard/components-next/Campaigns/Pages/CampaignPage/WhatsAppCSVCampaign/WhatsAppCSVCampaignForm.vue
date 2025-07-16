@@ -691,7 +691,7 @@ watch(debugDisabled, val => console.table(val), { immediate: true });
           target="_blank"
           rel="noopener noreferrer"
           download="csv-campaigns-sample.csv"
-          class="text-woot-300 text-sm underline"
+          class="text-n-brand text-sm underline"
         >
           {{ t('CAMPAIGN.CSV.WHATSAPP.CREATE.DOWNLOAD_SAMPLE_CSV') }}
         </a>

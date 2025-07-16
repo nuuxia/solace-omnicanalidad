@@ -43,9 +43,9 @@ const colorClass = computed(() => {
 
   const styleMap = {
     primary: {
-      outline: `${baseClasses.outline} outline-ash-400 hover:text-woot-500 active:text-woot-500`,
+      outline: `${baseClasses.outline} outline-ash-400 hover:text-n-brand active:text-n-brand`,
       ghost: `${baseClasses.ghost} focus:outline-woot-400`,
-      solid: `${baseClasses.solid} bg-woot-500 text-white focus:outline-woot-500`,
+      solid: `${baseClasses.solid} bg-n-brand text-white focus:outline-n-brand`,
     },
     secondary: {
       outline: `${baseClasses.outline} outline-ash-400 hover:text-ash-900 active:text-woot-900 `,
