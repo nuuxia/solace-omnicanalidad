@@ -7,7 +7,10 @@ on:
 
 jobs:
   deploy:
+    # Allow this job to run up to 45 minutes
+    timeout-minutes: 45
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -16,20 +19,24 @@ jobs:
         run: |
           echo "${{ secrets.PROD_SSH_KEY }}" > key.pem
           chmod 600 key.pem
-          ssh -o StrictHostKeyChecking=no -i key.pem ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} "echo 'Conexión SSH exitosa'"
+          ssh -o StrictHostKeyChecking=no -i key.pem \
+            ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} \
+            "echo 'SSH connection successful'"
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v0.1.8
         with:
           host: ${{ secrets.PROD_HOST }}
-          username: arrows  # Usamos el usuario "arrows" en lugar de "root"
+          username: arrows            # use 'arrows' user instead of root
           key: ${{ secrets.PROD_SSH_KEY }}
           password: ${{ secrets.PROD_SSH_PASSWORD }}
+          # SSH action timeout in seconds (45 min = 2700 s)
+          timeout: 2700
           script: |
-            # Navegar a la carpeta donde está el proyecto
+            # Navigate to project directory
             cd /home/arrows/SoftwareArrows
 
-            # Si el repositorio no está clonado, clonarlo; de lo contrario, actualizarlo
+            # Clone or update repository
             if [ ! -d ".git" ]; then
               git clone git@github.com:SoftwareArrows/SoftwareArrows.git .
             else
@@ -37,7 +44,6 @@ jobs:
               git reset --hard origin/prod
             fi
 
+            # Export Redis password and rebuild containers
             export REDIS_PASSWORD=${{ secrets.PROD_REDIS_PASSWORD }}
-
-            # Levantar los contenedores utilizando docker-compose.yaml y el archivo .env
             docker compose up -d --build

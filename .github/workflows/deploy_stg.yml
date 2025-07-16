@@ -7,7 +7,10 @@ on:
 
 jobs:
   deploy:
+    # Permitir que el job dure hasta 45 minutos
+    timeout-minutes: 45
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -16,19 +19,23 @@ jobs:
         run: |
           echo "${{ secrets.STG_SSH_KEY }}" > key.pem
           chmod 600 key.pem
-          ssh -o StrictHostKeyChecking=no -i key.pem ${{ secrets.STG_USER }}@${{ secrets.STG_HOST }} "echo 'Conexión SSH exitosa'"
+          ssh -o StrictHostKeyChecking=no -i key.pem \
+            ${{ secrets.STG_USER }}@${{ secrets.STG_HOST }} \
+            "echo 'Conexión SSH exitosa'"
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v0.1.8
         with:
           host: ${{ secrets.STG_HOST }}
-          username: arrows  # Usamos el usuario "arrows" en lugar de "root"
+          username: arrows
           key: ${{ secrets.STG_SSH_KEY }}
+          # Timeout de la acción SSH en segundos (45 min = 2700 s)
+          timeout: 2700
           script: |
-            # Navegar a la carpeta donde está el proyecto
+            # Navegar al proyecto
             cd /home/arrows/SoftwareArrows
 
-            # Si el repositorio no está clonado, clonarlo; de lo contrario, actualizarlo
+            # Clonar o actualizar repo
             if [ ! -d ".git" ]; then
               git clone git@github.com:SoftwareArrows/SoftwareArrows.git .
             else
@@ -36,7 +43,6 @@ jobs:
               git reset --hard origin/stg
             fi
 
+            # Levantar contenedores
             export REDIS_PASSWORD=${{ secrets.STG_REDIS_PASSWORD }}
-
-            # Levantar los contenedores utilizando docker-compose.yaml y el archivo .env
             docker compose up -d --build
