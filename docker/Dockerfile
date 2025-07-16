@@ -1,105 +1,85 @@
-# pre-build stage
-FROM node:23-alpine as node
+# 1) Stage de Node: instala Node.js y PNPM
+FROM node:23-alpine AS node
+ARG PNPM_VERSION="10.2.0"
+RUN npm install -g pnpm@${PNPM_VERSION} \
+  && pnpm --version
+
+# 2) Pre-builder: gems + assets
 FROM ruby:3.4.4-alpine3.21 AS pre-builder
 
-ARG NODE_VERSION="20.15.1"
-ARG PNPM_VERSION="10.2.0"
+# Variables de entorno / build args
 ARG BUNDLE_WITHOUT="development:test"
-ENV BUNDLE_WITHOUT=${BUNDLE_WITHOUT}
-ENV BUNDLER_VERSION=2.5.11
-ARG RAILS_ENV=production
-ENV RAILS_ENV=${RAILS_ENV}
-ENV BUNDLE_PATH="/gems"
-ENV NODE_OPTIONS="--max-old-space-size=4096 --openssl-legacy-provider"
+ARG RAILS_ENV="production"
+ENV BUNDLE_WITHOUT=${BUNDLE_WITHOUT} \
+    RAILS_ENV=${RAILS_ENV} \
+    BUNDLER_VERSION=2.5.11 \
+    BUNDLE_PATH="/gems" \
+    NODE_OPTIONS="--max-old-space-size=4096 --openssl-legacy-provider" \
+    PNPM_HOME="/root/.local/share/pnpm" \
+    PATH="$PNPM_HOME:$PATH"
 
-# Instalar dependencias base + node + npm
+# Dependencias base (sin Node.js ni npm)
 RUN apk update && apk add --no-cache \
-  openssl \
-  tar \
-  build-base \
-  tzdata \
-  postgresql-dev \
-  postgresql-client \
-  nodejs=${NODE_VERSION}-r0 \
-  npm \
-  git \
-  curl \
-  && mkdir -p /var/app \
-  && gem install bundler
-
-# Instalar pnpm globalmente
-RUN npm install -g pnpm@${PNPM_VERSION} && pnpm --version
-
-ENV PNPM_HOME="/root/.local/share/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
+    openssl \
+    tar \
+    build-base \
+    tzdata \
+    postgresql-dev \
+    postgresql-client \
+    git \
+    curl \
+    vips \
+  && gem install bundler -v ${BUNDLER_VERSION}
 
 WORKDIR /app
 
+# Copia y bundle gems
 COPY Gemfile Gemfile.lock ./
+RUN bundle config set force_ruby_platform true \
+  && bundle install --jobs 4 --retry 3
 
-RUN apk add --no-cache \
-  build-base musl ruby-full ruby-dev gcc make musl-dev \
-  openssl openssl-dev g++ linux-headers xz vips
+# Copia y usa PNPM del stage `node`
+COPY --from=node /usr/local /usr/local
 
-RUN bundle config set --local force_ruby_platform true
-
-RUN if [ "$RAILS_ENV" = "production" ]; then \
-  bundle config set without 'development test'; bundle install -j 4 -r 3; \
-  else bundle install -j 4 -r 3; \
-  fi
-
+# JS deps + build assets
 COPY package.json pnpm-lock.yaml ./
-RUN pnpm install
+RUN pnpm install \
+  && SECRET_KEY_BASE=precompile_placeholder RAILS_LOG_TO_STDOUT=enabled \
+     bundle exec rake assets:precompile \
+  && rm -rf node_modules tmp/cache
 
-COPY . /app
-RUN mkdir -p /app/log
+# Código de la app
+COPY . .
+RUN mkdir -p log \
+  && git rev-parse HEAD > .git_sha \
+  && rm -rf .git .gitignore \
+  && rm -rf /gems/ruby/*/cache/*.gem /gems/ruby/*/gems/*/{*.c,*.o}
 
-RUN if [ "$RAILS_ENV" = "production" ]; then \
-  SECRET_KEY_BASE=precompile_placeholder RAILS_LOG_TO_STDOUT=enabled bundle exec rake assets:precompile \
-  && rm -rf spec node_modules tmp/cache; \
-  fi
-
-RUN git rev-parse HEAD > /app/.git_sha
-
-RUN rm -rf /gems/ruby/3.3.0/cache/*.gem \
-  && find /gems/ruby/3.3.0/gems/ \( -name "*.c" -o -name "*.o" \) -delete \
-  && rm -rf .git .gitignore
-
-# final build stage
+# 3) Stage final: sólo Ruby + copia todo listo
 FROM ruby:3.4.4-alpine3.21
 
-ARG NODE_VERSION="20.15.1"
-ARG PNPM_VERSION="10.2.0"
 ARG BUNDLE_WITHOUT="development:test"
-ENV BUNDLE_WITHOUT=${BUNDLE_WITHOUT}
-ENV BUNDLER_VERSION=2.5.11
-ENV EXECJS_RUNTIME="Disabled"
-ENV RAILS_SERVE_STATIC_FILES=true
-ENV BUNDLE_FORCE_RUBY_PLATFORM=1
-ENV RAILS_ENV=production
-ENV BUNDLE_PATH="/gems"
+ENV BUNDLE_WITHOUT=${BUNDLE_WITHOUT} \
+    BUNDLER_VERSION=2.5.11 \
+    RAILS_ENV=production \
+    BUNDLE_PATH="/gems" \
+    RAILS_SERVE_STATIC_FILES=true \
+    EXECJS_RUNTIME="Disabled"
 
+# Dependencias mínimas
 RUN apk update && apk add --no-cache \
-  build-base \
-  openssl \
-  tzdata \
-  postgresql-client \
-  imagemagick \
-  git \
-  vips \
-  nodejs=${NODE_VERSION}-r0 \
-  npm \
-  && gem install bundler
-
-# pnpm en no-producción
-RUN if [ "$RAILS_ENV" != "production" ]; then \
-  npm install -g pnpm@${PNPM_VERSION} && pnpm --version; \
-  fi
-
-COPY --from=pre-builder /gems/ /gems/
-COPY --from=pre-builder /app /app
-COPY --from=pre-builder /app/.git_sha /app/.git_sha
+    openssl \
+    tzdata \
+    postgresql-client \
+    imagemagick \
+    git \
+    vips \
+  && gem install bundler -v ${BUNDLER_VERSION}
 
 WORKDIR /app
+# Copia gems, app y .git_sha desde pre-builder
+COPY --from=pre-builder /gems /gems
+COPY --from=pre-builder /app /app
 
 EXPOSE 3000
+CMD ["bundle", "exec", "rails", "s", "-b", "0.0.0.0"]
