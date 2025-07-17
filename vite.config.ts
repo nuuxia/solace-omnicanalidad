@@ -18,6 +18,8 @@ and build it separately using Vite itself, toggled by an ENV variable.
 
 We need to edit the `asset:precompile` rake task to include the SDK in the precompile list.
 */
+/// <reference types="vitest" />
+
 import { defineConfig } from 'vite';
 import ruby from 'vite-plugin-ruby';
 import path from 'path';
@@ -47,8 +49,6 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        // [NOTE] when not in library mode, no new keys will be addedd or overwritten
-        // setting dir: isLibraryMode ? 'public/packs' : undefined will not work
         ...(isLibraryMode
           ? {
               dir: 'public/packs',
@@ -60,13 +60,13 @@ export default defineConfig({
               },
             }
           : {}),
-        inlineDynamicImports: isLibraryMode, // Disable code-splitting for SDK
+        inlineDynamicImports: isLibraryMode,
       },
     },
     lib: isLibraryMode
       ? {
           entry: path.resolve(__dirname, './app/javascript/entrypoints/sdk.js'),
-          formats: ['iife'], // IIFE format for single file
+          formats: ['iife'],
           name: 'sdk',
         }
       : undefined,
@@ -83,6 +83,20 @@ export default defineConfig({
       survey: path.resolve('./app/javascript/survey'),
       widget: path.resolve('./app/javascript/widget'),
       assets: path.resolve('./app/javascript/dashboard/assets'),
+    },
+  },
+  // ADD THIS CSS CONFIGURATION BLOCK
+  css: {
+    preprocessorOptions: {
+      scss: {
+        // These paths tell Sass where to look for imported .scss files
+        includePaths: [
+          path.resolve(__dirname, 'node_modules'), // Essential for node_modules imports (e.g., if 'reset' is a package)
+          path.resolve(__dirname, 'app/javascript'), // This covers most of your internal imports like 'widget/assets/scss/reset'
+          path.resolve(__dirname, 'app/javascript/widget/assets/scss'), // Specific path for 'woot.scss' and its direct imports
+          path.resolve(__dirname, 'app/javascript/shared/assets/fonts'), // For 'shared/assets/fonts/widget_fonts'
+        ],
+      },
     },
   },
   test: {
