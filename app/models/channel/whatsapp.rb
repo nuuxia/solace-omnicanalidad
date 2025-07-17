@@ -61,9 +61,9 @@ class Channel::Whatsapp < ApplicationRecord
   private
 
   def ensure_webhook_verify_token
-    if provider == 'whatsapp_cloud'
-      provider_config['webhook_verify_token'] ||= ENV['WEBHOOK_VERIFY_TOKEN']
-    end
+    return unless provider == 'whatsapp_cloud'
+
+    provider_config['webhook_verify_token'] ||= ENV.fetch('WEBHOOK_VERIFY_TOKEN', nil)
   end
 
   def validate_provider_config
