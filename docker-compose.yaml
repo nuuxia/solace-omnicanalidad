@@ -14,8 +14,11 @@ services:
     env_file:
       - .env
     environment:
-      # --- LÍNEA AÑADIDA ---
+      # --- LÍNEAS DE FUERZA BRUTA (Mantenlas) ---
       - BUNDLE_PATH=/gems 
+      - GEM_HOME=/gems
+      # --- LA LÍNEA FINAL QUE FALTA ---
+      - BUNDLE_WITHOUT=development:test
       - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379/0
     command: >
       sh -c "
@@ -37,8 +40,11 @@ services:
     env_file:
       - .env
     environment:
-      # --- LÍNEA AÑADIDA ---
+      # --- LÍNEAS DE FUERZA BRUTA (Mantenlas) ---
       - BUNDLE_PATH=/gems
+      - GEM_HOME=/gems
+      # --- LA LÍNEA FINAL QUE FALTA ---
+      - BUNDLE_WITHOUT=development:test
       - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379/0
     command: >
       sh -c "
