@@ -10,18 +10,29 @@ FROM ruby:3.4.4-slim AS pre-builder
 ARG BUNDLE_WITHOUT="development:test"
 ARG RAILS_ENV="production"
 ARG BUNDLER_VERSION="2.5.11"
-ARG PNPM_VERSION="10.2.0" # Añadido para consistencia
+ARG PNPM_VERSION="10.2.0"
 
-ENV BUNDLE_WITHOUT=${BUNDLE_WITHOUT} \
+# --- BRUTE FORCE BUNDLER CONFIG (START) ---
+# Forzamos todas las rutas a nuestro directorio /gems para anular cualquier
+# configuración por defecto de la imagen base.
+ENV GEM_HOME="/gems" \
+    BUNDLE_PATH="/gems" \
+    BUNDLE_BIN="/gems/bin" \
+    BUNDLE_APP_CONFIG="/gems/config" \
+# --- BRUTE FORCE BUNDLER CONFIG (END) ---
+    BUNDLE_WITHOUT=${BUNDLE_WITHOUT} \
     RAILS_ENV=${RAILS_ENV} \
     BUNDLER_VERSION=${BUNDLER_VERSION} \
-    BUNDLE_PATH="/gems" \
     NODE_OPTIONS="--max-old-space-size=4096 --openssl-legacy-provider" \
     PNPM_HOME="/root/.local/share/pnpm" \
-    PATH="$PNPM_HOME:$PATH" \
+    PATH="/gems/bin:$PNPM_HOME:$PATH" \
     HUSKY=0
 
 WORKDIR /app
+
+# Borramos cualquier configuración de Bundler pre-existente en la imagen
+RUN rm -f /usr/local/etc/bundle/config \
+  && rm -f ~/.bundle/config
 
 # Instalar dependencias del sistema, Node.js, PNPM y Bundler en un solo paso
 RUN apt-get update \
@@ -66,15 +77,18 @@ RUN mkdir -p log \
 # 3) Final stage: runtime minimal
 FROM ruby:3.4.4-slim
 
-ARG BUNDLE_WITHOUT="development:test"
 ARG BUNDLER_VERSION="2.5.11"
 
-ENV BUNDLE_WITHOUT=${BUNDLE_WITHOUT} \
-    BUNDLER_VERSION=${BUNDLER_VERSION} \
-    RAILS_ENV="production" \
+# --- BRUTE FORCE BUNDLER CONFIG (START) ---
+ENV GEM_HOME="/gems" \
     BUNDLE_PATH="/gems" \
+    BUNDLE_BIN="/gems/bin" \
+    BUNDLE_APP_CONFIG="/gems/config" \
+# --- BRUTE FORCE BUNDLER CONFIG (END) ---
+    RAILS_ENV="production" \
     RAILS_SERVE_STATIC_FILES=true \
-    EXECJS_RUNTIME="Disabled"
+    EXECJS_RUNTIME="Disabled" \
+    PATH="/gems/bin:$PATH"
 
 WORKDIR /app
 
