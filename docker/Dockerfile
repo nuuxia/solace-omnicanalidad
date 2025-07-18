@@ -1,6 +1,5 @@
-# 1) Node stage: instala Node.js y PNPM
+# 1) Node stage: No se usa actualmente, pero se mantiene por si acaso.
 FROM node:23-alpine AS node
-
 ARG PNPM_VERSION="10.2.0"
 RUN npm install -g pnpm@${PNPM_VERSION} \
   && pnpm --version
@@ -11,6 +10,7 @@ FROM ruby:3.4.4-slim AS pre-builder
 ARG BUNDLE_WITHOUT="development:test"
 ARG RAILS_ENV="production"
 ARG BUNDLER_VERSION="2.5.11"
+ARG PNPM_VERSION="10.2.0" # Añadido para consistencia
 
 ENV BUNDLE_WITHOUT=${BUNDLE_WITHOUT} \
     RAILS_ENV=${RAILS_ENV} \
@@ -23,26 +23,26 @@ ENV BUNDLE_WITHOUT=${BUNDLE_WITHOUT} \
 
 WORKDIR /app
 
-# Instalar dependencias del sistema y Bundler
+# Instalar dependencias del sistema, Node.js, PNPM y Bundler en un solo paso
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
     build-essential \
     curl \
     git \
     libffi-dev \
-    pkgconf \
+    pkg-config \
     libpq-dev \
     postgresql-client \
-    vips-tools \
+    libvips-tools \
     libvips-dev \
     openssl \
     tzdata \
+    nodejs \
+    npm \
+  && npm install -g pnpm@${PNPM_VERSION} \
   && gem install bundler -v ${BUNDLER_VERSION} \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
-
-# Traer PNPM desde el stage de Node
-COPY --from=node /usr/local /usr/local
 
 # Instalar gems
 COPY Gemfile Gemfile.lock ./
@@ -84,7 +84,7 @@ RUN apt-get update \
     git \
     imagemagick \
     libpq5 \
-    vips-tools \
+    libvips-tools \
     openssl \
     tzdata \
   && gem install bundler -v ${BUNDLER_VERSION} \
