@@ -8,7 +8,6 @@ RUN npm install -g pnpm@${PNPM_VERSION} \
 # 2) Pre-builder stage: gems, JS deps y compilación de assets
 FROM ruby:3.4.4-alpine3.21 AS pre-builder
 
-# Build args y env
 ARG BUNDLE_WITHOUT="development:test"
 ARG RAILS_ENV="production"
 ARG BUNDLER_VERSION="2.5.11"
@@ -20,12 +19,11 @@ ENV BUNDLE_WITHOUT=${BUNDLE_WITHOUT} \
     NODE_OPTIONS="--max-old-space-size=4096 --openssl-legacy-provider" \
     PNPM_HOME="/root/.local/share/pnpm" \
     PATH="$PNPM_HOME:$PATH" \
-    # Deshabilita Husky para no requerir .git
     HUSKY=0
 
 WORKDIR /app
 
-# Dependencias de sistema + libffi + pkgconf + linux-headers
+# Dependencias de sistema e instalador de Bundler
 RUN apk update && apk add --no-cache \
     build-base \
     curl \
@@ -39,33 +37,32 @@ RUN apk update && apk add --no-cache \
     tzdata \
     vips \
     openssl \
+    gcompat \
   && gem install bundler -v ${BUNDLER_VERSION}
 
-# 2.1) Instalar gems de Ruby
+# Instalación de gems
 COPY Gemfile Gemfile.lock ./
 RUN bundle config set force_ruby_platform true \
   && bundle install --jobs 4 --retry 3
 
-# 2.2) Traer PNPM desde stage de Node
+# Traer PNPM desde el stage de Node
 COPY --from=node /usr/local /usr/local
 
-# 2.3) Copiar TODO el código (incluye Rakefile, config/, app/, etc.)
+# Copiar código y compilar assets
 COPY . .
-
-# 2.4) Instalar dependencias JS y compilar assets
 RUN pnpm install \
   && SECRET_KEY_BASE=precompile_placeholder RAILS_LOG_TO_STDOUT=enabled \
      bundle exec rake assets:precompile \
   && rm -rf node_modules tmp/cache
 
-# Limpieza final de pre-builder
+# Limpieza de cachés y metadatos
 RUN mkdir -p log \
   && git rev-parse HEAD > .git_sha \
   && rm -rf .git .gitignore \
   && rm -rf /gems/ruby/*/cache/*.gem \
   && find /gems/ruby/*/gems -type f \( -name "*.c" -o -name "*.o" \) -delete
 
-# 3) Final stage: runtime minimal con gems y app lista
+# 3) Final stage: runtime minimal
 FROM ruby:3.4.4-alpine3.21
 
 ARG BUNDLE_WITHOUT="development:test"
@@ -80,7 +77,7 @@ ENV BUNDLE_WITHOUT=${BUNDLE_WITHOUT} \
 
 WORKDIR /app
 
-# Dependencias de runtime mínimas
+# Dependencias mínimas de runtime
 RUN apk update && apk add --no-cache \
     git \
     imagemagick \
@@ -88,9 +85,10 @@ RUN apk update && apk add --no-cache \
     tzdata \
     vips \
     openssl \
+    gcompat \
   && gem install bundler -v ${BUNDLER_VERSION}
 
-# Copiar gems y app compilada desde pre-builder
+# Copiar gems y aplicación compilada
 COPY --from=pre-builder /gems /gems
 COPY --from=pre-builder /app /app
 
