@@ -2,7 +2,8 @@
 FROM node:23-alpine AS node
 
 ARG PNPM_VERSION="10.2.0"
-RUN npm install -g pnpm@${PNPM_VERSION} && pnpm --version
+RUN npm install -g pnpm@${PNPM_VERSION} \
+  && pnpm --version
 
 # 2) Pre-builder stage: gems, JS deps y compilación de assets
 FROM ruby:3.4.4-slim AS pre-builder
@@ -22,7 +23,9 @@ ENV BUNDLE_WITHOUT=${BUNDLE_WITHOUT} \
 
 WORKDIR /app
 
-# Dependencias de sistema e instalador de Bundler\RUN apt-get update && apt-get install -y \
+# Instalar dependencias del sistema y Bundler
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends \
     build-essential \
     curl \
     git \
@@ -34,12 +37,15 @@ WORKDIR /app
     libvips-dev \
     openssl \
     tzdata \
-  && gem install bundler -v ${BUNDLER_VERSION}
+  && gem install bundler -v ${BUNDLER_VERSION} \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
 
-# Traer PNPM desde stage de Node
+# Traer PNPM desde el stage de Node
 COPY --from=node /usr/local /usr/local
 
-# Instalación de gems\COPY Gemfile Gemfile.lock ./
+# Instalar gems
+COPY Gemfile Gemfile.lock ./
 RUN bundle config set force_ruby_platform true \
   && bundle install --jobs 4 --retry 3
 
@@ -72,15 +78,18 @@ ENV BUNDLE_WITHOUT=${BUNDLE_WITHOUT} \
 
 WORKDIR /app
 
-# Dependencias mínimas de runtime
-RUN apt-get update && apt-get install -y \
+# Instalar dependencias mínimas de runtime
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends \
     git \
     imagemagick \
     libpq5 \
     vips-tools \
     openssl \
     tzdata \
-  && gem install bundler -v ${BUNDLER_VERSION}
+  && gem install bundler -v ${BUNDLER_VERSION} \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
 
 # Copiar gems y aplicación compilada
 COPY --from=pre-builder /gems /gems
