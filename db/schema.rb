@@ -340,6 +340,8 @@ ActiveRecord::Schema[7.1].define(version: 202506201021076) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.jsonb "config", default: {}, null: false
+    t.jsonb "response_guidelines", default: []
+    t.jsonb "guardrails", default: []
     t.index ["account_id"], name: "index_captain_assistants_on_account_id"
   end
 

@@ -89,6 +89,12 @@ export default {
     selectedTabKey() {
       return this.tabs[this.selectedTabIndex]?.key;
     },
+    shouldShowWhatsAppConfiguration() {
+      return !!(
+        this.isAWhatsAppCloudChannel &&
+        this.inbox.provider_config?.source !== 'embedded_signup'
+      );
+    },
     whatsAppAPIProviderName() {
       if (this.isAWhatsAppCloudChannel) {
         return this.$t('INBOX_MGMT.ADD.WHATSAPP.PROVIDERS.WHATSAPP_CLOUD');
@@ -418,7 +424,7 @@ export default {
 
 <template>
   <div
-    class="flex-grow flex-shrink w-full min-w-0 pl-0 pr-0 overflow-auto settings"
+    class="overflow-auto flex-grow flex-shrink pr-0 pl-0 w-full min-w-0 settings"
   >
     <SettingIntroBanner
       :header-image="inbox.avatarUrl"
@@ -440,7 +446,7 @@ export default {
         />
       </woot-tabs>
     </SettingIntroBanner>
-    <section class="w-full max-w-6xl mx-auto">
+    <section class="mx-auto w-full max-w-6xl">
       <MicrosoftReauthorize v-if="microsoftUnauthorized" :inbox="inbox" />
       <FacebookReauthorize v-if="facebookUnauthorized" :inbox="inbox" />
       <GoogleReauthorize v-if="googleUnauthorized" :inbox="inbox" />

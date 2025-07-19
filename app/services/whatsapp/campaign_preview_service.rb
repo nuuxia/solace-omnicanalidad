@@ -25,12 +25,11 @@ module Whatsapp
     def send_preview_message
       Whatsapp::SendTemplateService.new(
         phone_number_id: inbox.phone_number_id,
-        version: ENV['VITE_FB_GRAPH_API_VERSION'],
+        version: ENV.fetch('FB_GRAPH_API_VERSION', nil),
         to: phone_number,
         template: template,
         token: inbox.whatsapp_api_key
       ).perform
     end
-    
   end
 end

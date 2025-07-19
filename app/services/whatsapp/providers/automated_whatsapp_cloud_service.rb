@@ -7,9 +7,9 @@ module Whatsapp
         @waba_id          = waba_id
         @phone_number_id  = phone_number_id
         @business_id      = business_id
-        @version          = ENV.fetch('VITE_FB_GRAPH_API_VERSION', nil)
+        @version          = ENV.fetch('FB_GRAPH_API_VERSION', nil)
         @access_token     = ENV.fetch('SYSTEM_USER_ACCESS_TOKEN', nil)
-        @pin              = ENV.fetch('VITE_FB_CONFIG_PIN', nil)
+        @pin              = ENV.fetch('FB_CONFIG_PIN', nil)
       end
 
       def call

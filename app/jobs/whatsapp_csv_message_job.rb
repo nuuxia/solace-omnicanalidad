@@ -65,7 +65,7 @@ class WhatsappCsvMessageJob
   def send_and_capture(phone, campaign, expanded_template)
     Whatsapp::SendTemplateService.new(
       phone_number_id: campaign.inbox.phone_number_id,
-      version: ENV.fetch('VITE_FB_GRAPH_API_VERSION', 'v19.0'),
+      version: ENV.fetch('FB_GRAPH_API_VERSION', 'v19.0'),
       to: phone,
       template: expanded_template,
       token: campaign.inbox.whatsapp_api_key

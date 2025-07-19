@@ -3,7 +3,7 @@ class WhatsappMessageJob
   include Sidekiq::Worker
   sidekiq_options queue: :whatsapp_messages, retry: 3
 
-  RATE_LIMIT_KEY = "whatsapp_rate_limit"
+  RATE_LIMIT_KEY = 'whatsapp_rate_limit'
   MESSAGES_PER_SECOND = 10
 
   def perform(campaign_id, contact_id)
@@ -27,10 +27,10 @@ class WhatsappMessageJob
 
     # 2) Expandir template con placeholders
     expanded_template = Whatsapp::TemplatePlaceholderService.new(
-      template:         raw_template,
-      body_variables:   body_vars,
+      template: raw_template,
+      body_variables: body_vars,
       button_variables: button_vars,
-      contact:          contact,         # para contact_name
+      contact: contact,         # para contact_name
       header_media_url: header_media_url
     ).perform
 
@@ -38,7 +38,7 @@ class WhatsappMessageJob
     response_body = send_message(campaign, contact, expanded_template)
 
     if response_body.nil?
-      Rails.logger.error "[WhatsappMessageJob] Respuesta nil. Error de red o parseo. Marcando como failed."
+      Rails.logger.error '[WhatsappMessageJob] Respuesta nil. Error de red o parseo. Marcando como failed.'
       campaign.increment!(:messages_failed)
       return
     end
@@ -69,10 +69,10 @@ class WhatsappMessageJob
 
     Whatsapp::SendTemplateService.new(
       phone_number_id: campaign.inbox.phone_number_id,
-      version:        ENV['VITE_FB_GRAPH_API_VERSION'],  # o "v16.0"
-      to:             contact.phone_number,
-      template:       expanded_template,
-      token:          api_key
+      version: ENV.fetch('FB_GRAPH_API_VERSION', nil),  # o "v16.0"
+      to: contact.phone_number,
+      template: expanded_template,
+      token: api_key
     ).perform
   end
 
@@ -95,7 +95,7 @@ class WhatsappMessageJob
           conn.expire(key, 2)
         end
       end
-      Rails.logger.debug "[enforce_rate_limit] Incrementado contador para #{key} a #{count + 1}"
+      Rails.logger.debug { "[enforce_rate_limit] Incrementado contador para #{key} a #{count + 1}" }
     end
   end
 

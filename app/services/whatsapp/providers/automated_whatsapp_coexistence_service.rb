@@ -7,7 +7,7 @@ module Whatsapp
         @account_id   = account_id
         @waba_id      = waba_id
         @business_id  = business_id # por si lo querés guardar más adelante
-        @version      = ENV.fetch('VITE_FB_GRAPH_API_VERSION', nil)
+        @version      = ENV.fetch('FB_GRAPH_API_VERSION', nil)
         @access_token = ENV.fetch('SYSTEM_USER_ACCESS_TOKEN', nil)
       end
 

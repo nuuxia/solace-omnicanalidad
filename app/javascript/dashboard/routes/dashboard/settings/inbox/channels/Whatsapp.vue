@@ -1,5 +1,8 @@
-<script>
-import PageHeader from '../../SettingsSubPageHeader.vue';
+<script setup>
+import { computed } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+import { useStore } from 'vuex';
 import Twilio from './Twilio.vue';
 import ThreeSixtyDialogWhatsapp from './360DialogWhatsapp.vue';
 import CloudWhatsapp from './CloudWhatsapp.vue';
@@ -242,9 +245,22 @@ export default {
       </label>
     </div>
 
-    <Twilio v-if="provider === 'twilio'" type="whatsapp" />
-    <ThreeSixtyDialogWhatsapp v-else-if="provider === '360dialog'" />
-    <CloudWhatsapp v-else />
+    <div v-else-if="showConfiguration">
+      <div class="px-6 py-5 rounded-2xl border bg-n-solid-2 border-n-weak">
+        <WhatsappEmbeddedSignup
+          v-if="shouldShowEmbeddedSignup(selectedProvider)"
+        />
+        <CloudWhatsapp v-else-if="shouldShowCloudWhatsapp(selectedProvider)" />
+        <Twilio
+          v-else-if="selectedProvider === PROVIDER_TYPES.TWILIO"
+          type="whatsapp"
+        />
+        <ThreeSixtyDialogWhatsapp
+          v-else-if="selectedProvider === PROVIDER_TYPES.THREE_SIXTY_DIALOG"
+        />
+        <CloudWhatsapp v-else />
+      </div>
+    </div>
   </div>
 </template>
 
