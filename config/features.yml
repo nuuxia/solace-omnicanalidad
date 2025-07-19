@@ -189,5 +189,8 @@
   enabled: false
 - name: whatsapp_campaign
   display_name: WhatsApp Campaign
-  enabled: false
+  enabled: true
+- name: campaigns_csv_whatsapp
+  display_name: Campaigns CSV WhatsApp
+  enabled: true
 

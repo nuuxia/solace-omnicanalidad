@@ -6,16 +6,6 @@
     "RECONNECTION_REQUIRED": "Your inbox is disconnected. You won't receive new messages until you reauthorize it.",
     "CLICK_TO_RECONNECT": "Click here to reconnect.",
     "OFFLINE_RESPONSE_LABEL": "The bot will only answer during offline hours.",
-    "MERCADO_LIBRE_OPTIONS_HEADER": "Reception of Messages in the Inbox",
-    "MERCADO_LIBRE_USER_INFO_BUTTON": "Get MercadoLibre user information",
-    "MERCADO_LIBRE_USER_INFO": {
-      "TITLE": "Mercado Libre Account Info",
-      "SUB_TEXT": "Display the username and profile link of the connected Mercado Libre account.",
-      "LOADING": "Loading user information...",
-      "NICKNAME": "Username",
-      "PERMALINK": "Permanent link",
-      "ERROR": "An error occurred while fetching user information"
-    },
     "ENABLE_PRE_SALE_MESSAGES": "Enable pre-sale questions",
     "ENABLE_POST_SALE_MESSAGES": "Enable post-sale messaging",
     "ENABLE_BOTH_MESSAGES": "Enable both",
@@ -232,22 +222,27 @@
         }
       },
       "WHATSAPP": {
-        "TITLE": "WhatsApp Channel",
-        "DESC": "Start supporting your customers via WhatsApp.",
+        "TITLE": "Manual WhatsApp Channel",
+        "DESC": "Start supporting your customers via WhatsApp manual integration.",
+        "MANUAL_TITLE_ALT": "Or configure manually",
+        "MANUAL_DESC": "If you can't use the automated method, enter your WhatsApp Cloud API credentials here.",
+        "SELECT_PROVIDER": {
+          "TITLE": "Select your API provider",
+          "DESCRIPTION": "Choose your WhatsApp provider. You can connect directly through Meta which requires no setup, or connect through Twilio using your account credentials."
+        },
         "PROVIDERS": {
           "LABEL": "API Provider",
-          "WHATSAPP_EMBEDDED": "WhatsApp Business",
           "TWILIO": "Twilio",
           "WHATSAPP_CLOUD": "WhatsApp Cloud",
-          "WHATSAPP_CLOUD_DESC": "Quick setup through Meta",
-          "TWILIO_DESC": "Connect via Twilio credentials",
-          "360_DIALOG": "360Dialog"
+          "360_DIALOG": "360Dialog",
+          "WHATSAPP_CLOUD_DESC": "Quick setup through Meta.",
+          "TWILIO_DESC": "Connect via Twilio credentials."
         },
         "CHOOSE_METHOD": "Choose how you want to connect your WhatsApp channel. You can do it automatically through Facebook, or set it up manually.",
         "LOGIN_WITH_FACEBOOK": {
           "LABEL": "Login with Facebook"
         },
-        "AUTOMATED_TITLE": "Automated WhatsApp Chanel ",
+        "AUTOMATED_TITLE": "Automated WhatsApp Channel ",
         "AUTOMATED_DESC": "Connect your WhatsApp account through Facebook. Now, instead of doing it manually, you can take advantage of Meta's integrated registration to automate the entire process.",
         "INBOX_NAME": {
           "LABEL": "Inbox Name",
@@ -287,28 +282,6 @@
           "WEBHOOK_VERIFICATION_TOKEN": "Webhook Verification Token"
         },
         "SUBMIT_BUTTON": "Create WhatsApp Channel",
-        "EMBEDDED_SIGNUP": {
-          "TITLE": "Quick Setup with Meta",
-          "DESC": "You will be redirected to Meta to log into your WhatsApp Business account. Having admin access will help make the setup smooth and easy.",
-          "BENEFITS": {
-            "TITLE": "Benefits of Embedded Signup:",
-            "EASY_SETUP": "No manual configuration required",
-            "SECURE_AUTH": "Secure OAuth based authentication",
-            "AUTO_CONFIG": "Automatic webhook and phone number configuration"
-          },
-          "SUBMIT_BUTTON": "Connect with WhatsApp Business",
-          "AUTH_PROCESSING": "Authenticating with Meta",
-          "WAITING_FOR_BUSINESS_INFO": "Please complete business setup in the Meta window...",
-          "PROCESSING": "Setting up your WhatsApp Business Account",
-          "LOADING_SDK": "Loading Facebook SDK...",
-          "CANCELLED": "WhatsApp Signup was cancelled",
-          "SUCCESS_TITLE": "WhatsApp Business Account Connected!",
-          "WAITING_FOR_AUTH": "Waiting for authentication...",
-          "INVALID_BUSINESS_DATA": "Invalid business data received from Facebook. Please try again.",
-          "SIGNUP_ERROR": "Signup error occurred",
-          "AUTH_NOT_COMPLETED": "Authentication not completed. Please restart the process.",
-          "SUCCESS_FALLBACK": "WhatsApp Business Account has been successfully configured"
-        },
         "API": {
           "ERROR_MESSAGE": "We were not able to save the WhatsApp channel"
         }
@@ -431,14 +404,6 @@
         "API": {
           "ERROR_MESSAGE": "We were not able to save the telegram channel"
         }
-      },
-      "MERCADO_LIBRE_CHANNEL": {
-        "HELP": "To add Mercado Libre as a channel, you need to authenticate your Account by clicking on 'Sign in with Mercado Libre' ",
-        "ERROR_MESSAGE": "There was an error connecting to Mercado Libre, please try again",
-        "TITLE": "Mercado Libre Channel",
-        "DESC": "Integrate with the Mercado Libre channel and start supporting your customers.",
-        "SUBMIT_BUTTON": "Create Mercado Libre Channel",
-        "LOADING_MESSAGE": "Creating channel, please wait..."
       },
       "TIK_TOK_CHANNEL": {
         "HELP": "To add Tik Tok as a channel, you need to authenticate your Account by clicking on 'Sign in with Tik Tok' ",
@@ -889,7 +854,6 @@
       "EMAIL": "Email",
       "TELEGRAM": "Telegram",
       "LINE": "Line",
-      "MERCADO_LIBRE": "Mercado Libre",
       "TIK_TOK": "Tik Tok",
       "API": "API Channel",
       "INSTAGRAM": "Instagram",
