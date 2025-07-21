@@ -152,7 +152,7 @@ export default {
             <span
               class="text-xs font-medium hover:text-n-brand truncate min-w-0 dark:hover:text-n-brand"
               :class="{
-                'text-woot-300 dark:text-woot-300': activeSort === option.key,
+                'text-n-brand dark:text-n-brand': activeSort === option.key,
                 'text-n-slate-11': activeSort !== option.key,
               }"
             >
@@ -160,7 +160,7 @@ export default {
             </span>
             <span
               v-if="activeSort === option.key"
-              class="i-lucide-check size-2.5 flex-shrink-0 text-woot-300"
+              class="i-lucide-check size-2.5 flex-shrink-0 text-n-brand"
             />
           </div>
         </div>

@@ -126,7 +126,7 @@ const handleClick = id => {
   <CardLayout>
     <div class="flex justify-between w-full gap-1">
       <span
-        class="text-base cursor-pointer hover:underline underline-offset-2 hover:text-woot-300 text-n-slate-12 line-clamp-1"
+        class="text-base cursor-pointer hover:underline underline-offset-2 hover:text-n-brand text-n-slate-12 line-clamp-1"
         @click="handleClick(id)"
       >
         {{ title }}
