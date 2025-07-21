@@ -47,11 +47,11 @@ const runSDK = ({ baseUrl, websiteToken }) => {
     restoreWidgetInDOM(event.newDocument.body)
   );
 
-  const chatwootSettings = window.chatwootSettings || {};
-  let locale = chatwootSettings.locale;
-  let baseDomain = chatwootSettings.baseDomain;
+  const arrowsSettings = window.arrowsSettings || {};
+  let locale = arrowsSettings.locale;
+  let baseDomain = arrowsSettings.baseDomain;
 
-  if (chatwootSettings.useBrowserLanguage) {
+  if (arrowsSettings.useBrowserLanguage) {
     locale = window.navigator.language.replace('-', '_');
   }
 
@@ -59,26 +59,26 @@ const runSDK = ({ baseUrl, websiteToken }) => {
     baseUrl,
     baseDomain,
     hasLoaded: false,
-    hideMessageBubble: chatwootSettings.hideMessageBubble || false,
+    hideMessageBubble: arrowsSettings.hideMessageBubble || false,
     isOpen: false,
-    position: chatwootSettings.position === 'left' ? 'left' : 'right',
+    position: arrowsSettings.position === 'left' ? 'left' : 'right',
     websiteToken,
     locale,
-    useBrowserLanguage: chatwootSettings.useBrowserLanguage || false,
-    type: getBubbleView(chatwootSettings.type),
-    launcherTitle: chatwootSettings.launcherTitle || '',
-    showPopoutButton: chatwootSettings.showPopoutButton || false,
-    showUnreadMessagesDialog: chatwootSettings.showUnreadMessagesDialog ?? true,
-    widgetStyle: getWidgetStyle(chatwootSettings.widgetStyle) || 'standard',
+    useBrowserLanguage: arrowsSettings.useBrowserLanguage || false,
+    type: getBubbleView(arrowsSettings.type),
+    launcherTitle: arrowsSettings.launcherTitle || '',
+    showPopoutButton: arrowsSettings.showPopoutButton || false,
+    showUnreadMessagesDialog: arrowsSettings.showUnreadMessagesDialog ?? true,
+    widgetStyle: getWidgetStyle(arrowsSettings.widgetStyle) || 'standard',
     resetTriggered: false,
-    darkMode: getDarkMode(chatwootSettings.darkMode),
-    welcomeTitle: chatwootSettings.welcomeTitle || '',
-    welcomeDescription: chatwootSettings.welcomeDescription || '',
-    availableMessage: chatwootSettings.availableMessage || '',
-    unavailableMessage: chatwootSettings.unavailableMessage || '',
-    enableFileUpload: chatwootSettings.enableFileUpload ?? true,
-    enableEmojiPicker: chatwootSettings.enableEmojiPicker ?? true,
-    enableEndConversation: chatwootSettings.enableEndConversation ?? true,
+    darkMode: getDarkMode(arrowsSettings.darkMode),
+    welcomeTitle: arrowsSettings.welcomeTitle || '',
+    welcomeDescription: arrowsSettings.welcomeDescription || '',
+    availableMessage: arrowsSettings.availableMessage || '',
+    unavailableMessage: arrowsSettings.unavailableMessage || '',
+    enableFileUpload: arrowsSettings.enableFileUpload ?? true,
+    enableEmojiPicker: arrowsSettings.enableEmojiPicker ?? true,
+    enableEndConversation: arrowsSettings.enableEndConversation ?? true,
 
     toggle(state) {
       IFrameHelper.events.toggleBubble(state);
