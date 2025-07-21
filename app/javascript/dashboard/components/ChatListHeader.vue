@@ -29,9 +29,6 @@ const emit = defineEmits([
 const { uiSettings, updateUISettings } = useUISettings();
 
 const onBasicFilterChange = (value, type) => {
-  if (type === 'status') {
-    currentStatuses.value = Array.isArray(value) ? [...value] : [value];
-  }
   emit('basicFilterChange', value, type);
 };
 
@@ -85,7 +82,7 @@ const toggleConversationLayout = () => {
         v-if="!hasAppliedFiltersOrActiveFolders"
         class="px-2 py-1 my-0.5 mx-1 rounded-md capitalize bg-n-slate-3 text-xxs text-n-slate-12 shrink-0"
       >
-        {{ chatStatusLabel }}
+        {{ $t(`CHAT_LIST.CHAT_STATUS_FILTER_ITEMS.${activeStatus}.TEXT`) }}
       </span>
     </div>
     <div class="flex items-center gap-1">
@@ -159,7 +156,7 @@ const toggleConversationLayout = () => {
       </div>
       <ConversationBasicFilter
         v-if="!hasAppliedFiltersOrActiveFolders"
-        :initial-statuses="currentStatuses"
+        :is-on-expanded-layout="isOnExpandedLayout"
         @change-filter="onBasicFilterChange"
       />
       <SwitchLayout
