@@ -47,11 +47,11 @@ const runSDK = ({ baseUrl, websiteToken }) => {
     restoreWidgetInDOM(event.newDocument.body)
   );
 
-  const arrowsSettings = window.arrowsSettings || {};
-  let locale = arrowsSettings.locale;
-  let baseDomain = arrowsSettings.baseDomain;
+  const chatwootSettings = window.chatwootSettings || {};
+  let locale = chatwootSettings.locale;
+  let baseDomain = chatwootSettings.baseDomain;
 
-  if (arrowsSettings.useBrowserLanguage) {
+  if (chatwootSettings.useBrowserLanguage) {
     locale = window.navigator.language.replace('-', '_');
   }
 
@@ -59,16 +59,17 @@ const runSDK = ({ baseUrl, websiteToken }) => {
     baseUrl,
     baseDomain,
     hasLoaded: false,
-    hideMessageBubble: arrowsSettings.hideMessageBubble || false,
+    hideMessageBubble: chatwootSettings.hideMessageBubble || false,
     isOpen: false,
-    position: arrowsSettings.position === 'left' ? 'left' : 'right',
+    position: chatwootSettings.position === 'left' ? 'left' : 'right',
     websiteToken,
     locale,
-    useBrowserLanguage: arrowsSettings.useBrowserLanguage || false,
-    type: getBubbleView(arrowsSettings.type),
-    launcherTitle: arrowsSettings.launcherTitle || '',
-    showPopoutButton: arrowsSettings.showPopoutButton || false,
-    widgetStyle: getWidgetStyle(arrowsSettings.widgetStyle) || 'standard',
+    useBrowserLanguage: chatwootSettings.useBrowserLanguage || false,
+    type: getBubbleView(chatwootSettings.type),
+    launcherTitle: chatwootSettings.launcherTitle || '',
+    showPopoutButton: chatwootSettings.showPopoutButton || false,
+    showUnreadMessagesDialog: chatwootSettings.showUnreadMessagesDialog ?? true,
+    widgetStyle: getWidgetStyle(chatwootSettings.widgetStyle) || 'standard',
     resetTriggered: false,
     darkMode: getDarkMode(chatwootSettings.darkMode),
     welcomeTitle: chatwootSettings.welcomeTitle || '',
@@ -215,6 +216,6 @@ const runSDK = ({ baseUrl, websiteToken }) => {
   });
 };
 
-window.arrowsSDK = {
+window.chatwootSDK = {
   run: runSDK,
 };
