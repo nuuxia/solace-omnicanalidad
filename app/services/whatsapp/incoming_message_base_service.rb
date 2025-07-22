@@ -57,6 +57,7 @@ class Whatsapp::IncomingMessageBaseService
   def create_messages
     message = @processed_params[:messages].first
     log_error(message) && return if error_webhook_event?(message)
+
     process_in_reply_to(message)
 
     case message_type
@@ -97,6 +98,18 @@ class Whatsapp::IncomingMessageBaseService
     attach_files
     attach_location if message_type == 'location'
     @message.save!
+
+    return unless @message.content.downcase.strip == 'hola'
+
+    # Create the response message
+    response_message = @conversation.messages.create(
+      account_id: @conversation.account_id,
+      inbox_id: @conversation.inbox_id,
+      message_type: :outgoing,
+      content: '¡Hola! ¿Cómo estás?'
+    )
+    # Send the message
+    ::SendReplyJob.perform_later(response_message.id)
   end
 
   def create_flow_message(message)
@@ -111,7 +124,11 @@ class Whatsapp::IncomingMessageBaseService
     raw_json = flow_data[:response_json]
     return if raw_json.blank?
 
-    parsed = JSON.parse(raw_json) rescue {}
+    parsed = begin
+      JSON.parse(raw_json)
+    rescue StandardError
+      {}
+    end
     return if parsed.blank?
 
     ignored_keys = %w[flow_token screen_id step_id]
@@ -121,14 +138,14 @@ class Whatsapp::IncomingMessageBaseService
       next if ignored_keys.include?(key.to_s)
 
       clean_key = key.to_s
-                    .sub(/^screen_?/i, '')               # elimina "screen_"
-                    .gsub(/\b\d+\b/, '')                 # elimina números enteros aislados
-                    .gsub(/\A\d+\s*/, '')                # elimina números al inicio seguidos de espacios
-                    .gsub(/\s*\d+\z/, '')                # elimina números al final
-                    .tr('_', ' ')                        # reemplaza _
-                    .squeeze(' ')                        # colapsa dobles espacios
-                    .strip
-                    .split.map(&:capitalize).join(' ')  # capitaliza cada palabra
+                     .sub(/^screen_?/i, '')               # elimina "screen_"
+                     .gsub(/\b\d+\b/, '')                 # elimina números enteros aislados
+                     .gsub(/\A\d+\s*/, '')                # elimina números al inicio seguidos de espacios
+                     .gsub(/\s*\d+\z/, '')                # elimina números al final
+                     .tr('_', ' ')                        # reemplaza _
+                     .squeeze(' ')                        # colapsa dobles espacios
+                     .strip
+                     .split.map(&:capitalize).join(' ')  # capitaliza cada palabra
 
       lines << "#{index}. **#{clean_key}:** #{value}"
       index += 1
@@ -146,11 +163,12 @@ class Whatsapp::IncomingMessageBaseService
   def create_order_message(message)
     create_message(message)
     order = message[:order]
-    content = order[:text] || "Pedido recibido"
+    content = order[:text] || 'Pedido recibido'
 
     if order[:product_items].present?
       productos = order[:product_items].map.with_index(1) do |item, index|
-        "- #{index}. #{item[:product_retailer_id]} \n  Precio: #{format_currency(item[:item_price], item[:currency])} \n  Cantidad: #{item[:quantity]}"
+        "- #{index}. #{item[:product_retailer_id]} \n  Precio: #{format_currency(item[:item_price],
+                                                                                 item[:currency])} \n  Cantidad: #{item[:quantity]}"
       end.join("\n\n")
 
       total_price = order[:product_items].sum { |item| item[:item_price].to_f * item[:quantity].to_i }
@@ -165,7 +183,7 @@ class Whatsapp::IncomingMessageBaseService
   end
 
   def format_currency(amount, currency)
-    formatted_amount = "%.2f" % amount
+    formatted_amount = '%.2f' % amount
     "#{currency} #{formatted_amount}"
   end
 

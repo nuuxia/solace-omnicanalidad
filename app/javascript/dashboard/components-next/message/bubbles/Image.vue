@@ -14,7 +14,8 @@ import GalleryView from 'dashboard/components/widgets/conversation/components/Ga
 const emit = defineEmits(['error']);
 const { t } = useI18n();
 
-const { filteredCurrentChatAttachments, attachments } = useMessageContext();
+const { filteredCurrentChatAttachments, attachments, content } =
+  useMessageContext();
 
 const attachment = computed(() => {
   return attachments.value[0];
@@ -79,6 +80,10 @@ const downloadAttachment = async () => {
           @click.stop="downloadAttachment"
         />
       </div>
+    </div>
+    <!-- Mostrar contenido de texto si está presente -->
+    <div v-if="content" class="mt-2 text-sm text-n-slate-11">
+      {{ content }}
     </div>
   </BaseBubble>
   <GalleryView

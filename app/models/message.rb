@@ -260,6 +260,7 @@ class Message < ApplicationRecord
   end
 
   def execute_after_create_commit_callbacks
+    Rails.logger.info("[Message] execute_after_create_commit_callbacks - Message ID: #{id}, Type: #{message_type}, Sender: #{sender_id}")
     # rails issue with order of active record callbacks being executed https://github.com/rails/rails/issues/20911
     reopen_conversation
     notify_via_mail
@@ -295,9 +296,12 @@ class Message < ApplicationRecord
   end
 
   def dispatch_create_events
+    Rails.logger.info("[Message] dispatch_create_events - Message ID: #{id}, Type: #{message_type}, Sender: #{sender_id}")
     Rails.configuration.dispatcher.dispatch(MESSAGE_CREATED, Time.zone.now, message: self, performed_by: Current.executed_by)
+    Rails.logger.info('[Message] dispatch_create_events - MESSAGE_CREATED dispatched')
 
     if valid_first_reply?
+      Rails.logger.info('[Message] dispatch_create_events - Dispatching FIRST_REPLY_CREATED')
       Rails.configuration.dispatcher.dispatch(FIRST_REPLY_CREATED, Time.zone.now, message: self, performed_by: Current.executed_by)
       conversation.update(first_reply_created_at: created_at, waiting_since: nil)
     else

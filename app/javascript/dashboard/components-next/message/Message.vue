@@ -299,14 +299,13 @@ const componentToRender = computed(() => {
   if (Array.isArray(props.attachments) && props.attachments.length === 1) {
     const fileType = props.attachments[0].fileType;
 
-    if (!props.content) {
-      if (fileType === ATTACHMENT_TYPES.IMAGE) return ImageBubble;
-      if (fileType === ATTACHMENT_TYPES.FILE) return FileBubble;
-      if (fileType === ATTACHMENT_TYPES.AUDIO) return AudioBubble;
-      if (fileType === ATTACHMENT_TYPES.VIDEO) return VideoBubble;
-      if (fileType === ATTACHMENT_TYPES.IG_REEL) return VideoBubble;
-      if (fileType === ATTACHMENT_TYPES.LOCATION) return LocationBubble;
-    }
+    // Siempre renderizar adjuntos cuando estén presentes, independientemente del contenido
+    if (fileType === ATTACHMENT_TYPES.IMAGE) return ImageBubble;
+    if (fileType === ATTACHMENT_TYPES.FILE) return FileBubble;
+    if (fileType === ATTACHMENT_TYPES.AUDIO) return AudioBubble;
+    if (fileType === ATTACHMENT_TYPES.VIDEO) return VideoBubble;
+    if (fileType === ATTACHMENT_TYPES.IG_REEL) return VideoBubble;
+    if (fileType === ATTACHMENT_TYPES.LOCATION) return LocationBubble;
     // Attachment content is the name of the contact
     if (fileType === ATTACHMENT_TYPES.CONTACT) return ContactBubble;
   }

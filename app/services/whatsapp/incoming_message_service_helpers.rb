@@ -97,20 +97,57 @@ module Whatsapp::IncomingMessageServiceHelpers
     @message = Message.find_by(source_id: source_id)
   end
 
+  # Devuelve el array principal de mensajes (messages o message_echoes)
+  def main_message_array
+    @processed_params[:messages] || @processed_params[:message_echoes] || []
+  end
+
   def message_under_process?
-    key = format(Redis::RedisKeys::MESSAGE_SOURCE_KEY, id: @processed_params[:messages].first[:id])
-    Redis::Alfred.get(key)
+    return false if main_message_array.blank?
+
+    key = format(Redis::RedisKeys::MESSAGE_SOURCE_KEY, id: main_message_array.first[:id])
+    result = Redis::Alfred.get(key)
+    Rails.logger.info("[Whatsapp::IncomingMessageServiceHelpers] message_under_process? - key=#{key}, result=#{result}")
+    result
   end
 
   def cache_message_source_id_in_redis
-    return if @processed_params.try(:[], :messages).blank?
+    return if main_message_array.blank?
 
-    key = format(Redis::RedisKeys::MESSAGE_SOURCE_KEY, id: @processed_params[:messages].first[:id])
+    key = format(Redis::RedisKeys::MESSAGE_SOURCE_KEY, id: main_message_array.first[:id])
+    Rails.logger.info("[Whatsapp::IncomingMessageServiceHelpers] cache_message_source_id_in_redis - key=#{key}")
     ::Redis::Alfred.setex(key, true)
   end
 
   def clear_message_source_id_from_redis
-    key = format(Redis::RedisKeys::MESSAGE_SOURCE_KEY, id: @processed_params[:messages].first[:id])
+    return if main_message_array.blank?
+
+    key = format(Redis::RedisKeys::MESSAGE_SOURCE_KEY, id: main_message_array.first[:id])
+    Rails.logger.info("[Whatsapp::IncomingMessageServiceHelpers] clear_message_source_id_from_redis - key=#{key}")
     ::Redis::Alfred.delete(key)
+  end
+
+  # Determina el tipo de mensaje WhatsApp de forma robusta
+  def determine_message_type(message)
+    return message[:type] if message[:type].present?
+    return message['type'] if message['type'].present?
+    # fallback para casos especiales
+    if message['interactive'].present?
+      return 'interactive'
+    elsif message['contacts'].present?
+      return 'contacts'
+    elsif message['location'].present?
+      return 'location'
+    elsif message['image'].present?
+      return 'image'
+    elsif message['audio'].present?
+      return 'audio'
+    elsif message['video'].present?
+      return 'video'
+    elsif message['document'].present?
+      return 'document'
+    end
+
+    'text'
   end
 end

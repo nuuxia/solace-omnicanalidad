@@ -41,6 +41,42 @@ RSpec.describe Webhooks::WhatsappEventsJob do
       job.perform_now(params)
     end
 
+    context 'when message is from a coexistent device' do
+      let(:coexistence_params) do
+        {
+          object: 'whatsapp_business_account',
+          phone_number: channel.phone_number,
+          entry: [{
+            changes: [{
+              value: {
+                metadata: {
+                  phone_number_id: channel.provider_config['phone_number_id'],
+                  display_phone_number: channel.phone_number.delete('+')
+                },
+                messages: [{
+                  from: channel.phone_number.delete('+'), # Same as channel's phone number
+                  to: '9876543210',
+                  id: 'wamid.123456789',
+                  text: { body: 'Hello from coexistent device' },
+                  timestamp: '1633034394',
+                  type: 'text'
+                }]
+              }
+            }]
+          }]
+        }
+      end
+
+      it 'enqueues Whatsapp::CoexistenceMessageService' do
+        coexistence_service = double
+        allow(coexistence_service).to receive(:perform)
+        allow(Whatsapp::CoexistenceMessageService).to receive(:new).and_return(coexistence_service)
+
+        expect(Whatsapp::CoexistenceMessageService).to receive(:new).with(inbox: channel.inbox, params: coexistence_params)
+        job.perform_now(coexistence_params)
+      end
+    end
+
     it 'will not enqueue message jobs based on phone number in the URL if the entry payload is not present' do
       params = {
         object: 'whatsapp_business_account',
@@ -96,6 +132,73 @@ RSpec.describe Webhooks::WhatsappEventsJob do
 
       expect(Rails.logger).to receive(:warn).with("Inactive WhatsApp channel: unknown - #{unknown_phone}")
       job.perform_now(phone_number: unknown_phone)
+    end
+  end
+
+  describe '#message_from_coexistent_device?' do
+    let(:job_instance) { described_class.new }
+
+    context 'when message is from a coexistent device' do
+      let(:coexistence_params) do
+        {
+          entry: [{
+            changes: [{
+              value: {
+                messages: [{
+                  from: channel.phone_number.delete('+'), # Same as channel's phone number
+                  id: 'wamid.123456789',
+                  text: { body: 'Hello from coexistent device' },
+                  timestamp: '1633034394',
+                  type: 'text'
+                }]
+              }
+            }]
+          }]
+        }.with_indifferent_access
+      end
+
+      it 'returns true' do
+        expect(job_instance.send(:message_from_coexistent_device?, coexistence_params, channel)).to be true
+      end
+    end
+
+    context 'when message is not from a coexistent device' do
+      let(:regular_params) do
+        {
+          entry: [{
+            changes: [{
+              value: {
+                messages: [{
+                  from: '9876543210', # Different from channel's phone number
+                  id: 'wamid.123456789',
+                  text: { body: 'Hello from contact' },
+                  timestamp: '1633034394',
+                  type: 'text'
+                }]
+              }
+            }]
+          }]
+        }.with_indifferent_access
+      end
+
+      it 'returns false' do
+        expect(job_instance.send(:message_from_coexistent_device?, regular_params, channel)).to be false
+      end
+    end
+
+    context 'when params are invalid' do
+      it 'returns false for nil channel' do
+        expect(job_instance.send(:message_from_coexistent_device?, {}, nil)).to be false
+      end
+
+      it 'returns false for missing entry' do
+        expect(job_instance.send(:message_from_coexistent_device?, {}, channel)).to be false
+      end
+
+      it 'returns false for missing messages' do
+        params = { entry: [{ changes: [{ value: {} }] }] }.with_indifferent_access
+        expect(job_instance.send(:message_from_coexistent_device?, params, channel)).to be false
+      end
     end
   end
 

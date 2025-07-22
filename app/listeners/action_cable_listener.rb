@@ -32,10 +32,12 @@ class ActionCableListener < BaseListener
 
   def message_created(event)
     message, account = extract_message_and_account(event)
+    Rails.logger.info("[ActionCableListener] message_created - Message ID: #{message.id}, Type: #{message.message_type}, Sender: #{message.sender_id}, Sender Type: #{message.sender_type}")
     conversation = message.conversation
     tokens = user_tokens(account, conversation.inbox.members) + contact_tokens(conversation.contact_inbox, message)
-
+    Rails.logger.info("[ActionCableListener] message_created - Tokens: #{tokens.inspect}")
     broadcast(account, tokens, MESSAGE_CREATED, message.push_event_data)
+    Rails.logger.info("[ActionCableListener] message_created - Broadcast completed for message ID: #{message.id}")
   end
 
   def message_updated(event)

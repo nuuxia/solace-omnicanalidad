@@ -41,6 +41,8 @@ gem 'commonmarker'
 gem 'json_schemer'
 # used in swagger build
 gem 'json_refs'
+# Properly handle Content-Disposition headers with non-ASCII filenames
+gem 'content_disposition', '~> 1.0'
 # Rack middleware for blocking & throttling abusive requests
 gem 'rack-attack', '>= 6.7.0'
 # a utility tool for streaming, flexible and safe downloading of remote files
