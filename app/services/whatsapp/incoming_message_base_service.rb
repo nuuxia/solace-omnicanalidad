@@ -58,7 +58,7 @@ class Whatsapp::IncomingMessageBaseService
 
     # Set conversation for the contact
     set_conversation
-    
+
     # Create the outgoing message
     create_echo_message(echo_message)
   end
@@ -210,21 +210,34 @@ class Whatsapp::IncomingMessageBaseService
     # Check if message already exists to prevent duplicates
     return if find_message_by_source_id(echo_message[:id])
 
-    # Create the outgoing message
-    @message = @conversation.messages.build(
-      content: message_content_for_echo(echo_message),
-      account_id: @inbox.account_id,
-      inbox_id: @inbox.id,
-      message_type: :outgoing,
-      sender: nil, # Agent message
-      source_id: echo_message[:id].to_s,
-      status: :sent
-    )
+    begin
+      # Create the outgoing message
+      @message = @conversation.messages.build(
+        content: message_content_for_echo(echo_message) || '', # Ensure content is never nil
+        account_id: @inbox.account_id,
+        inbox_id: @inbox.id,
+        message_type: :outgoing,
+        sender: nil, # Agent message
+        source_id: echo_message[:id].to_s,
+        status: :sent
+      )
 
-    # Handle attachments if present
-    attach_echo_files(echo_message) if echo_message[:type] != 'text'
-    
-    @message.save!
+      # Handle attachments if present
+      if echo_message[:type] != 'text'
+        attach_echo_files(echo_message)
+        # For image messages without caption, set a default content
+        @message.content = '' if @message.content.blank? && echo_message[:type] == 'image'
+      end
+
+      # Only save if message is valid
+      if @message.valid?
+        @message.save!
+      else
+        Rails.logger.error "Invalid echo message: #{@message.errors.full_messages}"
+      end
+    rescue StandardError => e
+      Rails.logger.error "Error creating echo message: #{e.message}"
+    end
   end
 
   def message_content_for_echo(echo_message)
@@ -237,13 +250,20 @@ class Whatsapp::IncomingMessageBaseService
     when 'interactive'
       echo_message.dig(:interactive, :button_reply, :title) ||
         echo_message.dig(:interactive, :list_reply, :title)
+    when 'image'
+      echo_message.dig(:image, :caption) # Images can have captions
+    when 'video'
+      echo_message.dig(:video, :caption) # Videos can have captions
+    when 'document'
+      echo_message.dig(:document, :caption) # Documents can have captions
     else
-      nil # For media messages, content will be in attachments
+      nil # For other media messages, content will be in attachments
     end
   end
 
   def attach_echo_files(echo_message)
     return if echo_message[:type] == 'text'
+    return unless echo_message[:type].present?
 
     # Handle different media types
     case echo_message[:type]
@@ -252,16 +272,35 @@ class Whatsapp::IncomingMessageBaseService
     when 'location'
       attach_echo_location(echo_message)
     end
+  rescue StandardError => e
+    Rails.logger.error "Error attaching echo files: #{e.message}"
+    # Continue without attachment rather than failing the entire message
   end
 
   def attach_echo_media_file(echo_message)
     media_data = echo_message[echo_message[:type].to_sym]
     return unless media_data
 
-    @message.attachments.new(
-      account_id: @message.account_id,
-      file_type: file_content_type(echo_message[:type])
-    )
+    begin
+      # Download the attachment file using WhatsApp API
+      attachment_file = download_attachment_file(media_data)
+      return unless attachment_file.present?
+
+      # Only create attachment if download was successful
+      @message.attachments.new(
+        account_id: @message.account_id,
+        file_type: file_content_type(echo_message[:type]),
+        file: {
+          io: attachment_file,
+          filename: attachment_file.original_filename || "file.#{echo_message[:type]}",
+          content_type: attachment_file.content_type || media_data[:mime_type]
+        }
+      )
+    rescue StandardError => e
+      Rails.logger.error "Error downloading echo attachment: #{e.message}"
+      # Skip attachment creation on error - better to have message without attachment than broken frontend
+      return
+    end
   end
 
   def attach_echo_location(echo_message)

@@ -45,7 +45,10 @@ class Attachment < ApplicationRecord
   def push_event_data
     return unless file_type
 
-    base_data.merge(metadata_for_file_type)
+    metadata = metadata_for_file_type
+    return if metadata.empty? # Skip if metadata is empty (no file and no valid external URL)
+
+    base_data.merge(metadata)
   end
 
   # NOTE: the URl returned does a 301 redirect to the actual file
@@ -98,17 +101,32 @@ class Attachment < ApplicationRecord
   end
 
   def file_metadata
-    metadata = {
-      extension: extension,
-      data_url: file_url,
-      thumb_url: thumb_url,
-      file_size: file.byte_size,
-      width: file.metadata[:width],
-      height: file.metadata[:height]
-    }
+    if file.attached?
+      metadata = {
+        extension: extension,
+        data_url: file_url,
+        thumb_url: thumb_url,
+        file_size: file.byte_size,
+        width: file.metadata&.[](:width),
+        height: file.metadata&.[](:height)
+      }
 
-    metadata[:data_url] = metadata[:thumb_url] = external_url if message.inbox.instagram? && message.incoming?
-    metadata
+      metadata[:data_url] = metadata[:thumb_url] = external_url if message.inbox.instagram? && message.incoming?
+      metadata
+    elsif external_url.present?
+      # Return external URL metadata for attachments without files but with valid external URL
+      {
+        extension: extension,
+        data_url: external_url,
+        thumb_url: external_url,
+        file_size: 0,
+        width: nil,
+        height: nil
+      }
+    else
+      # Skip this attachment - no file and no valid external URL
+      {}
+    end
   end
 
   def location_metadata
