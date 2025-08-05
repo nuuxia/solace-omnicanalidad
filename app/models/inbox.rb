@@ -4,29 +4,33 @@
 #
 # Table name: inboxes
 #
-#  id                            :integer          not null, primary key
-#  allow_messages_after_resolved :boolean          default(TRUE)
-#  auto_assignment_config        :jsonb
-#  business_name                 :string
-#  channel_type                  :string
-#  csat_config                   :jsonb            not null
-#  csat_survey_enabled           :boolean          default(FALSE)
-#  email_address                 :string
-#  enable_auto_assignment        :boolean          default(TRUE)
-#  enable_email_collect          :boolean          default(TRUE)
-#  greeting_enabled              :boolean          default(FALSE)
-#  greeting_message              :string
-#  lock_to_single_conversation   :boolean          default(FALSE), not null
-#  name                          :string           not null
-#  out_of_office_message         :string
-#  sender_name_type              :integer          default("friendly"), not null
-#  timezone                      :string           default("UTC")
-#  working_hours_enabled         :boolean          default(FALSE)
-#  created_at                    :datetime         not null
-#  updated_at                    :datetime         not null
-#  account_id                    :integer          not null
-#  channel_id                    :integer          not null
-#  portal_id                     :bigint
+#  id                               :integer          not null, primary key
+#  allow_messages_after_resolved    :boolean          default(TRUE)
+#  assistantid                      :string
+#  auto_assignment_config           :jsonb
+#  business_name                    :string
+#  channel_type                     :string
+#  csat_config                      :jsonb            not null
+#  csat_survey_enabled              :boolean          default(FALSE)
+#  email_address                    :string
+#  enable_auto_assignment           :boolean          default(TRUE)
+#  enable_email_collect             :boolean          default(TRUE)
+#  greeting_enabled                 :boolean          default(FALSE)
+#  greeting_message                 :string
+#  lock_to_single_conversation      :boolean          default(FALSE), not null
+#  mercado_libre_post_sale_messages :boolean          default(TRUE), not null
+#  mercado_libre_pre_sale_questions :boolean          default(TRUE), not null
+#  name                             :string           not null
+#  offline_response                 :boolean          default(FALSE), not null
+#  out_of_office_message            :string
+#  sender_name_type                 :integer          default("friendly"), not null
+#  timezone                         :string           default("UTC")
+#  working_hours_enabled            :boolean          default(FALSE)
+#  created_at                       :datetime         not null
+#  updated_at                       :datetime         not null
+#  account_id                       :integer          not null
+#  channel_id                       :integer          not null
+#  portal_id                        :bigint
 #
 # Indexes
 #

@@ -8,11 +8,31 @@ class Webhooks::WhatsappController < ActionController::API
       return
     end
 
-    Webhooks::WhatsappEventsJob.perform_later(params.to_unsafe_hash)
+    if contains_echo_event?(params.to_unsafe_hash)
+      # Add delay to prevent race condition where echo arrives before send message API completes
+      # This avoids duplicate messages when echo comes early during API processing
+      Webhooks::WhatsappEventsJob.set(wait: 2.seconds).perform_later(params.to_unsafe_hash)
+    else
+      Webhooks::WhatsappEventsJob.perform_later(params.to_unsafe_hash)
+    end
+
     head :ok
   end
 
   private
+
+  def contains_echo_event?(params)
+    return false unless params[:entry].is_a?(Array)
+
+    params[:entry].any? do |entry|
+      # Check changes array for message_echoes events
+      changes = entry[:changes] || []
+      changes.any? do |change|
+        change[:field] == 'smb_message_echoes' &&
+          change.dig(:value, :message_echoes).present?
+      end
+    end
+  end
 
   def valid_token?(token)
     channel = Channel::Whatsapp.find_by(phone_number: params[:phone_number])

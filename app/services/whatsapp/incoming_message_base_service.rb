@@ -11,6 +11,8 @@ class Whatsapp::IncomingMessageBaseService
 
     if processed_params.try(:[], :statuses).present?
       process_statuses
+    elsif processed_params.try(:[], :message_echoes).present?
+      process_message_echoes
     elsif processed_params.try(:[], :messages).present?
       process_messages
     end
@@ -43,6 +45,22 @@ class Whatsapp::IncomingMessageBaseService
     update_message_with_status(@message, @processed_params[:statuses].first)
   rescue ArgumentError => e
     Rails.logger.error "Error while processing whatsapp status update #{e.message}"
+  end
+
+  def process_message_echoes
+    # Process message echoes as outgoing messages from WhatsApp Business
+    echo_message = @processed_params[:message_echoes].first
+    return if echo_message.blank?
+
+    # Find or create contact based on the recipient (to) phone number
+    set_contact_for_echo(echo_message)
+    return unless @contact
+
+    # Set conversation for the contact
+    set_conversation
+    
+    # Create the outgoing message
+    create_echo_message(echo_message)
   end
 
   def update_message_with_status(message, status)
@@ -170,5 +188,94 @@ class Whatsapp::IncomingMessageBaseService
         meta: contact_meta
       )
     end
+  end
+
+  def set_contact_for_echo(echo_message)
+    # For echo messages, the 'to' field contains the contact's phone number
+    recipient_phone = echo_message[:to]
+    return if recipient_phone.blank?
+
+    # Find or create contact by phone number
+    contact_inbox = ::ContactInboxWithContactBuilder.new(
+      source_id: recipient_phone,
+      inbox: inbox,
+      contact_attributes: { phone_number: "+#{recipient_phone}" }
+    ).perform
+
+    @contact_inbox = contact_inbox
+    @contact = contact_inbox.contact
+  end
+
+  def create_echo_message(echo_message)
+    # Check if message already exists to prevent duplicates
+    return if find_message_by_source_id(echo_message[:id])
+
+    # Create the outgoing message
+    @message = @conversation.messages.build(
+      content: message_content_for_echo(echo_message),
+      account_id: @inbox.account_id,
+      inbox_id: @inbox.id,
+      message_type: :outgoing,
+      sender: nil, # Agent message
+      source_id: echo_message[:id].to_s,
+      status: :sent
+    )
+
+    # Handle attachments if present
+    attach_echo_files(echo_message) if echo_message[:type] != 'text'
+    
+    @message.save!
+  end
+
+  def message_content_for_echo(echo_message)
+    # Extract content based on message type
+    case echo_message[:type]
+    when 'text'
+      echo_message.dig(:text, :body)
+    when 'button'
+      echo_message.dig(:button, :text)
+    when 'interactive'
+      echo_message.dig(:interactive, :button_reply, :title) ||
+        echo_message.dig(:interactive, :list_reply, :title)
+    else
+      nil # For media messages, content will be in attachments
+    end
+  end
+
+  def attach_echo_files(echo_message)
+    return if echo_message[:type] == 'text'
+
+    # Handle different media types
+    case echo_message[:type]
+    when 'image', 'audio', 'video', 'document'
+      attach_echo_media_file(echo_message)
+    when 'location'
+      attach_echo_location(echo_message)
+    end
+  end
+
+  def attach_echo_media_file(echo_message)
+    media_data = echo_message[echo_message[:type].to_sym]
+    return unless media_data
+
+    @message.attachments.new(
+      account_id: @message.account_id,
+      file_type: file_content_type(echo_message[:type])
+    )
+  end
+
+  def attach_echo_location(echo_message)
+    location = echo_message[:location]
+    return unless location
+
+    location_name = location['name'] ? "#{location['name']}, #{location['address']}" : ''
+    @message.attachments.new(
+      account_id: @message.account_id,
+      file_type: file_content_type('location'),
+      coordinates_lat: location['latitude'],
+      coordinates_long: location['longitude'],
+      fallback_title: location_name,
+      external_url: location['url']
+    )
   end
 end
