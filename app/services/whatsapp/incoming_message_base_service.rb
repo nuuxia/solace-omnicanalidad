@@ -256,6 +256,18 @@ class Whatsapp::IncomingMessageBaseService
       echo_message.dig(:video, :caption) # Videos can have captions
     when 'document'
       echo_message.dig(:document, :caption) # Documents can have captions
+    when 'sticker'
+      nil # Stickers don't have captions, content is in the attachment
+    when 'contacts'
+      # Extract contact names for message content
+      contacts = echo_message[:contacts] || []
+      names = contacts.map { |contact| contact.dig(:name, :formatted_name) }.compact
+      names.any? ? "Contact: #{names.join(', ')}" : 'Contact'
+    when 'location'
+      # Extract location info for message content
+      location = echo_message[:location]
+      location['name'] || location['address'] || 'Location'
+
     else
       nil # For other media messages, content will be in attachments
     end
@@ -267,10 +279,12 @@ class Whatsapp::IncomingMessageBaseService
 
     # Handle different media types
     case echo_message[:type]
-    when 'image', 'audio', 'video', 'document'
+    when 'image', 'audio', 'video', 'document', 'sticker'
       attach_echo_media_file(echo_message)
     when 'location'
       attach_echo_location(echo_message)
+    when 'contacts'
+      attach_echo_contacts(echo_message)
     end
   rescue StandardError => e
     Rails.logger.error "Error attaching echo files: #{e.message}"
@@ -316,5 +330,31 @@ class Whatsapp::IncomingMessageBaseService
       fallback_title: location_name,
       external_url: location['url']
     )
+  end
+
+  def attach_echo_contacts(echo_message)
+    contacts = echo_message[:contacts]
+    return unless contacts.present?
+
+    # Handle multiple contacts in the echo message
+    contacts.each do |contact|
+      phones = contact[:phones]
+      phones = [{ phone: 'Phone number is not available' }] if phones.blank?
+
+      name_info = contact[:name] || {}
+      contact_meta = {
+        firstName: name_info[:first_name],
+        lastName: name_info[:last_name]
+      }.compact
+
+      phones.each do |phone|
+        @message.attachments.new(
+          account_id: @message.account_id,
+          file_type: file_content_type('contacts'),
+          fallback_title: phone[:phone].to_s,
+          meta: contact_meta
+        )
+      end
+    end
   end
 end
